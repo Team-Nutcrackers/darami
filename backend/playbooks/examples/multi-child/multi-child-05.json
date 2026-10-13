@@ -1,0 +1,196 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "multi-child-05",
+    "event_id": "multi-child",
+    "event_title": "다자녀",
+    "persona_summary": "37세 여성 · 경남 거제시 · 주부 · 자녀 3명, 공과금",
+    "persona": {
+      "facts": {
+        "age": 37,
+        "gender": "여성",
+        "residence": "경남 거제시",
+        "situation": "주부 · 자녀 3명, 공과금"
+      }
+    },
+    "query": "아이 셋 키우느라 전기요금이랑 가스요금이 엄청 나와요. 다자녀 가정은 요금을 할인해 준다던데 신청을 해야 하는 건지 자동으로 되는 건지 모르겠어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "multi-child"
+      ],
+      "reason": "다자녀 공과금 할인"
+    },
+    "plan": {
+      "title": "다자녀 공과금 할인",
+      "emoji": "💡",
+      "intro": "전기요금(자녀 3명 이상 월 30% 한도 16,000원)과 도시가스 경감은 각각 한전·도시가스사에 신청해야 적용돼요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "사회적 배려대상자 도시가스요금 경감",
+          "priority": "must",
+          "condition": "자녀 3명 이상 → 도시가스사에 가족관계증명서로 신청."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "다자녀"
+        ],
+        "local_keywords": [
+          "다자녀"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "다자녀 전기요금 할인(한전)",
+          "law_query": "전기사업법",
+          "keywords": [
+            "전기요금"
+          ],
+          "priority": "must",
+          "condition": "한전 고객센터(123)에 자녀 3명 이상 가구 전기요금 할인 신청(월 30%, 16,000원 한도)."
+        }
+      ]
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "다자녀가정 양육바우처 지원",
+          "priority": "nice",
+          "condition": "거제시 다자녀 양육바우처.",
+          "service_id": "WLF00005896"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "multi-child",
+    "events": [
+      "multi-child"
+    ],
+    "title": "다자녀 공과금 할인",
+    "emoji": "💡",
+    "intro": "전기요금(자녀 3명 이상 월 30% 한도 16,000원)과 도시가스 경감은 각각 한전·도시가스사에 신청해야 적용돼요.",
+    "region": {
+      "sido": "경상남도",
+      "sgg": "거제시"
+    },
+    "procedures": [
+      {
+        "ref": "G4",
+        "id": "gov24-B55121000003",
+        "name": "사회적 배려대상자 도시가스요금 경감",
+        "priority": "must",
+        "condition": "자녀 3명 이상 → 도시가스사에 가족관계증명서로 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "한국가스공사",
+        "online": true,
+        "documents": [
+          "○ 도시가스요금 경감 지원 신청서 및 개인정보 수집/이용·제공 위탁 동의서",
+          "○ 다자녀가구 : 만 18세 미만의 \"자녀\" 또는 \"손자녀\"의 확인이 주민등록표상 불가능할 경우 \"가족관계증명원\"",
+          "○ 장애 외국인 : 장애인의 경우, 외국인등록증(사실증명) 또는 국내거소신고증(사실증명)"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55121000003",
+        "source": {
+          "name": "보조금24 · 한국가스공사",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "사회적배려대상자의 도시가스 요금 경감을 통한 생활안정 지원",
+        "verification_status": "verified",
+        "eligibility": "생계급여, 주거급여, 의료급여 또는 교육급여의 수급자   차상위계층   장애의 정도가 심한 장애인   1~3급 신체장해등급 판정을 받은 5.18민주화운동 관련자   1~3급 상이등급 판정을 받은 국가유공자   독립유공자 또는 선순위 유족   자녀 또는",
+        "key": "svc:B55121000003",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "다자녀 전기요금 할인(한전)",
+        "priority": "must",
+        "condition": "한전 고객센터(123)에 자녀 3명 이상 가구 전기요금 할인 신청(월 30%, 16,000원 한도).",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "한국전력공사(산업통상자원부) · 한전 고객센터 123 / 사이버지점 / 관할 지사",
+        "online": true,
+        "documents": [
+          "전기요금 할인 신청서(한전 기본공급약관 별지 서식; 정부24 안내상 별도 신청서 '해당없음'으로 한전ON·123 신청 시 본인정보 제공 동의로 처리)",
+          "주민등록표 등본(세대주와의 관계가 '자' 또는 '손' 3명 이상 확인용 — 주민센터 접수 시 담당공무원 확인, 한전ON·123·사업소 접수 시 본인정보 제공 동의로 대체)",
+          "외국인등록사실증명·국내거소신고 확인서류(외국인·재외동포 가구인 경우)"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1126&ccfNo=5&cciNo=1&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 다자녀가구 > 전기료 감면",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "자녀(또는 손자녀)가 3명 이상인 가구는 한전에 신청하면 주택용 전기요금을 월 30%(월 16,000원 한도) 할인받는다. 한전 고객센터 123, 사이버지점, 지사에서 신청하며 셋째 출생신고 시 주민센터 행복출산 원스톱서비스로 한꺼번에 신청할 수 있다. 주민등록표상 세대주와의 관계가 '자' 3명 이상이어야 하며 18세 미만 자녀는 세대를 분리해도 인정된다.",
+        "verification_status": "verified",
+        "key": "x:다자녀 전기요금 할인(한전)",
+        "unlocks": 0,
+        "order": 2,
+        "where": "한전ON(online.kepco.co.kr) 온라인, 한전 고객센터(국번 없이 123) 전화, 한전 사업소 또는 행정복지센터(주민센터) 방문, 우편·팩스·메일. 셋째 출생신고 시 주민센터 '행복출산 원스톱서비스'로 동시 신청 가능",
+        "fee": "무료",
+        "steps": [
+          "주민등록표상 세대주와의 관계가 '자(子)' 또는 '손(孫)'인 가구원이 3명 이상인지 확인한다(18세 미만 자녀는 세대 분리해도 같은 가구로 봄)",
+          "한전 고객센터 123에 전화하거나 사이버지점·지사에서 고객번호를 확인하고 전기요금 할인 신청서를 제출한다",
+          "셋째 아이 출생신고 때는 주민센터 행복출산 원스톱서비스로 함께 신청한다",
+          "다음 달 고지서에서 월 30%(한도 16,000원) 할인 적용을 확인한다"
+        ],
+        "pitfalls": [
+          "신청해야 적용되며 소급 적용이 제한될 수 있으므로 셋째 출생·전입 즉시 신청한다",
+          "주민등록표상 세대주와의 관계가 '자' 또는 '손'으로 표시되어야 하므로 세대주를 조부모 등으로 둔 경우 요건을 확인한다",
+          "장애인·유공자·기초수급 등 다른 복지할인과의 중복 적용 여부는 한전 123에 확인한다(다자녀·대가족·출산가구는 모두 월 16,000원 한도 30% 할인군)",
+          "이사하면 새 주소의 고객번호로 다시 신청해야 한다"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1126&ccfNo=5&cciNo=1&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00005896",
+        "name": "다자녀가정 양육바우처 지원",
+        "priority": "nice",
+        "condition": "거제시 다자녀 양육바우처.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "경상남도 거제시 복지국 가족정책과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005896&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 경상남도 거제시 복지국 가족정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "다자녀 가구의 자녀 양육에 따른 경제적 부담 완화로 출산 장려",
+        "verification_status": "verified",
+        "key": "svc:WLF00005896",
+        "eligibility": "① 셋째아 이상의 자녀가 8세가 되는 달부터 신청가능하며, 18세 생일이 도달하는     달의 전달까지 지원② 신청일 현재 보호자와 대상자녀가 1년이상 계속하여 거제시에 주민등록을 두고    주민등록상 동일 세대인 다자녀가정 ① 셋째아 이상의 자녀가 ",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.7
+  }
+}

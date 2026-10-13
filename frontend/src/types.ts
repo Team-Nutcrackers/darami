@@ -1,8 +1,6 @@
 /** 정적 시나리오 3종 + 동적 생성 이벤트(임의 슬러그)를 모두 허용 */
 export type EventKey = "move" | "birth" | "resignation" | (string & {});
 
-/** 응답에 사용할 LLM 제공자. 공식 표기: Solar Pro(Upstage) / K-EXAONE(LG) */
-export type LlmProvider = "solar" | "kexaone";
 export type Priority = "must" | "nice" | "qna";
 export type Status = "waiting" | "in_progress" | "done";
 
@@ -29,6 +27,24 @@ export interface Procedure {
   anchor?: string;
   /** 큐레이션 agent의 grounding 상태 (verified/partial=공식출처, ai=AI생성·미검증) */
   verification_status?: "verified" | "partial" | "needs_review" | "unverified";
+  /** 먼저 끝내야 하는 선행 절차 id 목록 (playbooks/dependencies.json 카탈로그에서 계산) */
+  dependsOn?: string[];
+  /** 권고 선행(잠그지 않음) — AI 제안 절차 뒤에 하라는 학습 간선. 흐름도에 점선으로만 표시 */
+  suggestedAfter?: string[];
+  /** 선행 절차라서 자동으로 추가된 항목 */
+  autoAdded?: boolean;
+  /** 백엔드 절차 그래프(sources/graph.py)가 매긴 추천 순서·여는 후속 수. 프론트는 보드 기준으로 다시 계산한다(lib/graph.ts) */
+  order?: number;
+  unlocks?: number;
+  /** 그래프 노드 안정 키(common:/law:/svc:/x:) */
+  key?: string;
+  /** 절차 지식베이스(playbooks/procedures.json)에서 채운 창구·수수료·진행 순서·주의점 */
+  where?: string;
+  fee?: string;
+  steps?: string[];
+  pitfalls?: string[];
+  sourceUrl?: string;
+  curated?: boolean;
 }
 
 export interface Playbook {

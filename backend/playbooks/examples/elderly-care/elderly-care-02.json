@@ -1,0 +1,306 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "elderly-care-02",
+    "event_id": "elderly-care",
+    "event_title": "부모님 돌봄",
+    "persona_summary": "49세 남성 · 경기 군포시 · 자영업 · 부친 거동 불편",
+    "persona": {
+      "facts": {
+        "age": 49,
+        "gender": "남성",
+        "residence": "경기 군포시",
+        "situation": "자영업 · 부친 거동 불편"
+      }
+    },
+    "query": "아버지가 낙상하신 뒤로 거동을 거의 못 하세요. 집으로 요양보호사가 와주는 서비스를 받고 싶은데 비용이 얼마나 드는지, 본인 부담을 줄일 수 있는지 궁금해요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "elderly-care"
+      ],
+      "reason": "방문요양 비용"
+    },
+    "plan": {
+      "title": "방문요양 비용과 본인부담",
+      "emoji": "🧓",
+      "intro": "장기요양 등급을 받으면 방문요양은 비용의 15%만 본인부담이고(기초수급자 면제, 소득 하위는 6~9%), 등급별 월 한도 안에서 이용해요. 낙상 거동 불편은 신체기능으로 등급이 나와요.",
+      "law": [
+        {
+          "name": "장기요양인정 신청",
+          "priority": "must",
+          "condition": "낙상 후 거동 불가 → 등급 신청(의사소견서)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "노인장기요양보험(장기요양인정)",
+          "priority": "must",
+          "condition": "등급 판정."
+        },
+        {
+          "name": "재가급여",
+          "priority": "must",
+          "condition": "방문요양·방문목욕·방문간호(본인부담 15%)."
+        },
+        {
+          "name": "장기요양급여비용 본인부담금 감경",
+          "priority": "must",
+          "condition": "건보료 하위 25~50% → 본인부담 40~60% 감경."
+        },
+        {
+          "name": "노인맞춤돌봄서비스",
+          "priority": "nice",
+          "condition": "등급 외일 때."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "돌봄",
+          "어르신"
+        ],
+        "local_keywords": [
+          "돌봄",
+          "요양"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R3",
+          "name": "누구나 돌봄",
+          "priority": "nice",
+          "condition": "경기도 긴급 돌봄(연 150만 원 한도).",
+          "service_id": "641000000730"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "elderly-care",
+    "events": [
+      "elderly-care"
+    ],
+    "title": "방문요양 비용과 본인부담",
+    "emoji": "🧓",
+    "intro": "장기요양 등급을 받으면 방문요양은 비용의 15%만 본인부담이고(기초수급자 면제, 소득 하위는 6~9%), 등급별 월 한도 안에서 이용해요. 낙상 거동 불편은 신체기능으로 등급이 나와요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "군포시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-elderly-care-l1",
+        "name": "장기요양인정 신청",
+        "priority": "must",
+        "condition": "낙상 후 거동 불가 → 등급 신청(의사소견서).",
+        "deadline": "수시. 갱신은 유효기간 만료 90일 전부터 30일 전까지",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 국민건강보험공단 지사(장기요양운영센터)",
+        "online": true,
+        "documents": [
+          "장기요양인정신청서(공단 서식자료실)",
+          "의사소견서 원본(65세 이상은 등급판정위원회 심의 전까지 제출 가능, 65세 미만 노인성 질병자는 신청 시 의사소견서 또는 진단서 필수)",
+          "신분증(방문 시 제시, 우편·팩스 시 사본)",
+          "대리인 신분증 및 대리 관계 확인 서류(가족·친족 등 대리 신청 시)"
+        ],
+        "link": "https://www.nhis.or.kr/static/html/wbda/c/wbdac02.html",
+        "source": {
+          "name": "국민건강보험공단 장기요양인정 신청 절차 · 노인장기요양보험법 제13조(장기요양인정의 신청)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "65세 이상이거나 65세 미만 치매·뇌혈관질환 등 노인성 질병이 있는 사람이 거동이 어려우면 국민건강보험공단 지사에 장기요양인정을 신청한다. 가족이 대리 신청할 수 있고, 공단 방문조사와 의사소견서를 바탕으로 신청일부터 30일 안에 등급이 판정된다. 등급을 받아야 방문요양·주야간보호·시설급여를 이용할 수 있다.",
+        "verification_status": "verified",
+        "key": "law:장기요양인정 신청",
+        "unlocks": 2,
+        "order": 1,
+        "where": "공단 지사(운영센터) 방문·우편·팩스, 노인장기요양보험 홈페이지(longtermcare.or.kr, 65세 이상·갱신 시) 또는 전화(갱신만)",
+        "fee": "무료(의사소견서 발급비는 본인부담분 있음)",
+        "steps": [
+          "공단 지사·홈페이지에 장기요양인정신청서 제출(가족 대리 가능)",
+          "공단 직원 방문조사(신체·인지 기능 등 조사표 작성)",
+          "공단이 보낸 의사소견서 발급의뢰서로 병원에서 의사소견서 발급·제출",
+          "등급판정위원회 판정(신청일부터 30일, 최대 30일 연장) → 장기요양인정서·개인별 이용계획서 수령 → 재가·시설급여 이용"
+        ],
+        "pitfalls": [
+          "의사소견서를 기한 내 제출하지 않으면 등급판정이 안 됨(발급의뢰서 없이 먼저 발급받으면 전액 본인부담)",
+          "65세 미만은 노인성 질병 증빙(진단서) 없이는 접수 불가",
+          "인터넷 신청은 65세 이상 또는 갱신 신청만 가능(외국인 불가)",
+          "등급판정에 불복하면 심사청구 가능"
+        ],
+        "sourceUrl": "https://www.nhis.or.kr/static/html/wbda/c/wbdac02.html",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-999000000089",
+        "name": "노인장기요양보험(장기요양인정)",
+        "priority": "must",
+        "condition": "등급 판정.",
+        "deadline": "자세한 날짜는 국민건강보험공단 지사에 따라 다를 수 있음",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 장기요양인정 신청서",
+          "○ 의사소견서",
+          "의사소견서는 장기요양인정신청시 제출해야 하나, 등급판정위원회 개최 전까지 의사소견서를 제출할 수 있음.",
+          "신청인이 만65세 미만인 자로서 노인성 질병을 확인할 수 있는 진단서를 제출한 경우, 등급판정위원회 개최 전까지 의사소견서를 추가로 제출할 수 있음.",
+          "[별지 제1호의2서식] 장기요양인정 신청서¸ 장기요양인정 갱신신청서¸ 장기요양등급 변경신청서¸ 장기요양 급여종류ㆍ내용 변경신청서.hwp"
+        ],
+        "link": "http://www.longtermcare.or.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "고령이나 노인성 질병 등의 사유로 일상생활을 혼자서 수행하기 어려운 노인 등에게 신체활동 또는 가사활동 지원 등의 장기요양급여를 지원하여 노후의 건강증진 및 생활 안정을 도모하고 그 가족의 부담을 덜어줌으로써 국민의 삶의 질을 향상하도록 함",
+        "verification_status": "verified",
+        "eligibility": "신청 가능 대상  - 만 65세 이상 노인 또는 만 65세 미만자 중 치매ㆍ뇌혈관성 질환 등 노인성 질병(시행령 제2조에 정해진 질병)이 있는 자  - 만 65세 미만자 중 노인성 질병이 있는 경우 장기요양인정 신청서와 의사소견서(또는 진단서)를 같이",
+        "key": "svc:999000000089",
+        "unlocks": 2,
+        "order": 2
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-SSE000000020",
+        "name": "재가급여",
+        "priority": "must",
+        "condition": "방문요양·방문목욕·방문간호(본인부담 15%).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 장기요양기관과 급여계약 시 신청인 필수 서류",
+          "장기요양인정서",
+          "개인별장기요양이용계획서",
+          "본인부담금 감경대상자 증명서(해당자에 한함)"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/SSE000000020",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "고령이나 노인성 질병 등의 사유로 일상생활을 혼자서 수행하기 어려운 노인 등에게 제공하는 신체활동 또는 가사활동 지원 등을 제공하여 노후의 건강증진 및 생활 안정을 도모하고 그 가족의 부담을 덜어주어 국민의 삶의 질을 향상시키고자 함",
+        "verification_status": "verified",
+        "eligibility": "65세 이상 노인 및 노인성 질병을 가진 65세 미만의 국민으로서 혼자서 일상생활을 수행하기 어려워 장기 요양 1~5등급을 받은 수급자",
+        "key": "svc:SSE000000020",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-elderly-care-l1",
+          "gov24-999000000089"
+        ]
+      },
+      {
+        "ref": "G8",
+        "id": "gov24-135200005031",
+        "name": "장기요양급여비용 본인부담금 감경",
+        "priority": "must",
+        "condition": "건보료 하위 25~50% → 본인부담 40~60% 감경.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "별도 신청절차 없으나, 감경 해지자 중 보험료가 변동되는 등의 사유로 감경기준에 해당될 시 장기요양 본인부담금 감경에 관한 고시  별지 제1호 서식에 따른 본인부담금 감경신청서 제출 필요"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005031",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "장기요양급여비용에 부담을 느끼는 소득계층의 비용부담을 실질적으로 해소하여 저소득 가구의 장기요양 급여이용 권리를 보장",
+        "verification_status": "verified",
+        "eligibility": "(40% 감경) 가입자 종류 및 가구원수별 산정보험료 순위 25%초과 50%이하인 자 (60% 감경) 보험료 순위 25%이하인 자, 「의료급여법」제3조제1항제2호부터 제9호까지의 규정에 따른 수급권자, 「국민건강보험법 시행규칙」제15조에 따라 국민건강",
+        "key": "svc:135200005031",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-elderly-care-l1",
+          "gov24-999000000089"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-SSE000000050",
+        "name": "노인맞춤돌봄서비스",
+        "priority": "nice",
+        "condition": "등급 외일 때.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 본인신청",
+          "신청서",
+          "신청자의 신분증",
+          "○ 대리신청",
+          "신청서",
+          "위임장 및 대리신청자의 신분증",
+          "신청자의 신분증"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "홀로 일상생활을 영위하기 어려운 취약노인에게 복지 서비스 자원 발굴/연계, 생활교육, 정기적인 안전 확인 및 정서적 지원 등의 기본 서비스 제공",
+        "verification_status": "verified",
+        "eligibility": "65세 이상 ①국민기초생활수급자, ②차상위계층 또는 ③기초연금수급자로서 유사중복사업 자격에 해당되지 않는 자      (다만, 시장･군수･구청장이 서비스가 필요하다고 인정하는 경우 예외적으로 제공 가능)    - 독거･조손･고령부부 가구 노인 등 돌봄",
+        "key": "svc:SSE000000050",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "R3",
+        "id": "regional-641000000730",
+        "name": "누구나 돌봄",
+        "priority": "nice",
+        "condition": "경기도 긴급 돌봄(연 150만 원 한도).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "경기도",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gg.go.kr/ggcare/hmpg/main/main.do",
+        "source": {
+          "name": "보조금24 · 경기도",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "소득·연령에 관계없이 기존 돌봄의 틈새로 발생하는 돌봄공백의 해소",
+        "verification_status": "verified",
+        "key": "svc:641000000730",
+        "eligibility": "돌봄이 필요한 31개 시·군 도민 누구나   적격 판단 기준  ( ※ 3가지 위기 상황 모두 충족하여야 지원 가능)  - 혼자 거동이 어렵거나 독립적인 일상생활 수행이 어려운 경우  - 수발 할 수 있는 가족 등이 없거나 수발 할 수 없는 경우  - ",
+        "unlocks": 0,
+        "order": 6
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 6,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

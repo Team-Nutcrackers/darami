@@ -1,0 +1,164 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "parental-leave-05",
+    "event_id": "parental-leave",
+    "event_title": "육아휴직",
+    "persona_summary": "34세 남성 · 경북 구미시 · 생산직 · 배우자 출산휴가 분할",
+    "persona": {
+      "facts": {
+        "age": 34,
+        "gender": "남성",
+        "residence": "경북 구미시",
+        "situation": "생산직 · 배우자 출산휴가 분할"
+      }
+    },
+    "query": "다음 주에 아이가 태어나는데 배우자 출산휴가를 한 번에 다 쓰기보다 나눠서 쓰고 싶어요. 몇 번까지 나눌 수 있고 언제까지 써야 하는지 알고 싶습니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "parental-leave"
+      ],
+      "reason": "배우자 출산휴가 분할"
+    },
+    "plan": {
+      "title": "배우자 출산휴가 나눠 쓰기",
+      "emoji": "👨‍🍼",
+      "intro": "배우자 출산휴가 20일은 최대 3회로 나눌 수 있고, 출산일부터 120일 이내에 써야 해요.",
+      "law": [
+        {
+          "name": "배우자 출산휴가",
+          "priority": "must",
+          "condition": "다음 주 출산 → 출산일부터 120일 이내, 20일, 3회 분할."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "배우자 출산휴가 급여",
+          "priority": "must",
+          "condition": "우선지원대상기업이면 고용보험 급여(휴가 종료 후 12개월 이내 신청)."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "육아휴직",
+          "아빠"
+        ],
+        "local_keywords": [
+          "육아휴직",
+          "아빠"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "parental-leave",
+    "events": [
+      "parental-leave"
+    ],
+    "title": "배우자 출산휴가 나눠 쓰기",
+    "emoji": "👨‍🍼",
+    "intro": "배우자 출산휴가 20일은 최대 3회로 나눌 수 있고, 출산일부터 120일 이내에 써야 해요.",
+    "region": {
+      "sido": "경상북도",
+      "sgg": "구미시"
+    },
+    "procedures": [
+      {
+        "ref": "L3",
+        "id": "law-parental-leave-l3",
+        "name": "배우자 출산휴가",
+        "priority": "must",
+        "condition": "다음 주 출산 → 출산일부터 120일 이내, 20일, 3회 분할.",
+        "deadline": "배우자 출산일부터 120일 이내 사용(출산예정일 50일 전부터 시작 가능), 최대 3회 분할",
+        "deadlineDays": 120,
+        "agency": "고용노동부 · 소속 사업장(사용자)",
+        "online": false,
+        "documents": [
+          "배우자 출산(또는 출산예정) 사실 증빙(출생증명서·출산예정일 확인서 등 — 회사 내부 절차에 따름)",
+          "배우자 관계 증빙(가족관계증명서 등 — 회사가 요구하는 경우)",
+          "배우자 출산휴가 확인서(급여 신청용, 사업주가 고용24에 제출)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=1380&ccfNo=1&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 배우자 출산휴가 신청 · 남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률 제18조의2(배우자 출산전후휴가)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "배우자가 출산한 근로자는 사용자에게 청구해 20일의 유급 배우자 출산휴가를 쓸 수 있다(2025-02-23부터 10→20일, 3회 분할, 출산일부터 120일 이내). 사용자는 거부할 수 없으며, 우선지원대상기업 근로자는 휴가 후 고용24에서 정부 급여(20일분, 상한 있음)를 별도로 신청한다.",
+        "verification_status": "verified",
+        "key": "law:배우자 출산휴가",
+        "unlocks": 1,
+        "order": 1,
+        "where": "회사(사용자)에 배우자 출산 사실을 알리고 휴가 청구(별도 행정기관 접수 없음); 급여는 고용24(고용센터)에 별도 신청",
+        "fee": "무료(20일 전부 유급)",
+        "steps": [
+          "배우자 출산(예정) 사실을 회사에 알리고 휴가 사용 기간을 청구한다(출산일부터 120일 이내, 3회까지 분할).",
+          "회사는 20일의 유급휴가를 부여해야 한다(거부·무급 처리 시 500만원 이하 과태료).",
+          "휴가 사용 후 우선지원대상기업 근로자는 고용24에서 배우자 출산휴가 급여를 신청한다(사업주의 확인서 선제출 필요)."
+        ],
+        "pitfalls": [
+          "출산일부터 120일이 지나면 휴가를 쓸 수 없다. 휴가 기간 중 휴일·휴무일은 일수에 포함되지 않는다.",
+          "2025-02-22 이전에 10일을 모두 썼더라도 청구기한이 남았으면 확대된 20일이 적용되고 이미 사용한 일수는 차감된다.",
+          "급여 신청은 휴가 시작 후 1개월부터 휴가 종료 후 12개월 이내, 고용보험 피보험단위기간 180일 이상이어야 한다.",
+          "휴가 중 퇴사하면 퇴직일 이후 기간은 급여가 지급되지 않는다."
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=1380&ccfNo=1&cciNo=2&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-999000000004",
+        "name": "배우자 출산휴가 급여",
+        "priority": "must",
+        "condition": "우선지원대상기업이면 고용보험 급여(휴가 종료 후 12개월 이내 신청).",
+        "deadline": "휴가가 끝난 날 이후 12개월 이내에 신청",
+        "deadlineDays": 360,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "출산전후휴가 급여등 신청서(고용보험법 시행규칙 별지 제105호서식)",
+          "배우자 출산휴가 확인서(고용보험법 시행규칙 별지 제107호의2 서식) 1부",
+          "통상임금을 확인할 수 있는 자료(임금대장, 근로계약서 등) 사본 1부",
+          "휴가기간 동안 사업주로부터 금품을 지급받은 경우 이를 확인할 수 있는 자료"
+        ],
+        "link": "http://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "배우자 출산휴가를 사용한 남성 근로자에게 급여를 지원함으로써 남성의 육아 참여 활성화와 모성보호 도모",
+        "verification_status": "verified",
+        "eligibility": "- 「남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률」 제18조의2에 따른 배우자 출산휴가를 받은 우선지원대상기업 소속 근로자 - 휴가가 끝난 날 이전에 고용보험 피보험 단위기간이 합산하여 180일 이상 - 휴가가 끝난 날 이후 12개월 이내에 신청",
+        "key": "svc:999000000004",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "law-parental-leave-l3"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 2,
+    "by_status": {
+      "verified": 2
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.3
+  }
+}

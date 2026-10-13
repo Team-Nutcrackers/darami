@@ -1,0 +1,302 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "jeonse-fraud-05",
+    "event_id": "jeonse-fraud",
+    "event_title": "전세사기 피해",
+    "persona_summary": "40세 남성 · 경기 화성시 · 동탄 오피스텔 · 피해 후 이사",
+    "persona": {
+      "facts": {
+        "age": 40,
+        "gender": "남성",
+        "residence": "경기 화성시",
+        "situation": "동탄 오피스텔 · 피해 후 이사"
+      }
+    },
+    "query": "전세사기를 당해서 보증금을 못 받은 상태에서 일단 다른 곳으로 이사를 가야 해요. 피해자한테 이사비나 임시로 살 집을 지원해 주는 게 있다던데 화성시도 되나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "jeonse-fraud"
+      ],
+      "reason": "피해 후 이주 지원"
+    },
+    "plan": {
+      "title": "전세사기 피해 후 이사 지원",
+      "emoji": "🏚️",
+      "intro": "피해자 결정을 받으면 LH 긴급 전세임대와 저리 이주 대출을 받을 수 있고, 화성시·경기도 이사비·생활안정 지원도 있어요. 나가기 전 임차권등기를 하세요.",
+      "law": [
+        {
+          "name": "임차권등기명령",
+          "priority": "must",
+          "condition": "이사 전 임차권등기(대항력 유지)."
+        },
+        {
+          "name": "전세사기피해자 결정 신청",
+          "priority": "must",
+          "condition": "피해자 결정 → 주거·금융 지원 자격."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "기존주택 전세임대주택 지원사업",
+          "priority": "must",
+          "condition": "피해자 긴급 전세임대(LH) 신청."
+        },
+        {
+          "name": "긴급복지 주거지원",
+          "priority": "nice",
+          "condition": "임시 거처."
+        },
+        {
+          "name": "무료 소송대리 서비스(소액임차인)",
+          "priority": "nice",
+          "condition": "소송 지원."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "전세사기",
+          "전세피해"
+        ],
+        "local_keywords": [
+          "전세사기",
+          "전세피해",
+          "이사비"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "jeonse-fraud",
+    "events": [
+      "jeonse-fraud"
+    ],
+    "title": "전세사기 피해 후 이사 지원",
+    "emoji": "🏚️",
+    "intro": "피해자 결정을 받으면 LH 긴급 전세임대와 저리 이주 대출을 받을 수 있고, 화성시·경기도 이사비·생활안정 지원도 있어요. 나가기 전 임차권등기를 하세요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "화성시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-jeonse-fraud-l1",
+        "name": "임차권등기명령",
+        "priority": "must",
+        "condition": "이사 전 임차권등기(대항력 유지).",
+        "deadline": "임대차 종료 후 보증금 미반환 상태에서, 이사(주민등록 이전) 전에 신청·등기 완료",
+        "deadlineDays": 9999,
+        "agency": "법원 · 임차주택 소재지 관할 지방법원·지원·시군법원",
+        "online": true,
+        "documents": [
+          "임차권등기명령신청서(점유 개시일·주민등록일·확정일자·미반환 보증금 기재)",
+          "임대인 명의 부동산 등기사항증명서(미등기면 건축물대장 등)",
+          "임대차계약서(확정일자 날인본)",
+          "주민등록등(초)본(1개월 이내, 점유·전입일 소명)",
+          "임대차 종료 소명자료(계약해지 통지서·내용증명 등)",
+          "주거용 사용 증명자료(등기상 용도가 주거용이 아닌 경우)",
+          "건물 도면(일부 임차 시)",
+          "수입인지·송달료·등기촉탁 수수료 납부 영수증"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=629&ccfNo=5&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 임차권등기명령 신청 · 주택임대차보호법 제3조의3(임차권등기명령)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임대차가 끝났는데 보증금을 못 받은 채 이사해야 한다면, 이사 전에 임차주택 소재지 관할 법원에 임차권등기명령을 신청한다. 등기가 마쳐지면 주민등록을 옮겨도 기존 대항력·우선변제권이 유지된다. 신청 비용은 임대인에게 청구할 수 있다.",
+        "verification_status": "verified",
+        "key": "law:임차권등기명령",
+        "unlocks": 4,
+        "order": 1,
+        "where": "임차주택 소재지 관할 법원 민원실 방문 접수 또는 대법원 전자소송(ecfs.scourt.go.kr)",
+        "fee": "수입인지 2,000원 + 송달료 예납 + 등기촉탁 수수료(법원별 상이; 비용은 임대인에게 청구 가능)",
+        "steps": [
+          "계약 만료·해지로 임대차가 종료됐고 보증금(일부 포함)을 못 받았는지 확인",
+          "등기사항증명서·확정일자 계약서·주민등록초본·해지통지 자료를 준비",
+          "임차주택 소재지 관할 법원에 신청서 접수(전자소송 가능), 인지·송달료 납부",
+          "법원 결정 → 임대인 송달·등기소 촉탁으로 임차권등기 완료(등기부에서 확인)",
+          "등기 완료 후 이사·전출해도 대항력·우선변제권 유지; 보증금 반환 소송·지급명령 병행"
+        ],
+        "pitfalls": [
+          "등기 완료 전에 전출하면 대항력·우선변제권을 잃는다 — 반드시 등기부에 등기된 것을 확인한 뒤 이사",
+          "임대차 종료 전에는 신청할 수 없다(기간 만료·해지 통고 등 종료 사실 필요)",
+          "등기 전에 설정된 근저당권보다 우선할 수는 없다",
+          "전차인은 신청 불가, 대항력 상실 후 양수인 상대 신청 불가",
+          "임대인의 보증금 반환이 임차권등기 말소보다 선이행 — 보증금 받기 전엔 말소해주지 않는다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=629&ccfNo=5&cciNo=2&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "L2",
+        "id": "law-jeonse-fraud-l2",
+        "name": "전세사기피해자 결정 신청",
+        "priority": "must",
+        "condition": "피해자 결정 → 주거·금융 지원 자격.",
+        "deadline": "2025.5.31 이전 최초 임대차계약 체결자 대상, 결정 신청 유효기간 2027.5.31까지",
+        "deadlineDays": 9999,
+        "agency": "국토교통부(전세사기피해지원위원회) · 거주지 관할 시·도(전세피해지원센터)",
+        "online": true,
+        "documents": [
+          "전세사기피해자등 결정신청서(시행규칙 별지 제1호서식)",
+          "임대차계약서 사본",
+          "주민등록표 초본(행정정보 공동이용 미동의 시)",
+          "경매·공매 개시 관련 서류(민사집행법 제84조 최고서, 공매통지서 등) 중 하나",
+          "판결정본·지급명령 등 집행권원 확인 서류(있는 경우)",
+          "전세사기피해자 요건을 갖췄음을 증명하는 서류(임대인 연락두절·사기 고소장 등)",
+          "개인정보 수집·이용 동의서",
+          "가족관계증명서(법정대리인·유족 신청 시)",
+          "위임장(대리인 신청 시)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1972&ccfNo=2&cciNo=1&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 전세사기피해자등 결정 · 전세사기피해자 지원 및 주거안정에 관한 특별법 제14조(전세사기피해자등 결정)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "전세사기 피해를 입었다면 거주지 관할 시·도(또는 jeonse.kgeop.go.kr)에 결정신청서·임대차계약서·경매 통지서 등을 내고 전세사기피해자 결정을 받아야 경매 유예, 우선매수, 공공임대, 저리대출 등 지원을 받을 수 있다. 시·도 조사 30일, 위원회 심의 30일 안에 결정되며 기각 시 30일 내 이의신청이 가능하다.",
+        "verification_status": "verified",
+        "key": "law:전세사기피해자 결정 신청",
+        "unlocks": 3,
+        "order": 2,
+        "where": "거주지 관할 시·도청(전세피해지원센터) 방문·우편 또는 전세사기피해자 지원관리시스템(jeonse.kgeop.go.kr) 온라인 신청",
+        "fee": "무료",
+        "steps": [
+          "대항력(전입+점유)·확정일자 등 요건 자료와 임대차계약서, 경매·공매 통지서, 임대인 사기 정황 자료를 모은다",
+          "거주지 관할 시·도(또는 온라인 시스템)에 결정신청서와 서류 제출",
+          "시·도가 접수·조사(30일), 흠결 시 14일 내 보완",
+          "국토교통부 전세사기피해지원위원회가 심의·의결(30일, 15일 연장 가능) 후 결정 통지",
+          "결정서로 경·공매 유예, 우선매수권, 저리 대출·공공임대 등 지원 신청; 불복 시 송달일부터 30일 내 이의신청"
+        ],
+        "pitfalls": [
+          "2026.10.2 시행 개정법이 있어 서류·요건이 바뀔 수 있으니 접수 전 시·도 센터(1600-9640)에 확인",
+          "보완 요청(14일) 기간은 조사기간에서 제외되므로 서류 미비 시 지연",
+          "유효기간(2027.5.31)과 적용 계약 체결 시점(2025.5.31 이전) 제한이 있다",
+          "결정 전에 이사·전출하면 대항력을 잃을 수 있으니 임차권등기 후 이동",
+          "기각돼도 사정 변경 시 재신청 가능"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1972&ccfNo=2&cciNo=1&cnpClsNo=2",
+        "curated": true,
+        "dependsOn": [
+          "law-jeonse-fraud-l1"
+        ]
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-999000000022",
+        "name": "기존주택 전세임대주택 지원사업",
+        "priority": "must",
+        "condition": "피해자 긴급 전세임대(LH) 신청.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "국토교통부",
+        "online": true,
+        "documents": [
+          "전세임대주택 공급신청서",
+          "신분증",
+          "주민등록등본(주민등록이 분리된 배우자 포함)",
+          "개인정보 수집",
+          "이용 및 제3자 제공 동의서"
+        ],
+        "link": "https://apply.lh.or.kr/",
+        "source": {
+          "name": "보조금24 · 국토교통부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "저소득층 주거안정 도모",
+        "verification_status": "verified",
+        "eligibility": "<기존주택 전세임대주택 지원사업>  일반공급(저소득층) : 입주자 선정기준일에 해당 사업대상지역에 주민등록이 등재된 무주택세대구성원  (1순위) 생계·의료급여 수급자, 보호대상 한부모가족, 수급권자 또는 차상위계층 중 최저주거기준 미달이거나 소득대비월",
+        "key": "svc:999000000022",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-jeonse-fraud-l2"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-135200005001",
+        "name": "긴급복지 주거지원",
+        "priority": "nice",
+        "condition": "임시 거처.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 신청인 제출서류",
+          "신분증, 금융정보 등 제공동의서, 기타 구비 서류(긴급복지지원 담당공무원과 상담 필요)",
+          "○ 공무원 확인가능 서류",
+          "주민등록등본, 기타 요건확인에 따라 상이"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005001",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "갑작스러운 위기상황에 처하여 생계유지 등이 어려운 저소득 가구를 신속하게 지원하여 위기상황에서 벗어나게 함",
+        "verification_status": "verified",
+        "eligibility": "긴급복지지원법 제2조 각 호의 어느 하나에 해당하는 사유로 생계유지가 곤란한 사람  <위기사유> 1. 주소득자(主所得者)가 사망, 가출, 행방불명, 구금시설에 수용되는 등의 사유로 소득을 상실한 경우 2. 중한 질병 또는 부상을 당한 경우 3. 가구구",
+        "key": "svc:135200005001",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-jeonse-fraud-l2"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-B27000100027",
+        "name": "무료 소송대리 서비스(소액임차인)",
+        "priority": "nice",
+        "condition": "소송 지원.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대한법률구조공단",
+        "online": true,
+        "documents": [],
+        "link": "www.klac.or.kr",
+        "source": {
+          "name": "보조금24 · 대한법률구조공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 사회·경제적 약자에 대한 법률구조서비스 제공으로 법률복지증진\r\n\r\n○ 무료 법률상담\r\n\r\n○ 무료 소송대리\r\n - '주택'임대차 보증금 관련사건",
+        "verification_status": "verified",
+        "eligibility": "소액임차인  - 건강보험료 본인부담금 합산액이 기준중위소득 125% 이하인 자  - 「주택임대차보호법」에서 정한 소액임차인",
+        "key": "svc:B27000100027",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-jeonse-fraud-l2"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 30.2
+  }
+}

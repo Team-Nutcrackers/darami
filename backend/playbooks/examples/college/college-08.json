@@ -1,0 +1,184 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "college-08",
+    "event_id": "college",
+    "event_title": "대학 진학·학자금",
+    "persona_summary": "19세 여성 · 경기 이천시 · 고3 · 다자녀 가정, 장학금",
+    "persona": {
+      "facts": {
+        "age": 19,
+        "gender": "여성",
+        "residence": "경기 이천시",
+        "situation": "고3 · 다자녀 가정, 장학금"
+      }
+    },
+    "query": "형제가 셋이라 다자녀 장학금이 있다고 들었어요. 저는 둘째인데 둘째도 받을 수 있는 건지, 첫째 언니가 이미 받고 있으면 중복이 되는지 궁금해요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "college",
+        "multi-child"
+      ],
+      "reason": "다자녀 국가장학금"
+    },
+    "plan": {
+      "title": "다자녀 국가장학금(둘째)",
+      "emoji": "🎓",
+      "intro": "다자녀 국가장학금은 세 자녀 이상 가구의 모든 대학생 자녀가 대상이라 둘째도 받고, 언니와 중복이 아니라 각자 받아요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "다자녀(세 자녀 이상) 국가장학금",
+          "priority": "must",
+          "condition": "3자녀 가구 둘째 → 소득 8구간 이하 등록금 지원(셋째 이상 자녀는 전액). 형제와 각각 수령."
+        },
+        {
+          "name": "국가장학금 Ⅰ유형 (학생직접지원형)",
+          "priority": "nice",
+          "condition": "다자녀 유형이 더 유리하면 자동 적용."
+        },
+        {
+          "name": "취업 후 상환 학자금대출",
+          "priority": "nice",
+          "condition": "부족분."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "다자녀",
+          "장학금"
+        ],
+        "local_keywords": [
+          "다자녀",
+          "장학금"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "college",
+    "events": [
+      "college",
+      "multi-child"
+    ],
+    "title": "다자녀 국가장학금(둘째)",
+    "emoji": "🎓",
+    "intro": "다자녀 국가장학금은 세 자녀 이상 가구의 모든 대학생 자녀가 대상이라 둘째도 받고, 언니와 중복이 아니라 각자 받아요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "이천시"
+    },
+    "procedures": [
+      {
+        "ref": "G2",
+        "id": "gov24-999000000090",
+        "name": "다자녀(세 자녀 이상) 국가장학금",
+        "priority": "must",
+        "condition": "3자녀 가구 둘째 → 소득 8구간 이하 등록금 지원(셋째 이상 자녀는 전액). 형제와 각각 수령.",
+        "deadline": "(2026년 2학기) (1차) 2026년 5월 22일~6월 22일 (2차) 2026년 8월 12일~ 9월 9일",
+        "deadlineDays": 739490,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "○ 필수서류",
+          "구비서류 없음",
+          "○ 선택서류",
+          "국가장학금 신청정보와 한국장학재단에서 신청자에 대한 확인 정보가 불일치할 경우 별도 제출 필요",
+          "(신청인 제출 서류) 가족관계증명서, 기초생활보장 수급자증명서, 한부모가족증명서, 수급자증명서 등",
+          "※ 불일치 사유에 따라 제출 서류 상이"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "다자녀 가정에 대한 대학 교육비 부담 경감을 통해 다자녀 가정에 대한 사회적 우대 분위기 조성",
+        "verification_status": "verified",
+        "eligibility": "대한민국 국적을 소지한 국내대학의 학자금지원 9구간 이하 다자녀(자녀 3명 이상) 가정의 대학생 중 성적 및 이수학점(100점 만점에 80점 이상, 12학점 이수) 등 기준을 충족하는 경우에 지원  - 세부지원 기준은 한국장학재단 홈페이지(www.ko",
+        "key": "svc:999000000090",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G8",
+        "id": "gov24-GES000000110",
+        "name": "취업 후 상환 학자금대출",
+        "priority": "nice",
+        "condition": "부족분.",
+        "deadline": "2026-2학기 신청기간 : 2026.7.1.~2026.11.17.",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "기본적으로 제출 서류는 없으나, 경우에 따라서 추가서류 필요"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "대학생에게 학자금을 대출하고 그 원리금은 소득이 발생한 후에 소득 수준에 따라 상환하도록 하여 현재의 경제적 여건에 관계없이 누구나 원하는 고등교육 기회를 가질 수 있도록 함",
+        "verification_status": "verified",
+        "eligibility": "교육부 또는 한국장학재단과 협약을 체결한 국내 고등교육기관 학부생, 전문기술석사 및 대학원생",
+        "key": "svc:GES000000110",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-SD0000004508",
+        "name": "국가장학금 Ⅰ유형 (학생직접지원형)",
+        "priority": "nice",
+        "condition": "다자녀 유형이 더 유리하면 자동 적용.",
+        "deadline": "(2026년 2학기) (1차) 2026년 5월 22일~6월 22일 (2차) 2026년 8월 12일~ 9월 9일",
+        "deadlineDays": 739490,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "○ 필수서류",
+          "구비서류 없음",
+          "○ 선택서류",
+          "국가장학금 신청정보와 한국장학재단에서 신청자에 대한 확인 정보가 불일치할 경우 별도 제출 필요",
+          "(신청인 제출 서류) 가족관계증명서, 기초생활보장 수급자증명서, 한부모가족증명서, 수급자증명서 등",
+          "※ 불일치 사유별 제출서류 상이"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "경제적 여건과 관계없이 능력과 의지가 있는 학생이면 누구나 대학교육의 혜택을 누릴 수 있는 여건 마련",
+        "verification_status": "verified",
+        "eligibility": "대한민국 국적을 소지한 국내대학의 학자금지원 9구간 이하 대학생 중 직전학기 성적 및 이수학점(100점 만점에 80점 이상, 12학점 이수) 기준을 충족하는 경우에 지원  - 세부지원 기준은 한국장학재단 홈페이지(www.kosaf.go.kr) 참고",
+        "key": "svc:SD0000004508",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

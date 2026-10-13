@@ -1,0 +1,338 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "industrial-accident-04",
+    "event_id": "industrial-accident",
+    "event_title": "산업재해",
+    "persona_summary": "49세 남성 · 경북 포항시 · 제철소 협력업체 · 산재 장해",
+    "persona": {
+      "facts": {
+        "age": 49,
+        "gender": "남성",
+        "residence": "경북 포항시",
+        "situation": "제철소 협력업체 · 산재 장해"
+      }
+    },
+    "query": "산재로 치료를 다 받았는데 다리에 장해가 남았어요. 장해급여를 받을 수 있다던데 등급은 어떻게 정해지고 일시금이랑 연금 중에 고를 수 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "industrial-accident"
+      ],
+      "reason": "장해급여"
+    },
+    "plan": {
+      "title": "산재 장해급여 청구",
+      "emoji": "🦺",
+      "intro": "요양이 끝나면 장해진단서로 장해급여를 청구하고 공단이 1~14급을 판정해요. 1~3급은 연금만, 4~7급은 연금·일시금 선택, 8급 이하는 일시금이에요.",
+      "law": [
+        {
+          "name": "장해급여",
+          "priority": "must",
+          "condition": "요양 종결 후 장해진단서 → 공단 장해등급 판정(1~3급 연금, 4~7급 선택, 8급~ 일시금)."
+        },
+        {
+          "name": "직업재활급여",
+          "priority": "nice",
+          "condition": "장해 1~12급 → 직업훈련·복귀 지원."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "산재근로자 직장 복귀 지원",
+          "priority": "nice",
+          "condition": "복귀 시 지원."
+        },
+        {
+          "name": "요양급여(보조기)-산재보험급여",
+          "priority": "nice",
+          "condition": "보조기 필요 시."
+        },
+        {
+          "name": "산재근로자 생활안정자금 융자",
+          "priority": "nice",
+          "condition": "생활자금."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "산재"
+        ],
+        "local_keywords": [
+          "산재"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "industrial-accident",
+    "events": [
+      "industrial-accident"
+    ],
+    "title": "산재 장해급여 청구",
+    "emoji": "🦺",
+    "intro": "요양이 끝나면 장해진단서로 장해급여를 청구하고 공단이 1~14급을 판정해요. 1~3급은 연금만, 4~7급은 연금·일시금 선택, 8급 이하는 일시금이에요.",
+    "region": {
+      "sido": "경상북도",
+      "sgg": "포항시"
+    },
+    "procedures": [
+      {
+        "id": "law-industrial-accident-518e6ab3",
+        "name": "산재 요양급여",
+        "priority": "must",
+        "condition": "선행 절차 — 요양 종결 후",
+        "deadline": "요양을 받은 날의 다음날부터 3년(소멸시효)",
+        "deadlineDays": 1095,
+        "agency": "고용노동부 · 근로복지공단(사업장 관할 지역본부·지사)",
+        "online": true,
+        "documents": [
+          "요양급여신청서(산재보험법 시행규칙 별지 제2호서식)",
+          "초진소견서(주치의 작성, 별지 제3호서식)",
+          "재해발생 경위서(2018년부터 사업주 확인 없이 제출 가능)",
+          "의무기록지·MRI 등 의학적 입증자료(필요 시)",
+          "업무상질병 전문소견서(뇌심혈관계·근골격계 질병인 경우)",
+          "합의서·판결문·영수증(사업주·제3자로부터 다른 보상을 받은 경우)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 요양급여의 신청 및 지급 · 산업재해보상보험법 제40조(요양급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 사고·질병으로 다쳤다면 사업주 동의 없이도 요양급여신청서와 초진소견서를 근로복지공단에 내면 된다(병원 대행·온라인 가능). 공단이 조사 후 7일 이내 결정하며, 승인되면 치료비와 휴업급여 등을 받는다. 청구권은 요양일 다음날부터 3년이면 소멸한다.",
+        "verification_status": "verified",
+        "key": "law:산재 요양급여",
+        "autoAdded": true,
+        "autoAddedFor": "law-industrial-accident-l3",
+        "unlocks": 5,
+        "order": 1,
+        "where": "근로복지공단 지사 방문·우편·팩스, 고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인, 또는 산재보험 의료기관 대행 접수",
+        "fee": "무료",
+        "steps": [
+          "산재보험 의료기관에서 치료받고 주치의에게 초진소견서를 받는다",
+          "요양급여신청서를 작성해 근로복지공단 관할 지사에 제출(병원 대행·토탈서비스 온라인 가능; 사업주 동의 불필요)",
+          "공단이 사업장·의료기관 조사(업무상질병은 판정위원회 심의) 후 7일 이내 승인 여부 결정·통지",
+          "승인되면 치료비(요양급여)·휴업급여 등 지급; 불승인 시 90일 이내 심사청구"
+        ],
+        "pitfalls": [
+          "2018.1.1부터 신청서의 사업주 확인란이 삭제돼 사업주 날인 없이 신청 가능하다",
+          "비지정 의료기관에서 치료받았다면 본인이 직접 접수해야 한다",
+          "신청일 기준 3년 넘은 부분은 시효 소멸; 신청하면 시효가 중단된다",
+          "합의금 등 다른 보상을 받았으면 신청서 '다른 보상'란에 기재해야 한다",
+          "불승인 처분은 안 날부터 90일 이내 심사청구"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "ref": "L3",
+        "id": "law-industrial-accident-l3",
+        "name": "장해급여",
+        "priority": "must",
+        "condition": "요양 종결 후 장해진단서 → 공단 장해등급 판정(1~3급 연금, 4~7급 선택, 8급~ 일시금).",
+        "deadline": "치유된 날의 다음날부터 5년(소멸시효)",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 산재보상정책과 · 근로복지공단 지역본부(지사)",
+        "online": true,
+        "documents": [
+          "장해급여청구서(보상업무처리규정 별지 제11호)",
+          "장해진단서(요양 종결 당시 산재보험 의료기관 발급)",
+          "방사선 검사 자료",
+          "진료기록부 등 장해 상태 확인 자료"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000266",
+        "source": {
+          "name": "정부24 - 산재보험 장해보상청구 · 산업재해보상보험법 제57조(장해급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 부상·질병이 치유된 뒤 손·허리 등에 장해가 남으면 요양 종결 시 의료기관에서 장해진단서를 받아 근로복지공단에 장해급여를 청구한다. 치유일 다음날부터 5년 안에 청구해야 하며 수수료는 없다. 등급에 따라 연금(1~3급)·일시금(8~14급)·선택(4~7급)으로 지급된다.",
+        "verification_status": "verified",
+        "key": "law:장해급여",
+        "unlocks": 1,
+        "order": 2,
+        "where": "고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인 또는 근로복지공단 지사 방문·우편·FAX",
+        "fee": "무료",
+        "steps": [
+          "요양 종결(치유) 후 치료받은 산재보험 의료기관에서 장해진단서 발급",
+          "장해급여청구서에 진단서·방사선 자료·진료기록을 첨부해 근로복지공단 지사 또는 토탈서비스로 청구",
+          "필요 시 공단 지정 의료기관 전문진단(7급 이상 소견, 중추신경 손상 등)",
+          "장해등급 결정(처리기간 10일): 1~3급 연금, 8~14급 일시금, 4~7급 선택, 결정일부터 14일 내 지급"
+        ],
+        "pitfalls": [
+          "정부24에는 구비서류 없음으로 표기되나 실제로는 장해진단서·검사자료가 필요하다",
+          "장해진단서는 요양 종결 당시 산재보험 의료기관에서 받는 것이 원칙",
+          "장해등급 재판정 전 고의로 장해를 악화시키면 급여가 제한된다",
+          "결정에 불복하면 심사청구 가능"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000266",
+        "curated": true,
+        "dependsOn": [
+          "law-industrial-accident-518e6ab3"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-149200000018",
+        "name": "산재근로자 생활안정자금 융자",
+        "priority": "nice",
+        "condition": "생활자금.",
+        "deadline": "(의료비) 진료일 또는 의료비 납부일부터 1년이내 (혼례비) 결혼일 전·후 또는 혼인신고일부터 90일 이내 (장례비) 사망일부터 90일 이내 (취업안정자금) 직장복귀일부터 1년이내 (차량구입비) 소유권 등록일 또는 차량(건설기계)매매계약이루터 90일 이내 또는 차량인수일 이전 30일 이내 (주택이전비) 임대차계약일 또는 전입일부터 90일 이내 (자녀양육비) 자년가 13세에 도달하는 시기 이내",
+        "deadlineDays": 365,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "○ 공통서류 : 융자신청서, 서약서, 주민등록등본, 원천징수영수증 사본(소득금액증명원) 또는 임금대장(필요시)",
+          "○ 융자종류별 추가 서류 : (의료비) 진료비계산서, 영수증 사본, (혼례비) 혼인관계증명서 및 혼인사실을 확인 할 수 있는 자료, (장례비) 사망인의 기본증명서, 사망진단서, 사망확인서 중 택 1, 주택이전비) 임대차계약서, (차량구입비) 차량매매계약서, 차량등록원부, (취업안정자금)재직증명서, (자녀양육비) 가족관계증명서"
+        ],
+        "link": "http://welfare.comwel.or.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "산재노동자 및 유족의 생활안정에 필요한 자금을 필요시기에 장기저리로 융자함으로써 생활안정 및 복지증진 도모",
+        "verification_status": "verified",
+        "eligibility": "월평균소득이 보건복지부 장관이 고시하는 3인 가구 기준 중위소득 이하인 자로 다음에 해당하는 자  - 산재사망근로자의 유족 중 수급권 1순위자(방계 일시금 수급권자 제외)   - 상병보상연금 수급자, 산재장해등급 1~9급 판정자   - 융자신청일 현재",
+        "key": "svc:149200000018",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-industrial-accident-518e6ab3"
+        ]
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-149200000021",
+        "name": "산재근로자 직장 복귀 지원",
+        "priority": "nice",
+        "condition": "복귀 시 지원.",
+        "deadline": "(직장복귀지원금) 산재장해인이 기존 직장에 복귀한 날부터 3년 (직장적응훈련비, 재활운동비) 산재장해인이 직장적응 또는 재활운동을 시작한 날부터 3년",
+        "deadlineDays": 1095,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "직장복귀지원금청구서, (필요시)산재근로자의 월별 임금지급서류",
+          "직장적응훈련비청구서, 직장적응 훈련실시 확인서, 비용 관련 영수증",
+          "재활운동비청구서, 재활운동을 위해 사업주가 지급한 관련 비용 서류"
+        ],
+        "link": "https://total.comwel.or.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "산재근로자가 기존의 직장으로 복귀할 수 있도록 지원",
+        "verification_status": "verified",
+        "eligibility": "산재장해등급 제1급~제12급에 해당하는 산재장해인을 복귀시켜 고용을 유지한 사업주",
+        "key": "svc:149200000021",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-industrial-accident-518e6ab3"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-B49000100043",
+        "name": "요양급여(보조기)-산재보험급여",
+        "priority": "nice",
+        "condition": "보조기 필요 시.",
+        "deadline": "구입일(지급일)로부터 3년이내",
+        "deadlineDays": 1095,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "○ 산재보험 재활보조기구 처방전 및 검수확인서",
+          "○ 세금계산서 또는 거래명세서"
+        ],
+        "link": "http://total.kcomwel.or.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "산재근로자를 대상으로 해당 신체 부위 또는 기능 상실에 대한 보조를 위하여 의학적으로 필요한 경우 해당 유형 및 용도별로 재활보조기구를 지급함",
+        "verification_status": "verified",
+        "eligibility": "재활보조기구 지급 대상에 해당하는 산재근로자",
+        "key": "svc:B49000100043",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-industrial-accident-518e6ab3"
+        ]
+      },
+      {
+        "ref": "L4",
+        "id": "law-industrial-accident-l4",
+        "name": "직업재활급여",
+        "priority": "nice",
+        "condition": "장해 1~12급 → 직업훈련·복귀 지원.",
+        "deadline": "훈련수당: 훈련 시작 1개월 후부터 월 단위 청구, 청구권은 3년 내 행사 / 직장복귀지원금: 복귀일(훈련 시작일)부터 1개월 후 청구, 3년 이내",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 근로복지공단 관할 지역본부(지사)",
+        "online": true,
+        "documents": [
+          "직업복귀계획서(공단 재활담당자와 수립)",
+          "직업훈련수당 청구서(직업재활업무 처리규정 별지 제18호서식, 훈련대상자 본인)",
+          "직업훈련비용 청구서(별지 제16호서식, 훈련기관이 출석·훈련시간 확인서류와 함께 제출)",
+          "직장복귀지원금·직장적응훈련비·재활운동비 청구서(사업주, 임금 지급 증빙)"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=575&ccfNo=6&cciNo=2&cnpClsNo=1&menuType=cnpcls",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 산재보험 직업재활급여 · 산업재해보상보험법 제72조(직업재활급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "산재로 장해등급 1~12급을 받은 미취업 근로자는 근로복지공단과 직업복귀계획을 세운 뒤 계약 훈련기관에서 직업훈련을 받으면 훈련비용(600만원 한도)과 훈련수당(1일 최저임금 상당)을 받을 수 있다. 수당은 훈련 1개월 후부터 월 단위로 지사·토탈서비스에 청구하며 3년 내 청구해야 한다. 사업주가 복귀 근로자를 6개월 이상 고용하면 직장복귀지원금 등을 받는다.",
+        "verification_status": "verified",
+        "key": "law:직업재활급여",
+        "unlocks": 0,
+        "order": 6,
+        "where": "근로복지공단 지사 방문·우편·팩스 또는 고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인 청구; 훈련비용은 훈련기관이 청구",
+        "fee": "무료",
+        "steps": [
+          "장해등급 1~12급 판정(또는 요양 중 해당 등급 예상 소견)을 받고 미취업 상태에서 공단 재활담당자와 직업복귀계획을 수립한다",
+          "공단과 계약된 직업훈련기관에서 훈련을 받는다(1인당 600만원 한도, 정부승인 훈련은 승인 훈련비)",
+          "훈련 시작 1개월 후부터 월 단위로 직업훈련수당(1일 최저임금 상당, 출석률 80% 이상)을 지사 또는 토탈서비스로 청구한다",
+          "원직장 복귀 시 사업주가 6개월 이상 고용 유지 후 직장복귀지원금(등급별 월 45~80만원, 12개월), 직장적응훈련비·재활운동비(3개월)를 청구한다"
+        ],
+        "pitfalls": [
+          "휴업급여·상병보상연금·구직급여를 받는 기간에는 훈련수당이 지급되지 않는다",
+          "출석률 80% 미만이면 훈련수당 미지급",
+          "고용보험·장애인고용공단 등 다른 훈련 지원을 중복으로 받으면 비용이 지급되지 않는다",
+          "취업(고용보험 피보험자격 취득·사업자등록)하면 훈련대상자 요건을 잃는다",
+          "부정수급 시 2배 징수"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=575&ccfNo=6&cciNo=2&cnpClsNo=1&menuType=cnpcls",
+        "curated": true,
+        "dependsOn": [
+          "law-industrial-accident-518e6ab3",
+          "law-industrial-accident-l3"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 1.1
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "elderly-care-08",
+    "event_id": "elderly-care",
+    "event_title": "부모님 돌봄",
+    "persona_summary": "55세 여성 · 경기 파주시 · 부모 치매 치료비",
+    "persona": {
+      "facts": {
+        "age": 55,
+        "gender": "여성",
+        "residence": "경기 파주시",
+        "situation": "부모 치매 치료비"
+      }
+    },
+    "query": "어머니가 치매 약을 계속 드셔야 하는데 약값이 부담돼요. 치매 치료비를 지원해 준다던데 소득 기준이 있는지, 보건소에서 신청하는 건지 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "elderly-care"
+      ],
+      "reason": "치매 치료비"
+    },
+    "plan": {
+      "title": "치매 치료비 지원",
+      "emoji": "🧓",
+      "intro": "치매치료관리비는 치매안심센터(보건소)에 신청하면 소득 기준(건보료 하위) 충족 시 약값·진료비 월 3만 원까지 지원돼요. 산정특례 대상 치매는 본인부담 10%예요.",
+      "law": [
+        {
+          "name": "치매안심센터",
+          "priority": "must",
+          "condition": "파주시 치매안심센터 등록 후 치료관리비 신청."
+        },
+        {
+          "name": "장기요양인정 신청",
+          "priority": "nice",
+          "condition": "돌봄 필요 시 등급."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "치매 치료관리비 지원",
+          "priority": "must",
+          "condition": "건보료 기준 중위 120% 이하 → 월 3만 원(연 36만 원)."
+        },
+        {
+          "name": "치매관리 서비스 (치매안심센터)",
+          "priority": "must",
+          "condition": "등록·관리."
+        },
+        {
+          "name": "치매검진 지원",
+          "priority": "nice",
+          "condition": "정밀검진비."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "치매"
+        ],
+        "local_keywords": [
+          "치매"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "elderly-care",
+    "events": [
+      "elderly-care"
+    ],
+    "title": "치매 치료비 지원",
+    "emoji": "🧓",
+    "intro": "치매치료관리비는 치매안심센터(보건소)에 신청하면 소득 기준(건보료 하위) 충족 시 약값·진료비 월 3만 원까지 지원돼요. 산정특례 대상 치매는 본인부담 10%예요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "파주시"
+    },
+    "procedures": [
+      {
+        "ref": "L3",
+        "id": "law-elderly-care-l3",
+        "name": "치매안심센터",
+        "priority": "must",
+        "condition": "파주시 치매안심센터 등록 후 치료관리비 신청.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 시·군·구 보건소 치매안심센터(치매상담콜센터 ☎1899-9988)",
+        "online": false,
+        "documents": [
+          "신분증",
+          "주민등록상 주소지를 확인할 수 있는 서류",
+          "치매환자 등록 시: 질병분류코드가 포함된 진단서·소견서·처방전 중 1가지(전문의료기관에서 이미 진단받은 경우)",
+          "위임장·보호자 신분증·가족관계증명서(보호자 대리 방문 시, 센터별 안내에 따름)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=854&ccfNo=1&cciNo=2&cnpClsNo=3",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 치매, 등록하고 관리 받으세요 · 치매관리법 제17조(치매안심센터의 설치)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "치매안심센터는 전국 시·군·구 보건소에 설치되어 상담·조기검진·치매환자 등록관리·쉼터·가족지원을 무료로 제공하며, 치매가 걱정되는 사람·치매환자·가족·후견인 누구나 가까운 센터를 이용할 수 있다. 등록 시 신분증·주소 확인 서류와(치매환자는) 질병분류코드가 적힌 진단서·소견서·처방전 중 1가지를 가져가며, 등록하면 치료관리비 지원(월 최대 3만원), 조호물품, 실종예방 인식표, 쉼터·가족교실을 이용한다. 요양시설 입소 전 상담, 장기요양인정 신청 대리, 성년후견 이용지원도 센터 업무이며 문의는 치매상담콜센터 1899-9988.",
+        "verification_status": "verified",
+        "key": "law:치매안심센터",
+        "unlocks": 3,
+        "order": 1,
+        "where": "거주지 가까운 보건소 치매안심센터 방문(주소지 무관 이용 가능)",
+        "fee": "무료(선별검진 무료)",
+        "steps": [
+          "가까운 치매안심센터 방문 또는 1899-9988 상담",
+          "60세 이상 미진단자는 선별검진(MMSE-DS) → 필요 시 협약병원 진단·감별검사(검진비 지원)",
+          "검진 결과(정상·고위험군·치매) 또는 기존 진단서로 센터에 등록",
+          "구분별 서비스 이용: 쉼터(기억키움학교), 인지프로그램, 조호물품, 배회인식표, 치료관리비 지원, 가족교실, 장기요양인정 신청 대리, 성년후견 이용지원"
+        ],
+        "pitfalls": [
+          "조기검진과 일반 프로그램은 한 곳의 센터에서만 이용 가능하며 쉼터는 한 곳에서 최소 3개월 이용 후 이동 가능",
+          "쉼터(단기 보호)는 장기요양 인지지원등급·5등급 치매환자 등 대상 요건이 있어 센터에 확인",
+          "구비서류는 센터·서비스(조호물품·배회인식표 등)별로 추가 서류가 있을 수 있으므로 방문 전 전화로 확인",
+          "센터 등록 치매환자는 치매치료관리비(기준 중위소득 140% 이하 권고, 약제비 월 최대 3만원), 조호물품 1년 제공, 실종예방 인식표를 받을 수 있으므로 등록을 먼저 한다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=854&ccfNo=1&cciNo=2&cnpClsNo=3",
+        "curated": true
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-135200000080",
+        "name": "치매관리 서비스 (치매안심센터)",
+        "priority": "must",
+        "condition": "등록·관리.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000080",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "노후에도 안정적인 삶을 누릴 수 있도록 치매를 조기에 치료하고 지속적으로 관리하여 증상을 호전시키거나 심화를 예방",
+        "verification_status": "verified",
+        "eligibility": "지역사회 주민",
+        "key": "svc:135200000080",
+        "unlocks": 2,
+        "order": 2
+      },
+      {
+        "ref": "G5",
+        "id": "gov24-135200000125",
+        "name": "치매 치료관리비 지원",
+        "priority": "must",
+        "condition": "건보료 기준 중위 120% 이하 → 월 3만 원(연 36만 원).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "지원신청서",
+          "본인명의 입금통장사본",
+          "당해년도 발행된 치매치료제가 포함된 약처방전 또는 약품명이 기재된 약국 영수증",
+          "지원대상자의 주민등록등본 1부",
+          "신청일 전월 기준 건강보험료 납부확인서 및 건강보험증 사본 1부",
+          "행정정보 공동이용 사전 동의서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000125",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "치매를 조기에 지속적으로 치료,관리함으로써 치매증상을 호전시키고 증상 심화를 방지하여 노후 삶의 질 제고 및 사회경제적 비용 절감에 기여",
+        "verification_status": "verified",
+        "eligibility": "주민등록기준 보건소(치매안심센터)에 치매환자로 등록된 자로서  치매치료관리비 지원을 받고자하는 자",
+        "key": "svc:135200000125",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-elderly-care-l3",
+          "gov24-135200000080"
+        ]
+      },
+      {
+        "ref": "L1",
+        "id": "law-elderly-care-l1",
+        "name": "장기요양인정 신청",
+        "priority": "nice",
+        "condition": "돌봄 필요 시 등급.",
+        "deadline": "수시. 갱신은 유효기간 만료 90일 전부터 30일 전까지",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 국민건강보험공단 지사(장기요양운영센터)",
+        "online": true,
+        "documents": [
+          "장기요양인정신청서(공단 서식자료실)",
+          "의사소견서 원본(65세 이상은 등급판정위원회 심의 전까지 제출 가능, 65세 미만 노인성 질병자는 신청 시 의사소견서 또는 진단서 필수)",
+          "신분증(방문 시 제시, 우편·팩스 시 사본)",
+          "대리인 신분증 및 대리 관계 확인 서류(가족·친족 등 대리 신청 시)"
+        ],
+        "link": "https://www.nhis.or.kr/static/html/wbda/c/wbdac02.html",
+        "source": {
+          "name": "국민건강보험공단 장기요양인정 신청 절차 · 노인장기요양보험법 제13조(장기요양인정의 신청)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "65세 이상이거나 65세 미만 치매·뇌혈관질환 등 노인성 질병이 있는 사람이 거동이 어려우면 국민건강보험공단 지사에 장기요양인정을 신청한다. 가족이 대리 신청할 수 있고, 공단 방문조사와 의사소견서를 바탕으로 신청일부터 30일 안에 등급이 판정된다. 등급을 받아야 방문요양·주야간보호·시설급여를 이용할 수 있다.",
+        "verification_status": "verified",
+        "key": "law:장기요양인정 신청",
+        "unlocks": 0,
+        "order": 4,
+        "where": "공단 지사(운영센터) 방문·우편·팩스, 노인장기요양보험 홈페이지(longtermcare.or.kr, 65세 이상·갱신 시) 또는 전화(갱신만)",
+        "fee": "무료(의사소견서 발급비는 본인부담분 있음)",
+        "steps": [
+          "공단 지사·홈페이지에 장기요양인정신청서 제출(가족 대리 가능)",
+          "공단 직원 방문조사(신체·인지 기능 등 조사표 작성)",
+          "공단이 보낸 의사소견서 발급의뢰서로 병원에서 의사소견서 발급·제출",
+          "등급판정위원회 판정(신청일부터 30일, 최대 30일 연장) → 장기요양인정서·개인별 이용계획서 수령 → 재가·시설급여 이용"
+        ],
+        "pitfalls": [
+          "의사소견서를 기한 내 제출하지 않으면 등급판정이 안 됨(발급의뢰서 없이 먼저 발급받으면 전액 본인부담)",
+          "65세 미만은 노인성 질병 증빙(진단서) 없이는 접수 불가",
+          "인터넷 신청은 65세 이상 또는 갱신 신청만 가능(외국인 불가)",
+          "등급판정에 불복하면 심사청구 가능"
+        ],
+        "sourceUrl": "https://www.nhis.or.kr/static/html/wbda/c/wbdac02.html",
+        "curated": true,
+        "dependsOn": [
+          "law-elderly-care-l3"
+        ]
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-135200005043",
+        "name": "치매검진 지원",
+        "priority": "nice",
+        "condition": "정밀검진비.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005043",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "어르신의 치매를 조기 발견하고 즉시 치료할 수 있도록 지원",
+        "verification_status": "verified",
+        "eligibility": "선별 검사 : 만 60세 이상 어르신(만 60세 미만으로 인지 능력이 현저히 저하되는 조기 검진이 필요하다고 판단되는 경우 포함)  진단 · 감별 검사 : 만 60세 이상으로 소득이 기준 중위 소득 120% 이하인 어르신",
+        "key": "svc:135200005043",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-elderly-care-l3",
+          "gov24-135200000080"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 15.7
+  }
+}

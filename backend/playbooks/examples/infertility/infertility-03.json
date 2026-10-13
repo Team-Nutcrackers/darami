@@ -1,0 +1,159 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "infertility-03",
+    "event_id": "infertility",
+    "event_title": "난임",
+    "persona_summary": "36세 남성 · 부산 부산진구 · 회사원 · 아내 난임 시술, 휴가 문의",
+    "persona": {
+      "facts": {
+        "age": 36,
+        "gender": "남성",
+        "residence": "부산 부산진구",
+        "situation": "회사원 · 아내 난임 시술, 휴가 문의"
+      }
+    },
+    "query": "아내가 시험관 시술 중인데 채취하는 날이나 이식하는 날 제가 같이 가고 싶어요. 남편도 난임치료휴가를 쓸 수 있는 건지, 회사에서 거절할 수 있는 건지 알고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "infertility"
+      ],
+      "reason": "남편 난임치료휴가"
+    },
+    "plan": {
+      "title": "남편의 난임치료휴가",
+      "emoji": "🌱",
+      "intro": "난임치료휴가는 남녀 근로자 모두 연 6일(유급 2일) 쓸 수 있고, 회사는 정당한 이유 없이 거부할 수 없어요.",
+      "law": [
+        {
+          "name": "난임치료휴가",
+          "priority": "must",
+          "condition": "남편(회사원)도 아내 시술 동행 사유로 연 6일 사용. 사업주 거부 시 과태료."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "난임치료휴가 급여",
+          "priority": "must",
+          "condition": "우선지원대상기업 근로자는 유급 2일분 급여를 고용보험에서 지원."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [],
+        "local_keywords": []
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "infertility",
+    "events": [
+      "infertility"
+    ],
+    "title": "남편의 난임치료휴가",
+    "emoji": "🌱",
+    "intro": "난임치료휴가는 남녀 근로자 모두 연 6일(유급 2일) 쓸 수 있고, 회사는 정당한 이유 없이 거부할 수 없어요.",
+    "region": {
+      "sido": "부산광역시",
+      "sgg": "부산진구"
+    },
+    "procedures": [
+      {
+        "ref": "L2",
+        "id": "law-infertility-l2",
+        "name": "난임치료휴가",
+        "priority": "must",
+        "condition": "남편(회사원)도 아내 시술 동행 사유로 연 6일 사용. 사업주 거부 시 과태료.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 소속 사업장(사용자)",
+        "online": false,
+        "documents": [
+          "난임치료휴가 신청서(휴가 사용 예정일, 신청 연월일 기재, 전자문서 가능)",
+          "난임치료 사실 증명 서류(의료기관 발급, 사업주가 요구하는 경우)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2604&ccfNo=1&cciNo=3&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 난임치료 및 유산 등 휴가 · 남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률 제18조의3(난임치료휴가)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "인공수정·체외수정 등 난임치료를 받는 남녀 근로자는 회사에 연간 6일(최초 2일 유급)의 난임치료휴가를 청구할 수 있으며, 회사는 이를 이유로 불리한 처우를 할 수 없다. 사용 예정일과 신청일을 적은 문서를 내면 되고, 회사가 요구할 때만 의료기관 증빙을 제출한다. 우선지원대상기업 근로자는 고용보험에서 유급 2일분 급여를 지원받을 수 있다. 교사·공무원은 별도 규정(난임치료 휴직 등)이 적용된다.",
+        "verification_status": "verified",
+        "key": "law:난임치료휴가",
+        "unlocks": 1,
+        "order": 1,
+        "where": "사업주에게 문서(전자문서 포함)로 신청, 급여는 고용24(work24.go.kr)·고용센터",
+        "fee": "무료",
+        "steps": [
+          "휴가 사용 예정일(당일 신청 가능)·신청일을 적은 문서를 회사에 제출",
+          "연간 6일 이내 사용, 최초 2일 유급(회사 운영에 중대 지장 시 시기 협의 변경 가능)",
+          "사업주가 요구하면 의료기관의 난임치료 증빙 제출",
+          "우선지원대상기업 소속 고용보험 가입자는 휴가 시작 1개월 후~종료 후 12개월 내 고용24에서 난임치료휴가 급여 신청(최초 2일분 상한 168,420원)"
+        ],
+        "pitfalls": [
+          "회사 사정으로 시기 변경 협의는 가능하지만 휴가 자체를 거부할 수는 없다",
+          "급여 지원은 고용보험 피보험단위기간 180일 이상·우선지원대상기업 요건이 있다",
+          "급여 신청 기한(휴가 종료 후 12개월)을 넘기면 받을 수 없다",
+          "공무원·교원은 남녀고용평등법이 아닌 복무규정에 따른다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2604&ccfNo=1&cciNo=3&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-149200005026",
+        "name": "난임치료휴가 급여",
+        "priority": "must",
+        "condition": "우선지원대상기업 근로자는 유급 2일분 급여를 고용보험에서 지원.",
+        "deadline": "휴가를 시작한 날 이후 1개월부터 휴가가 끝난 날 이후 12개월 이내에 신청(분할사용 시 휴가가 끝난 날 이후 일괄하여 신청)",
+        "deadlineDays": 30,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "ㅇ 출산전후휴가 급여 등 신청서(고용보험법 시행규칙 별지 제105호서식)",
+          "ㅇ 난임치료휴가 확인서(고용보험법 시행규칙 별지 제107호의2 서식)",
+          "ㅇ 통상임금을 확인할 수 있는 자료(임금대장, 근로계약서 등) 사본",
+          "ㅇ 휴가기간 중 사업주로부터 통상임금에 해당하는 금품을 지급받은 경우 이를 확인할 수 있는 자료",
+          "ㅇ 난임치료를 받은 사실을 증명할 수 있는 의료기관(의료법 제3조에 따른 의료기관)의 진단서 1부"
+        ],
+        "link": "http://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "저출생 문제 극복 및 난임치료로 인한 근로자의 부담을 경감하기 위해 근로자에게 휴가 부여",
+        "verification_status": "verified",
+        "eligibility": "ㅇ 남녀고용평등법상 난임치료휴가를 부여받은 우선지원대상기업 소속 근로자 ㅇ 휴가가 끝난 날 이전에 피보험단위기간이 180일 이상    ㅇ 피보험자가 소속된 사업장이 우선지원대상기업인 경우",
+        "key": "svc:149200005026",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "law-infertility-l2"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 2,
+    "by_status": {
+      "verified": 2
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}

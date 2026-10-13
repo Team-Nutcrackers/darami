@@ -1,0 +1,192 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "employment-10",
+    "event_id": "employment",
+    "event_title": "취업·이직",
+    "persona_summary": "23세 남성 · 경북 구미시 · 고졸 취업 · 생산직 입사",
+    "persona": {
+      "facts": {
+        "age": 23,
+        "gender": "남성",
+        "residence": "경북 구미시",
+        "situation": "고졸 취업 · 생산직 입사"
+      }
+    },
+    "query": "고등학교 졸업하고 바로 공장에 취업했어요. 고졸로 취업한 사람한테 장려금이나 나중에 대학 갈 때 도와주는 게 있다고 들었는데 뭐가 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "employment"
+      ],
+      "reason": "고졸 취업 장려금"
+    },
+    "plan": {
+      "title": "고졸 취업 장려금과 후학습",
+      "emoji": "💼",
+      "intro": "고교 졸업 후 중소기업 취업 청년은 고교 취업연계 장려금과 청년내일채움공제 대상이고, 나중에 대학에 가면 고졸 후학습자 장학금(희망사다리Ⅱ)이 있어요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "청년내일채움공제",
+          "priority": "must",
+          "condition": "중소기업 정규직 → 2년 공제."
+        },
+        {
+          "name": "청년미래적금",
+          "priority": "nice",
+          "condition": "청년 적금."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "청년 취업",
+          "고졸"
+        ],
+        "local_keywords": [
+          "청년 취업",
+          "고졸"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "고교 취업연계 장려금",
+          "law_query": "직업교육훈련 촉진법",
+          "keywords": [
+            "취업"
+          ],
+          "priority": "nice",
+          "condition": "직업계고 졸업 후 중소기업 취업 → 교육부 취업연계 장려금(학교 통해 신청, 요건 확인)."
+        }
+      ]
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "employment",
+    "events": [
+      "employment"
+    ],
+    "title": "고졸 취업 장려금과 후학습",
+    "emoji": "💼",
+    "intro": "고교 졸업 후 중소기업 취업 청년은 고교 취업연계 장려금과 청년내일채움공제 대상이고, 나중에 대학에 가면 고졸 후학습자 장학금(희망사다리Ⅱ)이 있어요.",
+    "region": {
+      "sido": "경상북도",
+      "sgg": "구미시"
+    },
+    "procedures": [
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000011848",
+        "name": "청년내일채움공제",
+        "priority": "must",
+        "condition": "중소기업 정규직 → 2년 공제.",
+        "deadline": "-",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "청년·기업·정부 3자 적립을 통해 노동시장 중소기업 신규취업 진입 청년에게 만기공제금 지원\r\n('24년부터 신규지원 중단, 기가입자 계속 지원)",
+        "verification_status": "verified",
+        "eligibility": "('23년 가입자 기준)  ㅇ 고용보험 피보험자수 5인이상~50인 미만 제조,건설업종의 '중소기업', 해당 기업에 정규직으로 취업한 ‘청년’  ㅇ (청년) 만 15~34세(군 복무기간 포함 39세까지) 정규직 신규 취업자로서,     -  생애 최초 ",
+        "key": "svc:SD0000011848",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-B55370100044",
+        "name": "청년미래적금",
+        "priority": "nice",
+        "condition": "청년 적금.",
+        "deadline": "'26.6월 출시",
+        "deadlineDays": 9999,
+        "agency": "서민금융진흥원",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55370100044",
+        "source": {
+          "name": "보조금24 · 서민금융진흥원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "사회·경제적 환경 변화로 인해 타 연령층 대비 자산형성에 있어 어려움을 겪고 있는 청년층의 자산 형성 지원을 지원하는 적금상품",
+        "verification_status": "verified",
+        "eligibility": "가입대상 : 개인소득 및 가구소득 기준을 모두 충족하는 19~34세 청년 - (개인소득) 총급여 7,500만원(종합소득 6,300만원) 이하 또는 연매출 3억원 이하 - (가구소득) 기준중위소득 200% 이하",
+        "key": "svc:B55370100044",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "고교 취업연계 장려금",
+        "priority": "nice",
+        "condition": "직업계고 졸업 후 중소기업 취업 → 교육부 취업연계 장려금(학교 통해 신청, 요건 확인).",
+        "deadline": "2026학년도 재학생: 2026.6.22.~12.31. / 2025학년도 졸업생: 2026.10.1.~12.31.(기간 내 미신청 시 지원 불가)",
+        "deadlineDays": 9999,
+        "agency": "교육부(직업교육정책과) · 한국장학재단",
+        "online": true,
+        "documents": [
+          "온라인 신청서(한국장학재단 홈페이지·앱)",
+          "일반고 직업교육 위탁과정 6개월(180일) 이상 교육 증명서(일반고 위탁과정 학생인 경우)",
+          "재직기간 유예 사유 증빙서류(군입대·질병·임신출산 등 유예 신청 시)"
+        ],
+        "link": "http://www.kosaf.go.kr/ko/scholar.do?pg=scholarship05_18_01&ttab1=4",
+        "source": {
+          "name": "한국장학재단 고교 취업연계 장려금",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "직업계고(또는 일반고 직업교육 위탁과정) 졸업(예정)자가 중소·중견기업에 취업하면 교육부·한국장학재단의 고교 취업연계 장려금으로 1인당 총 500만 원(1차 200만 원, 2차 300만 원)을 받는다. 한국장학재단 홈페이지에서 본인이 직접 신청하며, 총 1년(360일) 재직이 확인되어야 전액 지급되고, 졸업하지 못하면 전액 반환한다.",
+        "verification_status": "verified",
+        "key": "x:고교 취업연계 장려금",
+        "unlocks": 0,
+        "order": 3,
+        "where": "한국장학재단 홈페이지(kosaf.go.kr) 또는 모바일 앱에서 본인이 직접 온라인 신청",
+        "fee": "무료",
+        "steps": [
+          "대상 확인: 직업계고 3학년(또는 일반고 직업교육 위탁과정 6개월 이상 이수자)으로 졸업(예정) 후 중소·중견기업에 취업",
+          "신청 기간 내 한국장학재단 홈페이지·앱에서 본인이 직접 신청하고 증빙서류 업로드",
+          "온라인 사전교육 이수",
+          "재직 확인(1차 3개월·90일 재직 확인 후 200만 원, 2차 추가 9개월·270일 재직 확인 후 300만 원 지급)",
+          "연락처 변경 시 재단 홈페이지에서 개인정보 최신화(재직 확인 안내 수신)"
+        ],
+        "pitfalls": [
+          "대리 신청 불가, 신청 기간을 넘기면 지원 불가",
+          "미졸업 시 전액 반환",
+          "현장실습지원금 참여기간·지원 제외 기업 재직기간·군복무대체기간은 재직기간으로 인정되지 않음(고용보험 가입 산업기능요원 예외)",
+          "군입대·질병·임신출산 등은 최대 24개월까지 재직기간 유예 가능(증빙 필요)"
+        ],
+        "sourceUrl": "http://www.kosaf.go.kr/ko/scholar.do?pg=scholarship05_18_01&ttab1=4",
+        "curated": true
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

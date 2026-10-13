@@ -1,0 +1,287 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "resignation-06",
+    "event_id": "resignation",
+    "event_title": "퇴사·실직",
+    "persona_summary": "26세 여성 · 광주 광산구 · 퇴사 후 재취업 준비",
+    "persona": {
+      "facts": {
+        "age": 26,
+        "gender": "여성",
+        "residence": "광주 광산구",
+        "situation": "퇴사 후 재취업 준비"
+      }
+    },
+    "query": "퇴사하고 실업급여를 신청하려는데 받는 동안 다른 분야 학원을 다녀도 되나요? 아예 직종을 바꾸려고 훈련을 받고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "resignation"
+      ],
+      "reason": "실업급여 중 직업훈련"
+    },
+    "plan": {
+      "title": "실업급여 받으며 직업훈련",
+      "emoji": "📋",
+      "intro": "실업급여 수급 중에도 내일배움카드로 훈련받을 수 있고, 고용센터가 지시한 훈련이면 실업인정도 훈련 출석으로 대체돼요.",
+      "law": [
+        {
+          "name": "구직급여 수급 요건",
+          "priority": "must",
+          "condition": "수급 중 훈련 수강 가능(훈련 참여를 구직활동으로 인정)."
+        },
+        {
+          "name": "실업 신고",
+          "priority": "must",
+          "condition": "수급자격 신청 시 훈련 계획 상담."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "구직급여",
+          "priority": "must",
+          "condition": "실업급여."
+        },
+        {
+          "name": "국민내일배움카드",
+          "priority": "must",
+          "condition": "직종 전환 훈련비(수급자 자부담 경감)."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "실직",
+          "청년 구직"
+        ],
+        "local_keywords": [
+          "실직",
+          "구직"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "2026년도 청년 자격증 취득 지원사업",
+          "priority": "nice",
+          "condition": "광산구 미취업 청년 자격증 응시료.",
+          "service_id": "WLF00005564"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "resignation",
+    "events": [
+      "resignation"
+    ],
+    "title": "실업급여 받으며 직업훈련",
+    "emoji": "📋",
+    "intro": "실업급여 수급 중에도 내일배움카드로 훈련받을 수 있고, 고용센터가 지시한 훈련이면 실업인정도 훈련 출석으로 대체돼요.",
+    "region": {
+      "sido": "광주광역시",
+      "sgg": "광산구"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-resignation-l1",
+        "name": "구직급여 수급 요건",
+        "priority": "must",
+        "condition": "수급 중 훈련 수강 가능(훈련 참여를 구직활동으로 인정).",
+        "deadline": "이직일 다음날부터 12개월(수급기간) 안에 신청·수급 완료해야 함",
+        "deadlineDays": 365,
+        "agency": "고용노동부 · 거주지 관할 고용센터",
+        "online": true,
+        "documents": [
+          "수급자격 인정신청서(고용보험법 시행규칙 별지 제75호서식)",
+          "신분증",
+          "이직확인서(사업주가 고용센터에 제출; 신청인이 사업주에게 자료 발급 요청 가능)",
+          "수급자격 인정(국민연금 가입기간 추가 산입) 신청서(실업크레딧 희망 시)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=1&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 구직급여 수급자격 · 고용보험법 제40조(구직급여의 수급 요건)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "구직급여는 이직 전 18개월 동안 고용보험 피보험 단위기간이 180일 이상이고, 비자발적으로 이직했으며 일할 의사·능력이 있는데 취업하지 못한 사람이 받을 수 있다. 고용24 구직등록 후 관할 고용센터에 실업 신고(수급자격 인정신청)를 하며, 이직 다음날부터 12개월이 지나면 남은 급여도 받을 수 없으므로 바로 신청한다.",
+        "verification_status": "verified",
+        "key": "law:구직급여 수급 요건",
+        "unlocks": 2,
+        "order": 1,
+        "where": "고용24(work24.go.kr) 구직등록·온라인 교육 후 거주지 관할 고용센터에 수급자격 인정신청",
+        "fee": "무료",
+        "steps": [
+          "요건 확인: 이직 전 18개월(초단시간 근로자 24개월) 중 피보험 단위기간 180일 이상 + 비자발적 이직(또는 임금체불 등 정당한 사유) + 근로 의사·능력",
+          "회사가 고용보험 상실신고·이직확인서를 제출했는지 확인",
+          "고용24에서 구직등록 후 수급자격 온라인 교육 이수",
+          "거주지 관할 고용센터에 출석해 실업 신고 및 수급자격 인정신청서 제출",
+          "수급자격 인정 후 대기기간 7일, 이후 지정된 실업인정일마다 재취업활동 보고"
+        ],
+        "pitfalls": [
+          "180일은 달력상 6개월이 아니라 유급일 기준(주5일 근무면 주 6일 산입)이라 6개월 근무로는 부족할 수 있다",
+          "자발적 퇴사는 원칙적으로 제외되나 임금체불·근로조건 저하·사업장 이전 등 정당한 사유는 인정",
+          "중대한 귀책사유로 해고된 경우 제외",
+          "수급자격 불인정 시 90일 이내 심사청구 가능",
+          "신청 전달 초일부터 신청일까지 근로일수가 총일수의 1/3 이상이면 불인정"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=1&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "L2",
+        "id": "law-resignation-l2",
+        "name": "실업 신고",
+        "priority": "must",
+        "condition": "수급자격 신청 시 훈련 계획 상담.",
+        "deadline": "퇴직 후 지체 없이(기한은 없으나 이직일 다음 날부터 12개월이 지나면 남은 급여일수가 있어도 지급 종료)",
+        "deadlineDays": 365,
+        "agency": "고용노동부 · 거주지 관할 고용센터(고용복지플러스센터)",
+        "online": false,
+        "documents": [
+          "수급자격 인정신청서(고용보험법 시행규칙 별지 제75호서식, 자영업자는 제75호의2)",
+          "신분증",
+          "구직신청(고용24 구직등록) 완료 상태",
+          "실업급여 사전 온라인 교육 수료(또는 센터 현장 교육)",
+          "이직확인서(사업주가 제출, 미제출 시 고용센터가 사업주에게 요청)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 실업급여 > 실업의 신고 · 고용보험법 제42조(실업의 신고)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "구직급여를 받으려면 퇴사 후 바로 고용24에서 구직등록과 온라인 교육을 마치고 거주지 관할 고용센터에 방문해 수급자격 인정신청서를 내는 것이 '실업 신고'다. 실업 신고는 구직신청과 수급자격 인정신청을 합친 절차로 방문이 필수이며 수수료는 없다. 이직일 다음 날부터 12개월이 지나면 남은 급여를 받을 수 없으니 늦추지 말아야 한다.",
+        "verification_status": "verified",
+        "key": "law:실업 신고",
+        "unlocks": 1,
+        "order": 2,
+        "where": "고용24(work24.go.kr)에서 구직등록·온라인 교육 후 거주지 관할 고용센터 방문(수급자격 인정신청은 방문 필수)",
+        "fee": "무료",
+        "steps": [
+          "퇴사 시 회사에 이직확인서·고용보험 상실 신고를 요청(이직 사유 확인)",
+          "고용24에서 구직등록(구직신청) 후 실업급여 수급자격 온라인 교육 수강",
+          "교육 수료 후 14일 이내 신분증 지참, 거주지 관할 고용센터 방문해 수급자격 인정신청서 제출",
+          "수급자격 인정 → 최초 실업인정일에 수급자격증 수령, 이후 실업인정일마다 재취업활동 보고"
+        ],
+        "pitfalls": [
+          "수급자격 신청을 늦추면 12개월 한도에 걸려 소정급여일수를 다 못 받음",
+          "구직신청 유효기간(3개월)이 급여 종료 전까지 유지돼야 함",
+          "이직확인서가 처리되지 않으면 수급자격 심사가 지연 — 회사에 미리 요청",
+          "자발적 퇴사·중대 귀책 해고는 수급 제한, 허위·형식적 구직활동은 급여 미지급"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "curated": true,
+        "dependsOn": [
+          "law-resignation-l1"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000015536",
+        "name": "구직급여",
+        "priority": "must",
+        "condition": "실업급여.",
+        "deadline": "이직 후 지체없이 신청(이직일 다음 날부터 12개월 내 본인의 소정급여일수 한도로 지급)",
+        "deadlineDays": 360,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "구직신청서, 수급자격 인정 신청서"
+        ],
+        "link": "http://www.work24.go.kr/",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "고용보험 가입 근로자가 비자발적 사유로 이직하여 재취업활동을 하는 기간에 구직급여 등을 지급함으로써 생활 안정 및 조속한 노동시장 복귀 지원",
+        "verification_status": "verified",
+        "eligibility": "구직급여: 고용보험 적용 사업장에서 경영상 해고 등 비자발적으로 이직한 피보험자로서, 이직일 이전 18개월간 피보험 단위기간 180일 이상* 근무하고, 근로의 의사와 능력이 있음에도 불구하고 실업한 상태에서 적극적으로 재취업 활동을 하는 사람(일용근로",
+        "key": "svc:SD0000015536",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-resignation-l2",
+          "law-resignation-l1"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-149200000026",
+        "name": "국민내일배움카드",
+        "priority": "must",
+        "condition": "직종 전환 훈련비(수급자 자부담 경감).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "신분증",
+          "직업능력개발계좌(내일배움카드) 발급 신청서",
+          "개인정보의 수집·이용에 관한 동의서",
+          "기타 지원대상별 입증 서류"
+        ],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "급격한 기술발전에 적응하고 노동시장 변화에 대응하는 사회안전망 차원에서 생애에 걸친 역량개발 향상 등을 위해 국민 스스로 직업능력개발훈련을 실시할 수 있도록 훈련비 등 지원",
+        "verification_status": "verified",
+        "eligibility": "국민 누구나   지원 제외 대상  ① 공무원, 사립학교 교직원  ② 졸업까지 수업연한이 2년이 초과하여 남은 대학생 및 졸업예정자가 아닌 고등학생  ③ 연 매출 4억원 이상의 자영업자   ④ 월 임금 300만원 이상인 대규모기업 근로자(만 45세 미만",
+        "key": "svc:149200000026",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00005564",
+        "name": "2026년도 청년 자격증 취득 지원사업",
+        "priority": "nice",
+        "condition": "광산구 미취업 청년 자격증 응시료.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 광산구 경제재정국 일자리정책과",
+        "online": true,
+        "documents": [
+          "구직청년 자격증 취득비용 지원사업 신청서"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005564&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 광산구 경제재정국 일자리정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "o 경기 불황, 고용시장 침체 등으로 구직 활동이 장기화됨에 따라 미취업 청년의 경제적 부담 가중 o 청년 구직자에게 실질적으로 도움이 될 수 있는 어학 시험 및 자격증 취득 비용을 지원함으로써 청년의 구직활동 독려",
+        "verification_status": "verified",
+        "key": "svc:WLF00005564",
+        "eligibility": "o 자격요건   ※ 아래의 요건을 모두 충족한 자  - 연    령: 광산구 거주 청년(1987. 1. 1. ~ 2007. 12. 31. 출생자)  - 주    소: 공고일부터 신청일까지 계속하여 광산구에 거주(주민등록)하는 자  - 취업여부: 시험 ",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

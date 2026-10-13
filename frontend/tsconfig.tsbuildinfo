@@ -1,1 +1,0 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/store.ts","./src/types.ts","./src/vite-env.d.ts","./src/api/chat.ts","./src/components/chatpanel.tsx","./src/components/phoneframe.tsx","./src/components/proceduresheet.tsx","./src/components/scenariopicker.tsx","./src/components/taskboard.tsx","./src/components/timelinebar.tsx","./src/data/scenarios.ts"],"version":"5.9.3"}

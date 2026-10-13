@@ -1,0 +1,166 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "employment-04",
+    "event_id": "employment",
+    "event_title": "취업·이직",
+    "persona_summary": "24세 여성 · 경남 사천시 · 중소기업 입사 · 청년 목돈",
+    "persona": {
+      "facts": {
+        "age": 24,
+        "gender": "여성",
+        "residence": "경남 사천시",
+        "situation": "중소기업 입사 · 청년 목돈"
+      }
+    },
+    "query": "사천에 있는 중소기업에 들어갔어요. 중소기업 다니는 청년한테 목돈 만들어주는 제도가 있다고 들었는데 지금 가입할 수 있는 게 뭔지 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "employment"
+      ],
+      "reason": "중소기업 청년 자산형성"
+    },
+    "plan": {
+      "title": "중소기업 청년 자산형성",
+      "emoji": "💰",
+      "intro": "청년내일채움공제(2년 만기 공제)와 청년미래적금 중 가입 가능한 것을 입사 초기에 신청하세요. 경남·사천시 청년 정착 지원도 있어요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "청년내일채움공제",
+          "priority": "must",
+          "condition": "중소기업 정규직 입사 6개월 이내 신청(사업 운영 여부 확인)."
+        },
+        {
+          "name": "청년미래적금",
+          "priority": "must",
+          "condition": "19~34세 근로 청년."
+        },
+        {
+          "name": "자산형성지원사업(청년내일저축계좌)",
+          "priority": "nice",
+          "condition": "소득 기준 충족 시."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "청년",
+          "청년 취업"
+        ],
+        "local_keywords": [
+          "청년 취업",
+          "청년 자산"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "employment",
+    "events": [
+      "employment"
+    ],
+    "title": "중소기업 청년 자산형성",
+    "emoji": "💰",
+    "intro": "청년내일채움공제(2년 만기 공제)와 청년미래적금 중 가입 가능한 것을 입사 초기에 신청하세요. 경남·사천시 청년 정착 지원도 있어요.",
+    "region": {
+      "sido": "경상남도",
+      "sgg": "사천시"
+    },
+    "procedures": [
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000011848",
+        "name": "청년내일채움공제",
+        "priority": "must",
+        "condition": "중소기업 정규직 입사 6개월 이내 신청(사업 운영 여부 확인).",
+        "deadline": "-",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "청년·기업·정부 3자 적립을 통해 노동시장 중소기업 신규취업 진입 청년에게 만기공제금 지원\r\n('24년부터 신규지원 중단, 기가입자 계속 지원)",
+        "verification_status": "verified",
+        "eligibility": "('23년 가입자 기준)  ㅇ 고용보험 피보험자수 5인이상~50인 미만 제조,건설업종의 '중소기업', 해당 기업에 정규직으로 취업한 ‘청년’  ㅇ (청년) 만 15~34세(군 복무기간 포함 39세까지) 정규직 신규 취업자로서,     -  생애 최초 ",
+        "key": "svc:SD0000011848",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-B55370100044",
+        "name": "청년미래적금",
+        "priority": "must",
+        "condition": "19~34세 근로 청년.",
+        "deadline": "'26.6월 출시",
+        "deadlineDays": 9999,
+        "agency": "서민금융진흥원",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55370100044",
+        "source": {
+          "name": "보조금24 · 서민금융진흥원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "사회·경제적 환경 변화로 인해 타 연령층 대비 자산형성에 있어 어려움을 겪고 있는 청년층의 자산 형성 지원을 지원하는 적금상품",
+        "verification_status": "verified",
+        "eligibility": "가입대상 : 개인소득 및 가구소득 기준을 모두 충족하는 19~34세 청년 - (개인소득) 총급여 7,500만원(종합소득 6,300만원) 이하 또는 연매출 3억원 이하 - (가구소득) 기준중위소득 200% 이하",
+        "key": "svc:B55370100044",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-135200005013",
+        "name": "자산형성지원사업(청년내일저축계좌)",
+        "priority": "nice",
+        "condition": "소득 기준 충족 시.",
+        "deadline": "2026.05.04~2026.05.20",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "청년에 저축을 통한 자산형성을 지원하여 청년이 교육, 주거, 창업 등 미래에 투자하고, 위기에 대비할 수 있도록 지원",
+        "verification_status": "verified",
+        "eligibility": "ㅇ 연령, 개인소득, 가구소득 3가지 모두 충족한 자    (가입연령) 신청 당시 만15~39세 이하    (소득기준) 월 10만원 이상 근로, 사업 소득 발생     (가구소득) 기준 중위소득 50% 이하",
+        "key": "svc:135200005013",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.3
+  }
+}

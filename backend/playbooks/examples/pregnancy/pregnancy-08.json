@@ -1,0 +1,174 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "pregnancy-08",
+    "event_id": "pregnancy",
+    "event_title": "임신",
+    "persona_summary": "24세 여성 · 강원 강릉시 · 대학생 · 예상치 못한 임신",
+    "persona": {
+      "facts": {
+        "age": 24,
+        "gender": "여성",
+        "residence": "강원 강릉시",
+        "situation": "대학생 · 예상치 못한 임신"
+      }
+    },
+    "query": "대학생인데 생각지도 못하게 임신을 했어요. 아직 부모님께도 말을 못 했고 남자친구랑도 어떻게 할지 정하지 못했어요. 이런 상황에서 상담받을 수 있는 곳이 있을까요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "pregnancy"
+      ],
+      "reason": "예상치 못한 임신, 위기임신 상담"
+    },
+    "plan": {
+      "title": "예상치 못한 임신, 상담과 지원",
+      "emoji": "🤝",
+      "intro": "위기임신 상담은 1308(위기임신보호출산 상담)과 지역상담기관에서 비밀 보장으로 받을 수 있어요. 청소년산모 의료비도 있어요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "위기임신 및 보호출산 지원",
+          "priority": "must",
+          "condition": "24세 대학생, 결정 전 → 지역 위기임신 상담기관(1308) 상담·보호 지원."
+        },
+        {
+          "name": "청소년산모 임신·출산 의료비 지원",
+          "priority": "must",
+          "condition": "만 24세 이하 산모 → 임신·출산 의료비 120만 원."
+        },
+        {
+          "name": "건강보험 임신·출산 진료비 지원",
+          "priority": "nice",
+          "condition": "임신확인 후 진료비 바우처."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "임산부"
+        ],
+        "local_keywords": [
+          "임산부",
+          "청소년"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "pregnancy",
+    "events": [
+      "pregnancy"
+    ],
+    "title": "예상치 못한 임신, 상담과 지원",
+    "emoji": "🤝",
+    "intro": "위기임신 상담은 1308(위기임신보호출산 상담)과 지역상담기관에서 비밀 보장으로 받을 수 있어요. 청소년산모 의료비도 있어요.",
+    "region": {
+      "sido": "강원",
+      "sgg": "강릉시"
+    },
+    "procedures": [
+      {
+        "ref": "G8",
+        "id": "gov24-135200005048",
+        "name": "위기임신 및 보호출산 지원",
+        "priority": "must",
+        "condition": "24세 대학생, 결정 전 → 지역 위기임신 상담기관(1308) 상담·보호 지원.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 지원 단계 별 상이"
+        ],
+        "link": "https://ncrc.or.kr/ncrc/main.do",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산 및 양육에 어려움을 겪고 있는 임산부의 안전한 출산을 지원하고 그 태아 및 자녀인 아동의 안전한 양육 환경을 보장",
+        "verification_status": "verified",
+        "eligibility": "위기 임산부, 보호 출산 산모, 보호 출산 아동 및 아동의 생부",
+        "key": "svc:135200005048",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G7",
+        "id": "gov24-SD0000006936",
+        "name": "청소년산모 임신·출산 의료비 지원",
+        "priority": "must",
+        "condition": "만 24세 이하 산모 → 임신·출산 의료비 120만 원.",
+        "deadline": "임신확인서 상 임신확인일 기준으로 만 19세까지 신청 가능",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "임신확인서",
+          "주민등록등본"
+        ],
+        "link": "http://www.socialservice.or.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "청소년 산모의 임신, 출산 의료비 경감을 통해 산모와 태아의 건강증진 도모",
+        "verification_status": "verified",
+        "eligibility": "만 19세 이하 산모",
+        "key": "svc:SD0000006936",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000007672",
+        "name": "건강보험 임신·출산 진료비 지원",
+        "priority": "nice",
+        "condition": "임신확인 후 진료비 바우처.",
+        "deadline": "임신·유산(사산)·출산 사실이 확인이 된 날 ~ 분만예정일·출산(유·사산)일로부터 2년까지  ※ 신청 당시 분만예정일이 지난 경우 ‘임신’으로 신청 불가하며, ‘출산 등’으로 확인받아 신청하여야 함",
+        "deadlineDays": 730,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "건강보험 임신·출산 진료비 지급 신청서",
+          "․ 산부인과 전문의가 있는 요양기관에서 온라인(요양기관정보마당)에 임신·출산 정보 입력한 경우, 서면의 서류 별도 제출 필요 없음",
+          "고위험 임신 등의 사유로 본인이 신청 불가하여 임산부 가족이 대리로 신청하는 경우, 임산부와의 관계를 입증할 수 있는 서류 추가 제출(주민등록표 등본, 가족관계증명서 등)"
+        ],
+        "link": "https://bokjiro.go.kr/",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "임산부와 영유아의 의료비 부담을 경감하여 출산 친화적 환경을 조성하고, 주기적인 산전 진찰로 건강한 태아를 분만할 수 있도록 임산부와 2세 미만 영유아의 진료비 등의 본인부담금(급여·비급여) 결제에 사용할 수 있는 이용권을 제공하는 제도",
+        "verification_status": "verified",
+        "eligibility": "임신‧출산(유산·사산 포함)이 확인된 건강보험 가입자 또는 피부양자  2세 미만인 가입자 또는 피부양자의 법정대리인(출산한 가입자 또는 피부양자가 사망한 경우) * 제외 대상 : (의료급여법)에 따라 의료급여를 받는 자(수급권자), 건강보험 적용배제 ",
+        "key": "svc:SD0000007672",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

@@ -1,0 +1,508 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "financial-hardship-03",
+    "event_id": "financial-hardship",
+    "event_title": "생계 곤란",
+    "persona_summary": "65세 여성 · 부산 영도구 · 독거 · 기초생활수급 신청",
+    "persona": {
+      "facts": {
+        "age": 65,
+        "gender": "여성",
+        "residence": "부산 영도구",
+        "situation": "독거 · 기초생활수급 신청"
+      }
+    },
+    "query": "혼자 사는데 모아둔 돈도 없고 자식들도 연락이 끊겼어요. 기초생활수급자가 되려면 자식 소득도 본다던데 연락 안 되는 자식이 있으면 어떻게 되나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "financial-hardship"
+      ],
+      "reason": "독거 기초생활 부양의무"
+    },
+    "plan": {
+      "title": "독거 노인 기초생활수급 신청",
+      "emoji": "🆘",
+      "intro": "생계급여는 부양의무자 기준이 거의 폐지돼 자녀 소득이 높아도(연 1억·재산 9억 초과 제외) 받을 수 있어요. 연락이 끊긴 자녀는 '부양 기피'로 소명하면 돼요. 기초연금도 함께 신청하세요.",
+      "law": [
+        {
+          "name": "기초생활보장 급여 신청",
+          "priority": "must",
+          "condition": "65세 독거·무소득 → 생계·의료·주거급여 신청(생계급여 부양의무자 기준 폐지, 연락 두절 자녀는 부양 기피 사유서)."
+        },
+        {
+          "name": "긴급복지 지원요청",
+          "priority": "nice",
+          "condition": "결정 전 당장 생활비가 없으면 긴급복지."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "생계급여",
+          "priority": "must",
+          "condition": "1인 가구 중위소득 32% 이하."
+        },
+        {
+          "name": "의료급여 (의료급여)",
+          "priority": "must",
+          "condition": "의료급여는 부양의무자 기준 일부 적용 — 자녀 기피 소명."
+        },
+        {
+          "name": "주거급여 (맞춤형 급여)",
+          "priority": "must",
+          "condition": "임차료."
+        },
+        {
+          "name": "에너지바우처",
+          "priority": "nice",
+          "condition": "수급자 노인 → 에너지바우처."
+        },
+        {
+          "name": "긴급복지 생계지원",
+          "priority": "nice",
+          "condition": "결정 전 긴급 생계."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "기초생활",
+          "어르신"
+        ],
+        "local_keywords": [
+          "생계",
+          "독거노인"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "기초연금 신청",
+          "law_query": "기초연금법",
+          "keywords": [
+            "기초연금 지급의 신청"
+          ],
+          "priority": "must",
+          "condition": "65세 → 기초연금(수급자도 병행, 생계급여에서 차감)."
+        }
+      ]
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "부산형 긴급복지지원사업",
+          "priority": "nice",
+          "condition": "부산형 긴급복지.",
+          "service_id": "WLF00004708"
+        },
+        {
+          "cid": "R2",
+          "name": "저소득주민 시비특별지원사업(자녀교통비, 월동대책비)",
+          "priority": "nice",
+          "condition": "수급자 선정 후 월동대책비.",
+          "service_id": "WLF00002459"
+        }
+      ],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "financial-hardship",
+    "events": [
+      "financial-hardship"
+    ],
+    "title": "독거 노인 기초생활수급 신청",
+    "emoji": "🆘",
+    "intro": "생계급여는 부양의무자 기준이 거의 폐지돼 자녀 소득이 높아도(연 1억·재산 9억 초과 제외) 받을 수 있어요. 연락이 끊긴 자녀는 '부양 기피'로 소명하면 돼요. 기초연금도 함께 신청하세요.",
+    "region": {
+      "sido": "부산광역시",
+      "sgg": "영도구"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-financial-hardship-l1",
+        "name": "기초생활보장 급여 신청",
+        "priority": "must",
+        "condition": "65세 독거·무소득 → 생계·의료·주거급여 신청(생계급여 부양의무자 기준 폐지, 연락 두절 자녀는 부양 기피 사유서).",
+        "deadline": "연중 수시(신청일부터 30일 이내 결정, 조사에 시일이 걸리면 60일)",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 주민등록 주소지 읍·면·동 주민센터(결정은 시·군·구청)",
+        "online": false,
+        "documents": [
+          "사회보장급여(사회복지서비스 및 급여제공) 신청서",
+          "금융정보 등 제공 동의서(부양의무자 포함)",
+          "신분증",
+          "가족관계증명서(필요 시)",
+          "임대차계약서 또는 사용대차 확인서(임차·무상거주 시)",
+          "소득·재산 증명 서류(필요 시)",
+          "통장 사본(필요 시)",
+          "근로능력 증명 서류·재학증명서·부채 증명 서류(해당 시)",
+          "자동차등록증 또는 차량등록원부(차량 보유 시)",
+          "위임장 및 대리인 신분증(대리 신청 시)",
+          "외국인등록사실증명서(외국인인 경우)"
+        ],
+        "link": "https://www.gov.kr/portal/service/serviceInfo/WII000001410",
+        "source": {
+          "name": "정부24 생계급여 · 국민기초생활 보장법 제21조(급여의 신청)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "소득인정액이 기준 중위소득 이하로 생활이 어려우면 주소지 주민센터에서 생계·의료·주거·교육급여를 한 번에 신청한다. 신청서·금융정보 제공 동의서·신분증이 필수이고 소득·재산·임대차 서류는 상황에 따라 추가되며, 30일(최대 60일) 안에 결정된다. 수급 중 소득이 바뀌면 바로 신고해야 한다.",
+        "verification_status": "verified",
+        "key": "law:기초생활보장 급여 신청",
+        "unlocks": 4,
+        "order": 1,
+        "where": "주소지 읍·면·동 주민센터 방문(주거가 일정하지 않으면 실제 거주지 관할). 정부24 안내는 방문 신청",
+        "fee": "무료",
+        "steps": [
+          "주민센터 방문해 사회보장급여 신청서·금융정보 제공 동의서 작성(생계·의료·주거·교육급여 통합 신청)",
+          "소득·재산·근로능력·부양의무자 조사(추가 자료 요구 가능)",
+          "시·군·구청이 30일(최대 60일) 내 급여 종류별 선정 여부 통지",
+          "수급 중 소득·재산·가구원 변동은 바로 신고(미신고 시 환수)"
+        ],
+        "pitfalls": [
+          "신청 후 조사에서 추가 서류 제출을 요구할 수 있음",
+          "긴급한 상황이면 결정까지 기다리지 말고 긴급복지 지원을 먼저 요청",
+          "수급 중 소득인정액 변동을 신고하지 않으면 급여 환수",
+          "급여별 기준(생계 32%·의료 40%·주거 48%·교육 50%)이 달라 일부 급여만 선정될 수 있음"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/service/serviceInfo/WII000001410",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-WII000001410",
+        "name": "생계급여",
+        "priority": "must",
+        "condition": "1인 가구 중위소득 32% 이하.",
+        "deadline": "자세한 날짜는 읍면동 주민센터에 따라 다를 수 있음",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 신청인 제출 필수 서류",
+          "사회복지서비스 및 급여제공 신청서",
+          "금융 정보 등 제공동의서",
+          "신분증명 서류",
+          "○ 선택서류",
+          "통장 사본",
+          "재학 증명서",
+          "근로능력 증명 서류",
+          "소득 증명 서류",
+          "재산 증명 서류",
+          "임대차 계약서 또는 사용대차 확인서",
+          "자동차등록증 또는 차량등록 원부",
+          "부채 증명 서류",
+          "지출 실태조사표",
+          "복지 대상자 시설 입소(이용) 신청서",
+          "부양의무자 소득재산 신고서(의료급여만 해당)",
+          "부양기피 사유서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/WII000001410",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "생활이 어려운 생계급여 수급자에게 일상생활에 필요한 급여를 지급하여 최저 생활을 보장하고 자활을 돕는 것을 목적으로 함",
+        "verification_status": "verified",
+        "eligibility": "가구의 소득 인정액이 생계급여 선정 기준 이하로서 생계급여 수급자로 결정된 수급자   단, 타 법령에 의하여 생계급여를 지원받는 아래 사례는 제외  - 노숙인 자활시설 및 청소년쉼터 또는 한국법무보호공단 시설 거주자  - 하나원에 재원 중인 북한이탈주",
+        "key": "svc:WII000001410",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "law-financial-hardship-l1"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-999000000043",
+        "name": "의료급여 (의료급여)",
+        "priority": "must",
+        "condition": "의료급여는 부양의무자 기준 일부 적용 — 자녀 기피 소명.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "가족관계기록사항에 관한 증명서, 임대차 계약서, 소득재산 확인서류, 위임장 및 신분확인서류, 외국인등록사실증명서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/999000000043",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "의료급여수급권자에 대한 의료비를 지원하여 저소득층 국민보건 향상과 사회복지 증진에 기여",
+        "verification_status": "verified",
+        "eligibility": "국민기초생활보장수급권자   의료급여법에 의한 수급권자   타법에 의한 수급권자",
+        "key": "svc:999000000043",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-financial-hardship-l1"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-336000000096",
+        "name": "주거급여 (맞춤형 급여)",
+        "priority": "must",
+        "condition": "임차료.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "국토교통부",
+        "online": true,
+        "documents": [
+          "주거급여신청서",
+          "금융정보 등 제공동의서(부양의무자 포함)",
+          "임대차 계약서",
+          "소득 재산확인서류",
+          "제적등본"
+        ],
+        "link": "https://bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 국토교통부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "소득·주거형태·주거비 부담수준 등을 종합적으로 고려하여 저소득층의 주거비를 지원",
+        "verification_status": "verified",
+        "eligibility": "소득인정액이 기준 중위소득 48% 이내의 가구  ※ 지원형태: 서비스(임차급여, 수선유지급여)",
+        "key": "svc:336000000096",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-financial-hardship-l1"
+        ]
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "기초연금 신청",
+        "priority": "must",
+        "condition": "65세 → 기초연금(수급자도 병행, 생계급여에서 차감).",
+        "deadline": "만 65세 생일이 속한 달의 1개월 전부터 신청(신청한 달부터 지급)",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 읍·면·동 주민센터(행정복지센터), 국민연금공단 지사",
+        "online": true,
+        "documents": [
+          "신분증(대리 신청 시 본인·대리인 신분증과 위임장)",
+          "본인 명의 통장사본",
+          "사회복지서비스 및 급여 제공(변경) 신청서(현장 작성)",
+          "소득·재산 신고서(현장 작성)",
+          "금융정보 등 제공 동의서(본인·배우자, 배우자가 신청하지 않아도 필요)",
+          "전·월세 계약서(해당자)",
+          "수급희망 이력관리 신청서(선택)"
+        ],
+        "link": "https://basicpension.mohw.go.kr/menu.es?mid=a10201000000",
+        "source": {
+          "name": "보건복지부 기초연금 신청방법 · 기초연금법 제10조(기초연금 지급의 신청)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "만 65세 이상이고 소득인정액이 선정기준액 이하이면 생일이 속한 달의 전달부터 주민센터·국민연금공단 지사 또는 복지로에서 기초연금을 신청한다. 신분증·통장사본·배우자 금융정보제공동의서가 필요하고 신청한 달부터 매월 25일 지급된다. 기초생활보장 수급자도 받을 수 있지만 기초연금액이 소득으로 인정돼 생계급여가 그만큼 줄 수 있다.",
+        "verification_status": "verified",
+        "key": "x:기초연금 신청",
+        "unlocks": 0,
+        "order": 5,
+        "where": "복지로(online.bokjiro.go.kr) 온라인 신청 또는 주소지 읍·면·동 주민센터·국민연금공단 지사 방문(대리 신청 가능)",
+        "fee": "무료",
+        "steps": [
+          "기초연금 누리집 소득인정액 모의계산·자가진단으로 수급 가능성 확인",
+          "신분증·통장사본·(배우자) 금융정보제공동의서를 갖춰 주민센터·공단 지사 방문 또는 복지로 온라인 신청",
+          "소득·재산 조사 후 결정 통지, 매월 25일 본인 계좌로 지급",
+          "탈락 시 수급희망 이력관리를 신청해 두면 이후 요건 충족 시 안내받음"
+        ],
+        "pitfalls": [
+          "신청한 달부터 지급되므로 65세 생일 전달에 미리 신청하지 않으면 손해",
+          "기초생활보장 수급자는 기초연금이 소득인정액에 포함되어 생계급여가 감액될 수 있음(총액은 유지)",
+          "배우자가 신청하지 않아도 배우자의 소득·재산 조사와 금융정보제공동의서가 필요",
+          "재외국민 주민등록자는 신청 불가",
+          "직역연금 수급권자·배우자는 원칙적으로 제외"
+        ],
+        "sourceUrl": "https://basicpension.mohw.go.kr/menu.es?mid=a10201000000",
+        "curated": true
+      },
+      {
+        "ref": "L2",
+        "id": "law-financial-hardship-l2",
+        "name": "긴급복지 지원요청",
+        "priority": "nice",
+        "condition": "결정 전 당장 생활비가 없으면 긴급복지.",
+        "deadline": "상시(위기상황 발생 즉시 요청)",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 주소지 시·군·구청 또는 읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "신분증",
+          "금융정보 등 제공 동의서",
+          "위기상황 증빙 서류(사망진단서·진단서·실직 확인 등, 담당 공무원과 상담 후 확정)",
+          "주민등록등본 등 공무원 확인 서류는 제출 생략"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005003?administOrgCd=ALL",
+        "source": {
+          "name": "정부24 긴급복지 생계지원 · 긴급복지지원법 제7조(지원요청 및 신고)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "갑작스러운 실직·사망·질병·화재 등으로 생계가 어려우면 주소지 주민센터·시군구청에 방문하거나 129로 전화해 긴급복지 지원을 요청한다. 신분증과 금융정보 제공 동의서만으로 신청하고 위기상황 확인 후 먼저 지원받는 '선지원 후조사' 구조다. 기준 중위소득 75% 이하·재산 기준을 사후 확인하며 생계급여 수급자와는 중복 불가다.",
+        "verification_status": "verified",
+        "key": "law:긴급복지 지원요청",
+        "unlocks": 1,
+        "order": 6,
+        "where": "시·군·구청·읍·면·동 주민센터 방문, 보건복지상담센터 129 전화(야간·주말 포함), 또는 복지로(온라인)",
+        "fee": "무료",
+        "steps": [
+          "위기사유(주소득자 사망·실직·휴폐업·중한 질병·화재 등) 발생 → 129 또는 주민센터에 구술·서면으로 지원 요청",
+          "담당 공무원 현장 확인(위기상황 사전 확인, 소득·재산은 사후 조사)",
+          "지원 결정 후 생계·의료·주거·교육·연료비 등 지원 개시(선지원 후조사)",
+          "사후 소득·재산 조사 결과 기준 초과 시 환수될 수 있음"
+        ],
+        "pitfalls": [
+          "본인뿐 아니라 가족·이웃·의료진 등 누구나 신고·요청 가능",
+          "국민기초생활보장 생계급여 수급 중이면 긴급 생계지원 중복 불가",
+          "사후 조사에서 소득·재산 기준 초과가 확인되면 지원금 환수",
+          "병원비는 의료지원, 장례비는 장제비 지원 등 유형별로 요청 — 상황을 구체적으로 설명"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005003?administOrgCd=ALL",
+        "curated": true
+      },
+      {
+        "ref": "G7",
+        "id": "gov24-B55353000001",
+        "name": "에너지바우처",
+        "priority": "nice",
+        "condition": "수급자 노인 → 에너지바우처.",
+        "deadline": "2026. 6. 15.(월) ~ 2026. 12. 31.(목)",
+        "deadlineDays": 9999,
+        "agency": "기후에너지환경부",
+        "online": true,
+        "documents": [
+          "ㅇ 공통서류",
+          "에너지이용권 발급 신청서(읍면동 비치)",
+          "ㅇ 추가서류",
+          "대리인 신청인 경우, 대리 사실을 확인할 수 있는 위임장, 대리인의 신분증 사본",
+          "요금차감(가상카드) 신청인 경우, 전기, 도시가스, 지역난방 요금고지서(아파트 관리비 고지서)",
+          "연탄전환 에너지바우처인 경우, 연탄외 보일러 설치시공 확인서 및 연탄전환 지원결정 증빙서류",
+          "필요시, 취학의무 면제 확인서, 가족관계증명서 등 자격확인 증빙서류"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55353000001",
+        "source": {
+          "name": "보조금24 · 기후에너지환경부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "에너지이용 소외계층에게 냉ㆍ난방에너지를 구입할 수 있는 바우처 지급",
+        "verification_status": "verified",
+        "eligibility": "□ (기후민감계층, 에너지바우처) 소득기준 및 세대원 특성 기준을 모두 충족하는 세대에 지원   ㅇ 소득기준 : 대상자 본인이 국민기초생활보장법상 생계, 의료, 주거, 교육 급여 중 어느 하나를 수급하는 자  ㅇ 세대원 특성 기준 : 대상자 본인(기초",
+        "key": "svc:B55353000001",
+        "unlocks": 0,
+        "order": 7,
+        "dependsOn": [
+          "law-financial-hardship-l1"
+        ]
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-135200005003",
+        "name": "긴급복지 생계지원",
+        "priority": "nice",
+        "condition": "결정 전 긴급 생계.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 신청인 제출서류",
+          "신분증, 금융정보 등 제공동의서, 기타 구비 서류(긴급복지지원 담당공무원과 상담 필요)",
+          "○ 공무원 확인가능 서류",
+          "주민등록등본, 기타 요건확인에 따라 상이"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005003",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "갑작스러운 위기상황에 처하여 생계유지 등이 어려운 저소득 가구를 신속하게 지원하여 위기상황에서 벗어나게 함",
+        "verification_status": "verified",
+        "eligibility": "긴급복지지원법 제2조 각 호의 어느 하나에 해당하는 사유로 생계유지가 곤란한 사람  <위기사유> 1. 주소득자(主所得者)가 사망, 가출, 행방불명, 구금시설에 수용되는 등의 사유로 소득을 상실한 경우 2. 중한 질병 또는 부상을 당한 경우 3. 가구구",
+        "key": "svc:135200005003",
+        "unlocks": 0,
+        "order": 8,
+        "dependsOn": [
+          "law-financial-hardship-l2"
+        ]
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00004708",
+        "name": "부산형 긴급복지지원사업",
+        "priority": "nice",
+        "condition": "부산형 긴급복지.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "부산광역시 사회복지국 복지정책과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004708&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 부산광역시 사회복지국 복지정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "생계곤란 등 위기 상황에 높인 가구에 신속히 급여 지원",
+        "verification_status": "verified",
+        "key": "svc:WLF00004708",
+        "eligibility": "ㅇ 지원대상: 법·제도적 지원을 받지 못한 위기 상황에 처한 가구 ㅇ 선정기준      - (위기사유) 주 소득자의 실직, 폐업 등 생계 곤란한 사유 발생   - (소    득) 기준 중위소득 85%이하   - (재    산) 350백만원 이하    ",
+        "unlocks": 0,
+        "order": 9
+      },
+      {
+        "ref": "R2",
+        "id": "local-WLF00002459",
+        "name": "저소득주민 시비특별지원사업(자녀교통비, 월동대책비)",
+        "priority": "nice",
+        "condition": "수급자 선정 후 월동대책비.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "부산광역시 사회복지국 복지정책과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00002459&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 부산광역시 사회복지국 복지정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "생계유지에 어려움을 겪고 있는 기초생활보장수급자(생계,의료급여) 및 차상위계층에게 월동대책비 및 자녀교통비를 지원하여 저소득주민의 생활안정을 도모하고자 함",
+        "verification_status": "verified",
+        "key": "svc:WLF00002459",
+        "eligibility": "국민기초생활보장법상의 생계,의료급여수급자 및 차상위계층 중 지원기준 적합자(차상위자활사업대상자와 차상위계층확인서발급대상으로 선정된 가구) 생계,의료급여수급자 및 차상위계층",
+        "unlocks": 0,
+        "order": 10
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 10,
+    "by_status": {
+      "verified": 10
+    },
+    "candidates": 3,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

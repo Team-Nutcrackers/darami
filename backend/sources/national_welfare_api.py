@@ -18,6 +18,8 @@ import xml.etree.ElementTree as ET
 import requests
 from dotenv import load_dotenv
 
+from .apicache import disk_cached
+
 load_dotenv()
 
 KEY = os.environ.get("DATA_GO_KR_KEY", "")
@@ -71,9 +73,22 @@ def ground_national_welfare(service_name: str) -> dict:
     svc = _find_service(service_name)
     if not svc or not svc.get("servId"):
         return {"verification_status": "needs_review", "error": f"'{service_name}' 검색 결과 없음"}
+    result = ground_national_service(svc["servId"], svc)
+    if result.get("verification_status") == "verified":
+        _cache[service_name] = result
+    return result
 
-    root = _get("NationalWelfaredetailedV001", {"servId": svc["servId"]})
-    if root is None:
+
+@disk_cached("national_welfare")
+def ground_national_service(serv_id: str, svc: dict | None = None) -> dict:
+    """servId로 직접 grounding (이벤트 API 매핑에 고정된 servId 용). 실패 시 needs_review."""
+    if serv_id in _cache:
+        return _cache[serv_id]
+    if not KEY:
+        return {"verification_status": "needs_review", "error": "DATA_GO_KR_KEY 미설정"}
+    svc = svc or {}
+    root = _get("NationalWelfaredetailedV001", {"servId": serv_id})
+    if root is None or not root.findtext(".//servNm"):
         return {"verification_status": "needs_review", "error": "상세조회 실패"}
 
     def t(tag):
@@ -95,8 +110,8 @@ def ground_national_welfare(service_name: str) -> dict:
     result = {
         "verification_status": "verified",
         "source": "복지로(중앙부처복지서비스)",
-        "service_id": svc["servId"],
-        "service_name": svc.get("servNm"),
+        "service_id": serv_id,
+        "service_name": svc.get("servNm") or t("servNm"),
         "agency": agency,
         "documents": documents,
         "deadline_text": "상시신청",
@@ -105,9 +120,10 @@ def ground_national_welfare(service_name: str) -> dict:
         "support_target": target,
         "support_content": content,
         "legal": legal,
-        "source_url": svc.get("link") or "",
+        "source_url": svc.get("link") or t("servDtlLink")
+        or f"https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId={serv_id}",
         "evidence_span": (target or content)[:300],
         "fetched_at": _today(),
     }
-    _cache[service_name] = result
+    _cache[serv_id] = result
     return result

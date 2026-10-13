@@ -1,0 +1,302 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "industrial-accident-03",
+    "event_id": "industrial-accident",
+    "event_title": "산업재해",
+    "persona_summary": "38세 여성 · 서울 구로구 · 콜센터 · 업무 스트레스로 우울증",
+    "persona": {
+      "facts": {
+        "age": 38,
+        "gender": "여성",
+        "residence": "서울 구로구",
+        "situation": "콜센터 · 업무 스트레스로 우울증"
+      }
+    },
+    "query": "콜센터에서 일하면서 폭언을 계속 들어서 우울증 진단을 받았어요. 정신적인 병도 산재로 인정받을 수 있는지, 어떤 자료를 준비해야 하는지 알고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "industrial-accident"
+      ],
+      "reason": "업무 스트레스 정신질환 산재"
+    },
+    "plan": {
+      "title": "업무 스트레스 정신질환 산재",
+      "emoji": "🦺",
+      "intro": "고객 폭언으로 인한 우울증은 업무상 질병으로 인정돼요. 진단서와 폭언 기록(녹취·상담일지), 회사 보고 내역을 모아 근로복지공단에 신청하세요.",
+      "law": [
+        {
+          "name": "산재 요양급여",
+          "priority": "must",
+          "condition": "정신질환 업무상 질병 신청(업무상질병판정위 심의) — 진단서·폭언 녹취·업무 기록."
+        },
+        {
+          "name": "휴업급여",
+          "priority": "must",
+          "condition": "치료 중 미취업 기간 70%."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "산재근로자사회심리재활지원",
+          "priority": "nice",
+          "condition": "승인 후 심리재활 프로그램."
+        },
+        {
+          "name": "무료 소송대리 서비스(저소득 재해근로자)",
+          "priority": "nice",
+          "condition": "불승인 시 심사·소송."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "산재",
+          "감정노동"
+        ],
+        "local_keywords": [
+          "산재",
+          "감정노동"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "고객응대근로자 보호조치",
+          "law_query": "산업안전보건법",
+          "keywords": [
+            "고객의 폭언"
+          ],
+          "priority": "nice",
+          "condition": "콜센터 사업주는 폭언 시 업무 중단·휴게·치료 지원 의무."
+        }
+      ]
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "industrial-accident",
+    "events": [
+      "industrial-accident"
+    ],
+    "title": "업무 스트레스 정신질환 산재",
+    "emoji": "🦺",
+    "intro": "고객 폭언으로 인한 우울증은 업무상 질병으로 인정돼요. 진단서와 폭언 기록(녹취·상담일지), 회사 보고 내역을 모아 근로복지공단에 신청하세요.",
+    "region": {
+      "sido": "서울특별시",
+      "sgg": "구로구"
+    },
+    "procedures": [
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "고객응대근로자 보호조치",
+        "priority": "nice",
+        "condition": "콜센터 사업주는 폭언 시 업무 중단·휴게·치료 지원 의무.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 사업장 관할 지방고용노동청(지청), 안전보건공단",
+        "online": true,
+        "documents": [],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1407&ccfNo=1&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 고객응대근로자 보호 개요 · 산업안전보건법 제41조(고객의 폭언 등으로 인한 건강장해 예방조치 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "콜센터·판매 등 고객을 직접 또는 전화·온라인으로 응대하는 근로자가 고객의 폭언·폭행으로 건강장해를 입었거나 입을 우려가 크면, 사업주는 산업안전보건법 제41조에 따라 업무의 일시 중단·전환, 휴게시간 연장, 치료·상담 지원, 고소·고발 또는 손해배상 청구 지원 등의 조치를 해야 한다. 근로자는 이 조치를 요구할 수 있고, 요구를 이유로 해고 등 불리한 처우를 받지 않는다. 폭언으로 인한 정신질환은 업무상 재해로 인정될 수 있다.",
+        "verification_status": "verified",
+        "key": "x:고객응대근로자 보호조치",
+        "unlocks": 3,
+        "order": 1,
+        "where": "사업주에게 조치 요구(사내 고충처리 창구); 미이행 시 관할 지방고용노동청 신고·진정",
+        "pitfalls": [
+          "사업주는 사전에 폭언 금지 문구 게시·음성 안내, 응대 매뉴얼·교육 등 예방조치를 해야 하며, 사후조치 미이행·불리한 처우는 과태료·벌칙 대상",
+          "조치 요구는 기록이 남게(서면·메신저) 하고, 폭언 통화 녹취·상담기록을 보관",
+          "은행·보험 등 금융업종은 별도 법률에 고객응대직원 보호 의무가 있음",
+          "스트레스로 인한 적응장애·우울증 등은 근로복지공단에 산재 요양급여 신청 가능"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1407&ccfNo=1&cciNo=2&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "L1",
+        "id": "law-industrial-accident-l1",
+        "name": "산재 요양급여",
+        "priority": "must",
+        "condition": "정신질환 업무상 질병 신청(업무상질병판정위 심의) — 진단서·폭언 녹취·업무 기록.",
+        "deadline": "요양을 받은 날의 다음날부터 3년(소멸시효)",
+        "deadlineDays": 1095,
+        "agency": "고용노동부 · 근로복지공단(사업장 관할 지역본부·지사)",
+        "online": true,
+        "documents": [
+          "요양급여신청서(산재보험법 시행규칙 별지 제2호서식)",
+          "초진소견서(주치의 작성, 별지 제3호서식)",
+          "재해발생 경위서(2018년부터 사업주 확인 없이 제출 가능)",
+          "의무기록지·MRI 등 의학적 입증자료(필요 시)",
+          "업무상질병 전문소견서(뇌심혈관계·근골격계 질병인 경우)",
+          "합의서·판결문·영수증(사업주·제3자로부터 다른 보상을 받은 경우)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 요양급여의 신청 및 지급 · 산업재해보상보험법 제40조(요양급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 사고·질병으로 다쳤다면 사업주 동의 없이도 요양급여신청서와 초진소견서를 근로복지공단에 내면 된다(병원 대행·온라인 가능). 공단이 조사 후 7일 이내 결정하며, 승인되면 치료비와 휴업급여 등을 받는다. 청구권은 요양일 다음날부터 3년이면 소멸한다.",
+        "verification_status": "verified",
+        "key": "law:산재 요양급여",
+        "unlocks": 2,
+        "order": 2,
+        "where": "근로복지공단 지사 방문·우편·팩스, 고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인, 또는 산재보험 의료기관 대행 접수",
+        "fee": "무료",
+        "steps": [
+          "산재보험 의료기관에서 치료받고 주치의에게 초진소견서를 받는다",
+          "요양급여신청서를 작성해 근로복지공단 관할 지사에 제출(병원 대행·토탈서비스 온라인 가능; 사업주 동의 불필요)",
+          "공단이 사업장·의료기관 조사(업무상질병은 판정위원회 심의) 후 7일 이내 승인 여부 결정·통지",
+          "승인되면 치료비(요양급여)·휴업급여 등 지급; 불승인 시 90일 이내 심사청구"
+        ],
+        "pitfalls": [
+          "2018.1.1부터 신청서의 사업주 확인란이 삭제돼 사업주 날인 없이 신청 가능하다",
+          "비지정 의료기관에서 치료받았다면 본인이 직접 접수해야 한다",
+          "신청일 기준 3년 넘은 부분은 시효 소멸; 신청하면 시효가 중단된다",
+          "합의금 등 다른 보상을 받았으면 신청서 '다른 보상'란에 기재해야 한다",
+          "불승인 처분은 안 날부터 90일 이내 심사청구"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "curated": true,
+        "suggestedAfter": [
+          "X1"
+        ]
+      },
+      {
+        "ref": "L2",
+        "id": "law-industrial-accident-l2",
+        "name": "휴업급여",
+        "priority": "must",
+        "condition": "치료 중 미취업 기간 70%.",
+        "deadline": "휴업한 날의 다음날부터 3년 이내 청구(소멸시효)",
+        "deadlineDays": 1095,
+        "agency": "고용노동부 · 근로복지공단(의료기관 관할 지역본부·지사)",
+        "online": true,
+        "documents": [
+          "휴업급여·상병보상연금 청구서(근로복지공단 보상업무처리규정 별지 제7호서식)",
+          "재해 발생 달 포함 이전 4개월간 임금대장 등 임금 확인자료(최초 청구 시)",
+          "연장수당·연차수당·상여금 내역 확인자료(해당 시, 상여금은 12개월분)",
+          "부분취업내역신고서(요양 중 부분 취업 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000265",
+        "source": {
+          "name": "정부24 – 산재보험 휴업급여, 상병보상연금 청구 · 산업재해보상보험법 제52조(휴업급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 재해로 요양 중 4일 이상 일하지 못한 기간에는 근로복지공단에 휴업급여를 청구해 1일 평균임금의 70%(저소득자는 90%·최저 기준 보장)를 받습니다. 산재 요양 승인이 선행되어야 하며, 토탈서비스 온라인이나 공단 지사에 휴업급여 청구서와 임금대장 등 임금자료를 내면 7일 내 처리됩니다. 청구권은 휴업일 다음날부터 3년이면 소멸하니 매월 또는 정기적으로 청구하세요.",
+        "verification_status": "verified",
+        "key": "law:휴업급여",
+        "unlocks": 0,
+        "order": 3,
+        "where": "고용·산재보험 토탈서비스(total.comwel.or.kr 온라인, 2회차부터 터치고용산재 앱) 또는 근로복지공단 지사 방문·우편·팩스",
+        "fee": "무료",
+        "steps": [
+          "산재 요양급여 신청·승인(요양 승인이 있어야 휴업급여 청구 가능)",
+          "요양으로 4일 이상 취업하지 못한 기간에 대해 휴업급여 청구서 작성(의료기관에 접수 위임 가능)",
+          "토탈서비스 온라인 또는 공단 지사에 임금자료 첨부해 제출(2회차 이후는 앱으로도 가능)",
+          "공단 심사(처리기간 7일) 후 지급 결정일부터 14일 이내 1일 평균임금의 70% 지급"
+        ],
+        "pitfalls": [
+          "취업하지 못한 기간이 3일 이내면 미지급",
+          "요양 중 취업하거나 사업주로부터 임금을 받은 기간은 지급 제외(부분취업 시 별도 신고)",
+          "3년 지나면 시효 소멸",
+          "외국인 근로자도 산재보험 적용 대상이므로 동일하게 청구 가능"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000265",
+        "curated": true,
+        "dependsOn": [
+          "law-industrial-accident-l1"
+        ]
+      },
+      {
+        "ref": "G5",
+        "id": "gov24-149200000020",
+        "name": "산재근로자사회심리재활지원",
+        "priority": "nice",
+        "condition": "승인 후 심리재활 프로그램.",
+        "deadline": "예산의 범위에서 수시 모집",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "○ (공통) 사회심리재활 프로그램 신청서",
+          "(재활스포츠 신청서, 멘토링프로그램 멘티신청서 개별 제출)",
+          "○ 각 사업별 비용 청구서 등 증빙 자료 일체",
+          "(심리상담) 심리상담 비용청구서, 출석확인 카드 등",
+          "(집단프로그램) 지원금청구서 및 관련증빙자료 일체",
+          "(사회적응프로그램) 사업계획 승인 및 지원금 지급 신청서, 정산서 등",
+          "(재활스포츠) 지원금청구서 등",
+          "(멘토링) 활동비용 등 청구서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/149200000020",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "산재 및 장해로 인한 심리적 충격을 해소하여 재활의욕 고취",
+        "verification_status": "verified",
+        "eligibility": "(심리상담 서비스) 산재노동자 및 유족연금수급자격자, 간병급여 및 상병보상연금 수급권자의 배우자·자녀   (희망 찾기/사회 적응 프로그램)   - 희망 찾기 프로그램 : 입원, 통원 중인 산재노동자  - 사회 적응 프로그램 : 장해등급 제1～14급 판",
+        "key": "svc:149200000020",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-industrial-accident-l1"
+        ]
+      },
+      {
+        "ref": "G7",
+        "id": "gov24-B27000100016",
+        "name": "무료 소송대리 서비스(저소득 재해근로자)",
+        "priority": "nice",
+        "condition": "불승인 시 심사·소송.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대한법률구조공단",
+        "online": true,
+        "documents": [],
+        "link": "www.klac.or.kr",
+        "source": {
+          "name": "보조금24 · 대한법률구조공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 사회·경제적 약자에 대한 법률구조서비스 제공으로 법률복지증진\r\n\r\n○ 무료 법률상담\r\n\r\n○ 무료 소송대리\r\n - 최초 요양 급여 신청 등이 불승인 된 경우 불승인 관련 행정사건 - 요양급여 신청 등이 승인된 경우 민 ·  가사 ·  행정 ·  헌법소원 사건",
+        "verification_status": "verified",
+        "eligibility": "저소득 재해근로자(경남소재 사업장에 소속된 저소득 산업재해 피해 근로자 및 위 근로자가 업무상 재해로 사망한 경우 그 유족)  - 건강보험료 본인부담금 합산액이 기준중위소득 125% 이하인 자",
+        "key": "svc:B27000100016",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.7
+  }
+}

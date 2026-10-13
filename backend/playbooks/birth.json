@@ -13,9 +13,17 @@
       "deadlineDays": 30,
       "agency": "주민센터 / 정부24 (온라인 출생신고)",
       "online": true,
-      "documents": ["출생증명서(병원 발급)", "신고인 신분증", "(온라인 시) 병원 연계 출생정보"],
+      "documents": [
+        "출생증명서(병원 발급)",
+        "신고인 신분증",
+        "(온라인 시) 병원 연계 출생정보"
+      ],
       "link": "https://www.gov.kr/main?a=AA020InfoCappViewApp&CappBizCD=13100000035",
-      "source": { "name": "정부24", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "정부24",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "모든 출생 공통. 다른 모든 혜택의 선행 절차.",
       "summary": "출생 후 기한 내 신고해야 합니다. 일부 병원은 온라인 출생신고 연계가 가능해 방문 없이 처리할 수 있어요. 출생신고가 완료되어야 각종 지원금을 신청할 수 있습니다."
     },
@@ -29,9 +37,16 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "출생신고된 출생아.",
-      "summary": ""
+      "summary": "",
+      "dependsOn": [
+        "birth-report"
+      ]
     },
     {
       "id": "child-allowance",
@@ -43,9 +58,16 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "만 8세 미만 아동.",
-      "summary": ""
+      "summary": "",
+      "dependsOn": [
+        "birth-report"
+      ]
     },
     {
       "id": "parent-allowance",
@@ -57,9 +79,16 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "0~23개월 영아.",
-      "summary": ""
+      "summary": "",
+      "dependsOn": [
+        "birth-report"
+      ]
     },
     {
       "id": "child-care-allowance",
@@ -71,9 +100,16 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "어린이집·유치원 미이용(가정양육) 영유아.",
-      "summary": ""
+      "summary": "",
+      "dependsOn": [
+        "birth-report"
+      ]
     },
     {
       "id": "seoul-maternity-transport",
@@ -85,7 +121,11 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "거주 지자체의 임산부 교통비 지원(해당 지역).",
       "summary": ""
     }

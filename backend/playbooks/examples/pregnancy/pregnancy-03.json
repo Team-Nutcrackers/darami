@@ -1,0 +1,333 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "pregnancy-03",
+    "event_id": "pregnancy",
+    "event_title": "임신",
+    "persona_summary": "35세 여성 · 서울 동작구 · 공무원 · 임신 20주, 보건소 등록",
+    "persona": {
+      "facts": {
+        "age": 35,
+        "gender": "여성",
+        "residence": "서울 동작구",
+        "situation": "공무원 · 임신 20주, 보건소 등록"
+      }
+    },
+    "query": "임신 20주 차예요. 보건소에 등록하면 엽산제나 철분제를 준다는데 지금 등록해도 늦지 않았나요? 동작구 보건소에 가면 되는 건지도 궁금합니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "pregnancy"
+      ],
+      "reason": "보건소 임산부 등록·영양제"
+    },
+    "plan": {
+      "title": "보건소 임산부 등록",
+      "emoji": "🤰",
+      "intro": "20주에도 등록할 수 있어요. 철분제(16주~)와 영양플러스 등 보건소 서비스를 함께 신청하세요.",
+      "law": [
+        {
+          "name": "태아검진 시간",
+          "priority": "nice",
+          "condition": "공무원 검진 시간 보장."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "임산부 엽산제, 철분제 지원",
+          "priority": "must",
+          "condition": "동작구 보건소 등록 즉시 철분제 지원(16주 이후)."
+        },
+        {
+          "name": "임산부 및 영유아 영양플러스",
+          "priority": "nice",
+          "condition": "소득 기준 충족 시 영양 보충식품."
+        },
+        {
+          "name": "건강보험 임신·출산 진료비 지원",
+          "priority": "nice",
+          "condition": "아직 안 만들었으면 국민행복카드."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "임산부"
+        ],
+        "local_keywords": [
+          "임산부"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "임산부 친환경농산물 꾸러미 지원",
+          "priority": "nice",
+          "condition": "동작구 임산부 친환경농산물.",
+          "service_id": "319000000145"
+        },
+        {
+          "cid": "R3",
+          "name": "서울형 가사서비스 지원사업",
+          "priority": "nice",
+          "condition": "중위소득 180% 이하 임산부 가정 가사서비스.",
+          "service_id": "WLF00005849"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "pregnancy",
+    "events": [
+      "pregnancy"
+    ],
+    "title": "보건소 임산부 등록",
+    "emoji": "🤰",
+    "intro": "20주에도 등록할 수 있어요. 철분제(16주~)와 영양플러스 등 보건소 서비스를 함께 신청하세요.",
+    "region": {
+      "sido": "서울특별시",
+      "sgg": "동작구"
+    },
+    "procedures": [
+      {
+        "id": "law-pregnancy-f576da34",
+        "name": "보건소 임산부 등록·건강관리",
+        "priority": "must",
+        "condition": "선행 절차 — 보건소 임산부 등록 후 지급",
+        "deadline": "임신 확인 후 분만 예정일까지(상시)",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 주소지 관할 보건소",
+        "online": true,
+        "documents": [
+          "임신확인서(의료기관 발급; 산모수첩 등 임신 증명서류로 갈음하는 지자체도 있음)",
+          "신분증(방문 시)",
+          "본인인증(정부24 온라인 신청 시, 임산부 본인만 가능)"
+        ],
+        "link": "https://www.gov.kr/portal/service/serviceInfo/SD0000016094",
+        "source": {
+          "name": "정부24 – 임산부 엽산제, 철분제 지원 · 모자보건법 제10조(임산부ㆍ영유아ㆍ미숙아등의 건강관리 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임신이 확인되면 병원 임신확인서를 가지고 주소지 보건소에 방문하거나 정부24 '맘편한임신'으로 임산부 등록을 하면 모자보건법에 따른 엽산제·철분제 무료 지급, 표준모자보건수첩, 산전검사·영양플러스 등 보건소 건강관리 서비스를 받을 수 있습니다. 엽산제·철분제 등 다수 지원은 '보건소 등록 임산부'가 조건이므로 등록을 먼저 해야 합니다. 지자체별로 제공 서비스와 필요 서류가 달라 보건소에 확인하세요.",
+        "verification_status": "verified",
+        "key": "law:보건소 임산부 등록·건강관리",
+        "autoAdded": true,
+        "autoAddedFor": "gov24-SD0000016094",
+        "unlocks": 2,
+        "order": 1,
+        "where": "주소지 보건소 방문 또는 정부24 '임신 관련 서비스 통합처리 신청(맘편한임신)' 온라인",
+        "fee": "무료",
+        "steps": [
+          "병원에서 임신확인서 발급",
+          "주소지 보건소 방문(신분증·임신확인서) 또는 정부24 맘편한임신으로 임산부 등록",
+          "등록 후 표준모자보건수첩 수령, 엽산제(임신 전후 3개월분)·철분제(16주 이상 5개월분) 지급",
+          "영양플러스(중위소득 80% 이하), 임산부 배지·지자체 추가 혜택 신청 및 산전검사 등 건강관리 이용"
+        ],
+        "pitfalls": [
+          "정부24 온라인 신청은 임산부 본인만 가능(대리 불가)",
+          "지자체에 따라 온라인은 영양제·배지 신청만 되고 등록은 방문 필요할 수 있음",
+          "철분제는 임신 16주 이후 지급",
+          "유산·사산 후에도 보건소 심리상담 등 지원이 있으니 문의"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/service/serviceInfo/SD0000016094",
+        "curated": true
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-SD0000016094",
+        "name": "임산부 엽산제, 철분제 지원",
+        "priority": "must",
+        "condition": "동작구 보건소 등록 즉시 철분제 지원(16주 이후).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "임신확인서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/SD0000016094",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "(철분제) 임산부의 철분 결핍성 빈혈로 발생할 수 있는 조산, 유산, 산모 사망을 예방할 수 있는 철분제를 지원하여 안전한 분만유도 및 임산부 및 태아, 영유아의 건강증진을 도모하고자 함\r\n(엽산제) 엽산제 지원을 통해 신경관 결손으로 발생할 수 있는 유사산, 선천성 기형아 출산 등을 사전에 예방하여 임산부와 태아의 건강증진 도모",
+        "verification_status": "verified",
+        "eligibility": "(엽산제) 임신 전후 3개월  (철분제) 임신 16주 이상",
+        "key": "svc:SD0000016094",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "law-pregnancy-f576da34"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000007672",
+        "name": "건강보험 임신·출산 진료비 지원",
+        "priority": "nice",
+        "condition": "아직 안 만들었으면 국민행복카드.",
+        "deadline": "임신·유산(사산)·출산 사실이 확인이 된 날 ~ 분만예정일·출산(유·사산)일로부터 2년까지  ※ 신청 당시 분만예정일이 지난 경우 ‘임신’으로 신청 불가하며, ‘출산 등’으로 확인받아 신청하여야 함",
+        "deadlineDays": 730,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "건강보험 임신·출산 진료비 지급 신청서",
+          "․ 산부인과 전문의가 있는 요양기관에서 온라인(요양기관정보마당)에 임신·출산 정보 입력한 경우, 서면의 서류 별도 제출 필요 없음",
+          "고위험 임신 등의 사유로 본인이 신청 불가하여 임산부 가족이 대리로 신청하는 경우, 임산부와의 관계를 입증할 수 있는 서류 추가 제출(주민등록표 등본, 가족관계증명서 등)"
+        ],
+        "link": "https://bokjiro.go.kr/",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "임산부와 영유아의 의료비 부담을 경감하여 출산 친화적 환경을 조성하고, 주기적인 산전 진찰로 건강한 태아를 분만할 수 있도록 임산부와 2세 미만 영유아의 진료비 등의 본인부담금(급여·비급여) 결제에 사용할 수 있는 이용권을 제공하는 제도",
+        "verification_status": "verified",
+        "eligibility": "임신‧출산(유산·사산 포함)이 확인된 건강보험 가입자 또는 피부양자  2세 미만인 가입자 또는 피부양자의 법정대리인(출산한 가입자 또는 피부양자가 사망한 경우) * 제외 대상 : (의료급여법)에 따라 의료급여를 받는 자(수급권자), 건강보험 적용배제 ",
+        "key": "svc:SD0000007672",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "L2",
+        "id": "law-pregnancy-l2",
+        "name": "태아검진 시간",
+        "priority": "nice",
+        "condition": "공무원 검진 시간 보장.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 소속 사업장(사용자)",
+        "online": false,
+        "documents": [
+          "별도 법정 서류 없음(회사 취업규칙·복무규정에 따라 진료 예약 내역·검진 확인서 등을 요구할 수 있음)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1379&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 임산부를 위한 근무환경(태아검진 시간) · 근로기준법 제74조의2(태아검진 시간의 허용 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임신한 여성 근로자가 모자보건법상 임산부 정기건강진단(임신 28주까지 4주 1회, 29~36주 2주 1회, 37주 이후 1주 1회; 35세 이상·다태아·고위험 임신은 추가 가능)을 받는 데 필요한 시간을 청구하면 사용자는 허용해야 하고, 그 시간을 이유로 임금을 삭감할 수 없다(근로기준법 제74조의2). 법에 정해진 시간 수나 신청 서식은 없으며 병원 왕복·대기·진료 시간을 포함한 '필요한 시간'을 회사 규정 절차로 청구하면 된다.",
+        "verification_status": "verified",
+        "key": "law:태아검진 시간",
+        "unlocks": 0,
+        "order": 4,
+        "where": "별도 행정 신청 없음 — 회사(인사·담당 부서)에 정기건강진단 시간을 청구(회사 취업규칙·복무규정 절차에 따름)",
+        "fee": "무료(해당 시간은 유급)",
+        "pitfalls": [
+          "상시 5인 이상 사업장에 적용된다(5인 미만 사업장은 법적 의무 아님).",
+          "사용 주체는 임신한 여성 근로자 본인이며 배우자(남편)는 이 제도를 쓸 수 없다(연차 등 활용).",
+          "하루 전체를 부여할 의무는 없고 '필요한 시간'만 허용하면 된다는 것이 고용노동부 해석이다.",
+          "위반 시 별도 벌칙 조항이 없어 실효성이 낮다는 지적이 있다(2026년 과태료 신설 개정안 발의 상태 — 시행 여부 확인 필요)."
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1379&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-135200000005",
+        "name": "임산부 및 영유아 영양플러스",
+        "priority": "nice",
+        "condition": "소득 기준 충족 시 영양 보충식품.",
+        "deadline": "자세한 날짜는 보건소에 따라 다를 수 있음",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 가족수 확인을 위한 서류 : 주민등록등본 또는 가족관계증명서(다문화가정 등 등본으로 가족 확인 수 불가한 경우)",
+          "○ 소득확인을 위한 서류",
+          "건강보험 납입영수증 또는 건강보험 자격확인서",
+          "기초 생활 보장 대상자 확인서류 또는 차상위 대상자 확인서류(해당자인 경우에만)",
+          "○ 임신확인을 위한 서류 : 산모수첩(사본), 의사 진단서 또는 의사 소견서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000005",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 국민영양관리법 제11조에 따른 영유아, 임산부 등 영양취약계층을 위한 영양관리사업\r\n○ 기준 중위소득 대비 80% 이하 임산부 및 영유아 중 영양위험요인(빈혈, 저체중, 성장부진, 영양섭취 불량 등)을 가진 대상자에게 영양교육 및 상담을 실시하고 보충 식품패키지를 제공하여 영양위험요인 개선 및 스스로의 식생활 관리 능력 배양을 통한 국민 건강 증진",
+        "verification_status": "verified",
+        "eligibility": "아래 모두 충족하는 자  - 가구 규모별 기준 중위소득 대비 80% 이하  - 영양위험요인(빈혈, 저체중, 성장부진, 영양섭취상태 불량 중 한 가지 이상) 보유자  - 영아(만 1세 미만), 유아(만 1세-만 6세 까지), 임산부(임신부, 출산부, 모",
+        "key": "svc:135200000005",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-pregnancy-f576da34"
+        ]
+      },
+      {
+        "ref": "R1",
+        "id": "regional-319000000145",
+        "name": "임산부 친환경농산물 꾸러미 지원",
+        "priority": "nice",
+        "condition": "동작구 임산부 친환경농산물.",
+        "deadline": "공고 및 대상 모집시",
+        "deadlineDays": 9999,
+        "agency": "서울특별시 동작구",
+        "online": true,
+        "documents": [
+          "ㅇ 임신부 증빙서류 2개 : 주민등록등본 및 ① 임신확인서(병원발행), ② 병원명, 의사날인 기재된 산모수첩  ③ 임신출산진료비 지원신청서(국민건강보험공단) 중 택1",
+          "ㅇ 산모 증빙서류 2개 : 출생증명서, 출생신고된 주민등록등본"
+        ],
+        "link": "https://www.dongjak.go.kr",
+        "source": {
+          "name": "보조금24 · 서울특별시 동작구",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "- 친환경농산물 소비촉진을 통한 농가부담경감\r\n- 올바른 먹거리 공급으로 임산부 건강증진 및 지역 경제활성화에 기여",
+        "verification_status": "verified",
+        "key": "svc:319000000145",
+        "eligibility": "신청일 현재 동작구에 주소를 둔 2025. 1. 1. 이후 출산한 산모 또는 임신부",
+        "unlocks": 0,
+        "order": 6
+      },
+      {
+        "ref": "R3",
+        "id": "local-WLF00005849",
+        "name": "서울형 가사서비스 지원사업",
+        "priority": "nice",
+        "condition": "중위소득 180% 이하 임산부 가정 가사서비스.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "서울특별시 여성가족실 가족담당관",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005849&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 서울특별시 여성가족실 가족담당관",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "서울시 거주 중위소득 180%이하 임산부 맞벌이 다자녀 가정에게 가사서비스를 지원하여 일생활균형 지원 및 아이키우기 좋은환경 조성",
+        "verification_status": "verified",
+        "key": "svc:WLF00005849",
+        "eligibility": "(임산부) 임신3개월~출산 후 1년이내(맞벌이) 12세이하 자녀를 양육하고 있는 맞벌이 부부(다자녀) 18세이하 자녀를 2명이상 양육하는 다자녀가정(단 자녀중 1명은 반드시 12세 이하여야 함) ㅇ 임산부 가정 - 중위소득 180% 이하 임산부(임신∼",
+        "unlocks": 0,
+        "order": 7
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 7,
+    "by_status": {
+      "verified": 7
+    },
+    "candidates": 3,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}

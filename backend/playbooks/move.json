@@ -13,9 +13,16 @@
       "deadlineDays": 14,
       "agency": "새 주소지 관할 주민센터 / 정부24",
       "online": true,
-      "documents": ["신청인 신분증", "(대리신고 시) 위임장·대리인 신분증"],
+      "documents": [
+        "신청인 신분증",
+        "(대리신고 시) 위임장·대리인 신분증"
+      ],
       "link": "https://www.gov.kr/main?a=AA020InfoCappViewApp&CappBizCD=13100000016",
-      "source": { "name": "정부24", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "정부24",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "모든 이사 공통.",
       "summary": "새 거주지 관할 주민센터에 전입을 신고합니다. 정부24에서 공동인증서로 온라인 신고가 가능해 평일 방문이 어려워도 처리할 수 있어요."
     },
@@ -27,11 +34,21 @@
       "deadlineDays": 14,
       "agency": "전입 학교 / 교육지원청",
       "online": true,
-      "documents": ["전입신고 시 취학아동 전입 동시 처리", "(필요 시) 재학증명서"],
+      "documents": [
+        "전입신고 시 취학아동 전입 동시 처리",
+        "(필요 시) 재학증명서"
+      ],
       "link": "https://www.gov.kr",
-      "source": { "name": "교육지원청", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "교육지원청",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "초·중학교 재학 자녀가 있는 경우.",
-      "summary": "전입신고 시 '취학아동 전입'을 함께 신청하면 새 주소지 배정 학교로 전학 통지가 갑니다. 새 학교에 등교일·필요서류를 확인하세요."
+      "summary": "전입신고 시 '취학아동 전입'을 함께 신청하면 새 주소지 배정 학교로 전학 통지가 갑니다. 새 학교에 등교일·필요서류를 확인하세요.",
+      "dependsOn": [
+        "transfer-report"
+      ]
     },
     {
       "id": "car-address",
@@ -41,11 +58,21 @@
       "deadlineDays": 15,
       "agency": "정부24 / 차량등록사업소",
       "online": true,
-      "documents": ["자동차등록증", "신분증"],
+      "documents": [
+        "자동차등록증",
+        "신분증"
+      ],
       "link": "https://www.gov.kr",
-      "source": { "name": "정부24", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "정부24",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "차량을 보유한 경우.",
-      "summary": "전입(주소 변경)에 따라 자동차 변경등록이 필요합니다. 전입신고 시 동시 신청하면 한 번에 처리됩니다."
+      "summary": "전입(주소 변경)에 따라 자동차 변경등록이 필요합니다. 전입신고 시 동시 신청하면 한 번에 처리됩니다.",
+      "dependsOn": [
+        "transfer-report"
+      ]
     },
     {
       "id": "health-insurance-change",
@@ -57,9 +84,16 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "거주지 변경에 따른 건강보험 주소·자격 반영(공통).",
-      "summary": ""
+      "summary": "",
+      "dependsOn": [
+        "transfer-report"
+      ]
     }
   ]
 }

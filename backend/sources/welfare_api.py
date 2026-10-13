@@ -18,6 +18,8 @@ from datetime import date
 import requests
 from dotenv import load_dotenv
 
+from .apicache import disk_cached
+
 load_dotenv()
 
 KEY = os.environ.get("DATA_GO_KR_KEY", "")
@@ -32,6 +34,7 @@ def _today() -> str:
     return date.today().isoformat()
 
 
+@disk_cached("gov24")
 def _get(ep: str, params: dict) -> dict | None:
     try:
         r = requests.get(f"{BASE}/{ep}", params={"serviceKey": KEY, **params}, timeout=TIMEOUT)

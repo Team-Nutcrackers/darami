@@ -1,0 +1,351 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "adoption-07",
+    "event_id": "adoption",
+    "event_title": "입양",
+    "persona_summary": "43세 여성 · 세종시 · 연구원 · 입양 비용",
+    "persona": {
+      "facts": {
+        "age": 43,
+        "gender": "여성",
+        "residence": "세종시",
+        "situation": "연구원 · 입양 비용"
+      }
+    },
+    "query": "입양을 준비하고 있는데 기관에 내는 비용이 있다고 들었어요. 이 비용을 나라에서 지원해 준다는 얘기가 있던데 어떻게 신청하는지 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "adoption"
+      ],
+      "reason": "입양 비용 지원"
+    },
+    "plan": {
+      "title": "입양 비용 지원",
+      "emoji": "🧸",
+      "intro": "입양기관에 내는 수수료는 입양 성립 후 입양비용지원으로 돌려받을 수 있어요. 세종시 주민센터에 신청하세요.",
+      "law": [
+        {
+          "name": "가정법원 입양허가",
+          "priority": "must",
+          "condition": "입양 절차 진행 중."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "입양비용지원",
+          "priority": "must",
+          "condition": "입양 성립 후 기관 수수료 전액 지원 신청."
+        },
+        {
+          "name": "입양축하금",
+          "priority": "nice",
+          "condition": "입양 후."
+        },
+        {
+          "name": "입양아동 양육수당 지원",
+          "priority": "nice",
+          "condition": "월 양육수당."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "입양"
+        ],
+        "local_keywords": [
+          "입양"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R4",
+          "name": "입양축하금 지원",
+          "priority": "nice",
+          "condition": "세종시 입양축하금(국가 축하금과 별도).",
+          "service_id": "WLF00001264"
+        },
+        {
+          "cid": "R2",
+          "name": "입양아동 상해보험료 지원",
+          "priority": "nice",
+          "condition": "세종시 입양아동 상해보험료.",
+          "service_id": "WLF00005297"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "adoption",
+    "events": [
+      "adoption"
+    ],
+    "title": "입양 비용 지원",
+    "emoji": "🧸",
+    "intro": "입양기관에 내는 수수료는 입양 성립 후 입양비용지원으로 돌려받을 수 있어요. 세종시 주민센터에 신청하세요.",
+    "region": {
+      "sido": "세종특별자치시",
+      "sgg": null
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-adoption-l1",
+        "name": "가정법원 입양허가",
+        "priority": "must",
+        "condition": "입양 절차 진행 중.",
+        "deadline": "법원은 청구일부터 6개월 이내 허가 여부 결정(원칙)",
+        "deadlineDays": 9999,
+        "agency": "보건복지부(국가아동권리보장원) · 양자가 될 아동 주소지 관할 가정법원",
+        "online": true,
+        "documents": [
+          "입양허가 청구서",
+          "아동의 출생신고 증빙 서류",
+          "양자가 될 아동으로 결정한 서류",
+          "입양 동의 및 승낙 의사 확인 서류",
+          "결연확인서",
+          "아동의 가족관계등록부 등 증명서 및 주민등록표 등·초본",
+          "양부모가 되려는 사람의 가족관계등록부 등 증명서 및 주민등록표 등·초본",
+          "양부모가 되려는 사람의 범죄경력조회회신서",
+          "양부모교육 이수증명서"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2584&ccfNo=1&cciNo=3&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 보호대상아동 입양의 절차와 효과 · 국내입양에 관한 특별법 제21조(가정법원의 입양허가)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "2025.7.19 시행 국내입양에 관한 특별법에 따라 보호대상아동 입양은 국가아동권리보장원 신청→교육·가정조사→결연을 거쳐 아동 주소지 관할 가정법원에 입양허가를 청구하고, 인용 심판이 확정되면 입양 효력이 생긴다. 법원은 청구일부터 6개월 이내에 결정하며, 확정 후 허가서를 첨부해 입양신고를 한다.",
+        "verification_status": "verified",
+        "key": "law:가정법원 입양허가",
+        "unlocks": 4,
+        "order": 1,
+        "where": "아동 주소지 관할 가정법원에 입양허가 청구(방문 또는 전자소송); 사전 절차는 국가아동권리보장원",
+        "fee": "법원 인지·송달료(가사비송)",
+        "steps": [
+          "양부모가 되려는 사람이 국가아동권리보장원에 입양신청서 제출",
+          "상담·양부모교육 이수·가정환경조사(2회 이상 방문, 1회는 불시) 후 보고서 작성",
+          "보건복지부 입양정책위원회 심의로 결연 → 결연확인서 발급",
+          "아동 주소지 관할 가정법원에 입양허가 청구(결연확인서·범죄경력조회·교육이수증 등 첨부); 필요 시 임시양육결정 신청",
+          "법원 심리 후 허가 심판 → 확정되면 입양 효력 발생(친양자 지위), 아동 인도",
+          "허가서(심판서·확정증명서) 첨부해 시·구·읍·면에 입양신고"
+        ],
+        "pitfalls": [
+          "허가 없이 입양하면 3년 이하 징역 또는 3천만 원 이하 벌금",
+          "결연확인서·양부모교육 이수증·범죄경력조회회신서가 없으면 청구 불가",
+          "효력은 신고가 아니라 심판 확정 시 발생하지만, 가족관계등록을 위해 신고는 해야 한다",
+          "임시양육결정이 있으면 양부모가 임시후견인이 되고 친권 행사가 정지된다",
+          "외국인 관련 서류는 본국 공증 필요"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2584&ccfNo=1&cciNo=3&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "id": "law-adoption-58a80d6b",
+        "name": "입양신고",
+        "priority": "must",
+        "condition": "선행 절차 — 입양 확정 후",
+        "deadline": "친양자 입양은 재판 확정일부터 1개월 이내(일반 입양은 신고기간 없음, 신고로 효력 발생)",
+        "deadlineDays": 30,
+        "agency": "법무부(가족관계등록)·법원행정처 · 시(구)·읍·면 가족관계등록 담당",
+        "online": false,
+        "documents": [
+          "입양신고서",
+          "입양동의서",
+          "가정법원 입양허가서 등본(미성년자 입양) 또는 부모 동의를 갈음하는 가정법원 심판서",
+          "친양자 입양은 심판서 등본 및 확정증명서",
+          "신고인 신분증",
+          "입양당사자의 기본증명서·가족관계증명서·입양관계증명서(전산 확인 가능 시 생략)",
+          "양친 또는 양자가 외국인이면 국적·본국법 요건 증명서면"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=707&ccfNo=3&cciNo=1&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 입양신고하기 · 가족관계의 등록 등에 관한 법률 제62조(입양의 신고)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "입양은 가족관계등록법에 따라 시(구)·읍·면에 신고해야 효력이 생기며, 미성년자 입양은 가정법원 허가서 등본을, 친양자 입양은 심판 확정일부터 1개월 이내에 심판서·확정증명서를 첨부해 신고한다. 양친과 양자가 직접 신고하고(13세 미만은 승낙한 법정대리인), 대리 신고는 할 수 없다. 신고가 끝나야 입양축하금·양육수당·아동수당 등 후속 지원을 신청할 수 있다.",
+        "verification_status": "verified",
+        "key": "law:입양신고",
+        "autoAdded": true,
+        "autoAddedFor": "gov24-SCY000000040",
+        "unlocks": 3,
+        "order": 2,
+        "where": "입양자의 등록기준지 또는 신고인 주소지·현재지의 시(구)청·읍·면사무소 방문(대리 신고 불가, 온라인 불가)",
+        "fee": "무료",
+        "steps": [
+          "미성년자 입양은 가정법원 입양허가(친양자는 친양자 입양재판) 확정 → 심판서 등본·확정증명서 발급",
+          "입양신고서 작성(양친·양자 신고, 13세 미만은 승낙한 법정대리인)",
+          "등록기준지 또는 주소지 시(구)·읍·면에 허가서 등본·동의서·신분증 지참 방문 제출",
+          "가족관계등록부 정리(친양자는 양부의 성·본으로 기재) → 입양관계증명서 발급 확인"
+        ],
+        "pitfalls": [
+          "친양자 입양 신고를 확정일부터 1개월 넘기면 과태료(5만원 이하)",
+          "본인 의사 중시로 대리인 신고가 불가하다",
+          "미성년자 입양에 가정법원 허가 없이 신고하면 수리되지 않는다",
+          "친양자 입양은 친생부모와의 관계가 종료되고 양부 성·본으로 등록된다는 점을 확인"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=707&ccfNo=3&cciNo=1&cnpClsNo=1",
+        "curated": true,
+        "dependsOn": [
+          "law-adoption-l1"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-SCY000000040",
+        "name": "입양비용지원",
+        "priority": "must",
+        "condition": "입양 성립 후 기관 수수료 전액 지원 신청.",
+        "deadline": "입양부모가 신청서류를 첨부하여 시군구청에 신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "입양아동 양육보조금 등 신청서 1부, 입양 확정증명원 사본 1부, 통장사본 1부"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/SCY000000040",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "입양가정에 대한 입양비용 지원을 통해 국내 입양 활성화 도모",
+        "verification_status": "verified",
+        "eligibility": "국내입양에 관한 특별법에 따라 보호대상아동을 국내입양한 가정 중에서 가정법원 입양확정일이 2026.1.1. 이후인 가정",
+        "key": "svc:SCY000000040",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-adoption-58a80d6b"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-135200005011",
+        "name": "입양축하금",
+        "priority": "nice",
+        "condition": "입양 후.",
+        "deadline": "지급신청분에 대해 매월 20일에 1회 지급",
+        "deadlineDays": 20,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "입양아동 양육보조금 등 신청서 1부 , 입양확정증명원 사본 1부, 통장사본 1부"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005011",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "입양가정에 대한 입양축하금 지급을 통해 국내 입양 활성화 도모",
+        "verification_status": "verified",
+        "eligibility": "국내입양에 관한 특별법에 따라 보호대상아동을 국내입양한 가정 중에서 가정법원 입양확정일이 2022.1.1. 이후인 가정",
+        "key": "svc:135200005011",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-adoption-58a80d6b"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-SCY000000060",
+        "name": "입양아동 양육수당 지원",
+        "priority": "nice",
+        "condition": "월 양육수당.",
+        "deadline": "지급신청 후 통지한날이 속한달부터 지급",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "입양아동 양육보조금 등 신청서 1부, 입양확정증명원 사본 1부, 통장사본 1부"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/SCY000000060",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "입양아동 양육수당 지원을 통해 입양가정의 경제적 부담을 완화하여 국내 입양 활성화 및 아동의 건전육성 도모",
+        "verification_status": "verified",
+        "eligibility": "국내입양에 관한 특별법에 따라 보호대상아동을 국내입양한 가정(구 입양특례법상 허가를 받은 입양기관에 의해 보호대상아동을 국내입양한 가정도 해당)  - 입양아동이 만 18세가 되는 날이 속한 달까지",
+        "key": "svc:SCY000000060",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-adoption-58a80d6b"
+        ]
+      },
+      {
+        "ref": "R4",
+        "id": "local-WLF00001264",
+        "name": "입양축하금 지원",
+        "priority": "nice",
+        "condition": "세종시 입양축하금(국가 축하금과 별도).",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "세종특별자치시 보건복지국 아동청소년과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00001264&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 세종특별자치시 보건복지국 아동청소년과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "국내입양 활성화를 도모하고 입양아동이 가정생활에 원만하게 적응할 수 있도록 입양가정 지원",
+        "verification_status": "verified",
+        "key": "svc:WLF00001264",
+        "eligibility": "입양신고일 현재 세종시에 주민등록을 두고 신청일 현재까지 거주한 입양 양친 입양신고일 현재 세종시에 주민등록을 두고 신청일 현재까지 거주",
+        "unlocks": 0,
+        "order": 6
+      },
+      {
+        "ref": "R2",
+        "id": "local-WLF00005297",
+        "name": "입양아동 상해보험료 지원",
+        "priority": "nice",
+        "condition": "세종시 입양아동 상해보험료.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "세종특별자치시 보건복지국 아동청소년과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005297&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 세종특별자치시 보건복지국 아동청소년과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "입양아동 상해보험료 가입 지원",
+        "verification_status": "verified",
+        "key": "svc:WLF00005297",
+        "eligibility": "관내 입양아동 관내 입양아동",
+        "unlocks": 0,
+        "order": 7
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 7,
+    "by_status": {
+      "verified": 7
+    },
+    "candidates": 4,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

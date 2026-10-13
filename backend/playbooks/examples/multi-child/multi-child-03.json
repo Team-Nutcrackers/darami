@@ -1,0 +1,228 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "multi-child-03",
+    "event_id": "multi-child",
+    "event_title": "다자녀",
+    "persona_summary": "40세 여성 · 대전 중구 · 맞벌이 · 자녀 2명, 다자녀 기준",
+    "persona": {
+      "facts": {
+        "age": 40,
+        "gender": "여성",
+        "residence": "대전 중구",
+        "situation": "맞벌이 · 자녀 2명, 다자녀 기준"
+      }
+    },
+    "query": "아이가 둘인데 요즘은 두 명만 있어도 다자녀라고 하던데 맞나요? 대전에서 두 자녀 가정이 받을 수 있는 혜택을 알고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "multi-child"
+      ],
+      "reason": "두 자녀 다자녀 기준"
+    },
+    "plan": {
+      "title": "두 자녀 가정 다자녀 혜택",
+      "emoji": "👨‍👩‍👧‍👦",
+      "intro": "국가 다자녀 기준은 대부분 셋 이상이지만, 공공분양 특공·지자체 혜택은 두 자녀부터 다자녀로 보는 경우가 많아요. 대전시 기준을 확인하세요.",
+      "law": [
+        {
+          "name": "다자녀 지방세 감면",
+          "priority": "nice",
+          "condition": "지방세 감면은 3명 이상 → 2자녀는 미해당(지자체 조례 확인)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "공공분양 주택공급",
+          "priority": "nice",
+          "condition": "다자녀 특별공급은 미성년 자녀 2명 이상부터."
+        },
+        {
+          "name": "사회적 배려대상자 도시가스요금 경감",
+          "priority": "nice",
+          "condition": "도시가스 경감은 3자녀 이상 → 확인."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "다자녀",
+          "두 자녀"
+        ],
+        "local_keywords": [
+          "다자녀",
+          "두자녀"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "대전시 다자녀가정 수도 요금 감면 신청",
+          "priority": "must",
+          "condition": "대전 다자녀 조례 기준(2자녀 포함 여부) 확인 후 상수도 감면 신청.",
+          "service_id": "630000000660"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "multi-child",
+    "events": [
+      "multi-child"
+    ],
+    "title": "두 자녀 가정 다자녀 혜택",
+    "emoji": "👨‍👩‍👧‍👦",
+    "intro": "국가 다자녀 기준은 대부분 셋 이상이지만, 공공분양 특공·지자체 혜택은 두 자녀부터 다자녀로 보는 경우가 많아요. 대전시 기준을 확인하세요.",
+    "region": {
+      "sido": "대전광역시",
+      "sgg": "중구"
+    },
+    "procedures": [
+      {
+        "ref": "R1",
+        "id": "regional-630000000660",
+        "name": "대전시 다자녀가정 수도 요금 감면 신청",
+        "priority": "must",
+        "condition": "대전 다자녀 조례 기준(2자녀 포함 여부) 확인 후 상수도 감면 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대전광역시",
+        "online": true,
+        "documents": [
+          "○ 신청인 제출서류",
+          "없음  ( 다만, 필요시 가족관계증명서(상세) 제출)"
+        ],
+        "link": "https://www.waterworks.daejeon.kr/kor/index.do",
+        "source": {
+          "name": "보조금24 · 대전광역시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "□ 사업개요\r\n  ○ (감면대상) ｢대전광역시 다자녀가정 지원 조례｣ 에 따른 다자녀가정\r\n      * 대전광역시에 주민등록을 두고 거주하는 자녀가 2명 이상이고, 막내자녀의 나이가 18세 이하인 가정\r\n  ○ (감면범위) 2자녀 가정: 요금의 10%, 3자녀 이상 가정: 요금의 30%\r\n      * 공동주택의 경우 전체 수도사용량에 기초한 세대별 평균",
+        "verification_status": "verified",
+        "key": "svc:630000000660",
+        "eligibility": "(감면대상) ｢대전광역시 다자녀가정 지원 조례｣ 에 따른 다자녀가정        * 대전광역시에 주민등록을 두고 거주하는 자녀가 2명 이상이고, 막내자녀의 나이가 18세 이하인 가정",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "L1",
+        "id": "law-multi-child-l1",
+        "name": "다자녀 지방세 감면",
+        "priority": "nice",
+        "condition": "지방세 감면은 3명 이상 → 2자녀는 미해당(지자체 조례 확인).",
+        "deadline": "자동차 취득세 신고·등록 시(취득일부터 60일 이내) 함께 신청, 적용기한 2027년 12월 31일 취득분까지",
+        "deadlineDays": 60,
+        "agency": "행정안전부 · 자동차 등록지 시·군·구청 세무부서(자동차등록 창구)",
+        "online": false,
+        "documents": [
+          "지방세 감면 신청서",
+          "가족관계증명서(자녀 수 확인, 담당자 확인 가능 시 생략)",
+          "자동차 등록 관련 서류(취득세 신고 시 함께 제출)"
+        ],
+        "link": "https://www.gov.kr/portal/service/serviceInfo/131200000008",
+        "source": {
+          "name": "정부24 — 다자녀가구 자동차취득세 감면 · 지방세특례제한법 제22조의2(출산 및 양육 지원을 위한 감면)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "18세 미만 자녀 3명 이상을 양육하는 사람이 양육 목적으로 2027년 12월 31일까지 취득·등록하는 자동차 1대는 취득세가 면제되고(6인승 이하 승용은 140만원 한도), 2자녀는 50% 경감(70만원 한도)된다. 7~10인승 승용, 15인승 이하 승합, 1톤 이하 화물, 250cc 이하 이륜은 한도 없이 면제된다. 차량 등록 시 시·군·구청에 지방세 감면 신청서를 내면 되며, 1년 내 사유 없이 소유권을 이전하면 감면세액이 추징된다.",
+        "verification_status": "verified",
+        "key": "law:다자녀 지방세 감면",
+        "unlocks": 0,
+        "order": 2,
+        "where": "자동차 등록 시 시·군·구청(차량등록사업소) 방문해 지방세 감면 신청서 제출",
+        "fee": "무료",
+        "steps": [
+          "18세 미만 자녀 수(3명 이상 면제, 2명 50% 경감)와 차종(승용·15인승 이하 승합·1톤 이하 화물·250cc 이하 이륜) 확인",
+          "양육자 본인 또는 배우자·자녀 공동명의로 차량 취득",
+          "시·군·구청 차량등록 창구에서 취득세 신고와 함께 지방세 감면 신청서 제출",
+          "감면 적용 후 등록(6인승 이하 승용은 3자녀 140만원·2자녀 70만원 한도)",
+          "등록일부터 1년간 소유권 유지(배우자 이전 제외) — 위반 시 추징"
+        ],
+        "pitfalls": [
+          "다자녀 양육자 중 1명이라도 이미 감면받은 차를 보유하면 적용 불가(대체취득은 가능)",
+          "배우자·자녀 외의 사람과 공동등록하면 감면 배제",
+          "등록일부터 1년 내 사망·혼인·해외이민·면허취소 등 사유 없이 양도하면 추징",
+          "자녀 수는 가족관계등록부 기준(입양 자녀는 친생부모 쪽에서 제외)"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/service/serviceInfo/131200000008",
+        "curated": true
+      },
+      {
+        "ref": "G5",
+        "id": "gov24-WII000001470",
+        "name": "공공분양 주택공급",
+        "priority": "nice",
+        "condition": "다자녀 특별공급은 미성년 자녀 2명 이상부터.",
+        "deadline": "입주자요건에 따름",
+        "deadlineDays": 9999,
+        "agency": "국토교통부",
+        "online": true,
+        "documents": [
+          "주민등록 등(초) 본, 주민등록증"
+        ],
+        "link": "http://www.lh.or.kr",
+        "source": {
+          "name": "보조금24 · 국토교통부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "저소득층의 주거안정 및 무주택자의 내 집 마련 기회 제공",
+        "verification_status": "verified",
+        "eligibility": "입주자 모집공고일 현재 당해 주택 건설지역 거주하는 무주택 가구 구성원으로서 해당 세대의 소득 및 보유자산이 국토교통부 장관이 정하는 기준 이하인 자   소득 기준  - 일반공급   · 공공 주택 중 전용면적 60㎡ 이하 주택 : 전년도 도시근로자 가",
+        "key": "svc:WII000001470",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-B55121000003",
+        "name": "사회적 배려대상자 도시가스요금 경감",
+        "priority": "nice",
+        "condition": "도시가스 경감은 3자녀 이상 → 확인.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "한국가스공사",
+        "online": true,
+        "documents": [
+          "○ 도시가스요금 경감 지원 신청서 및 개인정보 수집/이용·제공 위탁 동의서",
+          "○ 다자녀가구 : 만 18세 미만의 \"자녀\" 또는 \"손자녀\"의 확인이 주민등록표상 불가능할 경우 \"가족관계증명원\"",
+          "○ 장애 외국인 : 장애인의 경우, 외국인등록증(사실증명) 또는 국내거소신고증(사실증명)"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55121000003",
+        "source": {
+          "name": "보조금24 · 한국가스공사",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "사회적배려대상자의 도시가스 요금 경감을 통한 생활안정 지원",
+        "verification_status": "verified",
+        "eligibility": "생계급여, 주거급여, 의료급여 또는 교육급여의 수급자   차상위계층   장애의 정도가 심한 장애인   1~3급 신체장해등급 판정을 받은 5.18민주화운동 관련자   1~3급 상이등급 판정을 받은 국가유공자   독립유공자 또는 선순위 유족   자녀 또는",
+        "key": "svc:B55121000003",
+        "unlocks": 0,
+        "order": 4
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 4,
+    "by_status": {
+      "verified": 4
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 10.4
+  }
+}

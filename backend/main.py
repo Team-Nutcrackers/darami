@@ -1,20 +1,19 @@
-"""다람이 백엔드 — FastAPI + 멀티 LLM 프록시 (Upstage Solar Pro / LG K-EXAONE).
+"""다람이 백엔드 — FastAPI + Upstage Solar Pro 프록시.
 
 - 프론트엔드에서 /api/chat 으로 대화 메시지를 보내면
-  선별된 이벤트 플레이북을 시스템 프롬프트에 주입해 선택된 LLM을 호출하고,
+  선별된 이벤트 플레이북을 시스템 프롬프트에 주입해 Solar Pro 를 호출하고,
   결과(JSON)를 SSE로 흘려준다.
-- 두 모델 모두 OpenAI 호환 chat completions 라 base_url/model/extra_body 만 바꿔 끼운다.
-    · Solar Pro  : Upstage (https://api.upstage.ai/v1, model=solar-pro2)
-    · K-EXAONE   : LG / Friendli dedicated endpoint (OpenAI 호환, reasoning off)
-- API 키는 .env 에서만 읽고 프론트로 노출하지 않는다. 프론트는 provider 키("solar"|"kexaone")만 보낸다.
+- Solar Pro : Upstage OpenAI 호환 chat completions (https://api.upstage.ai/v1, model=solar-pro2)
+- API 키는 .env 에서만 읽고 프론트로 노출하지 않는다.
 """
 
 from __future__ import annotations
 
 import asyncio
 import json
+from datetime import datetime
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional
 
@@ -27,63 +26,42 @@ from openai import OpenAI
 
 from prompts import build_system_prompt, build_generation_prompt, build_persona_prompt
 from sources.curate import curate_event, legal_for, curate_dynamic
+from sources.curate_v2 import curate_dynamic_v2
+from sources import graph as procgraph
 
 load_dotenv()
 
 UPSTAGE_API_KEY = os.environ.get("UPSTAGE_API_KEY", "")
 SOLAR_MODEL = os.environ.get("SOLAR_MODEL", "solar-pro2")
 
-# LG K-EXAONE (Friendli dedicated endpoint) — OpenAI 호환
-KEXAONE_API_KEY = os.environ.get("KEXAONE_API_KEY", "")
-KEXAONE_ENDPOINT = os.environ.get("KEXAONE_ENDPOINT", "")  # 배포된 endpoint id = model 값
-KEXAONE_BASE_URL = os.environ.get("KEXAONE_BASE_URL", "https://api.friendli.ai/dedicated/v1")
-
 PLAYBOOK_DIR = Path(__file__).parent / "playbooks"
+CURATE_VERSION = os.environ.get("DARAMI_CURATE", "v2")  # "v2"(기본) | "v1"(예전 키워드 검색 방식)
 
 
-# ---------- LLM 제공자(provider) 레지스트리 ----------
+# ---------- LLM (Solar Pro 단일) ----------
 @dataclass
 class Provider:
-    key: str               # 프론트가 보내는 식별자
-    label: str             # 공식 표기명(UI 노출)
+    key: str               # 식별자(trace 기록용)
+    label: str             # 공식 표기명
     model: str             # chat.completions 의 model 값
     client: Optional[OpenAI]
-    extra_body: dict = field(default_factory=dict)  # provider 고유 옵션(예: K-EXAONE reasoning off)
 
     @property
     def available(self) -> bool:
         return self.client is not None and bool(self.model)
 
 
-PROVIDERS: dict[str, Provider] = {
-    "solar": Provider(
-        key="solar",
-        label="Solar Pro",
-        model=SOLAR_MODEL,
-        client=OpenAI(api_key=UPSTAGE_API_KEY, base_url="https://api.upstage.ai/v1") if UPSTAGE_API_KEY else None,
-    ),
-    "kexaone": Provider(
-        key="kexaone",
-        label="K-EXAONE",
-        model=KEXAONE_ENDPOINT,
-        client=OpenAI(api_key=KEXAONE_API_KEY, base_url=KEXAONE_BASE_URL) if KEXAONE_API_KEY else None,
-        # 구조화 JSON만 필요하므로 추론(thinking) 비활성 → 더 빠르고 깔끔한 응답
-        extra_body={"chat_template_kwargs": {"enable_thinking": False}},
-    ),
-}
-DEFAULT_PROVIDER = "solar"
+SOLAR = Provider(
+    key="solar",
+    label="Solar Pro",
+    model=SOLAR_MODEL,
+    client=OpenAI(api_key=UPSTAGE_API_KEY, base_url="https://api.upstage.ai/v1") if UPSTAGE_API_KEY else None,
+)
 
 
-def get_provider(key: Optional[str]) -> Provider:
-    """요청의 provider 키 → Provider. 미지정/미가용이면 사용 가능한 기본값으로 폴백."""
-    p = PROVIDERS.get(key or DEFAULT_PROVIDER)
-    if p and p.available:
-        return p
-    # 요청한 provider가 없거나 키 미설정 → 가용한 첫 provider
-    fallback = PROVIDERS.get(DEFAULT_PROVIDER)
-    if fallback and fallback.available:
-        return fallback
-    return next((p for p in PROVIDERS.values() if p.available), PROVIDERS[DEFAULT_PROVIDER])
+def get_provider(_key: Optional[str] = None) -> Provider:
+    """항상 Solar Pro. (예전 요청의 provider 필드는 무시한다)"""
+    return SOLAR
 
 
 app = FastAPI(title="다람이 API")
@@ -106,19 +84,17 @@ class ChatReq(BaseModel):
     playbook: Optional[dict] = None    # 동적 이벤트는 생성된 플레이북을 직접 실어 보낸다
     persona: Optional[dict] = None     # 지금까지 파악한 사용자 페르소나(facts)
     messages: List[Message]
-    provider: Optional[str] = None     # "solar" | "kexaone" (미지정 시 기본값)
+    board: Optional[List[dict]] = None  # 현재 '할 일' 보드 [{id, status}] — 완료 체크 상태를 모델이 알도록
 
 
 class GenReq(BaseModel):
     description: str                    # 사용자가 자유롭게 입력한 생활 이벤트 설명
     persona: Optional[dict] = None      # 거주지 등(지자체 혜택 grounding에 사용)
-    provider: Optional[str] = None      # "solar" | "kexaone"
 
 
 class PersonaReq(BaseModel):
     persona: Optional[dict] = None     # 현재 페르소나(facts)
     messages: List[Message]            # 대화 기록(최신 사용자 입력 포함)
-    provider: Optional[str] = None     # "solar" | "kexaone"
 
 
 # ---------- 플레이북 ----------
@@ -142,20 +118,8 @@ def load_playbook(event: str | None) -> dict:
 def health():
     return {
         "ok": True,
-        "defaultProvider": DEFAULT_PROVIDER,
-        "providers": {k: p.available for k, p in PROVIDERS.items()},
-    }
-
-
-@app.get("/api/providers")
-def providers():
-    """프론트 LLM 토글용 — 선택 가능한 모델과 가용성."""
-    return {
-        "default": DEFAULT_PROVIDER,
-        "providers": [
-            {"key": p.key, "label": p.label, "available": p.available}
-            for p in PROVIDERS.values()
-        ],
+        "model": SOLAR.label,
+        "available": SOLAR.available,
     }
 
 
@@ -172,6 +136,18 @@ def get_playbook(event: str, region: Optional[str] = None):
     return JSONResponse(load_playbook(event))
 
 
+@app.get("/api/graph")
+def graph_stats():
+    """절차 그래프 현황(기본판 + 사용 중 학습된 확장). 학습판 삭제는 `python -m sources.graph reset-learned`."""
+    b, l = procgraph.base(), procgraph.learned()
+    return {
+        "base": {"nodes": len(b.get("nodes", {})), "edges": len(b.get("edges", [])), "builtAt": b.get("built_at")},
+        "learned": {"nodes": len(l.get("nodes", {})), "edges": len(l.get("edges", [])),
+                    "rejected": len(l.get("rejected", [])), "updatedAt": l.get("updated_at"),
+                    "edgesList": [{k: e.get(k) for k in ("before_name", "after_name", "relation", "guidance")} for e in l.get("edges", [])]},
+    }
+
+
 @app.get("/api/legal-basis/{procedure_id}")
 def legal_basis(procedure_id: str):
     """절차의 법적 근거를 국가법령정보 OPEN API로 실시간 조회·교차검증.
@@ -179,7 +155,7 @@ def legal_basis(procedure_id: str):
     return JSONResponse(legal_for(procedure_id))
 
 
-# ---------- 핵심: LLM 호출 (provider 공통) ----------
+# ---------- 핵심: LLM 호출 ----------
 def _parse_json(raw: str, fallback: dict) -> dict:
     """모델 응답에서 JSON 객체를 파싱. 잡텍스트가 섞이면 중괄호 범위만 추출."""
     try:
@@ -201,7 +177,6 @@ def _create_json(provider: Provider, chat_messages: list[dict], temperature: flo
         messages=chat_messages,
         response_format={"type": "json_object"},
         temperature=temperature,
-        extra_body=provider.extra_body or None,
     )
     return completion.choices[0].message.content or "{}"
 
@@ -238,20 +213,40 @@ def generate(req: GenReq):
     보조금24를 이벤트 키워드로 검색해 실제 서비스에서 절차를 구성(grounding)하고,
     핵심 신고 절차는 법령 API로 보강. grounding 안 되는 건 'ai'(미검증)로 표기.
     """
-    provider = get_provider(req.provider)
+    provider = get_provider()
     if provider.client is None:
         return JSONResponse({"error": f"{provider.label} API 키가 설정되지 않았습니다."}, status_code=500)
     try:
-        playbook = curate_dynamic(req.description.strip(), req.persona, make_json_caller(provider))
+        if CURATE_VERSION == "v1":
+            playbook = curate_dynamic(req.description.strip(), req.persona, make_json_caller(provider))
+        else:
+            # v2: 이벤트 분류 → 사전 생성 사례(few-shot) → 이벤트별 API 매핑으로 계획·grounding
+            playbook, trace = curate_dynamic_v2(req.description.strip(), req.persona, make_json_caller(provider))
+            _save_live_trace(req, provider.key, playbook, trace)
     except Exception as e:  # noqa: BLE001
         return JSONResponse({"error": f"동적 큐레이션 실패: {e}"}, status_code=500)
     return JSONResponse(playbook)
 
 
+def _save_live_trace(req: GenReq, provider_key: str, playbook: dict, trace: dict) -> None:
+    """실서비스 "?" 요청의 판단 추적을 generated/live/ 에 남긴다(이상한 절차가 나왔을 때 분류·계획·선택을 되짚기 위해)."""
+    try:
+        live = Path(__file__).resolve().parent / "generated" / "live"
+        live.mkdir(parents=True, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        (live / f"{ts}_{playbook.get('event') or 'none'}.json").write_text(json.dumps({
+            "query": req.description, "persona": req.persona, "provider": provider_key,
+            "playbook": playbook, "trace": trace}, ensure_ascii=False, indent=2), encoding="utf-8")
+        bad = [p["name"] for p in playbook.get("procedures", []) if p.get("verification_status") == "unverified"]
+        print(f"[generate] event={playbook.get('event')} procs={len(playbook.get('procedures', []))} unverified={bad} → {live.name}/{ts}")
+    except Exception as e:  # noqa: BLE001
+        print(f"[generate] trace 저장 실패: {e!r}")
+
+
 @app.post("/api/persona")
 def persona(req: PersonaReq):
     """대화 입력으로 사용자 페르소나를 갱신하고 충돌을 검사한다(턴당 1차 호출)."""
-    provider = get_provider(req.provider)
+    provider = get_provider()
     if provider.client is None:
         return JSONResponse({"error": f"{provider.label} API 키가 설정되지 않았습니다."}, status_code=500)
     # 최근 대화를 한 덩어리로 만들어 최신 입력 중심으로 갱신
@@ -271,12 +266,46 @@ def persona(req: PersonaReq):
     return JSONResponse({"facts": facts, "conflict": conflict})
 
 
+def _sanitize_board_ops(ops, board_status: dict, playbook: dict | None = None) -> list:
+    """모델의 boardOps 중 보드 상태를 망가뜨리는 것을 거르고, 의존관계를 코드로 보강한다.
+    - 이미 보드에 있는 절차를 다시 add → 상태(done 등)가 waiting 으로 초기화되므로 버린다.
+    - done 인 절차를 update 로 waiting/in_progress 로 되돌리는 것도 버린다(완료 해제는 사용자가 직접 체크로 한다).
+    - 어떤 절차가 done 이 되면 그 선행 절차(dependsOn, 재귀)도 끝난 것이므로 done 으로 같이 올린다(모델이 빠뜨려도)."""
+    out, seen = [], set()
+    deps = {p.get("id"): list(p.get("dependsOn") or []) for p in (playbook or {}).get("procedures", [])}
+    for op in ops or []:
+        if not isinstance(op, dict) or not op.get("id"):
+            continue
+        cur = board_status.get(op["id"])
+        if op.get("op") == "add" and cur is not None:
+            continue
+        if cur == "done" and op.get("status") != "done":
+            continue
+        out.append(op); seen.add(op["id"])
+        if op.get("status") == "done":
+            stack = list(deps.get(op["id"], []))
+            while stack:
+                d = stack.pop()
+                if d in seen or board_status.get(d) == "done":
+                    continue
+                seen.add(d)
+                out.append({"op": "update" if d in board_status else "add", "id": d, "status": "done"})
+                stack += deps.get(d, [])
+    return out
+
+
 @app.post("/api/chat")
 async def chat(req: ChatReq):
     # 동적 이벤트는 요청에 실린 플레이북을 우선 사용, 없으면 디스크에서 로드
     playbook = req.playbook or load_playbook(req.event)
-    system_prompt = build_system_prompt(playbook, req.persona)
-    provider = get_provider(req.provider)
+    # 절차 그래프: 보드의 완료 상태로 '현재 위치'를 잡고 지금 할 수 있는 것·막힌 것·순서를 모델에 알린다
+    try:
+        guidance = procgraph.guidance_block(playbook, req.board)
+    except Exception:  # noqa: BLE001 — 안내 생성 실패가 대화를 막지 않도록
+        guidance = ""
+    system_prompt = build_system_prompt(playbook, req.persona, req.board, guidance)
+    provider = get_provider()
+    board_status = {b.get("id"): b.get("status") for b in (req.board or []) if isinstance(b, dict) and b.get("id")}
 
     async def gen():
         if provider.client is None:
@@ -310,7 +339,7 @@ async def chat(req: ChatReq):
                 "eventDetected": result.get("eventDetected"),
                 "askMissing": result.get("askMissing", []),
                 "quickReplies": result.get("quickReplies", []),
-                "boardOps": result.get("boardOps", []),
+                "boardOps": _sanitize_board_ops(result.get("boardOps", []), board_status, playbook),
                 "userTodos": result.get("userTodos", []),
             },
         )

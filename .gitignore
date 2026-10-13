@@ -15,3 +15,14 @@ frontend/dist/
 
 # os
 .DS_Store
+# 발급 키 명세 PDF — DATA_GO_KR_KEY 등 평문 노출, 커밋 금지
+api/
+
+# 절차 그래프 학습판 (사용 중 LLM 제안으로 누적, 기계별 상태 — 지우면 기본판 graph.base.json 만으로 동작)
+backend/playbooks/graph.learned.json
+
+# 생성·실행 산출물 (공공 API 응답 캐시, 사전 생성 배치 중간물, 실서비스 trace, 사용자 테스트 결과) — 재생성 가능, 커밋 금지
+backend/generated/
+
+# 빌드 산출물
+*.tsbuildinfo

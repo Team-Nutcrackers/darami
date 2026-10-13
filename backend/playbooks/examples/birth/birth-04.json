@@ -1,0 +1,506 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "birth-04",
+    "event_id": "birth",
+    "event_title": "출산",
+    "persona_summary": "38세 남성 · 대구 달서구 · 자영업 · 셋째 출산 예정",
+    "persona": {
+      "facts": {
+        "age": 38,
+        "gender": "남성",
+        "residence": "대구 달서구",
+        "situation": "자영업 · 셋째 출산 예정"
+      }
+    },
+    "query": "다음 주에 셋째가 태어날 예정이에요. 출생신고하면서 한 번에 신청되는 서비스가 있다던데, 미리 준비해야 할 서류가 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "birth",
+        "multi-child"
+      ],
+      "reason": "셋째 출산 예정, 통합신청과 다자녀"
+    },
+    "plan": {
+      "title": "셋째 출산 준비와 다자녀",
+      "emoji": "👶",
+      "intro": "출생신고 때 행복출산 통합신청으로 한 번에 처리돼요. 셋째부터는 다자녀 혜택(취득세 감면·장학금 등)도 시작돼요.",
+      "law": [
+        {
+          "name": "출생신고",
+          "priority": "must",
+          "condition": "출생 후 1개월 이내. 신분증·출생증명서 지참."
+        },
+        {
+          "name": "다자녀 지방세 감면",
+          "priority": "nice",
+          "condition": "셋째 출생으로 다자녀 → 차량 취득세 감면 등."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+          "priority": "must",
+          "condition": "출생신고 시 통합신청: 서류는 신분증, 통장사본(지원금 입금용), 가족관계 확인."
+        },
+        {
+          "name": "첫만남이용권 지원",
+          "priority": "must",
+          "condition": "셋째 300만 원."
+        },
+        {
+          "name": "아동수당",
+          "priority": "must",
+          "condition": "셋째 아동수당."
+        },
+        {
+          "name": "다자녀가구 자동차취득세 감면",
+          "priority": "nice",
+          "condition": "자녀 3명 이상 → 차량 1대 취득세 감면."
+        },
+        {
+          "name": "고속도로 다자녀가구 통행료 할인",
+          "priority": "nice",
+          "condition": "다자녀 통행료 할인 등록."
+        }
+      ],
+      "national_welfare": [
+        {
+          "name": "부모급여 지원",
+          "priority": "must",
+          "condition": "셋째 부모급여."
+        }
+      ],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "출산",
+          "다자녀"
+        ],
+        "local_keywords": [
+          "출산장려금",
+          "다자녀",
+          "셋째"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "달서구 출산축하금 지원",
+          "priority": "must",
+          "condition": "둘째 이상 출생아 → 셋째 출산축하금.",
+          "service_id": "347000000112"
+        },
+        {
+          "cid": "R4",
+          "name": "대구 아이조아카드(다자녀가정 우대) 안내",
+          "priority": "nice",
+          "condition": "2자녀 이상 가정 우대카드.",
+          "service_id": "627000000754"
+        },
+        {
+          "cid": "R5",
+          "name": "대구광역시 다자녀가정 상수도요금 감면",
+          "priority": "nice",
+          "condition": "3자녀 이상(막내 19세 미만) 상수도요금 감면.",
+          "service_id": "627000000759"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "birth",
+    "events": [
+      "birth",
+      "multi-child"
+    ],
+    "title": "셋째 출산 준비와 다자녀",
+    "emoji": "👶",
+    "intro": "출생신고 때 행복출산 통합신청으로 한 번에 처리돼요. 셋째부터는 다자녀 혜택(취득세 감면·장학금 등)도 시작돼요.",
+    "region": {
+      "sido": "대구광역시",
+      "sgg": "달서구"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "birth-report",
+        "name": "출생신고",
+        "priority": "must",
+        "condition": "출생 후 1개월 이내. 신분증·출생증명서 지참.",
+        "deadline": "1개월 이내",
+        "deadlineDays": 30,
+        "agency": "법무부(가족관계등록 사무는 법원행정처 감독) · 시(구)·읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "출생신고서(자녀 이름은 한글 또는 통상 사용 한자)",
+          "출생증명서(의사·조산사 작성) 또는 출생사실을 증명하는 서면",
+          "신고인 신분증(우편 제출 시 사본)",
+          "부·모의 혼인관계증명서(행정정보 공동이용 가능 시 생략)",
+          "자녀 출생 당시 모가 한국인임을 증명하는 서면(해당 시)",
+          "자녀가 이중국적자인 경우 취득한 국적을 소명하는 자료(해당 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "source": {
+          "name": "정부24 출생신고 민원안내 · 가족관계의 등록 등에 관한 법률 제44조(출생신고의 기재사항)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "아이가 태어나면 1개월 안에 부 또는 모가 출생증명서를 첨부해 주민센터나 전자가족관계등록시스템에 출생신고를 한다. 수수료는 없으며, 신고 때 행복출산 원스톱으로 부모급여·아동수당 등을 함께 신청하면 편하다. 기한을 넘기면 5만 원 이하 과태료가 부과된다.",
+        "verification_status": "verified",
+        "key": "common:birth-report",
+        "unlocks": 6,
+        "order": 1,
+        "where": "출생지·등록기준지·주소지 시(구)·읍·면·동 주민센터 방문, 우편, 또는 대법원 전자가족관계등록시스템(efamily.scourt.go.kr, 온라인 출생신고 참여 병원 출산 시)",
+        "fee": "무료",
+        "steps": [
+          "병원에서 출생증명서 발급(온라인 출생신고 참여 병원이면 정보 제공 동의)",
+          "출생신고서 작성(이름·본·등록기준지·출생 일시·장소·부모 정보)",
+          "주민센터 방문 제출 또는 전자가족관계등록시스템에서 전자서명 후 제출",
+          "같은 자리에서 행복출산 원스톱(부모급여·아동수당·첫만남이용권) 통합 신청"
+        ],
+        "pitfalls": [
+          "온라인 출생신고는 참여 병원에서 출산한 경우에만 가능 — 병원에 미리 확인",
+          "출생증명서를 받을 수 없으면 대체 서면이나 가정법원 출생확인이 필요해 시간이 걸림",
+          "혼인 외 출생자는 모가 신고의무자",
+          "부모급여·아동수당 등은 출생 후 60일 이내 신청해야 출생월부터 소급"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "curated": true
+      },
+      {
+        "ref": "R1",
+        "id": "regional-347000000112",
+        "name": "달서구 출산축하금 지원",
+        "priority": "must",
+        "condition": "둘째 이상 출생아 → 셋째 출산축하금.",
+        "deadline": "출생일 기준 1년 이내",
+        "deadlineDays": 365,
+        "agency": "대구광역시 달서구",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/347000000112",
+        "source": {
+          "name": "보조금24 · 대구광역시 달서구",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "두자녀 이상 출생 가정에 출산 축하금을 지원하여 경제적 부담을 경감하고자 함",
+        "verification_status": "verified",
+        "key": "svc:347000000112",
+        "eligibility": "지원대상 : 대구시 달서구에 출생 신고한 둘째 이상 출생아의 부 또는 모  지원기준 : 부모(부 또는 모)가 대상 자녀 출생일 기준으로 1년 전부터 지원금 신청일까지 달서구에 주민등록을 두고 실제 거주하고 있을 것 (단, 거주기간이 1년 미만인 경우에",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-174000000029",
+        "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+        "priority": "must",
+        "condition": "출생신고 시 통합신청: 서류는 신분증, 통장사본(지원금 입금용), 가족관계 확인.",
+        "deadline": "출생신고 시 또는 출생신고 이후(※ 개별 서비스별 신청 기간은 \"지원대상\" 참조)",
+        "deadlineDays": 9999,
+        "agency": "행정안전부",
+        "online": true,
+        "documents": [
+          "○ 온라인 : 간편인증, 공동인증서 등(본인인증 필요)",
+          "○ 방문: 신분증, 출산자의 신분증 사본(대리인 신청시), 가족관계증명서 등 가족관계를 증명할 수 있는 서류(시부모가 신청시)",
+          "* 저소득층 조제분유 지원, 지자체 지원 서비스 신청 또는 자격확인 연계 등이 불가한 경우,  해당 구비서류가 추가로 필요할 수 있습니다."
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/174000000029",
+        "source": {
+          "name": "보조금24 · 행정안전부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산 후 받을 수 있는 각종 출산지원 서비스를 한 번에 통합신청하는 서비스를 제공하여 출산가정에 서비스 이용 편의 제고",
+        "verification_status": "verified",
+        "eligibility": "신청일 기준 출산자(출산가정)  * 출생신고 시 또는 출생신고 이후 신청가능(출생자 주민등록번호 부여 후, 등록 처리 가능)  ※개별 서비스별 예외사항 및 신청가능기간(개별신청은 담당기관 문의)  부모급여, 아동수당, 양육수당, 기저귀·조제분유지원 :",
+        "key": "svc:174000000029",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-135200005015",
+        "name": "첫만남이용권 지원",
+        "priority": "must",
+        "condition": "셋째 300만 원.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "신분증",
+          "대리신청시 위임장, 보호자 신분증 사본 제출, 대리인 신분증"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출생 아동에게 200만원 이상의 첫만남이용권을 지급하여 생애초기 아동양육에 따른 경제적 부담 경감",
+        "verification_status": "verified",
+        "eligibility": "출생아로서 출생신고되어 정상적으로 주민등록번호를 부여받은 아동(주민등록상 생년월일로부터 1년이 초과되지 않는 출생아)  * 2024년 1월 1일 이후 출생아는 주민등록상 생년월일로부터 2년내에 신청하여 사용 가능",
+        "key": "svc:135200005015",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-135200000120",
+        "name": "아동수당",
+        "priority": "must",
+        "condition": "셋째 아동수당.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 공통서류",
+          "아동수당 지급 신청서",
+          "신청인의 신분증",
+          "○ 대리신청인 구비서류",
+          "대리 신청 시 위임장, 대리인 신분증, 보호자 신분증(사본) 지참"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000120",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "아동에게 아동수당을 지급하여 아동 양육에 따른 경제적 부담을 경감하고 건강한 성장환경을 조성함으로써 아동의 기본적 권리와 복지 증진에 기여",
+        "verification_status": "verified",
+        "eligibility": "만 8세 미만 모든 아동에게 아동수당을 지급  - 대한민국 국적을 보유한 아동   ㆍ 부모가 외국인이어도 아동이 한국 국적이면 요건 충족   ㆍ 국적법에 따른 복수국적자 포함   ㆍ 난민법에 따른 난민 인정 아동 포함   ㆍ ｢재한외국인처우기본법｣에 ",
+        "key": "svc:135200000120",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "N1",
+        "id": "national_welfare-WLF00004657",
+        "name": "부모급여 지원",
+        "priority": "must",
+        "condition": "셋째 부모급여.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 아동정책과",
+        "online": true,
+        "documents": [
+          "사회보장급여 신청(변경)서"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004657",
+        "source": {
+          "name": "복지로 · 보건복지부 아동정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "영아기 집중돌봄을 두텁게 지원하여 출산 및 양육으로 인한 경제적 부담을 줄여드립니다.",
+        "verification_status": "verified",
+        "eligibility": "2세 미만의 아동(0~23개월)에게 지원합니다.※ 2세부터는 가정양육수당을 지원합니다.\r2세 생일이 도래하는 달의 전 달까지 최대 24개월간 지급합니다.",
+        "key": "svc:WLF00004657",
+        "unlocks": 0,
+        "order": 6,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "L3",
+        "id": "law-multi-child-l3",
+        "name": "다자녀 지방세 감면",
+        "priority": "nice",
+        "condition": "셋째 출생으로 다자녀 → 차량 취득세 감면 등.",
+        "deadline": "자동차 취득세 신고·등록 시(취득일부터 60일 이내) 함께 신청, 적용기한 2027년 12월 31일 취득분까지",
+        "deadlineDays": 60,
+        "agency": "행정안전부 · 자동차 등록지 시·군·구청 세무부서(자동차등록 창구)",
+        "online": false,
+        "documents": [
+          "지방세 감면 신청서",
+          "가족관계증명서(자녀 수 확인, 담당자 확인 가능 시 생략)",
+          "자동차 등록 관련 서류(취득세 신고 시 함께 제출)"
+        ],
+        "link": "https://www.gov.kr/portal/service/serviceInfo/131200000008",
+        "source": {
+          "name": "정부24 — 다자녀가구 자동차취득세 감면 · 지방세특례제한법 제22조의2(출산 및 양육 지원을 위한 감면)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "18세 미만 자녀 3명 이상을 양육하는 사람이 양육 목적으로 2027년 12월 31일까지 취득·등록하는 자동차 1대는 취득세가 면제되고(6인승 이하 승용은 140만원 한도), 2자녀는 50% 경감(70만원 한도)된다. 7~10인승 승용, 15인승 이하 승합, 1톤 이하 화물, 250cc 이하 이륜은 한도 없이 면제된다. 차량 등록 시 시·군·구청에 지방세 감면 신청서를 내면 되며, 1년 내 사유 없이 소유권을 이전하면 감면세액이 추징된다.",
+        "verification_status": "verified",
+        "key": "law:다자녀 지방세 감면",
+        "unlocks": 1,
+        "order": 7,
+        "where": "자동차 등록 시 시·군·구청(차량등록사업소) 방문해 지방세 감면 신청서 제출",
+        "fee": "무료",
+        "steps": [
+          "18세 미만 자녀 수(3명 이상 면제, 2명 50% 경감)와 차종(승용·15인승 이하 승합·1톤 이하 화물·250cc 이하 이륜) 확인",
+          "양육자 본인 또는 배우자·자녀 공동명의로 차량 취득",
+          "시·군·구청 차량등록 창구에서 취득세 신고와 함께 지방세 감면 신청서 제출",
+          "감면 적용 후 등록(6인승 이하 승용은 3자녀 140만원·2자녀 70만원 한도)",
+          "등록일부터 1년간 소유권 유지(배우자 이전 제외) — 위반 시 추징"
+        ],
+        "pitfalls": [
+          "다자녀 양육자 중 1명이라도 이미 감면받은 차를 보유하면 적용 불가(대체취득은 가능)",
+          "배우자·자녀 외의 사람과 공동등록하면 감면 배제",
+          "등록일부터 1년 내 사망·혼인·해외이민·면허취소 등 사유 없이 양도하면 추징",
+          "자녀 수는 가족관계등록부 기준(입양 자녀는 친생부모 쪽에서 제외)"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/service/serviceInfo/131200000008",
+        "curated": true,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G9",
+        "id": "gov24-131200000008",
+        "name": "다자녀가구 자동차취득세 감면",
+        "priority": "nice",
+        "condition": "자녀 3명 이상 → 차량 1대 취득세 감면.",
+        "deadline": "자세한 날짜는 시군구청에 따라 다를 수 있음",
+        "deadlineDays": 9999,
+        "agency": "행정안전부",
+        "online": true,
+        "documents": [
+          "지방세 감면 신청서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/131200000008",
+        "source": {
+          "name": "보조금24 · 행정안전부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "다자녀가구가 취득한 자동차의 취득세를 감면하여 출산 및 양육을 지원",
+        "verification_status": "verified",
+        "eligibility": "만18세 미만의 자녀 2명 이상을 양육하는 자(가족관계등록부 기준, 양자 및 배우자 자녀 포함)",
+        "key": "svc:131200000008",
+        "unlocks": 0,
+        "order": 8
+      },
+      {
+        "ref": "G11",
+        "id": "gov24-B50000400042",
+        "name": "고속도로 다자녀가구 통행료 할인",
+        "priority": "nice",
+        "condition": "다자녀 통행료 할인 등록.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "한국도로공사",
+        "online": true,
+        "documents": [
+          "공공 마이데이터 미이용 시 주민등록등본, 가족관계증명서(주민등록등본만으로 부모·자녀 관계 확인 불가 시 주민등록등본과 함께 구비) 등 아래 서류를 구비하여 영업소를 방문하여 신청하여야 합니다.",
+          "[구비서류]",
+          "○ 신분증, 자녀와 함께 등재된 부(모) 또는 자녀 기준 주민등록등본*, 신청인 또는 자녀 기준 가족관계증명서",
+          "○ 자동차등록증(1년 이상 임차·대여차량은 시설대여계약서(리스) 또는 임대차계약서(렌트) 제출)",
+          "○ 본인 명의 하이패스카드번호(선불하이패스카드는 SM하이플러스카드, EX하이패스카드 기명카드만 가능)",
+          "○ 본인 명의 계좌정보(선불 하이패스카드)",
+          "○ 준회원 개인정보(위치정보 포함) 수집·이용 동의서**(고속도로 통행료 홈페이지 자료실에서 다운로드 가능)",
+          "* 행정복지센터에서 발급",
+          "** 자녀와 동일세대인 부 또는 모의 휴대전화번호를 등록하려는 경우 해당 부 또는 모의 서명본 지참"
+        ],
+        "link": "https://www.hipass.co.kr/main.do",
+        "source": {
+          "name": "보조금24 · 한국도로공사",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "저출생 위기 대응을 위한 생활밀착형 지원 \r\n다자녀가구의 주말 나들이 부담 경감",
+        "verification_status": "verified",
+        "eligibility": "부 또는 모와 만 19세 미만 자녀 2명 이상이 주민등록등본에 함께 등재되어 있는 가구       - 차량요건 : 부 또는 모가 소유하거나 1년 이상 리스·렌트한 비영업용 차량 (승용차 또는 12인승 이하 승합차, 세대당 1대)      ※ 개인·법인",
+        "key": "svc:B50000400042",
+        "unlocks": 0,
+        "order": 9,
+        "dependsOn": [
+          "law-multi-child-l3"
+        ]
+      },
+      {
+        "ref": "R4",
+        "id": "regional-627000000754",
+        "name": "대구 아이조아카드(다자녀가정 우대) 안내",
+        "priority": "nice",
+        "condition": "2자녀 이상 가정 우대카드.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대구광역시",
+        "online": true,
+        "documents": [
+          "* 어린이용 카드 발급 : 자녀 3명 이상 가정의 6세~12세 자녀로 주소지 보건소를  방문하여 신청/ 어린이용 선불교통카드",
+          "서류는 주민등록 등본(주소가 다른 자녀 있는 경우 가족관계증명 추가 필요), 신청 부모의 신분증",
+          "* 청소년용 카드 발급 : 자녀 3명 이상 가정의 13세~18세 자녀로 iM뱅크 영업점 방문 신청/청소년용 체크카드",
+          "서류는 은행 콜센터 1566-5050 문의 후  서류지참하여 가까운 영업점 방문 신청",
+          "* 부모용 카드 발급 : 자녀 2명 이상 가정의 부모(각각 신청 가능함)/ 신용 또는 체크 카드",
+          "서류는 은행 콜센터 1566-5050 문의 후  서류지참하여 가까운 영업점 방문 신청"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/627000000754",
+        "source": {
+          "name": "보조금24 · 대구광역시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "다자녀가정(자녀 2명 이상)에 '대구아이조아카드'를 발급하여 양육에 따른 경제적 부담 경감 및 출산 장려 분위기 확산",
+        "verification_status": "verified",
+        "key": "svc:627000000754",
+        "eligibility": "대구시에 주민등록을 두고 거주하고, 자녀가 2명 이상인 가정(자녀 중 1명 이상은 19세 미만)",
+        "unlocks": 0,
+        "order": 10
+      },
+      {
+        "ref": "R5",
+        "id": "regional-627000000759",
+        "name": "대구광역시 다자녀가정 상수도요금 감면",
+        "priority": "nice",
+        "condition": "3자녀 이상(막내 19세 미만) 상수도요금 감면.",
+        "deadline": "2026-07-06 ~",
+        "deadlineDays": 9999,
+        "agency": "대구광역시",
+        "online": true,
+        "documents": [
+          "다자녀가정 상수도요금 감면신청서"
+        ],
+        "link": "https://dgwater.go.kr",
+        "source": {
+          "name": "보조금24 · 대구광역시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "인구위기 대응 및 출산 친화 정책으로 아이키우기 좋은환경 조성을 위해 대구광역시에서는 2026년 9월 고지분부터 다자녀가정 상수도요금 감면을 시행\r\n\r\n※ 공공요금 감면을 통해 다자녀가정의 자녀양육에 실질적인 혜택을 제공하고자 함.",
+        "verification_status": "verified",
+        "key": "svc:627000000759",
+        "eligibility": "부모와 자녀모두 대구광역시에 주민등록을 둔 3자녀이상(막내자녀 19세미만)인 다자녀가정",
+        "unlocks": 0,
+        "order": 11
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 11,
+    "by_status": {
+      "verified": 11
+    },
+    "candidates": 11,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

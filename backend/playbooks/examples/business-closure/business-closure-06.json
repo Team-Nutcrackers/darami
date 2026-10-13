@@ -1,0 +1,317 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "business-closure-06",
+    "event_id": "business-closure",
+    "event_title": "폐업",
+    "persona_summary": "50세 여성 · 경기 안양시 · 미용실 폐업 · 재창업 준비",
+    "persona": {
+      "facts": {
+        "age": 50,
+        "gender": "여성",
+        "residence": "경기 안양시",
+        "situation": "미용실 폐업 · 재창업 준비"
+      }
+    },
+    "query": "미용실을 접고 업종을 바꿔서 다시 시작해 보려고 해요. 한 번 폐업한 사람이 다시 창업할 때 도와주는 프로그램이 있다고 들었는데 어떤 게 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "business-closure",
+        "startup"
+      ],
+      "reason": "폐업 후 재창업"
+    },
+    "plan": {
+      "title": "폐업 후 재창업",
+      "emoji": "🔁",
+      "intro": "희망리턴패키지 재창업 교육과 재창업자금(중진공), 재도전 재기지원 보증(기보)을 받을 수 있어요. 새 업종 영업신고·사업자등록을 다시 해요.",
+      "law": [
+        {
+          "name": "폐업신고",
+          "priority": "must",
+          "condition": "기존 미용실 폐업신고 완료."
+        },
+        {
+          "name": "사업자등록",
+          "priority": "must",
+          "condition": "새 업종 사업자등록."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "소상공인 재기지원",
+          "priority": "must",
+          "condition": "희망리턴패키지 재창업 교육·사업화."
+        },
+        {
+          "name": "재창업자금",
+          "priority": "must",
+          "condition": "중진공 재창업자금 융자."
+        },
+        {
+          "name": "재창업 재기지원 보증",
+          "priority": "nice",
+          "condition": "기술보증기금 재도전 보증."
+        },
+        {
+          "name": "혁신 소상공인 창업지원",
+          "priority": "nice",
+          "condition": "창업 공모."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "재창업",
+          "창업"
+        ],
+        "local_keywords": [
+          "재창업",
+          "창업"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "business-closure",
+    "events": [
+      "business-closure",
+      "startup"
+    ],
+    "title": "폐업 후 재창업",
+    "emoji": "🔁",
+    "intro": "희망리턴패키지 재창업 교육과 재창업자금(중진공), 재도전 재기지원 보증(기보)을 받을 수 있어요. 새 업종 영업신고·사업자등록을 다시 해요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "안양시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "business-registration",
+        "name": "사업자등록",
+        "priority": "must",
+        "condition": "새 업종 사업자등록.",
+        "deadline": "사업개시일부터 20일 이내(사업 개시 전 신청 가능)",
+        "deadlineDays": 20,
+        "agency": "재정경제부(국세청) · 사업장 관할 세무서 민원봉사실",
+        "online": true,
+        "documents": [
+          "사업자등록신청서(본인 자필 서명)",
+          "신분증",
+          "임대차계약서 사본(사업장을 임차한 경우)",
+          "상가건물 일부 임차 시 해당 부분 도면",
+          "허가·등록·신고증 사본(인허가 업종인 경우)",
+          "동업계약서(공동사업자인 경우)",
+          "자금출처 명세서(금지금 도·소매업 등 특정 업종)",
+          "위임장 및 위임자 신분증 사본(대리 신청 시)"
+        ],
+        "link": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2444&cntntsId=7777",
+        "source": {
+          "name": "국세청 사업자등록 신청 안내 · 부가가치세법 제8조(사업자등록)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "사업을 시작하면 사업개시일부터 20일 이내에 홈택스 또는 세무서에 사업자등록을 신청한다. 임차 사업장이면 임대차계약서 사본, 인허가 업종이면 허가증 사본이 필요하고 수수료는 없다. 미등록 시 공급가액의 1% 가산세와 매입세액 불공제 불이익이 있다.",
+        "verification_status": "verified",
+        "key": "common:business-registration",
+        "unlocks": 0,
+        "order": 1,
+        "where": "홈택스(온라인) 또는 관할·가까운 세무서 민원봉사실 방문",
+        "fee": "무료",
+        "steps": [
+          "업종(한국표준산업분류)·과세유형(일반/간이/면세) 결정, 인허가 업종이면 허가·신고 먼저",
+          "임대차계약서 등 구비서류 준비(스캔본)",
+          "홈택스 '사업자등록 신청' 또는 세무서 민원봉사실 제출",
+          "2일 이내 사업자등록증 발급(홈택스 조회·출력)"
+        ],
+        "pitfalls": [
+          "기한 경과 시 미등록 가산세(공급가액의 1%) 및 등록 전 매입세액 불공제",
+          "실제 사업하지 않는 장소를 사업장으로 등록하면 현장 확인·추징 대상",
+          "인적용역 프리랜서는 등록 의무가 없으나 세금계산서 발급이 필요하면 등록",
+          "온라인 판매는 사업자등록 후 통신판매업 신고를 별도로 해야 함"
+        ],
+        "sourceUrl": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2444&cntntsId=7777",
+        "curated": true
+      },
+      {
+        "ref": "L5",
+        "id": "law-business-closure-l5",
+        "name": "폐업신고",
+        "priority": "must",
+        "condition": "기존 미용실 폐업신고 완료.",
+        "deadline": "폐업 즉시(지체 없이) 신고, 부가가치세 확정신고는 폐업일이 속한 달의 말일부터 25일 이내",
+        "deadlineDays": 9999,
+        "agency": "재정경제부·국세청 · 관할 세무서(인허가 업종은 시·군·구청과 통합신고 가능)",
+        "online": true,
+        "documents": [
+          "휴업(폐업)신고서(부가가치세법 시행규칙 별지 제9호서식) 또는 통합폐업신고서(별지 제7호, 인허가 업종)",
+          "사업자등록증 원본(분실 시 생략 가능)",
+          "대표자 신분증(방문 시)",
+          "폐업신고확인서(허가·등록·신고 업종인 경우)",
+          "위임장·대리인 신분증(대리 방문 시)",
+          "동업해지계약서·공동사업자 인감증명서(공동사업자 폐업 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12100000078",
+        "source": {
+          "name": "정부24 — 사업자의 휴업(폐업)신고 · 부가가치세법 시행령 제13조(휴업·폐업의 신고)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "사업을 접으면 지체 없이 홈택스(휴폐업신고) 또는 관할 세무서에 폐업신고를 하며, 음식점·미용업 등 인허가 업종은 통합폐업신고서 한 장으로 시군구청과 세무서 폐업을 함께 처리할 수 있다. 수수료는 없고 즉시 처리되며, 완료 후 홈택스·정부24에서 폐업사실증명을 발급받아 실업급여·재기지원 등에 사용한다. 폐업 후에도 폐업일이 속한 달 말일부터 25일 이내에 부가가치세 확정신고를 해야 한다.",
+        "verification_status": "verified",
+        "key": "law:폐업신고",
+        "unlocks": 3,
+        "order": 2,
+        "where": "홈택스(신청/제출 → 휴폐업신고)·손택스 온라인, 또는 세무서(인허가 업종은 시군구청)에 통합폐업신고서 제출",
+        "fee": "무료",
+        "steps": [
+          "홈택스 로그인 → 신청/제출 → 신청업무 → 휴폐업신고에서 폐업일자·사유·사업양도 여부 입력(또는 세무서 방문)",
+          "음식점·미용업 등 인허가 업종은 통합폐업신고서를 시군구청 또는 세무서 한 곳에 제출(공중위생영업은 폐업일부터 20일 이내)",
+          "즉시(근무시간 내 3시간) 처리 → 홈택스·정부24에서 폐업사실증명 발급",
+          "폐업일이 속한 달 말일부터 25일 이내 부가가치세 확정신고·납부(잔존재화 과세 확인)",
+          "4대보험 사업장 탈퇴, 자영업자 실업급여 등 후속 절차 진행"
+        ],
+        "pitfalls": [
+          "폐업신고를 미루면 신고의무·가산세가 계속 발생한다",
+          "사업자등록 폐업만 하고 영업신고(보건소·구청) 폐업을 빠뜨리면 행정처분·과태료 대상 — 통합신고로 한 번에 처리",
+          "폐업 부가세 확정신고(폐업일 속한 달 말일부터 25일)를 잊기 쉽고, 남은 재고·고정자산은 잔존재화로 과세된다",
+          "폐업 취소·폐업일자 정정은 온라인 불가, 세무서 방문 필요"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12100000078",
+        "curated": true
+      },
+      {
+        "ref": "G7",
+        "id": "gov24-142000000088",
+        "name": "소상공인 재기지원",
+        "priority": "must",
+        "condition": "희망리턴패키지 재창업 교육·사업화.",
+        "deadline": "사업공고에 따름",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "1. 희망리턴패키지 : 신청서, 동의서, 사업자등록증(폐업사실증명원) 등 사업별 공고 참고",
+          "2. 자영업자 고용보험료 지원 : 자영업자 고용보험 가입신청서 등 사업 공고 참고"
+        ],
+        "link": "http://hope.sbiz.or.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "소상공인의 폐업 부담경감 및 신속한 재기를 위해 경영개선, 사업정리컨설팅·점포철거 등 폐업, 재취업·재창업 교육 및 자금 지원",
+        "verification_status": "verified",
+        "eligibility": "1. 희망리턴패키지 : 경영위기 또는 폐업(예정) 소상공인 2. 자영업자 고용보험료 지원 : 자영업자 고용보험에 가입한 소상공인",
+        "key": "svc:142000000088",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-business-closure-l5"
+        ]
+      },
+      {
+        "ref": "G10",
+        "id": "gov24-B55400900009",
+        "name": "재창업자금",
+        "priority": "must",
+        "condition": "중진공 재창업자금 융자.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업진흥공단",
+        "online": true,
+        "documents": [],
+        "link": "www.kosmes.or.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업진흥공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 폐업으로 민간자금 이용이 곤란한 재창업 추진 중소기업을 대상으로 정책자금 제공\r\n\r\n○ (대출한도) 연간 60억원(운전자금은 5억원) 이내\r\n\r\n○ (대출기간)   \r\n - 시설자금 10년(거치 4년 포함)\r\n * 시설자금 직접대출 시 수반되는 감정평가수수료 및 근저당권설정비용은 채권자인 중진공이 일부 부담(예산 소진시 조기 마감)\r\n - 운전자금  6",
+        "verification_status": "verified",
+        "eligibility": "폐업 후 재창업 예정 및 재창업 후 7년 미만 기업(신산업창업분야는 업력 10년 미만)  - 폐업으로 인해 신용 정보상 공공정보(파산면책결정, 회생인가, 신용회복확정, 채무조정확정)가 등록되어 있거나, 자금조달에 애로를 겪고 있는 기업인  - 연체 등",
+        "key": "svc:B55400900009",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-business-closure-l5"
+        ]
+      },
+      {
+        "ref": "G11",
+        "id": "gov24-B55369400007",
+        "name": "재창업 재기지원 보증",
+        "priority": "nice",
+        "condition": "기술보증기금 재도전 보증.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "기술보증기금",
+        "online": true,
+        "documents": [],
+        "link": "cyber.ccrs.or.kr",
+        "source": {
+          "name": "보조금24 · 기술보증기금",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "다중 채무자가 재창업 할 수 있도록 신용회복위원회, 기술보증기금, 신용보증기금, 중소벤처기업진흥공단의 협업으로 채무조정과 신규자금을 지원",
+        "verification_status": "verified",
+        "eligibility": "신용회복위원회의 채무조정 신청자로서 다음 요건을 모두 충족하는 자  - 「중소기업기본법」 제2조에 의한 중소기업 중 채무과다 등 사업을 계속할 수 없는 사유로 폐업한 개인사업자 및 법인의 보증채무를 부담했던 대표자, 대표이사 또는 경영실권자  - 주채",
+        "key": "svc:B55369400007",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-business-closure-l5"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-142000000038",
+        "name": "혁신 소상공인 창업지원",
+        "priority": "nice",
+        "condition": "창업 공모.",
+        "deadline": "별도 안내",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "신사업창업사관학교 교육생 선발 공고 등의 안내사항 참고"
+        ],
+        "link": "https://www.sbiz24.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "신사업 분야 등 예비창업자를 선발하여 창업교육, 점포경영체험, 사업화 자금 등을 패키지로 지원하여 소상공인의 준비된 창업 촉진",
+        "verification_status": "verified",
+        "eligibility": "생활분야에서 창의적인 아이디어로 창업을 하고자 하는 하는 예비창업자",
+        "key": "svc:142000000038",
+        "unlocks": 0,
+        "order": 6
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 3,
+    "unresolved": [],
+    "execute_seconds": 0.4
+  }
+}

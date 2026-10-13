@@ -1,0 +1,210 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "job-seeking-09",
+    "event_id": "job-seeking",
+    "event_title": "구직 준비",
+    "persona_summary": "26세 남성 · 충남 천안시 · 지방대 졸업 · 서울 면접 교통비",
+    "persona": {
+      "facts": {
+        "age": 26,
+        "gender": "남성",
+        "residence": "충남 천안시",
+        "situation": "지방대 졸업 · 서울 면접 교통비"
+      }
+    },
+    "query": "천안에 사는데 서울이나 다른 지역으로 면접을 보러 다니느라 교통비가 많이 나와요. 멀리 면접 보러 가는 사람한테 교통비를 주는 제도가 있다던데 사실인가요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "job-seeking"
+      ],
+      "reason": "원거리 면접 교통비"
+    },
+    "plan": {
+      "title": "원거리 면접 교통비",
+      "emoji": "🚄",
+      "intro": "광역구직활동비는 거주지에서 멀리(편도 50km 이상) 면접 보러 갈 때 교통·숙박비를 지원해요. 고용센터에 구직 등록이 돼 있어야 해요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "광역구직활동비",
+          "priority": "must",
+          "condition": "고용센터 구직등록 후 편도 50km 이상 면접 → 교통·숙박비(연 한도)."
+        },
+        {
+          "name": "국민취업지원제도",
+          "priority": "nice",
+          "condition": "참여 시 취업활동비용."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "면접",
+          "청년 구직"
+        ],
+        "local_keywords": [
+          "면접",
+          "구직"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "면접정장지원사업(청년취업패키지)",
+          "priority": "nice",
+          "condition": "천안시 청년 면접정장 대여·취업사진.",
+          "service_id": "449000000531"
+        },
+        {
+          "cid": "R2",
+          "name": "충청남도 취업자격증 취득지원 사업",
+          "priority": "nice",
+          "condition": "충남 구직자 자격증 응시료.",
+          "service_id": "WLF00005570"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "job-seeking",
+    "events": [
+      "job-seeking"
+    ],
+    "title": "원거리 면접 교통비",
+    "emoji": "🚄",
+    "intro": "광역구직활동비는 거주지에서 멀리(편도 50km 이상) 면접 보러 갈 때 교통·숙박비를 지원해요. 고용센터에 구직 등록이 돼 있어야 해요.",
+    "region": {
+      "sido": "충청남도",
+      "sgg": "천안시"
+    },
+    "procedures": [
+      {
+        "ref": "G6",
+        "id": "gov24-149200005002",
+        "name": "광역구직활동비",
+        "priority": "must",
+        "condition": "고용센터 구직등록 후 편도 50km 이상 면접 → 교통·숙박비(연 한도).",
+        "deadline": "광역구직활동을 종료한 날부터 14일 이내 가능",
+        "deadlineDays": 14,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "광역구직활동비 청구서, 운임 및 숙박료 증빙자료"
+        ],
+        "link": "http://www.work24.go.kr/",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "직업안정기관의 소개에 따라 거주지에서 25km 이상 떨어진 곳에서 구직활동을 하고 직업안정기관장이 지급 필요성을 인정하면 실비를 지원하여 조기 재취업을 촉진",
+        "verification_status": "verified",
+        "eligibility": "직업안정기관의 소개에 따라 거주지에서 25km 떨어진 곳에서 구직활동을 한 사람",
+        "key": "svc:149200005002",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-149200005007",
+        "name": "국민취업지원제도",
+        "priority": "nice",
+        "condition": "참여 시 취업활동비용.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "(필수) 취업지원신청서 및 지원자격 확인을 위한 개인정보 수집, 이용 및 제공 동의서",
+          "(필요시 추가서류)",
+          "가구단위 증빙서류: 가족관계증명원, 이혼소송확인서, 실종신고서 등",
+          "특정취약계층 증빙서류: 관련 추천서, 확인서 등",
+          "전산망으로 확인불가 또는 전산망에 실시간 연계되지 않은 소득, 재산, 취업경험 관련정보: 사업주 확인자료 등 관련 증빙자료"
+        ],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "근로능력과 구직의사가 있음에도 불구하고 취업에 어려움을 겪고 있는 구직자에게 통합적인 취업지원서비스를 제공하고 생계를 지원함으로써 구직활동 및 생계안정 도모",
+        "verification_status": "verified",
+        "eligibility": "∙ I유형   -(요건심사형) 15세~69세 구직자 중 중위소득 60% 이하, 재산 4억 이하(15~34세 청년은 재산 5억원 이하)이면서, 최근 2년 이내 100일 또는 800시간 이상의 취업경험이 있는 분   -(선발형) 15세~69세 구직자 중 ",
+        "key": "svc:149200005007",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "R1",
+        "id": "regional-449000000531",
+        "name": "면접정장지원사업(청년취업패키지)",
+        "priority": "nice",
+        "condition": "천안시 청년 면접정장 대여·취업사진.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "충청남도 천안시",
+        "online": true,
+        "documents": [
+          "신청서"
+        ],
+        "link": "https://www.ch2030youth.kr/",
+        "source": {
+          "name": "보조금24 · 충청남도 천안시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "미취업청년의 구직준비 지원",
+        "verification_status": "verified",
+        "key": "svc:449000000531",
+        "eligibility": "미취업 청년",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "R2",
+        "id": "local-WLF00005570",
+        "name": "충청남도 취업자격증 취득지원 사업",
+        "priority": "nice",
+        "condition": "충남 구직자 자격증 응시료.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "충청남도 산업경제실 경제기획관 일자리기업지원과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005570&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 충청남도 산업경제실 경제기획관 일자리기업지원과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "도내 구직자의 경제적 부담을 완화하고 취업능력 개발을 지원하기 위한 취업자격증 응시료 취득지원 사업",
+        "verification_status": "verified",
+        "key": "svc:WLF00005570",
+        "eligibility": "충청남도에 거주하는 만19~64세 구직자 (지원금액) 회당 지원상한액 5만원 / 1인당 연간 최대 2회 지원(총 10만원 한도)  - 신청자 본인이 실제 지출한 응시료 실비로 산정 및 지급  - 1회 지원 상한액(5만원) 초과 시, 초과금액 미지급",
+        "unlocks": 0,
+        "order": 4
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 4,
+    "by_status": {
+      "verified": 4
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

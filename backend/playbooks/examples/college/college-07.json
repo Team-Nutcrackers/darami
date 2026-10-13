@@ -1,0 +1,223 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "college-07",
+    "event_id": "college",
+    "event_title": "대학 진학·학자금",
+    "persona_summary": "25세 남성 · 서울 동대문구 · 복학생 · 학자금 대출 연체",
+    "persona": {
+      "facts": {
+        "age": 25,
+        "gender": "남성",
+        "residence": "서울 동대문구",
+        "situation": "복학생 · 학자금 대출 연체"
+      }
+    },
+    "query": "군대 다녀와서 복학했는데 예전에 받은 학자금 대출이 연체가 됐다는 연락을 받았어요. 연체되면 신용에 문제가 생기는지, 상환을 미룰 수 있는 방법이 있는지 알고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "college",
+        "debt-relief"
+      ],
+      "reason": "학자금 대출 연체"
+    },
+    "plan": {
+      "title": "학자금 대출 연체 대응",
+      "emoji": "🎓",
+      "intro": "한국장학재단에 연락해 상환 유예·분할상환을 먼저 신청하세요. 장기 연체면 국민행복기금 학자금 채무조정과 신용회복 지원이 있어요.",
+      "law": [
+        {
+          "name": "학자금대출",
+          "priority": "must",
+          "condition": "복학생 → 재학 중 상환 유예 신청(취업 후 상환 대출은 소득 발생 전 상환 의무 없음, 일반 상환은 거치 연장)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "취업 후 상환 학자금대출",
+          "priority": "must",
+          "condition": "대출 종류 확인 → 전환대출(취업 후 상환)로 바꾸면 재학 중 상환 부담 없음."
+        },
+        {
+          "name": "국민행복기금 채무조정",
+          "priority": "nice",
+          "condition": "장기 연체면 학자금 채무조정(원금 감면·분할)."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "학자금",
+          "신용회복"
+        ],
+        "local_keywords": [
+          "학자금 대출",
+          "신용회복"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "학자금대출 신용회복지원 사업",
+          "priority": "must",
+          "condition": "서울 청년 학자금대출 연체 → 분할상환약정·신용회복 지원.",
+          "service_id": "WLF00006584"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "college",
+    "events": [
+      "college",
+      "debt-relief"
+    ],
+    "title": "학자금 대출 연체 대응",
+    "emoji": "🎓",
+    "intro": "한국장학재단에 연락해 상환 유예·분할상환을 먼저 신청하세요. 장기 연체면 국민행복기금 학자금 채무조정과 신용회복 지원이 있어요.",
+    "region": {
+      "sido": "서울특별시",
+      "sgg": "동대문구"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-college-l1",
+        "name": "학자금대출",
+        "priority": "must",
+        "condition": "복학생 → 재학 중 상환 유예 신청(취업 후 상환 대출은 소득 발생 전 상환 의무 없음, 일반 상환은 거치 연장).",
+        "deadline": "학기별 신청기간 내(2026-2학기: 2026.7.1.~11.17. 18시); 등록 마감 약 8주 전 신청 권장",
+        "deadlineDays": 9999,
+        "agency": "교육부 · 한국장학재단",
+        "online": true,
+        "documents": [
+          "기본 제출 서류 없음(전자서명으로 본인 확인, 학자금 지원구간은 가구원 동의 후 사회보장정보시스템으로 산정)",
+          "가구원(부모 또는 배우자) 정보제공 동의",
+          "추가 증빙서류(긴급생계곤란 등 해당 시)"
+        ],
+        "link": "https://www.gov.kr/portal/service/serviceInfo/GES000000110",
+        "source": {
+          "name": "정부24 – 취업 후 상환 학자금대출 · 취업 후 학자금 상환 특별법 제12조(대출 신청 및 추천)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "취업 후 상환 학자금대출은 만 35세 이하 학부생(대학원생 40세 이하)이 한국장학재단에서 등록금 전액과 생활비(연 400만원)를 빌리고 졸업 후 소득이 생기면 갚는 제도로, 성적·신용 요건이 없고 등록금대출은 소득구간 제한도 없습니다(생활비대출은 8구간 이하). 학기별 신청기간(2026-2학기 7.1~11.17) 내에 장학재단 홈페이지·앱에서 전자서명으로 신청하며 기본 제출 서류는 없지만 가구원 동의로 소득구간이 산정됩니다. 기준중위소득 130%(6구간) 이하 재학생은 재학 중 이자가 면제됩니다.",
+        "verification_status": "verified",
+        "key": "law:학자금대출",
+        "unlocks": 0,
+        "order": 1,
+        "where": "한국장학재단 홈페이지(kosaf.go.kr) 또는 모바일 앱 온라인 신청(전자서명 필요)",
+        "fee": "무료(대출금리 2026-2학기 1.7% 변동금리)",
+        "steps": [
+          "요건 확인: 학부생 만 35세 이하(대학원생 40세 이하), 직전학기 12학점 이상 이수(신입생 제외), 등록금대출은 소득 제한 없음·생활비대출은 8구간 이하(다자녀 가구는 구간 무관)",
+          "한국장학재단 홈페이지·앱에서 전자서명으로 로그인 후 학기별 신청기간 내 취업 후 상환 학자금대출 신청",
+          "가구원 정보제공 동의 → 학자금 지원구간 산정·심사",
+          "승인 후 등록금(대학 계좌 직접 납부)·생활비(학기당 200만원, 연 400만원) 실행",
+          "졸업 후 소득이 상환기준소득을 넘으면 국세청 통해 원천공제 상환"
+        ],
+        "pitfalls": [
+          "신청 마감일은 18시까지만 접수",
+          "가구원 정보제공 동의가 늦으면 구간 산정이 지연돼 등록 마감에 못 맞출 수 있음",
+          "직전학기 12학점 미만 이수 시 재학생 대출 불가(신입생 제외)",
+          "35세 초과 학부생은 일반 상환 학자금대출로 신청"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/service/serviceInfo/GES000000110",
+        "curated": true
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-GES000000110",
+        "name": "취업 후 상환 학자금대출",
+        "priority": "must",
+        "condition": "대출 종류 확인 → 전환대출(취업 후 상환)로 바꾸면 재학 중 상환 부담 없음.",
+        "deadline": "2026-2학기 신청기간 : 2026.7.1.~2026.11.17.",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "기본적으로 제출 서류는 없으나, 경우에 따라서 추가서류 필요"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "대학생에게 학자금을 대출하고 그 원리금은 소득이 발생한 후에 소득 수준에 따라 상환하도록 하여 현재의 경제적 여건에 관계없이 누구나 원하는 고등교육 기회를 가질 수 있도록 함",
+        "verification_status": "verified",
+        "eligibility": "교육부 또는 한국장학재단과 협약을 체결한 국내 고등교육기관 학부생, 전문기술석사 및 대학원생",
+        "key": "svc:GES000000110",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00006584",
+        "name": "학자금대출 신용회복지원 사업",
+        "priority": "must",
+        "condition": "서울 청년 학자금대출 연체 → 분할상환약정·신용회복 지원.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "서울특별시 미래청년기획관 청년사업담당관",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00006584&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 서울특별시 미래청년기획관 청년사업담당관",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "학자금대출 상환연체로 인해 신용유의자가 된 청년들에게 한국장학재단과 분할상환약정 체결 시 초입금을 지원하여 신용회복을 지원",
+        "verification_status": "verified",
+        "key": "svc:WLF00006584",
+        "eligibility": "- 한국장학재단 학자금 대출로 인해 신용유의자로 등록된 자로서 신청일 기준 주민등록상 서울시 거주하는 만19~39세 청년   - 의무복무 제대군인은 군 복무기간에 따라 최대 42세까지 신청 가능 - 한국장학재단 학자금 대출로 인해 신용유의자로 등록된 ",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "G8",
+        "id": "gov24-B01000300005",
+        "name": "국민행복기금 채무조정",
+        "priority": "nice",
+        "condition": "장기 연체면 학자금 채무조정(원금 감면·분할).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "한국자산관리공사",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B01000300005",
+        "source": {
+          "name": "보조금24 · 한국자산관리공사",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "ㅇ 국민행복기금에서 금융회사로부터 매입한 장기연체채권을 상환능력에 따라 채무감면 및 분할상환을 통해 신용회복을 지원",
+        "verification_status": "verified",
+        "eligibility": "국민행복기금이 보유중인 연체채권 채무자",
+        "key": "svc:B01000300005",
+        "unlocks": 0,
+        "order": 4
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 4,
+    "by_status": {
+      "verified": 4
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 15.6
+  }
+}

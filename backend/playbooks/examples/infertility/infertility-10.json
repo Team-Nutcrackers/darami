@@ -1,0 +1,163 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "infertility-10",
+    "event_id": "infertility",
+    "event_title": "난임",
+    "persona_summary": "32세 여성 · 서울 강남구 · 프리랜서 디자이너 · 난소 나이 낮음",
+    "persona": {
+      "facts": {
+        "age": 32,
+        "gender": "여성",
+        "residence": "서울 강남구",
+        "situation": "프리랜서 디자이너 · 난소 나이 낮음"
+      }
+    },
+    "query": "아직 결혼 계획은 없는데 검진에서 난소 나이가 낮게 나왔어요. 나중을 위해서 난자를 얼려두는 걸 생각 중인데 이것도 지원받을 수 있는 게 있나요? 강남에 살아요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "infertility"
+      ],
+      "reason": "난자 동결(가임력 보존) 지원"
+    },
+    "plan": {
+      "title": "난자 동결(가임력 보존) 지원",
+      "emoji": "🧊",
+      "intro": "미혼 여성의 난자 동결은 국가 시술비 지원 대상이 아니지만, 서울시 등 일부 지자체가 비용을 지원해요.",
+      "law": [
+        {
+          "name": "난임 극복 지원사업",
+          "priority": "nice",
+          "condition": "국가 지원은 난임 진단 부부 대상 → 미혼 난자동결은 해당 없음(지자체 사업 확인)."
+        }
+      ],
+      "gov24": [],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "난자",
+          "가임력"
+        ],
+        "local_keywords": [
+          "난자동결",
+          "가임력"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "서울 난자동결 시술비용 지원",
+          "priority": "must",
+          "condition": "서울 6개월 이상 거주 20~49세 여성 난자동결 시술비 지원.",
+          "service_id": "WLF00006697"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "infertility",
+    "events": [
+      "infertility"
+    ],
+    "title": "난자 동결(가임력 보존) 지원",
+    "emoji": "🧊",
+    "intro": "미혼 여성의 난자 동결은 국가 시술비 지원 대상이 아니지만, 서울시 등 일부 지자체가 비용을 지원해요.",
+    "region": {
+      "sido": "서울특별시",
+      "sgg": "강남구"
+    },
+    "procedures": [
+      {
+        "ref": "R1",
+        "id": "local-WLF00006697",
+        "name": "서울 난자동결 시술비용 지원",
+        "priority": "must",
+        "condition": "서울 6개월 이상 거주 20~49세 여성 난자동결 시술비 지원.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "서울특별시 시민건강국 건강관리과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00006697&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 서울특별시 시민건강국 건강관리과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "서울시 6개월 이상 거주 20~49세 여성의 가임력을 보존하고 장래 임신을 위한 지원으로 난자동결 시술비용의 50%, 최대 200만원, 생애 1회 지원",
+        "verification_status": "verified",
+        "key": "svc:WLF00006697",
+        "eligibility": "서울시 6개월 이상 거주 20~49세 여성 중 난소기능수치(AMH) 1.5ng/ml 이하이면서 중위소득 180% 이하인 자 ㅇ 서울시 6개월 이상 거주한 난자동결 시술비 지원을 원하는 여성(연령) 20~49세(소득) 중위소득 180%이하(의학적) 난소",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "L1",
+        "id": "law-infertility-l1",
+        "name": "난임 극복 지원사업",
+        "priority": "nice",
+        "condition": "국가 지원은 난임 진단 부부 대상 → 미혼 난자동결은 해당 없음(지자체 사업 확인).",
+        "deadline": "시술 시작 전 신청해 지원결정통지서 발급(유효기간 발급일부터 3개월), 회차마다 재신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부(지자체 이양사업) · 여성 배우자 주소지 관할 보건소",
+        "online": true,
+        "documents": [
+          "난임부부 시술비 지원 신청서(체외수정 또는 인공수정)",
+          "난임진단서 1부(정부지정 난임시술 의료기관 발급, 1차 제출분 계속 인정; 사실혼은 생략)",
+          "부부 모두의 건강보험증 사본 또는 건강보험자격확인서 각 1부",
+          "주민등록등본(부부·직계비속 별거 시 가족관계증명서; 행정정보 공동이용 동의 시 생략)",
+          "사실혼 부부: 당사자 시술동의서, 1년 이상 사실혼 증명 공문서 또는 사실혼 확인보증서·보증인 신분증 사본",
+          "외국인 배우자: 외국인등록사실증명 또는 국내거소신고사실증명(1년 이상 체류)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14600000394",
+        "source": {
+          "name": "정부24 — 난임부부 시술비 지원 신청 · 모자보건법 제11조(난임ㆍ유산ㆍ사산 극복 지원사업)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "난임 진단을 받은 부부(법적 혼인 또는 1년 이상 사실혼)는 여성 배우자 주소지 보건소나 정부24·e보건소에 난임진단서·건강보험 서류를 내고 시술비 지원을 신청한다. 보건소가 지원결정통지서를 발급하면 3개월 안에 시술을 시작해야 하며, 체외수정(신선·동결)과 인공수정 횟수가 별도로 관리되고 회차마다 통지서를 다시 받아야 한다. 2022년부터 지자체 이양사업이라 지원금액·횟수·추가지원은 지역별로 차이가 있다.",
+        "verification_status": "verified",
+        "key": "law:난임 극복 지원사업",
+        "unlocks": 0,
+        "order": 2,
+        "where": "여성 배우자 주소지 보건소 방문, 또는 정부24·e보건소 공공보건포털 온라인(대리 신청은 방문만)",
+        "fee": "무료",
+        "steps": [
+          "정부지정 난임시술 의료기관에서 난임진단서 발급",
+          "보건소 방문 또는 정부24·e보건소에서 신청서·진단서·건강보험 서류 제출",
+          "보건소 자격 확인 후 지원결정통지서 발급(3개월 유효)",
+          "시술 최초 진료일에 통지서를 의료기관에 제출하고 시술(의료기관이 지원금 청구)",
+          "다음 회차 시술 전 보건소에서 결정통지서 재발급(회차별 자격 재확인)"
+        ],
+        "pitfalls": [
+          "통지서 발급 전에 시작한 시술은 지원되지 않는다(시술 전 신청 필수)",
+          "결정통지서 유효기간 3개월을 넘기면 재발급 필요",
+          "회차마다 재신청·자격 재확인이 필요하고 체외수정·인공수정 횟수는 별도 산정",
+          "지역별 지원 기준이 달라 전입 시 새 보건소 기준을 확인해야 한다"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14600000394",
+        "curated": true
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 2,
+    "by_status": {
+      "verified": 2
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.3
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "military-07",
+    "event_id": "military",
+    "event_title": "군 입대·전역",
+    "persona_summary": "35세 남성 · 충남 계룡시 · 중기 복무 군인 · 전역 예정",
+    "persona": {
+      "facts": {
+        "age": 35,
+        "gender": "남성",
+        "residence": "충남 계룡시",
+        "situation": "중기 복무 군인 · 전역 예정"
+      }
+    },
+    "query": "10년 복무하고 내년에 전역해요. 장기간 복무한 군인한테 취업이나 교육을 지원해 주는 게 있다던데 어떤 게 있고 언제부터 신청할 수 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "military",
+        "veterans"
+      ],
+      "reason": "중기복무 전역, 제대군인 지원"
+    },
+    "plan": {
+      "title": "중기복무 전역, 제대군인 지원",
+      "emoji": "🎖️",
+      "intro": "5년 이상 복무 전역자는 '중기복무 제대군인'으로 전직지원금(6개월), 취업·교육 지원, 전직교육을 받아요. 전역 1년 전부터 국방전직교육원 교육을 신청할 수 있어요.",
+      "law": [
+        {
+          "name": "군 복무 크레딧",
+          "priority": "nice",
+          "condition": "복무기간 연금 산입(군인연금 vs 국민연금 연계 확인)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "전역예정군인 재취업 지원",
+          "priority": "must",
+          "condition": "전역 예정 중기복무자 → 국방전직교육원 전직교육(전역 1년 전부터)."
+        },
+        {
+          "name": "제대군인 취업지원",
+          "priority": "must",
+          "condition": "국가보훈부 제대군인지원센터 취업 지원."
+        },
+        {
+          "name": "제대군인 의료지원",
+          "priority": "nice",
+          "condition": "제대군인 의료 지원."
+        },
+        {
+          "name": "국가보훈대상자 취업능력개발비용(취업수강료) 지원",
+          "priority": "nice",
+          "condition": "직업훈련 수강료."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "제대군인",
+          "전역"
+        ],
+        "local_keywords": [
+          "제대군인",
+          "전역"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "중·장기복무 제대군인 전직지원금",
+          "law_query": "제대군인지원에 관한 법률",
+          "keywords": [
+            "전직지원금"
+          ],
+          "priority": "must",
+          "condition": "중기복무(5년 이상) 전역 → 전직지원금(6개월) 신청(국가보훈부)."
+        }
+      ]
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "military",
+    "events": [
+      "military",
+      "veterans"
+    ],
+    "title": "중기복무 전역, 제대군인 지원",
+    "emoji": "🎖️",
+    "intro": "5년 이상 복무 전역자는 '중기복무 제대군인'으로 전직지원금(6개월), 취업·교육 지원, 전직교육을 받아요. 전역 1년 전부터 국방전직교육원 교육을 신청할 수 있어요.",
+    "region": {
+      "sido": "충청남도",
+      "sgg": "계룡시"
+    },
+    "procedures": [
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "중·장기복무 제대군인 전직지원금",
+        "priority": "must",
+        "condition": "중기복무(5년 이상) 전역 → 전직지원금(6개월) 신청(국가보훈부).",
+        "deadline": "전역 후 6개월 이내 신청",
+        "deadlineDays": 180,
+        "agency": "국가보훈부(제대군인일자리과) · 전국 보훈(지)청·제대군인지원센터",
+        "online": true,
+        "documents": [
+          "전직지원금 지급신청서(제대군인지원에 관한 법률 시행규칙 별지 제12호 서식)",
+          "적극적 구직활동 증명서류(해당자)",
+          "취업·창업 입증서류(수급 중 취·창업으로 일시금 신청 시)",
+          "건강보험자격득실확인서·사업자등록증·군인퇴직연금급여 내역(행정정보 공동이용 동의 시 제출 생략)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=11800000096",
+        "source": {
+          "name": "정부24 - 제대군인 전직지원금 지급신청(11800000096) · 제대군인지원에 관한 법률 제18조의2(전직지원금)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "5년 이상 19년 6개월 미만 복무하고 전역한 군인연금 비대상 제대군인이 실업 상태에서 구직활동을 하면 전직지원금을 최장 6개월 받을 수 있다(중기복무 월 58만원, 장기복무 월 81만원). 전역 후 6개월 이내에 보훈(지)청·제대군인지원센터 또는 정부24로 신청해야 하며 기한을 넘기면 지급되지 않는다.",
+        "verification_status": "verified",
+        "key": "x:중·장기복무 제대군인 전직지원금",
+        "unlocks": 0,
+        "order": 1,
+        "where": "정부24(온라인, 본인) 또는 전국 보훈(지)청·제대군인지원센터 방문·우편",
+        "fee": "무료",
+        "steps": [
+          "복무기간 5년 이상 19년 6개월 미만, 군인연금 비대상, 실업 상태인지 확인한다",
+          "전역 후 6개월 이내에 정부24 또는 보훈(지)청·제대군인지원센터에 지급신청서를 제출한다",
+          "매월 적극적 구직활동을 하고 증빙을 제출한다(처리기간 총 25일)",
+          "매월 25일 본인 계좌로 지급(중기 58만원·장기 81만원, 최장 6개월); 수급 중 취·창업하면 즉시 신고하고 잔여액의 1/2을 일시금으로 받는다"
+        ],
+        "pitfalls": [
+          "전역 후 6개월이 지나 신청하면 지급 불가",
+          "퇴역연금·퇴역연금일시금 등을 받았거나 받고 있으면 대상 제외",
+          "적극적 구직활동을 하지 않으면 지급 중단(질병·부상·임신·출산·천재지변 제외)",
+          "수급 중 취·창업 사실을 국가보훈부에 즉시 신고하지 않으면 부정수급이 될 수 있다"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=11800000096",
+        "curated": true
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-129000000013",
+        "name": "전역예정군인 재취업 지원",
+        "priority": "must",
+        "condition": "전역 예정 중기복무자 → 국방전직교육원 전직교육(전역 1년 전부터).",
+        "deadline": "사업별 상이",
+        "deadlineDays": 9999,
+        "agency": "국방부",
+        "online": true,
+        "documents": [
+          "사업별 상이"
+        ],
+        "link": "http://moti.or.kr",
+        "source": {
+          "name": "보조금24 · 국방부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "전역예정장병의 안정적인 사회정착을 위하여 교육, 상담 등 취업지원",
+        "verification_status": "verified",
+        "eligibility": "전역예정장병",
+        "key": "svc:129000000013",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-999000000020",
+        "name": "제대군인 취업지원",
+        "priority": "must",
+        "condition": "국가보훈부 제대군인지원센터 취업 지원.",
+        "deadline": "수시신청",
+        "deadlineDays": 9999,
+        "agency": "국가보훈부",
+        "online": true,
+        "documents": [
+          "취업지원신청서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/999000000020",
+        "source": {
+          "name": "보조금24 · 국가보훈부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "장기복무 제대군인의 성공적 사회정착을 위해 취업지원",
+        "verification_status": "verified",
+        "eligibility": "10년 이상 장기복무 제대군인 본인",
+        "key": "svc:999000000020",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "L3",
+        "id": "law-military-l3",
+        "name": "군 복무 크레딧",
+        "priority": "nice",
+        "condition": "복무기간 연금 산입(군인연금 vs 국민연금 연계 확인).",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 국민연금공단",
+        "online": false,
+        "documents": [
+          "별도 제출 서류 없음(노령연금 청구 시 공단이 병적 확인; 필요 시 병적증명서)"
+        ],
+        "link": "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0048M0.do?menuId=MN24001117&tab=tab8",
+        "source": {
+          "name": "국민연금공단 — 크레딧 제도 · 국민연금법 제18조(군 복무기간에 대한 가입기간 추가 산입)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "2008년 1월 1일 이후 입대해 6개월 이상 복무한 현역병·사회복무요원·상근예비역 등은 노령연금 청구 시 군 복무기간에 대해 국민연금 가입기간을 추가로 인정받는다(국민연금법 제18조; 종전 6개월, 2025년 연금개혁으로 확대). 전역 직후 별도 신청은 필요 없으며, 복무기간 보험료를 직접 내서 가입기간을 늘리는 '추납'과는 다른 제도다.",
+        "verification_status": "verified",
+        "key": "law:군 복무 크레딧",
+        "unlocks": 0,
+        "order": 4,
+        "where": "별도 신청 없음 — 노령연금 청구 시 국민연금공단이 병역 사실을 확인해 가입기간에 추가 산입(문의 국민연금 1355)",
+        "fee": "무료(국가 부담)",
+        "pitfalls": [
+          "크레딧은 노령연금 수급권(가입기간 10년 이상) 판단과 연금액 산정에 반영되며, 전역 시점에 신청하는 것이 아니다.",
+          "군 복무기간 보험료를 내는 '군복무 추납'은 별도 신청(병적증명서 필요)이며 군인연금 등 다른 공적연금에 포함된 기간은 제외된다.",
+          "2025년 연금개혁으로 인정 기간·소득 기준이 바뀌었고 이미 수급권을 취득한 경우 종전 규정이 적용되므로 본인 사례는 공단(1355)에 확인한다."
+        ],
+        "sourceUrl": "https://www.nps.or.kr/pnsinfo/ntpsklg/getOHAF0048M0.do?menuId=MN24001117&tab=tab8",
+        "curated": true
+      },
+      {
+        "ref": "G8",
+        "id": "gov24-999000000018",
+        "name": "제대군인 의료지원",
+        "priority": "nice",
+        "condition": "제대군인 의료 지원.",
+        "deadline": "별도 신청기한 없음(수시이용)",
+        "deadlineDays": 9999,
+        "agency": "국가보훈부",
+        "online": true,
+        "documents": [
+          "본인 신분증 및 건강보험증(의료급여증)"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/999000000018",
+        "source": {
+          "name": "보조금24 · 국가보훈부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "제대군인이 건강한 생활을 유지하기 위해 보훈병원 및 위탁병원에서 필요한 진료를 받을 수 있도록 함",
+        "verification_status": "verified",
+        "eligibility": "장기복무제대군인, 군 복무중 발병자, 상이등급 기준미달 판정을 받은 전ㆍ공상 제대군인",
+        "key": "svc:999000000018",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "G10",
+        "id": "gov24-183000000004",
+        "name": "국가보훈대상자 취업능력개발비용(취업수강료) 지원",
+        "priority": "nice",
+        "condition": "직업훈련 수강료.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "국가보훈부",
+        "online": true,
+        "documents": [
+          "○ 지원신청시:  ① 취업능력개발 비용 지원 신청 및 확인서, ② 서약서, ③ 수강료 영수증 등 수강 등록 관련 서류",
+          "○ 지원과정 수강 완료 후: ① 수강완료 및 수강료 지원여부 사실확인서, ② 지급계좌 지정동의서, ③ 계좌사본, ④ 응시확인서류(해당 과정을 수강하여 응시한 채용 또는 자격 시험의 응시확인 서류로 한정)"
+        ],
+        "link": "https://job.mpva.go.kr",
+        "source": {
+          "name": "보조금24 · 국가보훈부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "국가보훈대상자의 취업역량강화를 통한 취업지원의 실효성 제고",
+        "verification_status": "verified",
+        "eligibility": "보훈관계법령에서 정한 취업지원 대상자 중 취업을 희망하는 사람   - 보훈관계법률에 따라 취업지원(가점취업, 보훈특별고용, 특별채용 등)을 받은 법정취업자는 지원 불가   - 연령별, 대상구분별 지원과정 상이함",
+        "key": "svc:183000000004",
+        "unlocks": 0,
+        "order": 6
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "job-seeking-04",
+    "event_id": "job-seeking",
+    "event_title": "구직 준비",
+    "persona_summary": "29세 남성 · 부산 사상구 · 은둔 2년 · 사회 복귀",
+    "persona": {
+      "facts": {
+        "age": 29,
+        "gender": "남성",
+        "residence": "부산 사상구",
+        "situation": "은둔 2년 · 사회 복귀"
+      }
+    },
+    "query": "2년 동안 거의 집에만 있었어요. 다시 사회생활을 하고 싶은데 바로 취업하기는 자신이 없어요. 저 같은 청년을 도와주는 프로그램이 있을까요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "job-seeking"
+      ],
+      "reason": "은둔 청년 사회 복귀"
+    },
+    "plan": {
+      "title": "은둔 청년 사회 복귀",
+      "emoji": "🌱",
+      "intro": "청년도전지원사업(구직 단념 청년 전담)에서 상담·프로그램 참여 수당을 받고, 이후 국민취업지원으로 연결돼요.",
+      "law": [
+        {
+          "name": "구직촉진수당",
+          "priority": "nice",
+          "condition": "도전지원 이수 후 국민취업지원 1유형 연계."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "청년도전지원사업 안내",
+          "priority": "must",
+          "condition": "구직 단념·은둔 청년 → 참여수당·이수 인센티브."
+        },
+        {
+          "name": "국민취업지원제도",
+          "priority": "nice",
+          "condition": "이수 후 연계."
+        },
+        {
+          "name": "청년 일경험 지원",
+          "priority": "nice",
+          "condition": "준비되면 일경험."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "청년",
+          "은둔"
+        ],
+        "local_keywords": [
+          "은둔",
+          "고립 청년"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "청년면접컨설팅 「면접 A to Z」 운영",
+          "priority": "nice",
+          "condition": "사상구 청년 면접 컨설팅.",
+          "service_id": "339000000244"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "job-seeking",
+    "events": [
+      "job-seeking"
+    ],
+    "title": "은둔 청년 사회 복귀",
+    "emoji": "🌱",
+    "intro": "청년도전지원사업(구직 단념 청년 전담)에서 상담·프로그램 참여 수당을 받고, 이후 국민취업지원으로 연결돼요.",
+    "region": {
+      "sido": "부산광역시",
+      "sgg": "사상구"
+    },
+    "procedures": [
+      {
+        "ref": "G3",
+        "id": "gov24-149200005033",
+        "name": "청년도전지원사업 안내",
+        "priority": "must",
+        "condition": "구직 단념·은둔 청년 → 참여수당·이수 인센티브.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "1. 온라인신청 : 구비서류 없음",
+          "2. 방문신청 :  통장사본 ※신청서 및 개인정보 동의서 등은 현장 작성",
+          "각 지자체별 운영기관을 통해 확인 https://youth-up.kr/challenge-agency"
+        ],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "구직단념청년 등을 대상으로 맞춤형 프로그램을 제공하여 청년의 구직의욕 고취, 노동시장 참여 및 취업 촉진 지원",
+        "verification_status": "verified",
+        "eligibility": "(지원대상) 구직단념청년* , 자립준비청년, 청소년복지시설 입·퇴소 청년, 북한이탈청년,  가습기살균제피해청년, 지역특화청년       * 사업 신청일 이전 6개월간 취업 및 교육·직업훈련 참여 이력이 없고, 구직단념청년 문답표 확인 결과 21점(30",
+        "key": "svc:149200005033",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-149200005007",
+        "name": "국민취업지원제도",
+        "priority": "nice",
+        "condition": "이수 후 연계.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "(필수) 취업지원신청서 및 지원자격 확인을 위한 개인정보 수집, 이용 및 제공 동의서",
+          "(필요시 추가서류)",
+          "가구단위 증빙서류: 가족관계증명원, 이혼소송확인서, 실종신고서 등",
+          "특정취약계층 증빙서류: 관련 추천서, 확인서 등",
+          "전산망으로 확인불가 또는 전산망에 실시간 연계되지 않은 소득, 재산, 취업경험 관련정보: 사업주 확인자료 등 관련 증빙자료"
+        ],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "근로능력과 구직의사가 있음에도 불구하고 취업에 어려움을 겪고 있는 구직자에게 통합적인 취업지원서비스를 제공하고 생계를 지원함으로써 구직활동 및 생계안정 도모",
+        "verification_status": "verified",
+        "eligibility": "∙ I유형   -(요건심사형) 15세~69세 구직자 중 중위소득 60% 이하, 재산 4억 이하(15~34세 청년은 재산 5억원 이하)이면서, 최근 2년 이내 100일 또는 800시간 이상의 취업경험이 있는 분   -(선발형) 15세~69세 구직자 중 ",
+        "key": "svc:149200005007",
+        "unlocks": 1,
+        "order": 2
+      },
+      {
+        "ref": "L1",
+        "id": "law-job-seeking-l1",
+        "name": "구직촉진수당",
+        "priority": "nice",
+        "condition": "도전지원 이수 후 국민취업지원 1유형 연계.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 거주지 관할 고용센터",
+        "online": true,
+        "documents": [
+          "취업지원 신청서",
+          "개인정보 등 수집·이용 및 제공 동의서",
+          "가구원 개인정보 제공 동의서(휴대전화 인증 선택 시 불필요)",
+          "수급자격 신청을 위한 취업기간 인정 확인서(해당 시)",
+          "가구단위·소득·재산·취업경험 증빙(전산 확인이 안 되는 경우에만)",
+          "구직촉진수당 지급 신청서(수당 지급 신청 시)",
+          "가족수당 신청서(부양가족이 있는 경우)"
+        ],
+        "link": "https://m.work24.go.kr/cm/c/f/1100/selecSystInfo.do?systId=SI00000316&systClId=SC00000206",
+        "source": {
+          "name": "고용24 국민취업지원제도 제도안내 · 구직자 취업촉진 및 생활안정지원에 관한 법률 제7조(구직촉진수당의 수급 요건)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "구직촉진수당은 국민취업지원제도 1유형 참여자에게 취업활동계획 이행을 조건으로 월 60만 원씩 최대 6개월 지급하는 수당이다. 고용24에서 구직등록·동영상 수강 후 온라인 또는 고용센터에 취업지원 신청서를 내고, 수급자격이 인정되면 상담을 거쳐 계획 수립 후 매월 지급 신청한다.",
+        "verification_status": "verified",
+        "key": "law:구직촉진수당",
+        "unlocks": 0,
+        "order": 3,
+        "where": "고용24(work24.go.kr) 온라인 신청 또는 거주지 관할 고용센터 방문",
+        "fee": "무료",
+        "steps": [
+          "고용24 사전진단으로 1유형(15~69세, 가구소득 중위 60% 이하·재산 4억 이하, 청년은 중위 120%·5억 이하) 해당 여부 확인",
+          "고용24에 구직등록 후 제도 안내 동영상 필수 수강",
+          "온라인(고용24) 또는 관할 고용센터에 취업지원 신청서 제출",
+          "고용센터가 가구 소득·재산 조사 후 1개월 이내 수급자격 결과 통지",
+          "상담 후 취업활동계획(IAP) 수립 → 첫 회차 수당 지급",
+          "매월 계획 이행 증빙과 함께 지급 신청, 월 60만 원씩 최대 6개월(부양가족 1인당 10만 원, 최대 40만 원 추가)"
+        ],
+        "pitfalls": [
+          "실업급여 수급 중이거나 종료 후 6개월이 지나지 않으면 1유형 참여 불가",
+          "생계급여 수급자는 1유형 제외(주거급여만 받는 경우는 가능)",
+          "소득이 생기면 반드시 신고해야 하며 미신고 시 감액·환수될 수 있다",
+          "취업활동계획을 이행하지 않은 달은 수당이 지급되지 않는다",
+          "구직촉진수당을 받으면 주거급여가 줄 수 있으니 지자체에 미리 확인"
+        ],
+        "sourceUrl": "https://m.work24.go.kr/cm/c/f/1100/selecSystInfo.do?systId=SI00000316&systClId=SC00000206",
+        "curated": true,
+        "dependsOn": [
+          "gov24-149200005007"
+        ]
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-149200005006",
+        "name": "청년 일경험 지원",
+        "priority": "nice",
+        "condition": "준비되면 일경험.",
+        "deadline": "사업공고에 따름",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "청년 일경험 상담센터(1811-8447) 및 청년 일경험 운영기관을 통해 확인"
+        ],
+        "link": "https://yw.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "수시·경력직 채용경향 심화에 대응하여 직무경험이 필요한 청년에게 민·관 협업 기반으로 실무 중심의 일경험 기회 제공",
+        "verification_status": "verified",
+        "eligibility": "15세 이상 34세 이하 미취업 청년",
+        "key": "svc:149200005006",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "R1",
+        "id": "regional-339000000244",
+        "name": "청년면접컨설팅 「면접 A to Z」 운영",
+        "priority": "nice",
+        "condition": "사상구 청년 면접 컨설팅.",
+        "deadline": "상하반기 운영",
+        "deadlineDays": 9999,
+        "agency": "부산광역시 사상구",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/339000000244",
+        "source": {
+          "name": "보조금24 · 부산광역시 사상구",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "면접 기술 및 경험 체득으로 청년들의 자신감 및 취업 경쟁령 향상",
+        "verification_status": "verified",
+        "key": "svc:339000000244",
+        "eligibility": "- 사상구 거주 또는 활동하는 취업준비생 - 19~39세",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.3
+  }
+}

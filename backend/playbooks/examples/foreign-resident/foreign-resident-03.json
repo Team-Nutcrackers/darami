@@ -1,0 +1,213 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "foreign-resident-03",
+    "event_id": "foreign-resident",
+    "event_title": "외국인 체류",
+    "persona_summary": "41세 남성 · 우즈베키스탄 국적 · 충남 아산시 · 체류기간 만료 임박",
+    "persona": {
+      "facts": {
+        "age": 41,
+        "gender": "남성",
+        "nationality": "우즈베키스탄",
+        "residence": "충남 아산시",
+        "situation": "체류기간 만료 임박"
+      }
+    },
+    "query": "체류기간이 다음 달에 끝나요. 연장 신청은 언제부터 할 수 있고, 기간이 지나면 어떻게 되는지 걱정돼요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "foreign-resident"
+      ],
+      "reason": "체류기간 연장"
+    },
+    "plan": {
+      "title": "체류기간 연장 신청",
+      "emoji": "🛂",
+      "intro": "만료일 4개월 전부터 만료 전까지 하이코리아(온라인)나 출입국 방문으로 연장 신청해요. 만료 후 신청은 과태료·불이익이 있으니 지금 바로 예약하세요.",
+      "law": [
+        {
+          "name": "체류기간 연장허가",
+          "priority": "must",
+          "condition": "다음 달 만료 → 즉시 하이코리아 신청·출입국 방문 예약(고용 서류·거주지 증빙)."
+        },
+        {
+          "name": "외국인등록",
+          "priority": "nice",
+          "condition": "등록증 유효기간 연장."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "외국인 근로자 지원 서비스",
+          "priority": "nice",
+          "condition": "서류 작성 지원(아산 외국인노동자지원센터)."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "외국인"
+        ],
+        "local_keywords": [
+          "외국인"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "foreign-resident",
+    "events": [
+      "foreign-resident"
+    ],
+    "title": "체류기간 연장 신청",
+    "emoji": "🛂",
+    "intro": "만료일 4개월 전부터 만료 전까지 하이코리아(온라인)나 출입국 방문으로 연장 신청해요. 만료 후 신청은 과태료·불이익이 있으니 지금 바로 예약하세요.",
+    "region": {
+      "sido": "충청남도",
+      "sgg": "아산시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-foreign-resident-l1",
+        "name": "외국인등록",
+        "priority": "nice",
+        "condition": "등록증 유효기간 연장.",
+        "deadline": "입국일부터 90일 이내",
+        "deadlineDays": 90,
+        "agency": "법무부 · 체류지 관할 출입국·외국인관서",
+        "online": false,
+        "documents": [
+          "통합신청서(출입국관리법 시행규칙 별지 제34호서식)",
+          "여권",
+          "컬러 사진(3.5cm×4.5cm, 정부24 안내는 3cm×4cm 2매)",
+          "체류지 입증서류(임대차계약서·숙소 제공 확인서 등)",
+          "체류자격별 추가 서류(재직증명서·재학증명서·혼인관계증명서 등)",
+          "수수료"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000025",
+        "source": {
+          "name": "정부24 외국인등록 민원안내 · 출입국관리법 제31조(외국인등록)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "90일을 넘겨 한국에 체류하는 외국인은 입국일부터 90일 안에 하이코리아에서 예약하고 체류지 관할 출입국·외국인관서에 방문해 외국인등록을 한다. 여권·사진·체류지 입증서류·체류자격별 서류를 내며 수수료가 있다. 등록을 하지 않으면 과태료·체류 불이익이 있다.",
+        "verification_status": "verified",
+        "key": "law:외국인등록",
+        "unlocks": 1,
+        "order": 1,
+        "where": "하이코리아(hikorea.go.kr)에서 방문 예약 후 체류지 관할 출입국·외국인청(사무소) 방문(온라인 접수 불가)",
+        "fee": "정부24 안내 기준 35,000원(하이코리아에서 최신 금액 확인)",
+        "steps": [
+          "하이코리아에서 관할 출입국·외국인관서 방문 예약",
+          "통합신청서·여권·사진·체류지 입증서류·체류자격별 서류 준비",
+          "관서 방문해 신청(즉시 접수), 수수료 납부",
+          "외국인등록증 수령(우편 수령 신청 가능), 이후 체류지 변경·여권 변경은 15일 이내 신고"
+        ],
+        "pitfalls": [
+          "재외동포(F-4)는 국내거소신고로 대체 가능하나 거소신고를 안 하면 90일 내 외국인등록 필요",
+          "방문 예약 없이 가면 접수가 어려울 수 있음(하이코리아 예약 필수)",
+          "회사·학교가 대행하는지 반드시 확인(대행이라도 기한 책임은 본인)",
+          "등록 후 체류지 변경은 15일 이내 신고, 여권 정보 변경도 15일 이내 신고"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000025",
+        "curated": true
+      },
+      {
+        "ref": "L2",
+        "id": "law-foreign-resident-l2",
+        "name": "체류기간 연장허가",
+        "priority": "must",
+        "condition": "다음 달 만료 → 즉시 하이코리아 신청·출입국 방문 예약(고용 서류·거주지 증빙).",
+        "deadline": "체류기간 만료일 4개월 전부터 만료일 당일까지(전자민원은 만료일 전일까지) 신청",
+        "deadlineDays": 9999,
+        "agency": "법무부 출입국·외국인정책본부 · 체류지 관할 출입국·외국인청(사무소·출장소)",
+        "online": true,
+        "documents": [
+          "통합신청서(출입국관리법 시행규칙 별지 제34호서식)",
+          "여권",
+          "외국인등록증",
+          "체류지 입증서류(임대차계약서·숙소제공확인서 등)",
+          "체류자격별 추가 서류(예: F-6은 한국인 배우자 혼인관계증명서·주민등록등본, 취업자격은 재직·고용 서류 등 하이코리아 자격별 매뉴얼 확인)",
+          "수수료 납부(수입인지)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000097",
+        "source": {
+          "name": "정부24 — 체류기간연장허가 · 출입국관리법 제25조(체류기간 연장허가)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "체류기간이 끝나기 전에 계속 머물려면 만료일 4개월 전부터 만료일까지 관할 출입국·외국인청에 체류기간 연장허가를 신청해야 한다. 통합신청서, 여권, 외국인등록증, 체류지 입증서류에 자격별 추가 서류를 갖춰 하이코리아 전자민원(가능 자격) 또는 방문예약 후 접수하며 수수료는 6만원(F-6 3만원)이다. 체류자격 변경 심사 중 만료가 다가오면 연장 신청으로 불법체류를 막아야 한다.",
+        "verification_status": "verified",
+        "key": "law:체류기간 연장허가",
+        "unlocks": 0,
+        "order": 2,
+        "where": "하이코리아(hikorea.go.kr) 전자민원 또는 하이코리아 방문예약 후 관할 출입국·외국인청 방문",
+        "fee": "일반 60,000원(결혼이민 F-6 30,000원, 전자민원 20% 할인, 시행규칙 제74조 해당자 면제)",
+        "steps": [
+          "하이코리아에서 본인 체류자격의 연장 요건·추가 서류 확인(1345 외국인종합안내센터)",
+          "통합신청서·여권·외국인등록증·체류지 입증서류·자격별 서류 준비",
+          "하이코리아 전자민원 신청(가능 자격에 한함) 또는 방문예약 후 관할 출입국·외국인청 접수, 수수료 납부",
+          "심사(일반 10~15일, 조사 필요 시 최대 2개월) 후 외국인등록증 체류기간 갱신"
+        ],
+        "pitfalls": [
+          "만료일을 넘겨 신청하면 범칙금 부과 및 향후 체류 불이익",
+          "방문 접수는 반드시 하이코리아 사전 방문예약이 필요하다",
+          "서류는 3개월 이내 발급 원본 제시가 원칙이며 자격별 추가 서류가 다르다",
+          "전자민원은 신청 가능한 체류자격이 제한되어 있다"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000097",
+        "curated": true,
+        "dependsOn": [
+          "law-foreign-resident-l1"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-B49000700205",
+        "name": "외국인 근로자 지원 서비스",
+        "priority": "nice",
+        "condition": "서류 작성 지원(아산 외국인노동자지원센터).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "한국산업인력공단",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B49000700205",
+        "source": {
+          "name": "보조금24 · 한국산업인력공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "외국인근로자와 사업주 대상으로 상담 및 편의 제공",
+        "verification_status": "verified",
+        "eligibility": "외국인근로자와 그 사업주(담당자)",
+        "key": "svc:B49000700205",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.2
+  }
+}

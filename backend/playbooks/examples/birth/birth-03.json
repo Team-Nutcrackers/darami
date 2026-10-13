@@ -1,0 +1,405 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "birth-03",
+    "event_id": "birth",
+    "event_title": "출산",
+    "persona_summary": "29세 여성 · 전남 여수시 · 주부 · 출산 2주, 출산장려금",
+    "persona": {
+      "facts": {
+        "age": 29,
+        "gender": "여성",
+        "residence": "전남 여수시",
+        "situation": "주부 · 출산 2주, 출산장려금"
+      }
+    },
+    "query": "2주 전에 출산했어요. 여수시에서 출산장려금을 준다고 들었는데 전입한 지 얼마 안 돼서 받을 수 있을지 모르겠어요. 작년 겨울에 여수로 이사 왔습니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "birth"
+      ],
+      "reason": "출산 후 지자체 출산장려금 거주 요건"
+    },
+    "plan": {
+      "title": "여수시 출산장려금과 거주 요건",
+      "emoji": "👶",
+      "intro": "지자체 출산장려금은 대부분 '출생일 기준 일정 기간 이상 거주' 요건을 봐요. 작년 겨울 전입이면 대개 충족하지만 여수시 기준을 확인하세요.",
+      "law": [
+        {
+          "name": "출생신고",
+          "priority": "must",
+          "condition": "출산 2주 → 1개월 이내 신고(기한 약 2주 남음)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+          "priority": "must",
+          "condition": "출생신고 시 지자체 출산장려금도 함께 신청."
+        },
+        {
+          "name": "첫만남이용권 지원",
+          "priority": "must",
+          "condition": "200만 원 바우처."
+        },
+        {
+          "name": "아동수당",
+          "priority": "must",
+          "condition": "출생 60일 이내 신청."
+        },
+        {
+          "name": "산모·신생아 건강관리 지원",
+          "priority": "nice",
+          "condition": "출산 후 30일 이내 신청."
+        }
+      ],
+      "national_welfare": [
+        {
+          "name": "부모급여 지원",
+          "priority": "must",
+          "condition": "출생 60일 이내 신청 시 소급."
+        }
+      ],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "출산"
+        ],
+        "local_keywords": [
+          "출산장려금",
+          "출산"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R3",
+          "name": "여수시 출산지원금 지원사업",
+          "priority": "must",
+          "condition": "여수시 출산지원금 — 거주 기간 요건(출생일 기준) 확인 후 신청.",
+          "service_id": "WLF00004614"
+        },
+        {
+          "cid": "R2",
+          "name": "산후 건강관리 지원사업",
+          "priority": "nice",
+          "condition": "여수시 산모 산후 건강관리비.",
+          "service_id": "WLF00004934"
+        },
+        {
+          "cid": "R4",
+          "name": "산모신생아 건강관리 본인부담금 추가 지원(자체)",
+          "priority": "nice",
+          "condition": "산모·신생아 건강관리 이용 시 본인부담금 추가 지원.",
+          "service_id": "WLF00003508"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "birth",
+    "events": [
+      "birth"
+    ],
+    "title": "여수시 출산장려금과 거주 요건",
+    "emoji": "👶",
+    "intro": "지자체 출산장려금은 대부분 '출생일 기준 일정 기간 이상 거주' 요건을 봐요. 작년 겨울 전입이면 대개 충족하지만 여수시 기준을 확인하세요.",
+    "region": {
+      "sido": "전라남도",
+      "sgg": "여수시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "birth-report",
+        "name": "출생신고",
+        "priority": "must",
+        "condition": "출산 2주 → 1개월 이내 신고(기한 약 2주 남음).",
+        "deadline": "1개월 이내",
+        "deadlineDays": 30,
+        "agency": "법무부(가족관계등록 사무는 법원행정처 감독) · 시(구)·읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "출생신고서(자녀 이름은 한글 또는 통상 사용 한자)",
+          "출생증명서(의사·조산사 작성) 또는 출생사실을 증명하는 서면",
+          "신고인 신분증(우편 제출 시 사본)",
+          "부·모의 혼인관계증명서(행정정보 공동이용 가능 시 생략)",
+          "자녀 출생 당시 모가 한국인임을 증명하는 서면(해당 시)",
+          "자녀가 이중국적자인 경우 취득한 국적을 소명하는 자료(해당 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "source": {
+          "name": "정부24 출생신고 민원안내 · 가족관계의 등록 등에 관한 법률 제44조(출생신고의 기재사항)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "아이가 태어나면 1개월 안에 부 또는 모가 출생증명서를 첨부해 주민센터나 전자가족관계등록시스템에 출생신고를 한다. 수수료는 없으며, 신고 때 행복출산 원스톱으로 부모급여·아동수당 등을 함께 신청하면 편하다. 기한을 넘기면 5만 원 이하 과태료가 부과된다.",
+        "verification_status": "verified",
+        "key": "common:birth-report",
+        "unlocks": 4,
+        "order": 1,
+        "where": "출생지·등록기준지·주소지 시(구)·읍·면·동 주민센터 방문, 우편, 또는 대법원 전자가족관계등록시스템(efamily.scourt.go.kr, 온라인 출생신고 참여 병원 출산 시)",
+        "fee": "무료",
+        "steps": [
+          "병원에서 출생증명서 발급(온라인 출생신고 참여 병원이면 정보 제공 동의)",
+          "출생신고서 작성(이름·본·등록기준지·출생 일시·장소·부모 정보)",
+          "주민센터 방문 제출 또는 전자가족관계등록시스템에서 전자서명 후 제출",
+          "같은 자리에서 행복출산 원스톱(부모급여·아동수당·첫만남이용권) 통합 신청"
+        ],
+        "pitfalls": [
+          "온라인 출생신고는 참여 병원에서 출산한 경우에만 가능 — 병원에 미리 확인",
+          "출생증명서를 받을 수 없으면 대체 서면이나 가정법원 출생확인이 필요해 시간이 걸림",
+          "혼인 외 출생자는 모가 신고의무자",
+          "부모급여·아동수당 등은 출생 후 60일 이내 신청해야 출생월부터 소급"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-174000000029",
+        "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+        "priority": "must",
+        "condition": "출생신고 시 지자체 출산장려금도 함께 신청.",
+        "deadline": "출생신고 시 또는 출생신고 이후(※ 개별 서비스별 신청 기간은 \"지원대상\" 참조)",
+        "deadlineDays": 9999,
+        "agency": "행정안전부",
+        "online": true,
+        "documents": [
+          "○ 온라인 : 간편인증, 공동인증서 등(본인인증 필요)",
+          "○ 방문: 신분증, 출산자의 신분증 사본(대리인 신청시), 가족관계증명서 등 가족관계를 증명할 수 있는 서류(시부모가 신청시)",
+          "* 저소득층 조제분유 지원, 지자체 지원 서비스 신청 또는 자격확인 연계 등이 불가한 경우,  해당 구비서류가 추가로 필요할 수 있습니다."
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/174000000029",
+        "source": {
+          "name": "보조금24 · 행정안전부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산 후 받을 수 있는 각종 출산지원 서비스를 한 번에 통합신청하는 서비스를 제공하여 출산가정에 서비스 이용 편의 제고",
+        "verification_status": "verified",
+        "eligibility": "신청일 기준 출산자(출산가정)  * 출생신고 시 또는 출생신고 이후 신청가능(출생자 주민등록번호 부여 후, 등록 처리 가능)  ※개별 서비스별 예외사항 및 신청가능기간(개별신청은 담당기관 문의)  부모급여, 아동수당, 양육수당, 기저귀·조제분유지원 :",
+        "key": "svc:174000000029",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-135200005015",
+        "name": "첫만남이용권 지원",
+        "priority": "must",
+        "condition": "200만 원 바우처.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "신분증",
+          "대리신청시 위임장, 보호자 신분증 사본 제출, 대리인 신분증"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출생 아동에게 200만원 이상의 첫만남이용권을 지급하여 생애초기 아동양육에 따른 경제적 부담 경감",
+        "verification_status": "verified",
+        "eligibility": "출생아로서 출생신고되어 정상적으로 주민등록번호를 부여받은 아동(주민등록상 생년월일로부터 1년이 초과되지 않는 출생아)  * 2024년 1월 1일 이후 출생아는 주민등록상 생년월일로부터 2년내에 신청하여 사용 가능",
+        "key": "svc:135200005015",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-135200000120",
+        "name": "아동수당",
+        "priority": "must",
+        "condition": "출생 60일 이내 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 공통서류",
+          "아동수당 지급 신청서",
+          "신청인의 신분증",
+          "○ 대리신청인 구비서류",
+          "대리 신청 시 위임장, 대리인 신분증, 보호자 신분증(사본) 지참"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000120",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "아동에게 아동수당을 지급하여 아동 양육에 따른 경제적 부담을 경감하고 건강한 성장환경을 조성함으로써 아동의 기본적 권리와 복지 증진에 기여",
+        "verification_status": "verified",
+        "eligibility": "만 8세 미만 모든 아동에게 아동수당을 지급  - 대한민국 국적을 보유한 아동   ㆍ 부모가 외국인이어도 아동이 한국 국적이면 요건 충족   ㆍ 국적법에 따른 복수국적자 포함   ㆍ 난민법에 따른 난민 인정 아동 포함   ㆍ ｢재한외국인처우기본법｣에 ",
+        "key": "svc:135200000120",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "N1",
+        "id": "national_welfare-WLF00004657",
+        "name": "부모급여 지원",
+        "priority": "must",
+        "condition": "출생 60일 이내 신청 시 소급.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 아동정책과",
+        "online": true,
+        "documents": [
+          "사회보장급여 신청(변경)서"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004657",
+        "source": {
+          "name": "복지로 · 보건복지부 아동정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "영아기 집중돌봄을 두텁게 지원하여 출산 및 양육으로 인한 경제적 부담을 줄여드립니다.",
+        "verification_status": "verified",
+        "eligibility": "2세 미만의 아동(0~23개월)에게 지원합니다.※ 2세부터는 가정양육수당을 지원합니다.\r2세 생일이 도래하는 달의 전 달까지 최대 24개월간 지급합니다.",
+        "key": "svc:WLF00004657",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "R3",
+        "id": "local-WLF00004614",
+        "name": "여수시 출산지원금 지원사업",
+        "priority": "must",
+        "condition": "여수시 출산지원금 — 거주 기간 요건(출생일 기준) 확인 후 신청.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 여수시 보건소 건강증진과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004614&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 여수시 보건소 건강증진과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "모성 및 영유아의 생명과 건강을 보호하고 건전한 출산과 양육을 도모함으로써 여수시의 경쟁력을 높이고 시민의 삶의 질 향상에 이바지함",
+        "verification_status": "verified",
+        "key": "svc:WLF00004614",
+        "eligibility": "지원대상(1, 2 모두 충족해야 지원 가능)1. 부모 등은 출생아의 출생일 이전부터 시의 관할구역에 주민등록이 되어 있고 실제로 시에 거주하는 가정2. 부모 중 1명 이상의 거주기간이 1년을 경과하였을 것(직업, 학업 상의 사유로 인하여 부모 중 어느",
+        "unlocks": 0,
+        "order": 6
+      },
+      {
+        "ref": "G5",
+        "id": "gov24-PTR000050390",
+        "name": "산모·신생아 건강관리 지원",
+        "priority": "nice",
+        "condition": "출산 후 30일 이내 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 공통서류",
+          "신청인(대리 신청인)의 신분증",
+          "출생증명서 등 출산 또는 출산예정일 증빙자료",
+          "산모 및 배우자의 소득 증빙자료(건강보험증 사본, 신청일 기준 직전월 건강보험료 납부확인서 등)",
+          "가구원 수 및 출산 순위 확인자료(주민등록서류, 가족관계증명서 등)",
+          "휴직 확인자료(재직증명서 및 최근 월분 급여명세서 등)",
+          "예외지원 대상 확인자료(해당자에 한함)"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산가정에 건강관리사를 파견하여 산모의 산후 회복과 신생아의 양육을 지원하고,  출산가정의 경제적 부담을 경감",
+        "verification_status": "verified",
+        "eligibility": "지원대상  - 산모 또는 배우자가 생계·의료·주거·교육급여 수급자 또는 차상위계층*에 해당하는 출산가정     * 차상위본인부담경감, 차상위자활, 차상위장애인, 차상위자격확인  - 산모 및 배우자 등 해당 가구의 건강보험료 본인 부담금 합산액이 기준중",
+        "key": "svc:PTR000050390",
+        "unlocks": 0,
+        "order": 7
+      },
+      {
+        "ref": "R2",
+        "id": "local-WLF00004934",
+        "name": "산후 건강관리 지원사업",
+        "priority": "nice",
+        "condition": "여수시 산모 산후 건강관리비.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 여수시 보건소 건강증진과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004934&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 여수시 보건소 건강증진과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "우리시 산모에 대한 출산 후 건강관리비 지원을 통해 산모 건강 증진 및 아이 낳기 좋은 환경 조성에 기여",
+        "verification_status": "verified",
+        "key": "svc:WLF00004934",
+        "eligibility": "- 우리 시에 주민등록을 두고 자녀를 출산한, 국민건강보험공단 임신·출산 진료비 지원금 모두 소진한 산모(분만일 기준 1년 이내 신청 및 쿠폰 소진) 우리 시에 주민등록을 두고 자녀를 출산한, 국민건강보험공단 임신·출산 진료비 지원금 모두 소진한 산모",
+        "unlocks": 0,
+        "order": 8
+      },
+      {
+        "ref": "R4",
+        "id": "local-WLF00003508",
+        "name": "산모신생아 건강관리 본인부담금 추가 지원(자체)",
+        "priority": "nice",
+        "condition": "산모·신생아 건강관리 이용 시 본인부담금 추가 지원.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 여수시 보건소 건강증진과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00003508&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 여수시 보건소 건강증진과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "산모 신생아 건강관리 지원 서비스 이용 출산가정에 본인부담금을 추가지원하여 출산가정의 경제적 부담을 경감시키고 출산율 저하에 적극 대처하기 위함.",
+        "verification_status": "verified",
+        "key": "svc:WLF00003508",
+        "eligibility": "신청일 기준 서비스를 종료한 여수시 주민등록을 둔 출산가정 신청일 기준 서비스를 종료한 여수시 주민등록을 둔 출산가정",
+        "unlocks": 0,
+        "order": 9
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 9,
+    "by_status": {
+      "verified": 9
+    },
+    "candidates": 7,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

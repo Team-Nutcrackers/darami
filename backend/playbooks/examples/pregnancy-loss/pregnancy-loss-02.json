@@ -1,0 +1,150 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "pregnancy-loss-02",
+    "event_id": "pregnancy-loss",
+    "event_title": "유산·사산",
+    "persona_summary": "35세 남성 · 경기 용인시 · 회사원 · 배우자 유산",
+    "persona": {
+      "facts": {
+        "age": 35,
+        "gender": "남성",
+        "residence": "경기 용인시",
+        "situation": "회사원 · 배우자 유산"
+      }
+    },
+    "query": "아내가 며칠 전 유산을 해서 옆에 있어주고 싶은데 남편도 쓸 수 있는 휴가가 있나요? 회사에서는 그런 건 없다고 해서 정확히 알고 싶습니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "pregnancy-loss"
+      ],
+      "reason": "배우자 유산 휴가"
+    },
+    "plan": {
+      "title": "배우자 유산 시 남편의 휴가",
+      "emoji": "🕊️",
+      "intern": "",
+      "intro": "배우자가 유산·사산하면 남편도 3일의 배우자 유산·사산휴가를 쓸 수 있어요. 회사가 '없다'고 해도 법으로 보장돼요.",
+      "law": [
+        {
+          "name": "배우자 유산·사산휴가",
+          "priority": "must",
+          "condition": "아내 유산 며칠 전 → 유산일부터 20일 이내 청구, 3일 휴가. 사업주 거부 시 과태료."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "난임 부부, 유산 및 사산경험 부부, 임산부 및 양육모를 위한 심리상담",
+          "priority": "nice",
+          "condition": "부부 심리상담."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [],
+        "local_keywords": []
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "pregnancy-loss",
+    "events": [
+      "pregnancy-loss"
+    ],
+    "title": "배우자 유산 시 남편의 휴가",
+    "emoji": "🕊️",
+    "intro": "배우자가 유산·사산하면 남편도 3일의 배우자 유산·사산휴가를 쓸 수 있어요. 회사가 '없다'고 해도 법으로 보장돼요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "용인시"
+    },
+    "procedures": [
+      {
+        "ref": "L2",
+        "id": "law-pregnancy-loss-l2",
+        "name": "배우자 유산·사산휴가",
+        "priority": "must",
+        "condition": "아내 유산 며칠 전 → 유산일부터 20일 이내 청구, 3일 휴가. 사업주 거부 시 과태료.",
+        "deadline": "배우자가 유산 또는 사산한 날부터 20일 이내 청구",
+        "deadlineDays": 20,
+        "agency": "고용노동부 · 사업주(소속 회사)에 청구",
+        "online": false,
+        "documents": [
+          "배우자 유산·사산휴가 청구서(휴가 사용일, 배우자의 유산·사산일, 청구 연월일 기재, 전자문서 가능)",
+          "배우자의 유산·사산 사실을 증명하는 서류(사업주가 요구하는 경우, 진단서 등)"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2604&ccfNo=1&cciNo=3&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 저출생 지원 > 난임치료 및 유산 등 휴가 · 남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률 제18조의4(배우자 유산ㆍ사산휴가)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "남성 근로자는 배우자가 유산·사산하면 유산·사산일부터 20일 이내에 회사에 문서로 청구해 5일 범위의 휴가(최초 3일 유급)를 쓸 수 있다. 사업주는 이를 이유로 해고 등 불리한 처우를 할 수 없다. 우선지원대상기업이면 최초 3일분 통상임금(1일 상한 84,210원)을 고용보험에서 급여로 받을 수 있다.",
+        "verification_status": "verified",
+        "key": "law:배우자 유산·사산휴가",
+        "unlocks": 0,
+        "order": 1,
+        "where": "회사(사업주)에 서면·전자문서로 청구(관할 고용센터는 급여 신청·분쟁 상담 창구)",
+        "fee": "해당 없음",
+        "steps": [
+          "휴가 사용일·배우자 유산사산일·청구일을 적은 문서(전자문서 가능)를 사업주에게 제출한다",
+          "5일 범위에서 휴가를 사용한다(최초 3일은 유급, 나머지는 무급)",
+          "우선지원대상기업 근로자는 휴가 종료 후 1개월~12개월 안에 고용센터(고용24)에 최초 3일분 급여를 신청한다"
+        ],
+        "pitfalls": [
+          "청구 기한(유산·사산일부터 20일)을 넘기면 휴가를 요구할 수 없으므로 즉시 문서로 청구한다",
+          "모자보건법 제14조제1항에 해당하지 않는 인공 임신중절에 따른 유산은 휴가 대상이 아니다",
+          "유급은 최초 3일뿐이며 급여 지원은 우선지원대상기업 근로자(고용보험 피보험 단위기간 180일 이상)만 해당한다",
+          "급여는 휴가가 끝난 뒤 한꺼번에 신청해야 하며 휴가 종료 후 12개월이 지나면 신청할 수 없다"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2604&ccfNo=1&cciNo=3&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-B55265700002",
+        "name": "난임 부부, 유산 및 사산경험 부부, 임산부 및 양육모를 위한 심리상담",
+        "priority": "nice",
+        "condition": "부부 심리상담.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "국립중앙의료원",
+        "online": true,
+        "documents": [],
+        "link": "https://22762276.nmc.or.kr",
+        "source": {
+          "name": "보조금24 · 국립중앙의료원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 난임 부부, 유산 및 사산경험 부부, 임산부, 양육모 및 배우자를 대상으로 심리상담, 정서적 지지 및 정신건강 고위험군에 대한 의료적 개입 지원을 병행하는 서비스를 제공함으로써 정서적·심리적 문제를 완화하여 삶의 질을 향상시키기 위함\r\n\r\n○ 대상자별(난임 부부, 유산 및 사산경험 부부, 임산부, 양육모 및 배우자) 심리상담서비스 (대면, 비대면 상담서",
+        "verification_status": "verified",
+        "eligibility": "난임 부부  - 부부가 피임을 하지 않고 1년 이상 정기적인 성생활을 하여도 임신이 안되는 경우   유산 및 사산경험 부부  - 유산 및 사산 등으로 임신 유지관련 정서적 어려움을 호소하는 경우   임신부 및 배우자  - 임신 중인 여성 및 배우자  ",
+        "key": "svc:B55265700002",
+        "unlocks": 0,
+        "order": 2
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 2,
+    "by_status": {
+      "verified": 2
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}

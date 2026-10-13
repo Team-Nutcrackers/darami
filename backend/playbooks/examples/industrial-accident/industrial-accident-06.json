@@ -1,0 +1,380 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "industrial-accident-06",
+    "event_id": "industrial-accident",
+    "event_title": "산업재해",
+    "persona_summary": "61세 남성 · 강원 태백시 · 전직 광부 · 진폐증",
+    "persona": {
+      "facts": {
+        "age": 61,
+        "gender": "남성",
+        "residence": "강원 태백시",
+        "situation": "전직 광부 · 진폐증"
+      }
+    },
+    "query": "예전에 탄광에서 오래 일했는데 이번에 진폐증 진단을 받았어요. 일을 그만둔 지 오래됐는데도 산재 신청이 가능한가요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "industrial-accident"
+      ],
+      "reason": "퇴직 후 진폐증"
+    },
+    "plan": {
+      "title": "퇴직 후 진폐증 산재",
+      "emoji": "🦺",
+      "intro": "진폐는 퇴직 후에도 산재 신청이 가능하고, 진폐보상연금·요양이 별도 체계로 운영돼요. 근로복지공단에 진폐 요양·보상 신청을 하세요.",
+      "law": [
+        {
+          "name": "산재 요양급여",
+          "priority": "must",
+          "condition": "탄광 근무 이력 + 진폐 진단 → 퇴직 후에도 산재 신청(진폐 특례)."
+        },
+        {
+          "name": "장해급여",
+          "priority": "must",
+          "condition": "진폐 장해등급 → 진폐보상연금."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "산재근로자 특별진찰",
+          "priority": "must",
+          "condition": "진폐 정밀진단(특별진찰) 요청."
+        },
+        {
+          "name": "산재근로자 생활안정자금 융자",
+          "priority": "nice",
+          "condition": "생활비."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "산재",
+          "진폐"
+        ],
+        "local_keywords": [
+          "산재",
+          "진폐"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "진폐에 대한 보험급여 특례",
+          "law_query": "산업재해보상보험법",
+          "keywords": [
+            "진폐에 따른 보험급여의 특례",
+            "진폐"
+          ],
+          "priority": "must",
+          "condition": "진폐 요양급여·진폐보상연금·진폐유족연금 체계."
+        }
+      ]
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "재가진폐환자 의료비 지원",
+          "priority": "must",
+          "condition": "강원 재가 진폐환자 의료비 지원.",
+          "service_id": "642000000690"
+        },
+        {
+          "cid": "R2",
+          "name": "진폐의증환자 수당 지원",
+          "priority": "nice",
+          "condition": "진폐보상연금 대상에서 제외되면 태백시 진폐의증 수당.",
+          "service_id": "WLF00006722"
+        }
+      ],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "industrial-accident",
+    "events": [
+      "industrial-accident"
+    ],
+    "title": "퇴직 후 진폐증 산재",
+    "emoji": "🦺",
+    "intro": "진폐는 퇴직 후에도 산재 신청이 가능하고, 진폐보상연금·요양이 별도 체계로 운영돼요. 근로복지공단에 진폐 요양·보상 신청을 하세요.",
+    "region": {
+      "sido": "강원",
+      "sgg": "태백시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-industrial-accident-l1",
+        "name": "산재 요양급여",
+        "priority": "must",
+        "condition": "탄광 근무 이력 + 진폐 진단 → 퇴직 후에도 산재 신청(진폐 특례).",
+        "deadline": "요양을 받은 날의 다음날부터 3년(소멸시효)",
+        "deadlineDays": 1095,
+        "agency": "고용노동부 · 근로복지공단(사업장 관할 지역본부·지사)",
+        "online": true,
+        "documents": [
+          "요양급여신청서(산재보험법 시행규칙 별지 제2호서식)",
+          "초진소견서(주치의 작성, 별지 제3호서식)",
+          "재해발생 경위서(2018년부터 사업주 확인 없이 제출 가능)",
+          "의무기록지·MRI 등 의학적 입증자료(필요 시)",
+          "업무상질병 전문소견서(뇌심혈관계·근골격계 질병인 경우)",
+          "합의서·판결문·영수증(사업주·제3자로부터 다른 보상을 받은 경우)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 요양급여의 신청 및 지급 · 산업재해보상보험법 제40조(요양급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 사고·질병으로 다쳤다면 사업주 동의 없이도 요양급여신청서와 초진소견서를 근로복지공단에 내면 된다(병원 대행·온라인 가능). 공단이 조사 후 7일 이내 결정하며, 승인되면 치료비와 휴업급여 등을 받는다. 청구권은 요양일 다음날부터 3년이면 소멸한다.",
+        "verification_status": "verified",
+        "key": "law:산재 요양급여",
+        "unlocks": 3,
+        "order": 1,
+        "where": "근로복지공단 지사 방문·우편·팩스, 고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인, 또는 산재보험 의료기관 대행 접수",
+        "fee": "무료",
+        "steps": [
+          "산재보험 의료기관에서 치료받고 주치의에게 초진소견서를 받는다",
+          "요양급여신청서를 작성해 근로복지공단 관할 지사에 제출(병원 대행·토탈서비스 온라인 가능; 사업주 동의 불필요)",
+          "공단이 사업장·의료기관 조사(업무상질병은 판정위원회 심의) 후 7일 이내 승인 여부 결정·통지",
+          "승인되면 치료비(요양급여)·휴업급여 등 지급; 불승인 시 90일 이내 심사청구"
+        ],
+        "pitfalls": [
+          "2018.1.1부터 신청서의 사업주 확인란이 삭제돼 사업주 날인 없이 신청 가능하다",
+          "비지정 의료기관에서 치료받았다면 본인이 직접 접수해야 한다",
+          "신청일 기준 3년 넘은 부분은 시효 소멸; 신청하면 시효가 중단된다",
+          "합의금 등 다른 보상을 받았으면 신청서 '다른 보상'란에 기재해야 한다",
+          "불승인 처분은 안 날부터 90일 이내 심사청구"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "ref": "L3",
+        "id": "law-industrial-accident-l3",
+        "name": "장해급여",
+        "priority": "must",
+        "condition": "진폐 장해등급 → 진폐보상연금.",
+        "deadline": "치유된 날의 다음날부터 5년(소멸시효)",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 산재보상정책과 · 근로복지공단 지역본부(지사)",
+        "online": true,
+        "documents": [
+          "장해급여청구서(보상업무처리규정 별지 제11호)",
+          "장해진단서(요양 종결 당시 산재보험 의료기관 발급)",
+          "방사선 검사 자료",
+          "진료기록부 등 장해 상태 확인 자료"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000266",
+        "source": {
+          "name": "정부24 - 산재보험 장해보상청구 · 산업재해보상보험법 제57조(장해급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 부상·질병이 치유된 뒤 손·허리 등에 장해가 남으면 요양 종결 시 의료기관에서 장해진단서를 받아 근로복지공단에 장해급여를 청구한다. 치유일 다음날부터 5년 안에 청구해야 하며 수수료는 없다. 등급에 따라 연금(1~3급)·일시금(8~14급)·선택(4~7급)으로 지급된다.",
+        "verification_status": "verified",
+        "key": "law:장해급여",
+        "unlocks": 0,
+        "order": 2,
+        "where": "고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인 또는 근로복지공단 지사 방문·우편·FAX",
+        "fee": "무료",
+        "steps": [
+          "요양 종결(치유) 후 치료받은 산재보험 의료기관에서 장해진단서 발급",
+          "장해급여청구서에 진단서·방사선 자료·진료기록을 첨부해 근로복지공단 지사 또는 토탈서비스로 청구",
+          "필요 시 공단 지정 의료기관 전문진단(7급 이상 소견, 중추신경 손상 등)",
+          "장해등급 결정(처리기간 10일): 1~3급 연금, 8~14급 일시금, 4~7급 선택, 결정일부터 14일 내 지급"
+        ],
+        "pitfalls": [
+          "정부24에는 구비서류 없음으로 표기되나 실제로는 장해진단서·검사자료가 필요하다",
+          "장해진단서는 요양 종결 당시 산재보험 의료기관에서 받는 것이 원칙",
+          "장해등급 재판정 전 고의로 장해를 악화시키면 급여가 제한된다",
+          "결정에 불복하면 심사청구 가능"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000266",
+        "curated": true,
+        "dependsOn": [
+          "law-industrial-accident-l1"
+        ]
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-149200005025",
+        "name": "산재근로자 특별진찰",
+        "priority": "must",
+        "condition": "진폐 정밀진단(특별진찰) 요청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "없음"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/149200005025",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "급성기 이후 기능회복 의료재활을 통해 장해 최소화, 원활한 직업 및 사회복귀 촉진",
+        "verification_status": "verified",
+        "eligibility": "① 뇌혈관질환(뇌손상 포함): 발병일 또는 수술 후 6개월 이내 ② 척추질환(마비증세가 뚜렷한 경우 제외), 견관절질환, 주관절질환, 완관절·수부질환,     고관절질환, 슬관절질환, 족관절·족부질환: 발병일 또는 수술 후 3개월 이내 ③ 위 어느 하",
+        "key": "svc:149200005025",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-industrial-accident-l1"
+        ]
+      },
+      {
+        "ref": "R1",
+        "id": "regional-642000000690",
+        "name": "재가진폐환자 의료비 지원",
+        "priority": "must",
+        "condition": "강원 재가 진폐환자 의료비 지원.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "강원특별자치도",
+        "online": true,
+        "documents": [
+          "○ 개인정보 수집·이용, 제공 동의서 및 환자 등록 신청서",
+          "○ 진폐결정통지서 / 만성폐쇄성폐질환 승인통지서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/642000000690",
+        "source": {
+          "name": "보조금24 · 강원특별자치도",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "○ 재가진폐환자 및 만성폐쇄성폐질환자 본인 및 배우자 내과 관련 의료비 지원\r\n○ 재가진폐환자 및 만성폐쇄성폐질환자 본인 내과 관련 입원비 지원(연 20/10만원 한도)",
+        "verification_status": "verified",
+        "key": "svc:642000000690",
+        "eligibility": "재가진폐환자 및 만성폐쇄성폐질환 환자(배우자 포함)",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "진폐에 대한 보험급여 특례",
+        "priority": "must",
+        "condition": "진폐 요양급여·진폐보상연금·진폐유족연금 체계.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 근로복지공단(관할 지사)",
+        "online": false,
+        "documents": [
+          "요양급여신청서(진폐)",
+          "분진작업 종사경력 확인서(최초 신청 시)",
+          "의학적 소견서 또는 진단서",
+          "진폐보상연금청구서",
+          "진폐유족연금청구서(사망 시 유족)",
+          "간병급여청구서 + 간병 필요 의학적 소견서(해당 시)",
+          "장례비청구서(해당 시)"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=7&cciNo=1&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 산업재해보상보험 > 진폐에 대한 보험급여 특례 · 산업재해보상보험법 제91조의2(진폐에 대한 업무상의 재해의 인정기준)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 진폐는 일반 산재와 달리 요양급여·간병급여·장례비·직업재활급여·진폐보상연금·진폐유족연금 체계로 보상한다(산재보험법 제91조의2~제91조의11). 근로복지공단에 분진작업 경력 확인서와 진단서를 내면 공단이 건강진단기관 진단과 진폐심사위원회 심사를 거쳐 장해등급·연금을 결정하며, 진폐보상연금은 요양 여부와 관계없이 지급된다.",
+        "verification_status": "verified",
+        "key": "x:진폐에 대한 보험급여 특례",
+        "unlocks": 0,
+        "order": 5,
+        "where": "근로복지공단 관할 지사 방문·우편(고용산재보험 토탈서비스 온라인 청구 가능 여부는 지사 확인)",
+        "fee": "무료",
+        "steps": [
+          "분진작업 경력이 있는 근로자(또는 유족)가 근로복지공단에 요양급여신청서·분진작업 종사경력 확인서·진단서를 제출한다",
+          "공단이 건강진단기관에 진폐 진단을 의뢰하고, 기관이 검사 결과를 공단에 제출한다",
+          "진폐심사위원회 심사를 거쳐 공단이 요양 여부·진폐장해등급·진폐보상연금 지급 여부를 결정한다",
+          "결정에 따라 요양급여(진폐요양 의료기관)·진폐보상연금(기초연금+진폐장해연금)을 받고, 사망 시 유족이 진폐유족연금을 청구한다"
+        ],
+        "pitfalls": [
+          "진폐 진단 종료일부터 1년이 지나거나 요양이 종결돼야 재청구 가능(응급진단 소견 시 예외)",
+          "진폐요양 의료기관 외에서 요양하면 일반 산재 요양급여 기준 적용",
+          "제1~7급 진폐장해 수급권자는 재판정 대상이 될 수 있다",
+          "유족급여는 일시금 없이 진폐유족연금으로만 지급(사망 당시 받던 진폐보상연금 수준, 유족보상연금 한도)"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=7&cciNo=1&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-149200000018",
+        "name": "산재근로자 생활안정자금 융자",
+        "priority": "nice",
+        "condition": "생활비.",
+        "deadline": "(의료비) 진료일 또는 의료비 납부일부터 1년이내 (혼례비) 결혼일 전·후 또는 혼인신고일부터 90일 이내 (장례비) 사망일부터 90일 이내 (취업안정자금) 직장복귀일부터 1년이내 (차량구입비) 소유권 등록일 또는 차량(건설기계)매매계약이루터 90일 이내 또는 차량인수일 이전 30일 이내 (주택이전비) 임대차계약일 또는 전입일부터 90일 이내 (자녀양육비) 자년가 13세에 도달하는 시기 이내",
+        "deadlineDays": 365,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "○ 공통서류 : 융자신청서, 서약서, 주민등록등본, 원천징수영수증 사본(소득금액증명원) 또는 임금대장(필요시)",
+          "○ 융자종류별 추가 서류 : (의료비) 진료비계산서, 영수증 사본, (혼례비) 혼인관계증명서 및 혼인사실을 확인 할 수 있는 자료, (장례비) 사망인의 기본증명서, 사망진단서, 사망확인서 중 택 1, 주택이전비) 임대차계약서, (차량구입비) 차량매매계약서, 차량등록원부, (취업안정자금)재직증명서, (자녀양육비) 가족관계증명서"
+        ],
+        "link": "http://welfare.comwel.or.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "산재노동자 및 유족의 생활안정에 필요한 자금을 필요시기에 장기저리로 융자함으로써 생활안정 및 복지증진 도모",
+        "verification_status": "verified",
+        "eligibility": "월평균소득이 보건복지부 장관이 고시하는 3인 가구 기준 중위소득 이하인 자로 다음에 해당하는 자  - 산재사망근로자의 유족 중 수급권 1순위자(방계 일시금 수급권자 제외)   - 상병보상연금 수급자, 산재장해등급 1~9급 판정자   - 융자신청일 현재",
+        "key": "svc:149200000018",
+        "unlocks": 0,
+        "order": 6,
+        "dependsOn": [
+          "law-industrial-accident-l1"
+        ]
+      },
+      {
+        "ref": "R2",
+        "id": "local-WLF00006722",
+        "name": "진폐의증환자 수당 지원",
+        "priority": "nice",
+        "condition": "진폐보상연금 대상에서 제외되면 태백시 진폐의증 수당.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "강원특별자치도 복지보건국 장애인복지과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00006722&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 강원특별자치도 복지보건국 장애인복지과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "진폐보상연금 수급대상에서 제외된 진폐의증환자의 복지증진 및 삶의 질 향상 도모",
+        "verification_status": "verified",
+        "key": "svc:WLF00006722",
+        "eligibility": "도내 진폐의증환자 도내 진폐의증환자",
+        "unlocks": 0,
+        "order": 7
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 7,
+    "by_status": {
+      "verified": 7
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

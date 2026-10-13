@@ -1,0 +1,299 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "industrial-accident-01",
+    "event_id": "industrial-accident",
+    "event_title": "산업재해",
+    "persona_summary": "43세 남성 · 경기 시흥시 · 공장 근무 · 기계에 손 부상",
+    "persona": {
+      "facts": {
+        "age": 43,
+        "gender": "남성",
+        "residence": "경기 시흥시",
+        "situation": "공장 근무 · 기계에 손 부상"
+      }
+    },
+    "query": "공장에서 기계에 손이 끼어서 수술을 받았어요. 회사에서는 산재 처리하지 말고 공상으로 하자고 하는데, 그렇게 해도 되는 건지 산재 신청을 제가 직접 할 수 있는지 궁금해요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "industrial-accident"
+      ],
+      "reason": "기계 손 부상, 공상 vs 산재"
+    },
+    "plan": {
+      "title": "공상 대신 산재 신청",
+      "emoji": "🦺",
+      "intro": "산재 신청은 회사 동의 없이 본인이 근로복지공단에 직접 할 수 있어요. 공상 처리하면 후유증·재발 때 보상을 못 받을 수 있어요.",
+      "law": [
+        {
+          "name": "산재 요양급여",
+          "priority": "must",
+          "condition": "기계 손 부상·수술 → 사업주 동의 없이 요양급여신청서(병원 경유) 근로복지공단 제출. 사고 3년 내."
+        },
+        {
+          "name": "휴업급여",
+          "priority": "must",
+          "condition": "치료로 4일 이상 미취업 → 평균임금 70%."
+        },
+        {
+          "name": "장해급여",
+          "priority": "nice",
+          "condition": "손 기능 장해 남으면."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "요양급여(보조기)-산재보험급여",
+          "priority": "nice",
+          "condition": "보조기 필요 시."
+        },
+        {
+          "name": "무료 소송대리 서비스(저소득 재해근로자)",
+          "priority": "nice",
+          "condition": "불승인·회사 분쟁 시."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "산재"
+        ],
+        "local_keywords": [
+          "산재"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "industrial-accident",
+    "events": [
+      "industrial-accident"
+    ],
+    "title": "공상 대신 산재 신청",
+    "emoji": "🦺",
+    "intro": "산재 신청은 회사 동의 없이 본인이 근로복지공단에 직접 할 수 있어요. 공상 처리하면 후유증·재발 때 보상을 못 받을 수 있어요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "시흥시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-industrial-accident-l1",
+        "name": "산재 요양급여",
+        "priority": "must",
+        "condition": "기계 손 부상·수술 → 사업주 동의 없이 요양급여신청서(병원 경유) 근로복지공단 제출. 사고 3년 내.",
+        "deadline": "요양을 받은 날의 다음날부터 3년(소멸시효)",
+        "deadlineDays": 1095,
+        "agency": "고용노동부 · 근로복지공단(사업장 관할 지역본부·지사)",
+        "online": true,
+        "documents": [
+          "요양급여신청서(산재보험법 시행규칙 별지 제2호서식)",
+          "초진소견서(주치의 작성, 별지 제3호서식)",
+          "재해발생 경위서(2018년부터 사업주 확인 없이 제출 가능)",
+          "의무기록지·MRI 등 의학적 입증자료(필요 시)",
+          "업무상질병 전문소견서(뇌심혈관계·근골격계 질병인 경우)",
+          "합의서·판결문·영수증(사업주·제3자로부터 다른 보상을 받은 경우)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 요양급여의 신청 및 지급 · 산업재해보상보험법 제40조(요양급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 사고·질병으로 다쳤다면 사업주 동의 없이도 요양급여신청서와 초진소견서를 근로복지공단에 내면 된다(병원 대행·온라인 가능). 공단이 조사 후 7일 이내 결정하며, 승인되면 치료비와 휴업급여 등을 받는다. 청구권은 요양일 다음날부터 3년이면 소멸한다.",
+        "verification_status": "verified",
+        "key": "law:산재 요양급여",
+        "unlocks": 3,
+        "order": 1,
+        "where": "근로복지공단 지사 방문·우편·팩스, 고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인, 또는 산재보험 의료기관 대행 접수",
+        "fee": "무료",
+        "steps": [
+          "산재보험 의료기관에서 치료받고 주치의에게 초진소견서를 받는다",
+          "요양급여신청서를 작성해 근로복지공단 관할 지사에 제출(병원 대행·토탈서비스 온라인 가능; 사업주 동의 불필요)",
+          "공단이 사업장·의료기관 조사(업무상질병은 판정위원회 심의) 후 7일 이내 승인 여부 결정·통지",
+          "승인되면 치료비(요양급여)·휴업급여 등 지급; 불승인 시 90일 이내 심사청구"
+        ],
+        "pitfalls": [
+          "2018.1.1부터 신청서의 사업주 확인란이 삭제돼 사업주 날인 없이 신청 가능하다",
+          "비지정 의료기관에서 치료받았다면 본인이 직접 접수해야 한다",
+          "신청일 기준 3년 넘은 부분은 시효 소멸; 신청하면 시효가 중단된다",
+          "합의금 등 다른 보상을 받았으면 신청서 '다른 보상'란에 기재해야 한다",
+          "불승인 처분은 안 날부터 90일 이내 심사청구"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=575&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "ref": "L2",
+        "id": "law-industrial-accident-l2",
+        "name": "휴업급여",
+        "priority": "must",
+        "condition": "치료로 4일 이상 미취업 → 평균임금 70%.",
+        "deadline": "휴업한 날의 다음날부터 3년 이내 청구(소멸시효)",
+        "deadlineDays": 1095,
+        "agency": "고용노동부 · 근로복지공단(의료기관 관할 지역본부·지사)",
+        "online": true,
+        "documents": [
+          "휴업급여·상병보상연금 청구서(근로복지공단 보상업무처리규정 별지 제7호서식)",
+          "재해 발생 달 포함 이전 4개월간 임금대장 등 임금 확인자료(최초 청구 시)",
+          "연장수당·연차수당·상여금 내역 확인자료(해당 시, 상여금은 12개월분)",
+          "부분취업내역신고서(요양 중 부분 취업 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000265",
+        "source": {
+          "name": "정부24 – 산재보험 휴업급여, 상병보상연금 청구 · 산업재해보상보험법 제52조(휴업급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 재해로 요양 중 4일 이상 일하지 못한 기간에는 근로복지공단에 휴업급여를 청구해 1일 평균임금의 70%(저소득자는 90%·최저 기준 보장)를 받습니다. 산재 요양 승인이 선행되어야 하며, 토탈서비스 온라인이나 공단 지사에 휴업급여 청구서와 임금대장 등 임금자료를 내면 7일 내 처리됩니다. 청구권은 휴업일 다음날부터 3년이면 소멸하니 매월 또는 정기적으로 청구하세요.",
+        "verification_status": "verified",
+        "key": "law:휴업급여",
+        "unlocks": 1,
+        "order": 2,
+        "where": "고용·산재보험 토탈서비스(total.comwel.or.kr 온라인, 2회차부터 터치고용산재 앱) 또는 근로복지공단 지사 방문·우편·팩스",
+        "fee": "무료",
+        "steps": [
+          "산재 요양급여 신청·승인(요양 승인이 있어야 휴업급여 청구 가능)",
+          "요양으로 4일 이상 취업하지 못한 기간에 대해 휴업급여 청구서 작성(의료기관에 접수 위임 가능)",
+          "토탈서비스 온라인 또는 공단 지사에 임금자료 첨부해 제출(2회차 이후는 앱으로도 가능)",
+          "공단 심사(처리기간 7일) 후 지급 결정일부터 14일 이내 1일 평균임금의 70% 지급"
+        ],
+        "pitfalls": [
+          "취업하지 못한 기간이 3일 이내면 미지급",
+          "요양 중 취업하거나 사업주로부터 임금을 받은 기간은 지급 제외(부분취업 시 별도 신고)",
+          "3년 지나면 시효 소멸",
+          "외국인 근로자도 산재보험 적용 대상이므로 동일하게 청구 가능"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000265",
+        "curated": true,
+        "dependsOn": [
+          "law-industrial-accident-l1"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-B49000100043",
+        "name": "요양급여(보조기)-산재보험급여",
+        "priority": "nice",
+        "condition": "보조기 필요 시.",
+        "deadline": "구입일(지급일)로부터 3년이내",
+        "deadlineDays": 1095,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "○ 산재보험 재활보조기구 처방전 및 검수확인서",
+          "○ 세금계산서 또는 거래명세서"
+        ],
+        "link": "http://total.kcomwel.or.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "산재근로자를 대상으로 해당 신체 부위 또는 기능 상실에 대한 보조를 위하여 의학적으로 필요한 경우 해당 유형 및 용도별로 재활보조기구를 지급함",
+        "verification_status": "verified",
+        "eligibility": "재활보조기구 지급 대상에 해당하는 산재근로자",
+        "key": "svc:B49000100043",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-industrial-accident-l1"
+        ]
+      },
+      {
+        "ref": "L3",
+        "id": "law-industrial-accident-l3",
+        "name": "장해급여",
+        "priority": "nice",
+        "condition": "손 기능 장해 남으면.",
+        "deadline": "치유된 날의 다음날부터 5년(소멸시효)",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 산재보상정책과 · 근로복지공단 지역본부(지사)",
+        "online": true,
+        "documents": [
+          "장해급여청구서(보상업무처리규정 별지 제11호)",
+          "장해진단서(요양 종결 당시 산재보험 의료기관 발급)",
+          "방사선 검사 자료",
+          "진료기록부 등 장해 상태 확인 자료"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000266",
+        "source": {
+          "name": "정부24 - 산재보험 장해보상청구 · 산업재해보상보험법 제57조(장해급여)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "업무상 부상·질병이 치유된 뒤 손·허리 등에 장해가 남으면 요양 종결 시 의료기관에서 장해진단서를 받아 근로복지공단에 장해급여를 청구한다. 치유일 다음날부터 5년 안에 청구해야 하며 수수료는 없다. 등급에 따라 연금(1~3급)·일시금(8~14급)·선택(4~7급)으로 지급된다.",
+        "verification_status": "verified",
+        "key": "law:장해급여",
+        "unlocks": 0,
+        "order": 4,
+        "where": "고용·산재보험 토탈서비스(total.comwel.or.kr) 온라인 또는 근로복지공단 지사 방문·우편·FAX",
+        "fee": "무료",
+        "steps": [
+          "요양 종결(치유) 후 치료받은 산재보험 의료기관에서 장해진단서 발급",
+          "장해급여청구서에 진단서·방사선 자료·진료기록을 첨부해 근로복지공단 지사 또는 토탈서비스로 청구",
+          "필요 시 공단 지정 의료기관 전문진단(7급 이상 소견, 중추신경 손상 등)",
+          "장해등급 결정(처리기간 10일): 1~3급 연금, 8~14급 일시금, 4~7급 선택, 결정일부터 14일 내 지급"
+        ],
+        "pitfalls": [
+          "정부24에는 구비서류 없음으로 표기되나 실제로는 장해진단서·검사자료가 필요하다",
+          "장해진단서는 요양 종결 당시 산재보험 의료기관에서 받는 것이 원칙",
+          "장해등급 재판정 전 고의로 장해를 악화시키면 급여가 제한된다",
+          "결정에 불복하면 심사청구 가능"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14900000266",
+        "curated": true,
+        "dependsOn": [
+          "law-industrial-accident-l1",
+          "law-industrial-accident-l2"
+        ]
+      },
+      {
+        "ref": "G7",
+        "id": "gov24-B27000100016",
+        "name": "무료 소송대리 서비스(저소득 재해근로자)",
+        "priority": "nice",
+        "condition": "불승인·회사 분쟁 시.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대한법률구조공단",
+        "online": true,
+        "documents": [],
+        "link": "www.klac.or.kr",
+        "source": {
+          "name": "보조금24 · 대한법률구조공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 사회·경제적 약자에 대한 법률구조서비스 제공으로 법률복지증진\r\n\r\n○ 무료 법률상담\r\n\r\n○ 무료 소송대리\r\n - 최초 요양 급여 신청 등이 불승인 된 경우 불승인 관련 행정사건 - 요양급여 신청 등이 승인된 경우 민 ·  가사 ·  행정 ·  헌법소원 사건",
+        "verification_status": "verified",
+        "eligibility": "저소득 재해근로자(경남소재 사업장에 소속된 저소득 산업재해 피해 근로자 및 위 근로자가 업무상 재해로 사망한 경우 그 유족)  - 건강보험료 본인부담금 합산액이 기준중위소득 125% 이하인 자",
+        "key": "svc:B27000100016",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.8
+  }
+}

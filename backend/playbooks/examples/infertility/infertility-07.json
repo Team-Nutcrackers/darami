@@ -1,0 +1,276 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "infertility-07",
+    "event_id": "infertility",
+    "event_title": "난임",
+    "persona_summary": "37세 여성 · 전남 순천시 · 간호조무사 · 원거리 병원 통원",
+    "persona": {
+      "facts": {
+        "age": 37,
+        "gender": "여성",
+        "residence": "전남 순천시",
+        "situation": "간호조무사 · 원거리 병원 통원"
+      }
+    },
+    "query": "순천에 사는데 다니는 난임 병원이 광주에 있어서 왕복이 너무 힘들어요. 시술비 말고 교통비 같은 것도 지원해 주는 데가 있나요? 남편 소득이 꽤 높은 편인데 상관있을까요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "infertility"
+      ],
+      "reason": "난임 원거리 통원 교통비, 소득 기준"
+    },
+    "plan": {
+      "title": "난임 원거리 통원 지원",
+      "emoji": "🚗",
+      "intro": "시술비 지원은 소득과 무관해요. 교통비 지원은 지자체마다 달라 순천시·전남 기준을 확인하세요.",
+      "law": [
+        {
+          "name": "난임 극복 지원사업",
+          "priority": "must",
+          "condition": "소득 기준 폐지 → 남편 소득과 무관하게 시술비 지원."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "난임부부 시술비 지원",
+          "priority": "must",
+          "condition": "소득 무관, 횟수 한도 내."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "난임"
+        ],
+        "local_keywords": [
+          "난임",
+          "교통비"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R2",
+          "name": "난임시술비 추가지원",
+          "priority": "must",
+          "condition": "순천시 거주 난임부부 시술비 추가 지원.",
+          "service_id": "WLF00004226"
+        },
+        {
+          "cid": "R4",
+          "name": "난임부부 진단 검사비 지원",
+          "priority": "nice",
+          "condition": "순천시 난임 진단검사비.",
+          "service_id": "WLF00004735"
+        },
+        {
+          "cid": "R1",
+          "name": "한방난임치료비 지원",
+          "priority": "nice",
+          "condition": "순천시 한방 난임치료비.",
+          "service_id": "WLF00005231"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "infertility",
+    "events": [
+      "infertility"
+    ],
+    "title": "난임 원거리 통원 지원",
+    "emoji": "🚗",
+    "intro": "시술비 지원은 소득과 무관해요. 교통비 지원은 지자체마다 달라 순천시·전남 기준을 확인하세요.",
+    "region": {
+      "sido": "전라남도",
+      "sgg": "순천시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-infertility-l1",
+        "name": "난임 극복 지원사업",
+        "priority": "must",
+        "condition": "소득 기준 폐지 → 남편 소득과 무관하게 시술비 지원.",
+        "deadline": "시술 시작 전 신청해 지원결정통지서 발급(유효기간 발급일부터 3개월), 회차마다 재신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부(지자체 이양사업) · 여성 배우자 주소지 관할 보건소",
+        "online": true,
+        "documents": [
+          "난임부부 시술비 지원 신청서(체외수정 또는 인공수정)",
+          "난임진단서 1부(정부지정 난임시술 의료기관 발급, 1차 제출분 계속 인정; 사실혼은 생략)",
+          "부부 모두의 건강보험증 사본 또는 건강보험자격확인서 각 1부",
+          "주민등록등본(부부·직계비속 별거 시 가족관계증명서; 행정정보 공동이용 동의 시 생략)",
+          "사실혼 부부: 당사자 시술동의서, 1년 이상 사실혼 증명 공문서 또는 사실혼 확인보증서·보증인 신분증 사본",
+          "외국인 배우자: 외국인등록사실증명 또는 국내거소신고사실증명(1년 이상 체류)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14600000394",
+        "source": {
+          "name": "정부24 — 난임부부 시술비 지원 신청 · 모자보건법 제11조(난임ㆍ유산ㆍ사산 극복 지원사업)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "난임 진단을 받은 부부(법적 혼인 또는 1년 이상 사실혼)는 여성 배우자 주소지 보건소나 정부24·e보건소에 난임진단서·건강보험 서류를 내고 시술비 지원을 신청한다. 보건소가 지원결정통지서를 발급하면 3개월 안에 시술을 시작해야 하며, 체외수정(신선·동결)과 인공수정 횟수가 별도로 관리되고 회차마다 통지서를 다시 받아야 한다. 2022년부터 지자체 이양사업이라 지원금액·횟수·추가지원은 지역별로 차이가 있다.",
+        "verification_status": "verified",
+        "key": "law:난임 극복 지원사업",
+        "unlocks": 1,
+        "order": 1,
+        "where": "여성 배우자 주소지 보건소 방문, 또는 정부24·e보건소 공공보건포털 온라인(대리 신청은 방문만)",
+        "fee": "무료",
+        "steps": [
+          "정부지정 난임시술 의료기관에서 난임진단서 발급",
+          "보건소 방문 또는 정부24·e보건소에서 신청서·진단서·건강보험 서류 제출",
+          "보건소 자격 확인 후 지원결정통지서 발급(3개월 유효)",
+          "시술 최초 진료일에 통지서를 의료기관에 제출하고 시술(의료기관이 지원금 청구)",
+          "다음 회차 시술 전 보건소에서 결정통지서 재발급(회차별 자격 재확인)"
+        ],
+        "pitfalls": [
+          "통지서 발급 전에 시작한 시술은 지원되지 않는다(시술 전 신청 필수)",
+          "결정통지서 유효기간 3개월을 넘기면 재발급 필요",
+          "회차마다 재신청·자격 재확인이 필요하고 체외수정·인공수정 횟수는 별도 산정",
+          "지역별 지원 기준이 달라 전입 시 새 보건소 기준을 확인해야 한다"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14600000394",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-SME000000100",
+        "name": "난임부부 시술비 지원",
+        "priority": "must",
+        "condition": "소득 무관, 횟수 한도 내.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "① 난임 진단서 1부 <서식 2, 3>",
+          "* 난임 진단서는 1차 신청 시 제출한 내용을 최종 지원 시까지 갈음함",
+          "* 사실혼 부부의 경우, 난임진단서 없이 신청 가능",
+          "② 부부 모두의 건강보험증 사본 또는 건강보험자격확인서 1부씩",
+          "③ 주민등록등본 1부(단, 부부 또는 직계비속이 별도의 주민등록지에 거주하고 있는 경우 가족관계증명서 1부 제출)",
+          "※ ②, ③의 경우 ｢전자정부법｣에 따라 행정정보의 공동이용을 통한 확인에 동의한 경우는 제출 생략",
+          "④ 사실상 혼인관계인 경우",
+          "‑ 당사자 시술동의서 <서식 10>",
+          "‑ 주민등록등본* 및 가족관계등록부 당사자별 각 1부",
+          "* ｢전자정부법｣에 따라 행정정보의 공동이용을 통한 확인에 동의한 경우는 제출 생략",
+          "‑ 1년 이상 사실상 혼인관계를 증명할 수 있는 공문서 1부(해당 공문서가 없는 경우 사실혼 확인보증서<서식 11> 및 보증인 신분증 사본 각 1부)",
+          "* 주민등록등본상 동일 거주지에 1년 이상 동거한 기록이 있는 경우 제출 생략 가능",
+          "* 행정심판위원회, 보훈심사위원회, 범죄피해구조심의회, 의사상자심의위원회, 법원 판결문 등 정부기관에서 사실혼으로 인정한 공문서로서 반드시 1년 이상의 사실상 혼인관계 기간을 확인할 수 있어야 함",
+          "* 공문서 제출을 우선으로 받되, 해당 공문서가 없는 경우에 한해 사실혼 확인보증서를 징구(이 경우 보증인의 신분증 사본을 추가 징구)",
+          "* 사실혼 확인보증인은 반드시 내국인 성년자이어야 함(외국인 및 미성년자 불가능)",
+          "* 해외에서의 혼인신고 증빙서류는 인정하지 않음",
+          "‑ 1년 이상 체류를 증빙할 수 있는 외국인등록사실증명, 국내거소신고사실증명 중 1부(당사자가 외국인인 경우에 한함)",
+          "* 상기 서류 외에 1년 이상 체류를 추가 증빙하려는 경우 출입국기록을 추가 제출할 수 있음"
+        ],
+        "link": "https://www.e-health.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "자궁내 정자주입[인공수정] 및 체외수정(신선배아, 동결배아) 시술과 같은 국민건강보험 급여가 적용된 보조생식술을 받는 난임부부에게 본인부담 및 비급여 3종(배아동결비, 유산방지제, 착상보조제) 비용 일부를 보충적으로 지원하여 경제적 부담을 경감",
+        "verification_status": "verified",
+        "eligibility": "지원신청 자격  - 난임시술을 요하는 의사의 '난임진단서' 제출자  - 법적 혼인상태에 있거나, 신청일 기준 최근 1년 이상 사실상 혼인관계를 유지하였다고 관할 보건소로부터 확인된 난임부부  - 부부 중 최소한 한 명은 주민등록이 되어 있는 대한민국 ",
+        "key": "svc:SME000000100",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "R2",
+        "id": "local-WLF00004226",
+        "name": "난임시술비 추가지원",
+        "priority": "must",
+        "condition": "순천시 거주 난임부부 시술비 추가 지원.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 보건복지본부 복지정책관 건강위생과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004226&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 보건복지본부 복지정책관 건강위생과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "고액의 난임시술비 부담 경감",
+        "verification_status": "verified",
+        "key": "svc:WLF00004226",
+        "eligibility": "광주광역시에 거주하는 난임여성 중 난임시술 건강보험 적용 횟수* 종료자 광주광역시에 거주하는 난임여성 중 난임시술 건강보험 적용 횟수* 종료자 * 체외수정(신선·동결배아 20회), 인공수정 5회- 신청일 기준 1년 이상 광주광역시에 주민등록을 두고 실",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-infertility-l1"
+        ]
+      },
+      {
+        "ref": "R4",
+        "id": "local-WLF00004735",
+        "name": "난임부부 진단 검사비 지원",
+        "priority": "nice",
+        "condition": "순천시 난임 진단검사비.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 순천시 시민복지국 보육아동과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004735&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 순천시 시민복지국 보육아동과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "난임으로 고민하고 있는 가정의 경제적 부담감소 및 저출산 극복에 적극 대응",
+        "verification_status": "verified",
+        "key": "svc:WLF00004735",
+        "eligibility": "관내 주민등록을 두고 거주중인 난임 진단 부부 관내 주민등록을 두고 거주중인 난임 진단 부부(소득 및 연령기준 없음/사실혼 포함)-지원제외: 신혼예비부부 건강검진 및 기타 지자체 유사사업으로 지원받은 경우",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00005231",
+        "name": "한방난임치료비 지원",
+        "priority": "nice",
+        "condition": "순천시 한방 난임치료비.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 보건복지본부 복지정책관 건강위생과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005231&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 보건복지본부 복지정책관 건강위생과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산율 저하의 원인 중 하나인 난임에 대한 한방치료비를 지원하여 행복한 임신과 건강한 출산을 통한 출산율 증가에 기여",
+        "verification_status": "verified",
+        "key": "svc:WLF00005231",
+        "eligibility": "광주광역시 6개월 이상 거주한 난임부부 80명 관련 서류를 검토하여 한방난임위원회 심의를 거쳐 선정",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 5,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}

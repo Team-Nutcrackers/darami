@@ -1,0 +1,283 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "school-entry-08",
+    "event_id": "school-entry",
+    "event_title": "자녀 입학",
+    "persona_summary": "37세 남성 · 서울 관악구 · 한부모 · 어린이집 입소 순위",
+    "persona": {
+      "facts": {
+        "age": 37,
+        "gender": "남성",
+        "residence": "서울 관악구",
+        "situation": "한부모 · 어린이집 입소 순위"
+      }
+    },
+    "query": "혼자 아이를 키우고 있는데 어린이집 입소가 너무 어렵네요. 한부모 가정은 입소 순위에서 우선이 된다고 들었는데 어떻게 증명해야 하나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "school-entry"
+      ],
+      "reason": "한부모 어린이집 입소 우선순위"
+    },
+    "plan": {
+      "title": "한부모 어린이집 입소 우선순위",
+      "emoji": "🎒",
+      "intro": "한부모가족은 입소 우선순위 1순위예요. 아이사랑 입소대기 신청 때 한부모가족 증명서(주민센터 발급)를 증빙하세요.",
+      "law": [
+        {
+          "name": "무상보육",
+          "priority": "must",
+          "condition": "입소 후 보육료 전액 지원."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "영유아보육료 지원",
+          "priority": "must",
+          "condition": "입소 확정 후 보육료 신청."
+        },
+        {
+          "name": "아이돌봄 서비스",
+          "priority": "nice",
+          "condition": "한부모 가정 우선 돌봄."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "한부모",
+          "어린이집"
+        ],
+        "local_keywords": [
+          "한부모",
+          "어린이집"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "어린이집 입소 우선순위(한부모)",
+          "law_query": "영유아보육법",
+          "keywords": [
+            "우선 제공"
+          ],
+          "priority": "must",
+          "condition": "한부모가족 자녀는 입소 우선 제공 대상 — 한부모가족 증명서로 증빙."
+        }
+      ]
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R3",
+          "name": "일반아동 보육료 차액지원",
+          "priority": "nice",
+          "condition": "서울 민간·가정어린이집 3~5세 보육료 차액.",
+          "service_id": "WLF00002815"
+        }
+      ],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "school-entry",
+    "events": [
+      "school-entry"
+    ],
+    "title": "한부모 어린이집 입소 우선순위",
+    "emoji": "🎒",
+    "intro": "한부모가족은 입소 우선순위 1순위예요. 아이사랑 입소대기 신청 때 한부모가족 증명서(주민센터 발급)를 증빙하세요.",
+    "region": {
+      "sido": "서울특별시",
+      "sgg": "관악구"
+    },
+    "procedures": [
+      {
+        "ref": "L2",
+        "id": "law-school-entry-l2",
+        "name": "무상보육",
+        "priority": "must",
+        "condition": "입소 후 보육료 전액 지원.",
+        "deadline": "어린이집 입소 전 또는 입소와 동시에 신청(신청일부터 지원, 소급 불가); 처리 14일 이내(특별한 사유 시 30일)",
+        "deadlineDays": 9999,
+        "agency": "교육부(영유아재정과) · 아동 주민등록지 읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "사회보장급여(보육료·양육수당) 지원신청서(주민센터 비치)",
+          "신청인 신분증",
+          "가족관계증명서(온라인 신청 시 공무원 확인 대체 가능)",
+          "국민행복카드(보육서비스 이용권) 발급신청서(카드 미보유 시)",
+          "연장보육 신청 사유서(0~2세반 연장보육 신청 시)",
+          "부득이한 사유로 신청이 늦어진 경우 그 사유 증빙서류"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00003250",
+        "source": {
+          "name": "복지로 — 영유아보육료 지원(중앙부처 복지서비스) · 영유아보육법 제34조(무상보육)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "어린이집을 이용하는 0~5세 아동(대한민국 국적·주민등록번호 보유)은 소득과 관계없이 보육료를 전액 지원받는다. 복지로 또는 아동 주민등록지 주민센터에 신청하고 국민행복카드로 어린이집에 결제하는 방식이며, 신청일부터 지원되므로 입소 전에 신청해야 자부담이 생기지 않는다.",
+        "verification_status": "verified",
+        "key": "law:무상보육",
+        "unlocks": 0,
+        "order": 1,
+        "where": "복지로(온라인, 부모만) 또는 아동 주민등록지 읍·면·동 주민센터 방문",
+        "fee": "무료",
+        "steps": [
+          "어린이집 입소가 정해지면 입소일 전에 복지로 온라인(부모) 또는 아동 주민등록지 주민센터에 보육료 지원을 신청한다.",
+          "국민행복카드(아이행복카드)가 없으면 함께 발급 신청한다(기존 카드 보유 시 그대로 사용).",
+          "접수일부터 14일 이내에 지원 대상 여부를 통보받는다.",
+          "카드를 어린이집에 제시(결제)하는 방식으로 매월 보육료가 지원된다."
+        ],
+        "pitfalls": [
+          "입소일보다 신청일이 늦으면 그 사이 보육료는 보호자 자부담이 된다.",
+          "유치원 이용은 유아학비, 가정양육은 양육수당·부모급여를 선택해야 하며 보육료와 부모급여(현금)·종일제 아이돌봄은 중복 불가.",
+          "신청인과 아동 주소지가 다르거나 가족관계 확인이 필요한 경우 온라인 신청이 안 되고 주민센터 방문이 필요하다.",
+          "3월 입소 아동은 전년도 1~2월 사전신청 기간을 활용하면 편하다.",
+          "부정수급 시 처벌 및 전액 환수."
+        ],
+        "sourceUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00003250",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-134200005036",
+        "name": "영유아보육료 지원",
+        "priority": "must",
+        "condition": "입소 확정 후 보육료 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "ㅇ 신청인 제출서류",
+          "사회복지서비스 및 급여제공(변경) 신청서",
+          "사회복지서비스 이용권(바우처) 제공(변경) 신청서",
+          "아이사랑 카드 발급 신청 및 개인신용정보의 조회 · 제공· 이용 동의서"
+        ],
+        "link": "https://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "어린이집 이용 영유아에 대한 보육료 지원을 통해 부모의 자녀양육 부담 경감 및 원활한 경제활동 도모",
+        "verification_status": "verified",
+        "eligibility": "0세에서 5세 아동의 연령기준(26년 1월~'26년 12월까지 적용)  ㅇ 0세 : '25. 1. 1 이후 출생 아동 ㅇ 1세 : '24. 1. 1 ~ '24. 12. 31까지의 출생아동 ㅇ 2세 : '23. 1. 1 ~ '23. 12. 31까지의 출",
+        "key": "svc:134200005036",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "어린이집 입소 우선순위(한부모)",
+        "priority": "must",
+        "condition": "한부모가족 자녀는 입소 우선 제공 대상 — 한부모가족 증명서로 증빙.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "교육부(보육) · 아이사랑포털(한국사회보장정보원) / 해당 어린이집",
+        "online": true,
+        "documents": [
+          "가족관계증명서(필수)",
+          "한부모가족증명서(한부모가족지원법 지원대상자로 1순위 적용 시, 어린이집에 필요 여부 확인)"
+        ],
+        "link": "https://www.childcare.go.kr/?menuno=174",
+        "source": {
+          "name": "아이사랑포털 - 등록대기 > 우선순위 관련 규정 · 영유아보육법 제28조(보육의 우선 제공)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "한부모가족지원법상 지원대상자(및 조손가정)의 자녀는 어린이집 입소 1순위, 그 밖의 한부모가족 자녀는 2순위다(영유아보육법 제28조, 시행규칙 제29조, 2024.2.9. 시행). 아이사랑포털에서 등록대기를 신청하고 가족관계증명서를 어린이집에 제출하면 된다.",
+        "verification_status": "verified",
+        "key": "x:어린이집 입소 우선순위(한부모)",
+        "unlocks": 0,
+        "order": 3,
+        "where": "아이사랑포털(childcare.go.kr) 등록대기 신청(온라인) → 어린이집이 우선순위로 대상자 확정 → 증빙서류는 어린이집 제출 또는 아이사랑포털 '등록대기증빙' 업로드",
+        "fee": "무료",
+        "steps": [
+          "아이사랑포털에 로그인해 아동을 등록하고 어린이집 등록대기를 신청한다",
+          "어린이집이 우선순위에 따라 대상자를 확정하면 가족관계증명서 등 증빙을 어린이집에 내거나 포털에 업로드한다",
+          "원장이 서류를 확인한 뒤 입소 처리한다"
+        ],
+        "pitfalls": [
+          "한부모가족지원법 지원대상자(소득 기준 충족)여야 1순위이고, 그 외 한부모는 2순위라 순위가 다르다",
+          "가족관계증명서는 필수 제출 서류다",
+          "입소 확정 후 다른 어린이집 대기는 7일 내 연장하지 않으면 자동 취소된다"
+        ],
+        "sourceUrl": "https://www.childcare.go.kr/?menuno=174",
+        "curated": true
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-423000000362",
+        "name": "아이돌봄 서비스",
+        "priority": "nice",
+        "condition": "한부모 가정 우선 돌봄.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [
+          "○ 직장건강보험 가입자 : 별도 증빙서류 불필요",
+          "○ 직장건강보험 미가입자 : 취업 증빙 및 소득증빙 자료"
+        ],
+        "link": "https://www.idolbom.go.kr/",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "맞벌이가구 등 양육 공백이 발생한 가정의 12세 이하 아동에게 찾아가는 돌봄 서비스를 제공하여 부모의 양육부담 경감 및 시설보육의 사각지대 보완",
+        "verification_status": "verified",
+        "eligibility": "아동 연령 기준, 부모의 취업 등 양육 공백, 자녀양육 정부지원 중복금지 기준, 가구 소득기준을 모두 충족한 경우 정부 지원   아동 연령 기준  - 영아종일제 : 생후 3개월 ~ 36개월 이하  - 시간제(종합형 포함) : 생후 3개월 이상 ~ 12",
+        "key": "svc:423000000362",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "R3",
+        "id": "local-WLF00002815",
+        "name": "일반아동 보육료 차액지원",
+        "priority": "nice",
+        "condition": "서울 민간·가정어린이집 3~5세 보육료 차액.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "서울특별시 여성가족정책실 영유아담당관",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00002815&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 서울특별시 여성가족정책실 영유아담당관",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "정부미지원시설인 민간·가정어린이집을 이용하고 있는 3~5세 아동에 대한 보육료 차액 지원을 통해 보호자의 육아 부담 해소와 건전한 양육 분위기를 조성",
+        "verification_status": "verified",
+        "key": "svc:WLF00002815",
+        "eligibility": "정부미지원시설인 민간·가정어린이집을 이용하고 있는 3~5세 아동(서울시 소재 어린이집을 이용하는 경우) 서울시 소재 정부 미지원 어린이집을 이용하는  만3~5세 유아",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 3,
+    "unresolved": [],
+    "execute_seconds": 15.6
+  }
+}

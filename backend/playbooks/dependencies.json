@@ -1,0 +1,3809 @@
+{
+ "_note": "할 일 의존관계 카탈로그. sources/build_deps.py 가 생성(손으로 고치지 말 것). after 가 before 뒤에 와야 함. hard=선행이 없으면 자동 추가(any-of 는 후보가 있을 때만 연결).",
+ "edges": [
+  {
+   "after": "common:health-insurance-change",
+   "after_name": "health-insurance-change",
+   "before": [
+    "common:marriage-report",
+    "common:birth-report",
+    "common:transfer-report",
+    "common:death-report"
+   ],
+   "before_names": [
+    "marriage-report",
+    "birth-report",
+    "transfer-report",
+    "death-report"
+   ],
+   "hard": false,
+   "why": "신고가 끝난 뒤 건강보험 자격·피부양자 변경"
+  },
+  {
+   "after": "law:외국인등록",
+   "after_name": "외국인등록",
+   "before": "common:marriage-report",
+   "before_names": "marriage-report",
+   "hard": false,
+   "why": "결혼이민(F-6)이면 혼인신고가 선행(일반 외국인은 무관)"
+  },
+  {
+   "after": "law:간이귀화",
+   "after_name": "간이귀화",
+   "before": "law:외국인등록",
+   "before_names": "외국인등록",
+   "hard": true,
+   "why": "국내 체류(외국인등록) 기간이 귀화 요건"
+  },
+  {
+   "after": "law:이혼신고",
+   "after_name": "이혼신고",
+   "before": "law:협의이혼 의사확인",
+   "before_names": "협의이혼 의사확인",
+   "hard": false,
+   "why": "협의이혼이면 확인서 등본이 필수 첨부서류이고 교부일부터 3개월 내 미신고 시 효력 상실(재판상 이혼은 판결로 — 그래서 soft)"
+  },
+  {
+   "after": "law:양육비 이행 청구",
+   "after_name": "양육비 이행 청구",
+   "before": "law:이혼신고",
+   "before_names": "이혼신고",
+   "hard": false,
+   "why": "이혼 부모면 이혼 확정 후 청구(미혼모·부, 조손가족도 대상이라 필수 선행은 아님)"
+  },
+  {
+   "after": "law:양육비 선지급 신청",
+   "after_name": "양육비 선지급 신청",
+   "before": "svc:138300000066",
+   "before_names": "양육비 이행 지원 서비스",
+   "hard": false,
+   "why": "이행관리원 신청 후 미이행 시 선지급(직접 소송·강제집행을 마친 경우도 신청 가능)"
+  },
+  {
+   "after": "svc:138300000065",
+   "after_name": "양육비 선지급 지원",
+   "before": "svc:138300000066",
+   "before_names": "양육비 이행 지원 서비스",
+   "hard": false,
+   "why": "이행관리원 신청 후 미이행 시 선지급(직접 소송·강제집행을 마친 경우도 신청 가능)"
+  },
+  {
+   "after": "law:분할연금",
+   "after_name": "분할연금",
+   "before": "law:이혼신고",
+   "before_names": "이혼신고",
+   "hard": true,
+   "why": "이혼 성립 후 청구"
+  },
+  {
+   "after": "svc:SSI000000020",
+   "after_name": "한부모가족 아동양육비 지원",
+   "before": "law:이혼신고",
+   "before_names": "이혼신고",
+   "hard": true,
+   "why": "한부모가족 증명(이혼 확정) 필요"
+  },
+  {
+   "after": "svc:138300000017",
+   "after_name": "한부모가족 임대주택 특별공급",
+   "before": "law:이혼신고",
+   "before_names": "이혼신고",
+   "hard": true,
+   "why": "한부모가족 증명 필요"
+  },
+  {
+   "after": "svc:642000000035",
+   "after_name": "한부모가족자녀 교육비 지원",
+   "before": "law:이혼신고",
+   "before_names": "이혼신고",
+   "hard": true,
+   "why": "한부모가족 증명 필요"
+  },
+  {
+   "after": "svc:149200005026",
+   "after_name": "난임치료휴가 급여",
+   "before": "law:난임치료휴가",
+   "before_names": "난임치료휴가",
+   "hard": true,
+   "why": "휴가 사용 후 급여 신청"
+  },
+  {
+   "after": "svc:SD0000016094",
+   "after_name": "임산부 엽산제, 철분제 지원",
+   "before": "law:보건소 임산부 등록·건강관리",
+   "before_names": "보건소 임산부 등록·건강관리",
+   "hard": true,
+   "why": "보건소 임산부 등록 후 지급"
+  },
+  {
+   "after": "svc:135200000005",
+   "after_name": "임산부 및 영유아 영양플러스",
+   "before": "law:보건소 임산부 등록·건강관리",
+   "before_names": "보건소 임산부 등록·건강관리",
+   "hard": true,
+   "why": "보건소 등록 후 신청"
+  },
+  {
+   "after": "svc:WII000001460",
+   "after_name": "출산전후(유산ㆍ사산)휴가 급여",
+   "before": [
+    "law:임산부 보호(출산전후휴가·근로시간 단축)",
+    "law:유산·사산휴가"
+   ],
+   "before_names": [
+    "임산부 보호(출산전후휴가·근로시간 단축)",
+    "유산·사산휴가"
+   ],
+   "hard": false,
+   "why": "휴가 사용 후 급여 신청"
+  },
+  {
+   "after": "law:유산·사산휴가 급여",
+   "after_name": "유산·사산휴가 급여",
+   "before": "law:유산·사산휴가",
+   "before_names": "유산·사산휴가",
+   "hard": true,
+   "why": "휴가 사용 후 급여 신청"
+  },
+  {
+   "after": "svc:135200005015",
+   "after_name": "첫만남이용권 지원",
+   "before": [
+    "common:birth-report",
+    "law:입양신고"
+   ],
+   "before_names": [
+    "birth-report",
+    "입양신고"
+   ],
+   "hard": false,
+   "why": "출생신고(입양이면 입양신고) 후 신청"
+  },
+  {
+   "after": "svc:135200000120",
+   "after_name": "아동수당",
+   "before": [
+    "common:birth-report",
+    "law:입양신고"
+   ],
+   "before_names": [
+    "birth-report",
+    "입양신고"
+   ],
+   "hard": false,
+   "why": "출생신고(입양이면 입양신고) 후 신청"
+  },
+  {
+   "after": "svc:WLF00004657",
+   "after_name": "부모급여 지원",
+   "before": [
+    "common:birth-report",
+    "law:입양신고"
+   ],
+   "before_names": [
+    "birth-report",
+    "입양신고"
+   ],
+   "hard": false,
+   "why": "출생신고(입양이면 입양신고) 후 신청"
+  },
+  {
+   "after": "svc:134200005012",
+   "after_name": "가정양육수당 지원",
+   "before": [
+    "common:birth-report",
+    "law:입양신고"
+   ],
+   "before_names": [
+    "birth-report",
+    "입양신고"
+   ],
+   "hard": false,
+   "why": "출생신고(입양이면 입양신고) 후 신청"
+  },
+  {
+   "after": "svc:174000000029",
+   "after_name": "출산 관련 서비스 통합처리 신청(행복출산)",
+   "before": "common:birth-report",
+   "before_names": "birth-report",
+   "hard": true,
+   "why": "출생신고와 동시에(또는 이후) 신청"
+  },
+  {
+   "after": "svc:WII000000260",
+   "after_name": "국민연금출산크레딧",
+   "before": "common:birth-report",
+   "before_names": "birth-report",
+   "hard": true,
+   "why": "출생 사실 확인 후"
+  },
+  {
+   "after": "svc:999000000004",
+   "after_name": "배우자 출산휴가 급여",
+   "before": "law:배우자 출산휴가",
+   "before_names": "배우자 출산휴가",
+   "hard": true,
+   "why": "휴가 사용 후 급여 신청"
+  },
+  {
+   "after": "law:입양신고",
+   "after_name": "입양신고",
+   "before": "law:가정법원 입양허가",
+   "before_names": "가정법원 입양허가",
+   "hard": true,
+   "why": "법원 허가 후 신고"
+  },
+  {
+   "after": "svc:135200005011",
+   "after_name": "입양축하금",
+   "before": "law:입양신고",
+   "before_names": "입양신고",
+   "hard": true,
+   "why": "입양 확정 후"
+  },
+  {
+   "after": "svc:SCY000000060",
+   "after_name": "입양아동 양육수당 지원",
+   "before": "law:입양신고",
+   "before_names": "입양신고",
+   "hard": true,
+   "why": "입양 확정 후"
+  },
+  {
+   "after": "svc:SCY000000040",
+   "after_name": "입양비용지원",
+   "before": "law:입양신고",
+   "before_names": "입양신고",
+   "hard": true,
+   "why": "입양 확정 후"
+  },
+  {
+   "after": "svc:SCY000000050",
+   "after_name": "장애입양아동 양육보조금",
+   "before": "law:입양신고",
+   "before_names": "입양신고",
+   "hard": true,
+   "why": "입양 확정 후"
+  },
+  {
+   "after": "svc:SCY000000190",
+   "after_name": "장애입양아동 의료비 지원",
+   "before": "law:입양신고",
+   "before_names": "입양신고",
+   "hard": true,
+   "why": "입양 확정 후"
+  },
+  {
+   "after": "law:육아휴직 급여",
+   "after_name": "육아휴직 급여",
+   "before": "law:육아휴직",
+   "before_names": "육아휴직",
+   "hard": true,
+   "why": "휴직 시작 1개월 후부터 급여 신청"
+  },
+  {
+   "after": "svc:999000000008",
+   "after_name": "육아휴직급여",
+   "before": "law:육아휴직",
+   "before_names": "육아휴직",
+   "hard": true,
+   "why": "휴직 시작 1개월 후부터 급여 신청"
+  },
+  {
+   "after": "svc:999000000007",
+   "after_name": "육아기 근로시간 단축 급여",
+   "before": "law:육아기 근로시간 단축",
+   "before_names": "육아기 근로시간 단축",
+   "hard": true,
+   "why": "단축 사용 후 급여 신청"
+  },
+  {
+   "after": "svc:174000000013",
+   "after_name": "사망자 및 피후견인 재산조회 통합처리 신청(안심상속서비스)",
+   "before": [
+    "common:death-report",
+    "law:성년후견개시 심판"
+   ],
+   "before_names": [
+    "death-report",
+    "성년후견개시 심판"
+   ],
+   "hard": false,
+   "why": "사망신고(또는 후견 개시) 후 재산조회"
+  },
+  {
+   "after": "law:상속 승인·포기 기간",
+   "after_name": "상속 승인·포기 기간",
+   "before": "common:death-report",
+   "before_names": "death-report",
+   "hard": true,
+   "why": "심판청구 서류(사망 기재 기본증명서 등)에 사망신고가 필요 — 3개월은 상속개시를 안 날부터 진행(민법 1019조)되므로 신고를 늦춰도 기간은 줄지 않는다"
+  },
+  {
+   "after": "law:한정승인",
+   "after_name": "한정승인",
+   "before": "svc:174000000013",
+   "before_names": "사망자 및 피후견인 재산조회 통합처리 신청(안심상속서비스)",
+   "hard": false,
+   "why": "재산·채무를 조회한 뒤 결정(첨부서류는 재산목록·인감증명서뿐이라 조회 없이도 접수 가능)"
+  },
+  {
+   "after": "law:상속포기",
+   "after_name": "상속포기",
+   "before": "svc:174000000013",
+   "before_names": "사망자 및 피후견인 재산조회 통합처리 신청(안심상속서비스)",
+   "hard": false,
+   "why": "재산·채무를 조회한 뒤 결정(조회 결과는 첨부서류가 아니라 권고 순서)"
+  },
+  {
+   "after": "law:상속세 신고",
+   "after_name": "상속세 신고",
+   "before": "common:death-report",
+   "before_names": "death-report",
+   "hard": true,
+   "why": "사망신고 후 상속 개시"
+  },
+  {
+   "after": "law:유족연금",
+   "after_name": "유족연금",
+   "before": "common:death-report",
+   "before_names": "death-report",
+   "hard": true,
+   "why": "사망 확인 후 청구"
+  },
+  {
+   "after": "svc:SBA000000050",
+   "after_name": "장제급여",
+   "before": "common:death-report",
+   "before_names": "death-report",
+   "hard": true,
+   "why": "사망 확인 후 청구"
+  },
+  {
+   "after": "svc:999000000040",
+   "after_name": "긴급복지 장제비 지원",
+   "before": "common:death-report",
+   "before_names": "death-report",
+   "hard": true,
+   "why": "사망 확인 후 신청"
+  },
+  {
+   "after": "svc:183000000016",
+   "after_name": "국가유공자 등 사망일시금",
+   "before": "common:death-report",
+   "before_names": "death-report",
+   "hard": true,
+   "why": "사망 확인 후 청구"
+  },
+  {
+   "after": "law:맹견 책임보험",
+   "after_name": "맹견 책임보험",
+   "before": "law:동물등록·변경신고",
+   "before_names": "동물등록·변경신고",
+   "hard": false,
+   "why": "등록된 동물 기준으로 가입"
+  },
+  {
+   "after": "law:구직촉진수당",
+   "after_name": "구직촉진수당",
+   "before": "svc:149200005007",
+   "before_names": "국민취업지원제도",
+   "hard": true,
+   "why": "국민취업지원제도 참여자에게 지급"
+  },
+  {
+   "after": "svc:149200000063",
+   "after_name": "조기재취업수당",
+   "before": [
+    "svc:SD0000015536",
+    "law:실업급여 수급 중 취업 신고"
+   ],
+   "before_names": [
+    "구직급여",
+    "실업급여 수급 중 취업 신고"
+   ],
+   "hard": false,
+   "why": "구직급여 수급 중 재취업 후 신청"
+  },
+  {
+   "after": "svc:SD0000015536",
+   "after_name": "구직급여",
+   "before": "law:실업 신고",
+   "before_names": "실업 신고",
+   "hard": true,
+   "why": "고용센터 실업 신고 후 수급자격 인정"
+  },
+  {
+   "after": "svc:B55201500004",
+   "after_name": "실업크레딧 지원",
+   "before": "svc:SD0000015536",
+   "before_names": "구직급여",
+   "hard": true,
+   "why": "구직급여 수급자 대상"
+  },
+  {
+   "after": "law:대지급금",
+   "after_name": "대지급금",
+   "before": "law:임금체불 진정·신고(고용노동청)",
+   "before_names": "임금체불 진정·신고(고용노동청)",
+   "hard": true,
+   "why": "체불 확인(진정) 후 대지급금 청구"
+  },
+  {
+   "after": "svc:PTR000051327",
+   "after_name": "체불근로자 대지급금 지급",
+   "before": "law:임금체불 진정·신고(고용노동청)",
+   "before_names": "임금체불 진정·신고(고용노동청)",
+   "hard": true,
+   "why": "체불 확인 후"
+  },
+  {
+   "after": "svc:B49000100206",
+   "after_name": "간이 대지급금 지급",
+   "before": "law:임금체불 진정·신고(고용노동청)",
+   "before_names": "임금체불 진정·신고(고용노동청)",
+   "hard": true,
+   "why": "체불임금등·사업주 확인서 필요"
+  },
+  {
+   "after": "svc:B49000100212",
+   "after_name": "도산 대지급금 지급",
+   "before": "law:임금체불 진정·신고(고용노동청)",
+   "before_names": "임금체불 진정·신고(고용노동청)",
+   "hard": true,
+   "why": "체불 확인 후"
+  },
+  {
+   "after": "svc:B49000100203",
+   "after_name": "임금등 체불 근로자 생계비 융자",
+   "before": "law:임금체불 진정·신고(고용노동청)",
+   "before_names": "임금체불 진정·신고(고용노동청)",
+   "hard": true,
+   "why": "체불 확인서 필요"
+  },
+  {
+   "after": "svc:B27000100028",
+   "after_name": "무료 소송대리 서비스(체불임금피해근로자)",
+   "before": "law:임금체불 진정·신고(고용노동청)",
+   "before_names": "임금체불 진정·신고(고용노동청)",
+   "hard": true,
+   "why": "체불임금등·사업주 확인서 필요"
+  },
+  {
+   "after": "svc:PTR000051328",
+   "after_name": "체불근로자 무료법률구조지원",
+   "before": "law:임금체불 진정·신고(고용노동청)",
+   "before_names": "임금체불 진정·신고(고용노동청)",
+   "hard": false,
+   "why": "진정 결과를 바탕으로 법률구조"
+  },
+  {
+   "after": "law:휴업급여",
+   "after_name": "휴업급여",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "산재 승인 후"
+  },
+  {
+   "after": "law:장해급여",
+   "after_name": "장해급여",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "요양 종결 후"
+  },
+  {
+   "after": "law:직업재활급여",
+   "after_name": "직업재활급여",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "산재 승인 후"
+  },
+  {
+   "after": "svc:B49000100043",
+   "after_name": "요양급여(보조기)-산재보험급여",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "산재 승인 후"
+  },
+  {
+   "after": "svc:149200000018",
+   "after_name": "산재근로자 생활안정자금 융자",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "산재 승인 후"
+  },
+  {
+   "after": "svc:149200000016",
+   "after_name": "산재근로자 직업훈련",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "산재 승인 후"
+  },
+  {
+   "after": "svc:149200000021",
+   "after_name": "산재근로자 직장 복귀 지원",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "산재 승인 후"
+  },
+  {
+   "after": "svc:149200000020",
+   "after_name": "산재근로자사회심리재활지원",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "산재 승인 후"
+  },
+  {
+   "after": "svc:149200005025",
+   "after_name": "산재근로자 특별진찰",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": false,
+   "why": "요양 중 필요 시"
+  },
+  {
+   "after": "law:산재 불승인 심사청구(이의신청)",
+   "after_name": "산재 불승인 심사청구(이의신청)",
+   "before": "law:산재 요양급여",
+   "before_names": "산재 요양급여",
+   "hard": true,
+   "why": "요양급여 신청이 불승인된 경우"
+  },
+  {
+   "after": "svc:149200005017",
+   "after_name": "예술인ㆍ노무제공자 출산전후급여등",
+   "before": "law:예술인·노무제공자 고용보험",
+   "before_names": "예술인·노무제공자 고용보험",
+   "hard": true,
+   "why": "고용보험 가입자 대상"
+  },
+  {
+   "after": "svc:B55307700040",
+   "after_name": "소상공인 고용보험료 지원",
+   "before": "common:business-registration",
+   "before_names": "business-registration",
+   "hard": true,
+   "why": "사업자 대상"
+  },
+  {
+   "after": "common:online-business-report",
+   "after_name": "online-business-report",
+   "before": "common:business-registration",
+   "before_names": "business-registration",
+   "hard": true,
+   "why": "사업자등록 후 통신판매업 신고"
+  },
+  {
+   "after": "common:business-registration",
+   "after_name": "business-registration",
+   "before": "law:식품 영업신고·허가",
+   "before_names": "식품 영업신고·허가",
+   "hard": false,
+   "why": "식품업은 영업신고증을 갖춰 사업자등록"
+  },
+  {
+   "after": "law:창업중소기업 세액감면",
+   "after_name": "창업중소기업 세액감면",
+   "before": "common:business-registration",
+   "before_names": "business-registration",
+   "hard": true,
+   "why": "창업(사업자등록) 후 적용"
+  },
+  {
+   "after": "svc:142000000099",
+   "after_name": "청년전용창업자금",
+   "before": "common:business-registration",
+   "before_names": "business-registration",
+   "hard": true,
+   "why": "사업자등록 후 신청(예비창업자는 등록 조건부)"
+  },
+  {
+   "after": "svc:SD0000007429",
+   "after_name": "소상공인 정책자금 융자 지원(일반경영안정자금, 특별경영안정자금, 성장기반자금 등)",
+   "before": "common:business-registration",
+   "before_names": "business-registration",
+   "hard": true,
+   "why": "사업자 대상"
+  },
+  {
+   "after": "svc:135200005059",
+   "after_name": "두루누리 사회보험료 지원",
+   "before": "common:business-registration",
+   "before_names": "business-registration",
+   "hard": false,
+   "why": "사업자등록 → 4대보험 사업장 성립신고(가입) 후 신청 — 직접 전제는 성립신고"
+  },
+  {
+   "after": "svc:149200005008",
+   "after_name": "자영업자 실업급여",
+   "before": "law:폐업신고",
+   "before_names": "폐업신고",
+   "hard": true,
+   "why": "폐업 후 수급"
+  },
+  {
+   "after": "svc:142000000088",
+   "after_name": "소상공인 재기지원",
+   "before": "law:폐업신고",
+   "before_names": "폐업신고",
+   "hard": true,
+   "why": "폐업 사실 확인"
+  },
+  {
+   "after": "svc:B01000300013",
+   "after_name": "소상공인·자영업자 새출발기금 채무조정 프로그램",
+   "before": "law:폐업신고",
+   "before_names": "폐업신고",
+   "hard": false,
+   "why": "폐업자도 대상(영업 중도 가능)"
+  },
+  {
+   "after": "svc:B55400900009",
+   "after_name": "재창업자금",
+   "before": "law:폐업신고",
+   "before_names": "폐업신고",
+   "hard": true,
+   "why": "폐업 이력 확인"
+  },
+  {
+   "after": "svc:B55369400007",
+   "after_name": "재창업 재기지원 보증",
+   "before": "law:폐업신고",
+   "before_names": "폐업신고",
+   "hard": true,
+   "why": "폐업 이력 확인"
+  },
+  {
+   "after": "law:귀농인 정착 지원",
+   "after_name": "귀농인 정착 지원",
+   "before": "law:농업경영체 등록",
+   "before_names": "농업경영체 등록",
+   "hard": false,
+   "why": "보통 경영체 등록 후 신청하지만 귀농창업자금은 전입 예정 귀농희망자도 대상(구비서류에 등록확인서 없음)"
+  },
+  {
+   "after": "svc:154300000396",
+   "after_name": "청년농업인 영농정착지원",
+   "before": "law:농업경영체 등록",
+   "before_names": "농업경영체 등록",
+   "hard": true,
+   "why": "농업경영체 등록 후"
+  },
+  {
+   "after": "svc:154300005035",
+   "after_name": "맞춤형농지지원사업",
+   "before": "law:농업경영체 등록",
+   "before_names": "농업경영체 등록",
+   "hard": true,
+   "why": "농업경영체 등록 후"
+  },
+  {
+   "after": "svc:154300000011",
+   "after_name": "귀농 농업창업 및 주택구입지원 사업",
+   "before": "svc:154300000138",
+   "before_names": "귀농·귀촌인귀농귀촌교육",
+   "hard": true,
+   "why": "교육 이수(100시간)가 융자 요건"
+  },
+  {
+   "after": "law:농업경영체 등록",
+   "after_name": "농업경영체 등록",
+   "before": "law:농지취득자격증명",
+   "before_names": "농지취득자격증명",
+   "hard": false,
+   "why": "농지 확보(취득·임차) 후 경영체 등록"
+  },
+  {
+   "after": "common:car-address",
+   "after_name": "car-address",
+   "before": "common:transfer-report",
+   "before_names": "transfer-report",
+   "hard": true,
+   "why": "전입신고 후 자동차 주소 변경"
+  },
+  {
+   "after": "law:자녀 전학",
+   "after_name": "자녀 전학",
+   "before": "common:transfer-report",
+   "before_names": "transfer-report",
+   "hard": true,
+   "why": "전입신고 후 전학"
+  },
+  {
+   "after": "law:대항력·확정일자",
+   "after_name": "대항력·확정일자",
+   "before": "common:transfer-report",
+   "before_names": "transfer-report",
+   "hard": true,
+   "why": "전입신고(주민등록)가 대항력 요건"
+  },
+  {
+   "after": "svc:161300000099",
+   "after_name": "청년월세 지원",
+   "before": "common:transfer-report",
+   "before_names": "transfer-report",
+   "hard": true,
+   "why": "임차 주택에 전입(거주)해야 신청"
+  },
+  {
+   "after": "law:임차권등기명령",
+   "after_name": "임차권등기명령",
+   "before": "law:대항력·확정일자",
+   "before_names": "대항력·확정일자",
+   "hard": true,
+   "why": "대항력·우선변제권을 '유지'하는 제도라 대항요건(전입·점유)이 먼저 — 법원이 대항력 취득 여부를 심사"
+  },
+  {
+   "after": "law:소유권이전등기",
+   "after_name": "소유권이전등기",
+   "before": "law:부동산 거래신고",
+   "before_names": "부동산 거래신고",
+   "hard": true,
+   "why": "거래신고필증이 등기 서류"
+  },
+  {
+   "after": "law:소유권이전등기",
+   "after_name": "소유권이전등기",
+   "before": "law:취득세 신고·납부",
+   "before_names": "취득세 신고·납부",
+   "hard": true,
+   "why": "취득세 납부 후 등기"
+  },
+  {
+   "after": "law:생애최초 취득세 감면",
+   "after_name": "생애최초 취득세 감면",
+   "before": "law:취득세 신고·납부",
+   "before_names": "취득세 신고·납부",
+   "hard": true,
+   "why": "취득세 신고서에 감면신청서를 첨부해 동시에 — 신고 없이 감면만 접수되지 않는다"
+  },
+  {
+   "after": "law:양도소득세 예정신고",
+   "after_name": "양도소득세 예정신고",
+   "before": "law:부동산 거래신고",
+   "before_names": "부동산 거래신고",
+   "hard": false,
+   "why": "거래 신고 후 양도세 신고"
+  },
+  {
+   "after": "law:임대보증금 보증 가입",
+   "after_name": "임대보증금 보증 가입",
+   "before": "law:임대사업자 등록",
+   "before_names": "임대사업자 등록",
+   "hard": true,
+   "why": "등록임대사업자 의무"
+  },
+  {
+   "after": "law:전세사기피해자 결정 신청",
+   "after_name": "전세사기피해자 결정 신청",
+   "before": "law:임차권등기명령",
+   "before_names": "임차권등기명령",
+   "hard": false,
+   "why": "결정 신청 전 대항력 보전 권고"
+  },
+  {
+   "after": "svc:135200005001",
+   "after_name": "긴급복지 주거지원",
+   "before": [
+    "law:전세사기피해자 결정 신청",
+    "law:긴급복지 지원요청",
+    "law:재해구호 대상"
+   ],
+   "before_names": [
+    "전세사기피해자 결정 신청",
+    "긴급복지 지원요청",
+    "재해구호 대상"
+   ],
+   "hard": false,
+   "why": "피해자 결정·긴급복지 요청 후 지원"
+  },
+  {
+   "after": "svc:999000000022",
+   "after_name": "기존주택 전세임대주택 지원사업",
+   "before": "law:전세사기피해자 결정 신청",
+   "before_names": "전세사기피해자 결정 신청",
+   "hard": true,
+   "why": "전세사기피해자 결정 후 신청"
+  },
+  {
+   "after": "svc:B27000100027",
+   "after_name": "무료 소송대리 서비스(소액임차인)",
+   "before": "law:전세사기피해자 결정 신청",
+   "before_names": "전세사기피해자 결정 신청",
+   "hard": false,
+   "why": "피해자 결정이 있으면 지원 수월"
+  },
+  {
+   "after": "law:신규등록",
+   "after_name": "신규등록",
+   "before": "law:자동차보험 의무가입",
+   "before_names": "자동차보험 의무가입",
+   "hard": true,
+   "why": "보험가입증명서가 등록 서류"
+  },
+  {
+   "after": "law:이전등록",
+   "after_name": "이전등록",
+   "before": "law:자동차보험 의무가입",
+   "before_names": "자동차보험 의무가입",
+   "hard": true,
+   "why": "보험가입증명서가 등록 서류"
+  },
+  {
+   "after": "law:신규등록",
+   "after_name": "신규등록",
+   "before": "law:취득세 신고·납부",
+   "before_names": "취득세 신고·납부",
+   "hard": true,
+   "why": "등록 시 취득세 납부"
+  },
+  {
+   "after": "law:이전등록",
+   "after_name": "이전등록",
+   "before": "law:취득세 신고·납부",
+   "before_names": "취득세 신고·납부",
+   "hard": true,
+   "why": "등록 시 취득세 납부"
+  },
+  {
+   "after": "svc:131200000008",
+   "after_name": "다자녀가구 자동차취득세 감면",
+   "before": "law:취득세 신고·납부",
+   "before_names": "취득세 신고·납부",
+   "hard": false,
+   "why": "취득세 신고 시 감면 신청"
+  },
+  {
+   "after": "svc:131200000004",
+   "after_name": "장애인차량취득세및자동차세감면",
+   "before": [
+    "law:취득세 신고·납부",
+    "law:장애인 등록"
+   ],
+   "before_names": [
+    "취득세 신고·납부",
+    "장애인 등록"
+   ],
+   "hard": false,
+   "why": "장애인 등록 후 취득세 신고 시 감면"
+  },
+  {
+   "after": "law:말소등록(폐차)",
+   "after_name": "말소등록(폐차)",
+   "before": "svc:B55258400207",
+   "before_names": "조기폐차 지원",
+   "hard": false,
+   "why": "조기폐차 승인 후 폐차·말소"
+  },
+  {
+   "after": "svc:SD0000016119",
+   "after_name": "장애인연금",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": true,
+   "why": "등록 중증장애인만 신청 가능(장애인복지법 32조)"
+  },
+  {
+   "after": "svc:SPE000000010",
+   "after_name": "장애수당",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": false,
+   "why": "장애인 등록 후"
+  },
+  {
+   "after": "svc:VOU000000020",
+   "after_name": "장애인 활동지원",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": true,
+   "why": "등록 장애인만 신청 가능 — 등록 없이는 접수 불가"
+  },
+  {
+   "after": "law:활동지원급여 신청",
+   "after_name": "활동지원급여 신청",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": true,
+   "why": "등록 장애인만 신청 가능 — 등록 없이는 접수 불가"
+  },
+  {
+   "after": "svc:B55092800043",
+   "after_name": "장애인 건강보험료 경감",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": false,
+   "why": "장애인 등록 후"
+  },
+  {
+   "after": "svc:SPE000000020",
+   "after_name": "장애아동수당",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": false,
+   "why": "장애인 등록 후"
+  },
+  {
+   "after": "law:발달재활서비스 바우처",
+   "after_name": "발달재활서비스 바우처",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": false,
+   "why": "장애인 등록(또는 발달 지연 진단) 후"
+  },
+  {
+   "after": "svc:135200000095",
+   "after_name": "발달장애인 개인별지원계획 수립 지원",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": false,
+   "why": "장애인 등록 후"
+  },
+  {
+   "after": "law:장애인연금 수급권자",
+   "after_name": "장애인연금 수급권자",
+   "before": [
+    "law:장애인 등록",
+    "svc:WLF00006294"
+   ],
+   "before_names": [
+    "장애인 등록",
+    "장애인 등록 신청"
+   ],
+   "hard": true,
+   "why": "등록 중증장애인만 신청 가능(정부24 안내)"
+  },
+  {
+   "after": "svc:135200005005",
+   "after_name": "긴급복지 의료지원",
+   "before": "law:긴급복지 지원요청",
+   "before_names": "긴급복지 지원요청",
+   "hard": true,
+   "why": "긴급복지 지원요청 후 지원"
+  },
+  {
+   "after": "svc:135200005003",
+   "after_name": "긴급복지 생계지원",
+   "before": "law:긴급복지 지원요청",
+   "before_names": "긴급복지 지원요청",
+   "hard": true,
+   "why": "긴급복지 지원요청 후 지원"
+  },
+  {
+   "after": "svc:135200005004",
+   "after_name": "긴급복지 연료비 및 전기요금 지원",
+   "before": "law:긴급복지 지원요청",
+   "before_names": "긴급복지 지원요청",
+   "hard": true,
+   "why": "긴급복지 지원요청 후 지원"
+  },
+  {
+   "after": "svc:WII000001620",
+   "after_name": "암환자의료비지원",
+   "before": "svc:B55092800041",
+   "before_names": "건강보험 산정특례",
+   "hard": false,
+   "why": "산정특례(암) 등록 후"
+  },
+  {
+   "after": "svc:SSE000000020",
+   "after_name": "재가급여",
+   "before": [
+    "law:장기요양인정 신청",
+    "svc:999000000089"
+   ],
+   "before_names": [
+    "장기요양인정 신청",
+    "노인장기요양보험(장기요양인정)"
+   ],
+   "hard": true,
+   "why": "등급판정을 받아 장기요양인정서가 있는 수급자만 이용 가능"
+  },
+  {
+   "after": "svc:135200005031",
+   "after_name": "장기요양급여비용 본인부담금 감경",
+   "before": [
+    "law:장기요양인정 신청",
+    "svc:999000000089"
+   ],
+   "before_names": [
+    "장기요양인정 신청",
+    "노인장기요양보험(장기요양인정)"
+   ],
+   "hard": false,
+   "why": "장기요양 등급 판정 후"
+  },
+  {
+   "after": "svc:135200000125",
+   "after_name": "치매 치료관리비 지원",
+   "before": [
+    "law:치매안심센터",
+    "svc:135200000080"
+   ],
+   "before_names": [
+    "치매안심센터",
+    "치매관리 서비스 (치매안심센터)"
+   ],
+   "hard": false,
+   "why": "치매안심센터 등록 후"
+  },
+  {
+   "after": "svc:135200005043",
+   "after_name": "치매검진 지원",
+   "before": [
+    "law:치매안심센터",
+    "svc:135200000080"
+   ],
+   "before_names": [
+    "치매안심센터",
+    "치매관리 서비스 (치매안심센터)"
+   ],
+   "hard": false,
+   "why": "치매안심센터에서 검진"
+  },
+  {
+   "after": "svc:WII000001410",
+   "after_name": "생계급여",
+   "before": "law:기초생활보장 급여 신청",
+   "before_names": "기초생활보장 급여 신청",
+   "hard": true,
+   "why": "기초생활보장 신청으로 결정"
+  },
+  {
+   "after": "svc:999000000043",
+   "after_name": "의료급여 (의료급여)",
+   "before": "law:기초생활보장 급여 신청",
+   "before_names": "기초생활보장 급여 신청",
+   "hard": true,
+   "why": "기초생활보장 신청으로 결정"
+  },
+  {
+   "after": "svc:336000000096",
+   "after_name": "주거급여 (맞춤형 급여)",
+   "before": "law:기초생활보장 급여 신청",
+   "before_names": "기초생활보장 급여 신청",
+   "hard": true,
+   "why": "기초생활보장 신청으로 결정"
+  },
+  {
+   "after": "svc:WLU000000020",
+   "after_name": "차상위 본인부담 경감대상자 지원",
+   "before": "law:기초생활보장 급여 신청",
+   "before_names": "기초생활보장 급여 신청",
+   "hard": false,
+   "why": "소득 조사 결과 차상위 결정"
+  },
+  {
+   "after": "svc:SBA000000100",
+   "after_name": "자활근로(기초, 차상위)",
+   "before": "law:기초생활보장 급여 신청",
+   "before_names": "기초생활보장 급여 신청",
+   "hard": true,
+   "why": "수급자·차상위 대상"
+  },
+  {
+   "after": "svc:B55353000001",
+   "after_name": "에너지바우처",
+   "before": "law:기초생활보장 급여 신청",
+   "before_names": "기초생활보장 급여 신청",
+   "hard": true,
+   "why": "수급자 대상"
+  },
+  {
+   "after": "law:면책 신청",
+   "after_name": "면책 신청",
+   "before": "law:개인파산 신청",
+   "before_names": "개인파산 신청",
+   "hard": true,
+   "why": "파산 선고 후 면책"
+  },
+  {
+   "after": "svc:B27000100010",
+   "after_name": "무료 소송대리 서비스(개인회생신청대상자)",
+   "before": "law:개인회생 신청",
+   "before_names": "개인회생 신청",
+   "hard": false,
+   "why": "개인회생 신청 대상자"
+  },
+  {
+   "after": "svc:B27000100041",
+   "after_name": "무료 소송대리 서비스(파산·면책신청대상자)",
+   "before": "law:개인파산 신청",
+   "before_names": "개인파산 신청",
+   "hard": false,
+   "why": "파산·면책 신청 대상자"
+  },
+  {
+   "after": "svc:B55370000011",
+   "after_name": "신용회복위원회 성실상환자 소액대출",
+   "before": [
+    "svc:B01000300005",
+    "svc:B01000300001"
+   ],
+   "before_names": [
+    "국민행복기금 채무조정",
+    "한국자산관리공사 채무조정"
+   ],
+   "hard": false,
+   "why": "채무조정 성실상환 후"
+  },
+  {
+   "after": "law:피해구제 신청",
+   "after_name": "피해구제 신청",
+   "before": "law:계좌 지급정지",
+   "before_names": "계좌 지급정지",
+   "hard": true,
+   "why": "전화 지급정지 요청이 곧 구술 피해구제 신청 — 그날부터 3일 이내 서면 피해구제신청서 제출(시행령 3조 2항)"
+  },
+  {
+   "after": "law:피해환급금 지급",
+   "after_name": "피해환급금 지급",
+   "before": "law:피해구제 신청",
+   "before_names": "피해구제 신청",
+   "hard": true,
+   "why": "피해구제 절차 후 환급"
+  },
+  {
+   "after": "svc:B27000100049",
+   "after_name": "무료소송대리서비스(전기통신 금융사기 피해자(보이스피싱 피해자)",
+   "before": "law:피해구제 신청",
+   "before_names": "피해구제 신청",
+   "hard": false,
+   "why": "피해구제 신청 사실 확인"
+  },
+  {
+   "after": "law:구조금 지급신청",
+   "after_name": "구조금 지급신청",
+   "before": "law:범죄피해 구조금 지급요건",
+   "before_names": "범죄피해 구조금 지급요건",
+   "hard": false,
+   "why": "요건 확인 후 신청"
+  },
+  {
+   "after": "svc:128000000001",
+   "after_name": "범죄 피해 구조금 지급",
+   "before": "law:구조금 지급신청",
+   "before_names": "구조금 지급신청",
+   "hard": false,
+   "why": "신청 후 심의"
+  },
+  {
+   "after": "svc:138300000016",
+   "after_name": "가정폭력피해자 국민임대주택 우선 입주권 부여",
+   "before": "law:보호시설",
+   "before_names": "보호시설",
+   "hard": true,
+   "why": "보호시설 입소자 대상"
+  },
+  {
+   "after": "svc:138300000053",
+   "after_name": "가정폭력 피해자 보호시설 퇴소자 자립지원금",
+   "before": "law:보호시설",
+   "before_names": "보호시설",
+   "hard": true,
+   "why": "보호시설 퇴소자 대상"
+  },
+  {
+   "after": "law:주민등록 열람 제한",
+   "after_name": "주민등록 열람 제한",
+   "before": [
+    "law:가정폭력 임시조치",
+    "svc:WII000001480"
+   ],
+   "before_names": [
+    "가정폭력 임시조치",
+    "가정폭력 상담소 운영 지원"
+   ],
+   "hard": false,
+   "why": "피해 증빙(임시조치 결정·상담소 확인서) 필요"
+  },
+  {
+   "after": "law:피해학생 보호조치",
+   "after_name": "피해학생 보호조치",
+   "before": "law:학교폭력대책심의위원회",
+   "before_names": "학교폭력대책심의위원회",
+   "hard": false,
+   "why": "정식 보호조치는 심의위원회가 교육장에게 요청(법 16조 1항) — 학교장 긴급조치만 심의 전에 가능"
+  },
+  {
+   "after": "svc:B27000100034",
+   "after_name": "무료 소송대리 서비스(학교폭력피해자)",
+   "before": "law:학교폭력대책심의위원회",
+   "before_names": "학교폭력대책심의위원회",
+   "hard": false,
+   "why": "심의 결과를 바탕으로"
+  },
+  {
+   "after": "law:보험금 청구",
+   "after_name": "보험금 청구",
+   "before": "law:피해자 가불금",
+   "before_names": "피해자 가불금",
+   "hard": false,
+   "why": "가불금은 보험금 확정 전 선지급(자배법 11조) — 사고 접수만 되면 청구 가능, 최종 보험금에서 정산"
+  },
+  {
+   "after": "law:재난지역 국고보조 지원",
+   "after_name": "재난지역 국고보조 지원",
+   "before": "law:재해구호 대상",
+   "before_names": "재해구호 대상",
+   "hard": true,
+   "why": "피해 신고(재해구호 대상 등록) 후"
+  },
+  {
+   "after": "law:특별재난지역 지원",
+   "after_name": "특별재난지역 지원",
+   "before": "law:재해구호 대상",
+   "before_names": "재해구호 대상",
+   "hard": true,
+   "why": "피해 신고 후"
+  },
+  {
+   "after": "svc:135200005003",
+   "after_name": "긴급복지 생계지원",
+   "before": "law:재해구호 대상",
+   "before_names": "재해구호 대상",
+   "hard": false,
+   "why": "재난 피해 확인 후"
+  },
+  {
+   "after": "law:갱생보호 방법(숙식·취업 지원)",
+   "after_name": "갱생보호 방법(숙식·취업 지원)",
+   "before": "law:갱생보호 신청",
+   "before_names": "갱생보호 신청",
+   "hard": true,
+   "why": "갱생보호 신청 후"
+  },
+  {
+   "after": "law:주민등록증 재발급",
+   "after_name": "주민등록증 재발급",
+   "before": "law:개명신고",
+   "before_names": "개명신고",
+   "hard": true,
+   "why": "개명신고가 반영돼야 새 이름으로 발급(주민등록법 27조 기재사항 변경)"
+  },
+  {
+   "after": "law:재외국민 주민등록",
+   "after_name": "재외국민 주민등록",
+   "before": "law:해외이주신고",
+   "before_names": "해외이주신고",
+   "hard": false,
+   "why": "제출서류가 '재외국민등록부 등본 또는 해외이주신고 확인서'라 재외공관 재외국민등록으로 대체 가능"
+  },
+  {
+   "after": "law:국민연금 반환일시금",
+   "after_name": "국민연금 반환일시금",
+   "before": "law:해외이주신고",
+   "before_names": "해외이주신고",
+   "hard": true,
+   "why": "해외이주 증빙 필요"
+  },
+  {
+   "after": "law:건강보험 급여정지",
+   "after_name": "건강보험 급여정지",
+   "before": "law:해외이주신고",
+   "before_names": "해외이주신고",
+   "hard": false,
+   "why": "출국 후 자동 정지·신고"
+  },
+  {
+   "after": "law:체류기간 연장허가",
+   "after_name": "체류기간 연장허가",
+   "before": "law:외국인등록",
+   "before_names": "외국인등록",
+   "hard": true,
+   "why": "외국인등록 후"
+  },
+  {
+   "after": "law:체류지 변경신고",
+   "after_name": "체류지 변경신고",
+   "before": "law:외국인등록",
+   "before_names": "외국인등록",
+   "hard": true,
+   "why": "외국인등록 후"
+  },
+  {
+   "after": "law:외국인 건강보험",
+   "after_name": "외국인 건강보험",
+   "before": "law:외국인등록",
+   "before_names": "외국인등록",
+   "hard": true,
+   "why": "외국인등록 6개월 후 당연가입"
+  },
+  {
+   "after": "law:일반귀화",
+   "after_name": "일반귀화",
+   "before": "law:외국인등록",
+   "before_names": "외국인등록",
+   "hard": true,
+   "why": "국내 체류 기간 요건"
+  },
+  {
+   "after": "svc:183000000015",
+   "after_name": "국가유공자 등 보상금",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  },
+  {
+   "after": "svc:183000000014",
+   "after_name": "국가유공자 등 간호수당",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  },
+  {
+   "after": "svc:999000000018",
+   "after_name": "제대군인 의료지원",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  },
+  {
+   "after": "svc:183000000006",
+   "after_name": "국가보훈대상자 보훈장학금 지원",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  },
+  {
+   "after": "svc:183000000004",
+   "after_name": "국가보훈대상자 취업능력개발비용(취업수강료) 지원",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  },
+  {
+   "after": "svc:999000000017",
+   "after_name": "국가보훈대상자 주택우선공급",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  },
+  {
+   "after": "svc:B55265700001",
+   "after_name": "참전용사 진료비 감면",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  },
+  {
+   "after": "svc:183000000009",
+   "after_name": "보훈가족 심리재활서비스 지원",
+   "before": [
+    "law:국가유공자 등록",
+    "law:보훈보상대상자 등록"
+   ],
+   "before_names": [
+    "국가유공자 등록",
+    "보훈보상대상자 등록"
+   ],
+   "hard": false,
+   "why": "등록 결정 후"
+  }
+ ],
+ "items": {
+  "common:business-registration": {
+   "kind": "law",
+   "event": "common",
+   "name": "사업자등록",
+   "common": "business-registration"
+  },
+  "common:online-business-report": {
+   "kind": "law",
+   "event": "common",
+   "name": "통신판매업 신고",
+   "common": "online-business-report"
+  },
+  "common:unemployment-benefit": {
+   "kind": "law",
+   "event": "common",
+   "name": "구직급여(실업급여) 신청",
+   "common": "unemployment-benefit"
+  },
+  "common:transfer-report": {
+   "kind": "law",
+   "event": "common",
+   "name": "전입신고",
+   "common": "transfer-report"
+  },
+  "common:birth-report": {
+   "kind": "law",
+   "event": "common",
+   "name": "출생신고",
+   "common": "birth-report"
+  },
+  "common:death-report": {
+   "kind": "law",
+   "event": "common",
+   "name": "사망신고",
+   "common": "death-report"
+  },
+  "common:marriage-report": {
+   "kind": "law",
+   "event": "common",
+   "name": "혼인신고",
+   "common": "marriage-report"
+  },
+  "common:car-address": {
+   "kind": "law",
+   "event": "common",
+   "name": "자동차 주소지 변경",
+   "common": "car-address"
+  },
+  "common:health-insurance-change": {
+   "kind": "law",
+   "event": "common",
+   "name": "건강보험 자격·주소 변경",
+   "common": "health-insurance-change"
+  },
+  "common:pension-change": {
+   "kind": "law",
+   "event": "common",
+   "name": "국민연금 자격·소득 변경 신고",
+   "common": "pension-change"
+  },
+  "svc:161300000076": {
+   "kind": "gov24",
+   "event": "marriage",
+   "name": "버팀목전세자금대출",
+   "service_id": "161300000076"
+  },
+  "svc:B55140800003": {
+   "kind": "gov24",
+   "event": "marriage",
+   "name": "내집마련 디딤돌 대출",
+   "service_id": "B55140800003"
+  },
+  "svc:999000000026": {
+   "kind": "gov24",
+   "event": "marriage",
+   "name": "행복주택 공급",
+   "service_id": "999000000026"
+  },
+  "svc:WII000001470": {
+   "kind": "gov24",
+   "event": "marriage",
+   "name": "공공분양 주택공급",
+   "service_id": "WII000001470"
+  },
+  "law:외국인등록": {
+   "kind": "law",
+   "event": "international-marriage",
+   "name": "외국인등록",
+   "law_query": "출입국관리법",
+   "article_title": "외국인등록"
+  },
+  "law:간이귀화": {
+   "kind": "law",
+   "event": "international-marriage",
+   "name": "간이귀화",
+   "law_query": "국적법",
+   "article_title": "간이귀화"
+  },
+  "law:다문화가족지원센터": {
+   "kind": "law",
+   "event": "international-marriage",
+   "name": "다문화가족지원센터",
+   "law_query": "다문화가족지원법",
+   "article_title": "다문화가족지원센터"
+  },
+  "svc:138300000056": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "다문화가족지원센터 이용",
+   "service_id": "138300000056"
+  },
+  "svc:WII000001240": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "결혼이민자 통번역서비스",
+   "service_id": "WII000001240"
+  },
+  "svc:PTR000050660": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "다문화가족 방문교육서비스",
+   "service_id": "PTR000050660"
+  },
+  "svc:138300000060": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "결혼이민자 역량강화지원",
+   "service_id": "138300000060"
+  },
+  "svc:WII000001250": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "다문화가족 자녀 언어발달 지원서비스",
+   "service_id": "WII000001250"
+  },
+  "svc:127000000023": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "귀화허가, 국적회복허가 신청 수수료 면제 안내",
+   "service_id": "127000000023"
+  },
+  "svc:B27000100025": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "무료 소송대리 서비스(결혼이민자·귀화허가자)",
+   "service_id": "B27000100025"
+  },
+  "svc:138300000009": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "결혼이민예정자 현지사전교육 지원",
+   "service_id": "138300000009"
+  },
+  "svc:138300000021": {
+   "kind": "gov24",
+   "event": "international-marriage",
+   "name": "다문화가족 이중언어 교육지원",
+   "service_id": "138300000021"
+  },
+  "law:협의이혼 의사확인": {
+   "kind": "law",
+   "event": "divorce",
+   "name": "협의이혼 의사확인",
+   "law_query": "민법",
+   "article_title": "협의상 이혼"
+  },
+  "law:이혼신고": {
+   "kind": "law",
+   "event": "divorce",
+   "name": "이혼신고",
+   "law_query": "가족관계의 등록 등에 관한 법률",
+   "article_title": "이혼신고"
+  },
+  "law:양육비 이행 청구": {
+   "kind": "law",
+   "event": "divorce",
+   "name": "양육비 이행 청구",
+   "law_query": "양육비 이행확보 및 지원에 관한 법률",
+   "article_title": "양육비 이행 청구"
+  },
+  "law:양육비 선지급 신청": {
+   "kind": "law",
+   "event": "divorce",
+   "name": "양육비 선지급 신청",
+   "law_query": "양육비 이행확보 및 지원에 관한 법률",
+   "article_title": "양육비 선지급 신청"
+  },
+  "law:분할연금": {
+   "kind": "law",
+   "event": "divorce",
+   "name": "분할연금",
+   "law_query": "국민연금법",
+   "article_title": "분할연금"
+  },
+  "svc:138300000066": {
+   "kind": "gov24",
+   "event": "divorce",
+   "name": "양육비 이행 지원 서비스",
+   "service_id": "138300000066"
+  },
+  "svc:138300000065": {
+   "kind": "gov24",
+   "event": "divorce",
+   "name": "양육비 선지급 지원",
+   "service_id": "138300000065"
+  },
+  "svc:SSI000000020": {
+   "kind": "gov24",
+   "event": "divorce",
+   "name": "한부모가족 아동양육비 지원",
+   "service_id": "SSI000000020"
+  },
+  "svc:138300000040": {
+   "kind": "gov24",
+   "event": "divorce",
+   "name": "한부모무료법률구조",
+   "service_id": "138300000040"
+  },
+  "svc:138300000017": {
+   "kind": "gov24",
+   "event": "divorce",
+   "name": "한부모가족 임대주택 특별공급",
+   "service_id": "138300000017"
+  },
+  "svc:642000000035": {
+   "kind": "gov24",
+   "event": "divorce",
+   "name": "한부모가족자녀 교육비 지원",
+   "service_id": "642000000035"
+  },
+  "law:난임 극복 지원사업": {
+   "kind": "law",
+   "event": "infertility",
+   "name": "난임 극복 지원사업",
+   "law_query": "모자보건법",
+   "article_title": "난임"
+  },
+  "law:난임치료휴가": {
+   "kind": "law",
+   "event": "infertility",
+   "name": "난임치료휴가",
+   "law_query": "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률",
+   "article_title": "난임치료휴가"
+  },
+  "svc:SME000000100": {
+   "kind": "gov24",
+   "event": "infertility",
+   "name": "난임부부 시술비 지원",
+   "service_id": "SME000000100"
+  },
+  "svc:149200005026": {
+   "kind": "gov24",
+   "event": "infertility",
+   "name": "난임치료휴가 급여",
+   "service_id": "149200005026"
+  },
+  "svc:B55265700002": {
+   "kind": "gov24",
+   "event": "infertility",
+   "name": "난임 부부, 유산 및 사산경험 부부, 임산부 및 양육모를 위한 심리상담",
+   "service_id": "B55265700002"
+  },
+  "law:임산부 보호(출산전후휴가·근로시간 단축)": {
+   "kind": "law",
+   "event": "pregnancy",
+   "name": "임산부 보호(출산전후휴가·근로시간 단축)",
+   "law_query": "근로기준법",
+   "article_title": "임산부의 보호"
+  },
+  "law:태아검진 시간": {
+   "kind": "law",
+   "event": "pregnancy",
+   "name": "태아검진 시간",
+   "law_query": "근로기준법",
+   "article_title": "태아검진"
+  },
+  "law:보건소 임산부 등록·건강관리": {
+   "kind": "law",
+   "event": "pregnancy",
+   "name": "보건소 임산부 등록·건강관리",
+   "law_query": "모자보건법",
+   "article_title": "임산부ㆍ영유아ㆍ미숙아등의 건강관리 등",
+   "aliases": [
+    "모자보건수첩 발급",
+    "보건소 임산부 등록",
+    "출산 전·후 건강검진 등록",
+    "모자보건센터 등록",
+    "임산부 등록"
+   ]
+  },
+  "svc:SD0000007672": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "건강보험 임신·출산 진료비 지원",
+   "service_id": "SD0000007672"
+  },
+  "svc:135200005046": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "임산부 외래진료비 본인부담률 경감",
+   "service_id": "135200005046"
+  },
+  "svc:SD0000016094": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "임산부 엽산제, 철분제 지원",
+   "service_id": "SD0000016094"
+  },
+  "svc:135200000005": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "임산부 및 영유아 영양플러스",
+   "service_id": "135200000005"
+  },
+  "svc:135200000114": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "고위험 임산부 의료비 지원",
+   "service_id": "135200000114"
+  },
+  "svc:WII000001460": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "출산전후(유산ㆍ사산)휴가 급여",
+   "service_id": "WII000001460"
+  },
+  "svc:SD0000006936": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "청소년산모 임신·출산 의료비 지원",
+   "service_id": "SD0000006936"
+  },
+  "svc:135200005048": {
+   "kind": "gov24",
+   "event": "pregnancy",
+   "name": "위기임신 및 보호출산 지원",
+   "service_id": "135200005048"
+  },
+  "law:유산·사산휴가": {
+   "kind": "law",
+   "event": "pregnancy-loss",
+   "name": "유산·사산휴가",
+   "law_query": "근로기준법",
+   "article_title": "임산부의 보호"
+  },
+  "law:배우자 유산·사산휴가": {
+   "kind": "law",
+   "event": "pregnancy-loss",
+   "name": "배우자 유산·사산휴가",
+   "law_query": "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률",
+   "article_title": "배우자 유산"
+  },
+  "law:유산·사산휴가 급여": {
+   "kind": "law",
+   "event": "pregnancy-loss",
+   "name": "유산·사산휴가 급여",
+   "law_query": "고용보험법",
+   "article_title": "출산전후휴가 급여"
+  },
+  "svc:174000000029": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+   "service_id": "174000000029"
+  },
+  "svc:135200005015": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "첫만남이용권 지원",
+   "service_id": "135200005015"
+  },
+  "svc:135200000120": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "아동수당",
+   "service_id": "135200000120"
+  },
+  "svc:134200005012": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "가정양육수당 지원",
+   "service_id": "134200005012"
+  },
+  "svc:PTR000050390": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "산모·신생아 건강관리 지원",
+   "service_id": "PTR000050390"
+  },
+  "svc:999000000004": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "배우자 출산휴가 급여",
+   "service_id": "999000000004"
+  },
+  "svc:WII000000260": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "국민연금출산크레딧",
+   "service_id": "WII000000260"
+  },
+  "svc:149200000153": {
+   "kind": "gov24",
+   "event": "birth",
+   "name": "고용보험 미적용자 출산급여",
+   "service_id": "149200000153"
+  },
+  "svc:WLF00004657": {
+   "kind": "national_welfare",
+   "event": "birth",
+   "name": "부모급여 지원",
+   "service_id": "WLF00004657"
+  },
+  "law:다자녀 지방세 감면": {
+   "kind": "law",
+   "event": "multi-child",
+   "name": "다자녀 지방세 감면",
+   "law_query": "지방세특례제한법",
+   "article_title": "출산 및 양육 지원을 위한 감면"
+  },
+  "svc:131200000008": {
+   "kind": "gov24",
+   "event": "multi-child",
+   "name": "다자녀가구 자동차취득세 감면",
+   "service_id": "131200000008"
+  },
+  "svc:999000000090": {
+   "kind": "gov24",
+   "event": "multi-child",
+   "name": "다자녀(세 자녀 이상) 국가장학금",
+   "service_id": "999000000090"
+  },
+  "svc:B50000400042": {
+   "kind": "gov24",
+   "event": "multi-child",
+   "name": "고속도로 다자녀가구 통행료 할인",
+   "service_id": "B50000400042"
+  },
+  "svc:B55121000003": {
+   "kind": "gov24",
+   "event": "multi-child",
+   "name": "사회적 배려대상자 도시가스요금 경감",
+   "service_id": "B55121000003"
+  },
+  "law:가정법원 입양허가": {
+   "kind": "law",
+   "event": "adoption",
+   "name": "가정법원 입양허가",
+   "law_query": "국내입양에 관한 특별법",
+   "article_title": "가정법원의 입양허가"
+  },
+  "law:입양신고": {
+   "kind": "law",
+   "event": "adoption",
+   "name": "입양신고",
+   "law_query": "가족관계의 등록 등에 관한 법률",
+   "article_title": "입양신고"
+  },
+  "svc:135200005011": {
+   "kind": "gov24",
+   "event": "adoption",
+   "name": "입양축하금",
+   "service_id": "135200005011"
+  },
+  "svc:SCY000000060": {
+   "kind": "gov24",
+   "event": "adoption",
+   "name": "입양아동 양육수당 지원",
+   "service_id": "SCY000000060"
+  },
+  "svc:SCY000000040": {
+   "kind": "gov24",
+   "event": "adoption",
+   "name": "입양비용지원",
+   "service_id": "SCY000000040"
+  },
+  "svc:SCY000000050": {
+   "kind": "gov24",
+   "event": "adoption",
+   "name": "장애입양아동 양육보조금",
+   "service_id": "SCY000000050"
+  },
+  "svc:SCY000000190": {
+   "kind": "gov24",
+   "event": "adoption",
+   "name": "장애입양아동 의료비 지원",
+   "service_id": "SCY000000190"
+  },
+  "svc:WII000000450": {
+   "kind": "gov24",
+   "event": "adoption",
+   "name": "입양가정위탁아동 심리치료 지원",
+   "service_id": "WII000000450"
+  },
+  "law:육아휴직": {
+   "kind": "law",
+   "event": "parental-leave",
+   "name": "육아휴직",
+   "law_query": "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률",
+   "article_title": "육아휴직"
+  },
+  "law:육아기 근로시간 단축": {
+   "kind": "law",
+   "event": "parental-leave",
+   "name": "육아기 근로시간 단축",
+   "law_query": "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률",
+   "article_title": "육아기 근로시간 단축"
+  },
+  "law:배우자 출산휴가": {
+   "kind": "law",
+   "event": "parental-leave",
+   "name": "배우자 출산휴가",
+   "law_query": "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률",
+   "article_title": "배우자 출산"
+  },
+  "law:육아휴직 급여": {
+   "kind": "law",
+   "event": "parental-leave",
+   "name": "육아휴직 급여",
+   "law_query": "고용보험법",
+   "article_title": "육아휴직 급여"
+  },
+  "svc:999000000008": {
+   "kind": "gov24",
+   "event": "parental-leave",
+   "name": "육아휴직급여",
+   "service_id": "999000000008"
+  },
+  "svc:999000000007": {
+   "kind": "gov24",
+   "event": "parental-leave",
+   "name": "육아기 근로시간 단축 급여",
+   "service_id": "999000000007"
+  },
+  "svc:WII000001060": {
+   "kind": "gov24",
+   "event": "parental-leave",
+   "name": "출산육아기 고용안정장려금",
+   "service_id": "WII000001060"
+  },
+  "law:취학(취학통지·예비소집)": {
+   "kind": "law",
+   "event": "school-entry",
+   "name": "취학(취학통지·예비소집)",
+   "law_query": "초ㆍ중등교육법 시행령",
+   "article_title": "취학"
+  },
+  "law:무상보육": {
+   "kind": "law",
+   "event": "school-entry",
+   "name": "무상보육",
+   "law_query": "영유아보육법",
+   "article_title": "무상보육"
+  },
+  "law:유아 무상교육": {
+   "kind": "law",
+   "event": "school-entry",
+   "name": "유아 무상교육",
+   "law_query": "유아교육법",
+   "article_title": "무상교육"
+  },
+  "svc:134200005036": {
+   "kind": "gov24",
+   "event": "school-entry",
+   "name": "영유아보육료 지원",
+   "service_id": "134200005036"
+  },
+  "svc:000000465790": {
+   "kind": "gov24",
+   "event": "school-entry",
+   "name": "유아학비 (누리과정) 지원",
+   "service_id": "000000465790"
+  },
+  "svc:134200005047": {
+   "kind": "gov24",
+   "event": "school-entry",
+   "name": "유아교육비·보육료 추가지원",
+   "service_id": "134200005047"
+  },
+  "svc:423000000362": {
+   "kind": "gov24",
+   "event": "school-entry",
+   "name": "아이돌봄 서비스",
+   "service_id": "423000000362"
+  },
+  "law:학자금대출": {
+   "kind": "law",
+   "event": "college",
+   "name": "학자금대출",
+   "law_query": "취업 후 학자금 상환 특별법",
+   "article_title": "대출 신청"
+  },
+  "svc:SD0000004508": {
+   "kind": "gov24",
+   "event": "college",
+   "name": "국가장학금 Ⅰ유형 (학생직접지원형)",
+   "service_id": "SD0000004508"
+  },
+  "svc:134200005002": {
+   "kind": "gov24",
+   "event": "college",
+   "name": "국가장학금 Ⅱ유형 (대학자체노력연계형)",
+   "service_id": "134200005002"
+  },
+  "svc:GES000000110": {
+   "kind": "gov24",
+   "event": "college",
+   "name": "취업 후 상환 학자금대출",
+   "service_id": "GES000000110"
+  },
+  "svc:GES000000100": {
+   "kind": "gov24",
+   "event": "college",
+   "name": "일반 상환 학자금대출",
+   "service_id": "GES000000100"
+  },
+  "svc:GES000000120": {
+   "kind": "gov24",
+   "event": "college",
+   "name": "국가근로장학금",
+   "service_id": "GES000000120"
+  },
+  "svc:B55252900213": {
+   "kind": "gov24",
+   "event": "college",
+   "name": "대학생 기숙사 지원 (대학생 연합생활관)",
+   "service_id": "B55252900213"
+  },
+  "svc:SD0000010578": {
+   "kind": "gov24",
+   "event": "college",
+   "name": "농어촌 출신 대학(원)생 학자금 융자 지원 (무이자)",
+   "service_id": "SD0000010578"
+  },
+  "law:상속 승인·포기 기간": {
+   "kind": "law",
+   "event": "family-death",
+   "name": "상속 승인·포기 기간",
+   "law_query": "민법",
+   "article_title": "승인, 포기의 기간"
+  },
+  "law:한정승인": {
+   "kind": "law",
+   "event": "family-death",
+   "name": "한정승인",
+   "law_query": "민법",
+   "article_title": "한정승인의 방식"
+  },
+  "law:상속포기": {
+   "kind": "law",
+   "event": "family-death",
+   "name": "상속포기",
+   "law_query": "민법",
+   "article_title": "포기의 방식"
+  },
+  "law:상속세 신고": {
+   "kind": "law",
+   "event": "family-death",
+   "name": "상속세 신고",
+   "law_query": "상속세 및 증여세법",
+   "article_title": "상속세 과세표준신고"
+  },
+  "law:유족연금": {
+   "kind": "law",
+   "event": "family-death",
+   "name": "유족연금",
+   "law_query": "국민연금법",
+   "article_title": "유족연금의 수급권자"
+  },
+  "svc:174000000013": {
+   "kind": "gov24",
+   "event": "family-death",
+   "name": "사망자 및 피후견인 재산조회 통합처리 신청(안심상속서비스)",
+   "service_id": "174000000013"
+  },
+  "svc:SBA000000050": {
+   "kind": "gov24",
+   "event": "family-death",
+   "name": "장제급여",
+   "service_id": "SBA000000050"
+  },
+  "svc:999000000040": {
+   "kind": "gov24",
+   "event": "family-death",
+   "name": "긴급복지 장제비 지원",
+   "service_id": "999000000040"
+  },
+  "svc:183000000016": {
+   "kind": "gov24",
+   "event": "family-death",
+   "name": "국가유공자 등 사망일시금",
+   "service_id": "183000000016"
+  },
+  "law:동물등록·변경신고": {
+   "kind": "law",
+   "event": "pet",
+   "name": "동물등록·변경신고",
+   "law_query": "동물보호법",
+   "article_title": "등록대상동물의 등록"
+  },
+  "law:맹견 책임보험": {
+   "kind": "law",
+   "event": "pet",
+   "name": "맹견 책임보험",
+   "law_query": "동물보호법",
+   "article_title": "보험의 가입"
+  },
+  "law:구직촉진수당": {
+   "kind": "law",
+   "event": "job-seeking",
+   "name": "구직촉진수당",
+   "law_query": "구직자 취업촉진 및 생활안정지원에 관한 법률",
+   "article_title": "구직촉진수당의 수급 요건"
+  },
+  "law:국민내일배움카드(직업능력개발계좌)": {
+   "kind": "law",
+   "event": "job-seeking",
+   "name": "국민내일배움카드(직업능력개발계좌)",
+   "law_query": "국민 평생 직업능력 개발법",
+   "article_title": "직업능력개발계좌"
+  },
+  "svc:149200005007": {
+   "kind": "gov24",
+   "event": "job-seeking",
+   "name": "국민취업지원제도",
+   "service_id": "149200005007"
+  },
+  "svc:149200000026": {
+   "kind": "gov24",
+   "event": "job-seeking",
+   "name": "국민내일배움카드",
+   "service_id": "149200000026"
+  },
+  "svc:149200005033": {
+   "kind": "gov24",
+   "event": "job-seeking",
+   "name": "청년도전지원사업 안내",
+   "service_id": "149200005033"
+  },
+  "svc:149200005006": {
+   "kind": "gov24",
+   "event": "job-seeking",
+   "name": "청년 일경험 지원",
+   "service_id": "149200005006"
+  },
+  "svc:149200000092": {
+   "kind": "gov24",
+   "event": "job-seeking",
+   "name": "구직자 취업지원 서비스 제공",
+   "service_id": "149200000092"
+  },
+  "svc:149200005002": {
+   "kind": "gov24",
+   "event": "job-seeking",
+   "name": "광역구직활동비",
+   "service_id": "149200005002"
+  },
+  "svc:149200005023": {
+   "kind": "gov24",
+   "event": "job-seeking",
+   "name": "청년 국가기술자격시험 응시료 지원",
+   "service_id": "149200005023"
+  },
+  "law:실업급여 수급 중 취업 신고": {
+   "kind": "law",
+   "event": "employment",
+   "name": "실업급여 수급 중 취업 신고",
+   "law_query": "고용보험법",
+   "article_title": "취업 등의 신고"
+  },
+  "svc:SD0000011848": {
+   "kind": "gov24",
+   "event": "employment",
+   "name": "청년내일채움공제",
+   "service_id": "SD0000011848"
+  },
+  "svc:B55370100044": {
+   "kind": "gov24",
+   "event": "employment",
+   "name": "청년미래적금",
+   "service_id": "B55370100044"
+  },
+  "svc:135200005013": {
+   "kind": "gov24",
+   "event": "employment",
+   "name": "자산형성지원사업(청년내일저축계좌)",
+   "service_id": "135200005013"
+  },
+  "svc:149200000063": {
+   "kind": "gov24",
+   "event": "employment",
+   "name": "조기재취업수당",
+   "service_id": "149200000063"
+  },
+  "svc:B49000700017": {
+   "kind": "gov24",
+   "event": "employment",
+   "name": "해외취업정착지원금",
+   "service_id": "B49000700017"
+  },
+  "law:구직급여 수급 요건": {
+   "kind": "law",
+   "event": "resignation",
+   "name": "구직급여 수급 요건",
+   "law_query": "고용보험법",
+   "article_title": "구직급여의 수급 요건"
+  },
+  "law:실업 신고": {
+   "kind": "law",
+   "event": "resignation",
+   "name": "실업 신고",
+   "law_query": "고용보험법",
+   "article_title": "실업의 신고"
+  },
+  "law:퇴직금 지급": {
+   "kind": "law",
+   "event": "resignation",
+   "name": "퇴직금 지급",
+   "law_query": "근로자퇴직급여 보장법",
+   "article_title": "퇴직금의 지급"
+  },
+  "law:건강보험 임의계속가입": {
+   "kind": "law",
+   "event": "resignation",
+   "name": "건강보험 임의계속가입",
+   "law_query": "국민건강보험법",
+   "article_title": "실업자에 대한 특례"
+  },
+  "law:국민연금 납부예외": {
+   "kind": "law",
+   "event": "resignation",
+   "name": "국민연금 납부예외",
+   "law_query": "국민연금법",
+   "article_title": "연금보험료 납부의 예외"
+  },
+  "svc:SD0000015536": {
+   "kind": "gov24",
+   "event": "resignation",
+   "name": "구직급여",
+   "service_id": "SD0000015536",
+   "aliases": [
+    "실업급여",
+    "실업급여 신청",
+    "구직급여 신청"
+   ]
+  },
+  "svc:B55201500004": {
+   "kind": "gov24",
+   "event": "resignation",
+   "name": "실업크레딧 지원",
+   "service_id": "B55201500004"
+  },
+  "law:대지급금": {
+   "kind": "law",
+   "event": "wage-arrears",
+   "name": "대지급금",
+   "law_query": "임금채권보장법",
+   "article_title": "대지급금"
+  },
+  "law:금품 청산(퇴직 후 14일)": {
+   "kind": "law",
+   "event": "wage-arrears",
+   "name": "금품 청산(퇴직 후 14일)",
+   "law_query": "근로기준법",
+   "article_title": "금품 청산"
+  },
+  "law:임금 지급 원칙": {
+   "kind": "law",
+   "event": "wage-arrears",
+   "name": "임금 지급 원칙",
+   "law_query": "근로기준법",
+   "article_title": "임금 지급"
+  },
+  "law:임금체불 진정·신고(고용노동청)": {
+   "kind": "law",
+   "event": "wage-arrears",
+   "name": "임금체불 진정·신고(고용노동청)",
+   "law_query": "근로기준법",
+   "article_title": "감독 기관에 대한 신고",
+   "aliases": [
+    "체불임금 진정서 제출",
+    "임금체불 신고",
+    "노동청 진정",
+    "임금체불 진정"
+   ]
+  },
+  "svc:PTR000051327": {
+   "kind": "gov24",
+   "event": "wage-arrears",
+   "name": "체불근로자 대지급금 지급",
+   "service_id": "PTR000051327"
+  },
+  "svc:B49000100206": {
+   "kind": "gov24",
+   "event": "wage-arrears",
+   "name": "간이 대지급금 지급",
+   "service_id": "B49000100206"
+  },
+  "svc:B49000100212": {
+   "kind": "gov24",
+   "event": "wage-arrears",
+   "name": "도산 대지급금 지급",
+   "service_id": "B49000100212"
+  },
+  "svc:PTR000051328": {
+   "kind": "gov24",
+   "event": "wage-arrears",
+   "name": "체불근로자 무료법률구조지원",
+   "service_id": "PTR000051328"
+  },
+  "svc:B49000100203": {
+   "kind": "gov24",
+   "event": "wage-arrears",
+   "name": "임금등 체불 근로자 생계비 융자",
+   "service_id": "B49000100203"
+  },
+  "svc:B27000100028": {
+   "kind": "gov24",
+   "event": "wage-arrears",
+   "name": "무료 소송대리 서비스(체불임금피해근로자)",
+   "service_id": "B27000100028",
+   "aliases": [
+    "체불임금 청구 소송",
+    "체불금 청구 소송",
+    "임금 청구 소송",
+    "체불임금 소송",
+    "민사소송(임금)"
+   ]
+  },
+  "law:산재 요양급여": {
+   "kind": "law",
+   "event": "industrial-accident",
+   "name": "산재 요양급여",
+   "law_query": "산업재해보상보험법",
+   "article_title": "요양급여"
+  },
+  "law:휴업급여": {
+   "kind": "law",
+   "event": "industrial-accident",
+   "name": "휴업급여",
+   "law_query": "산업재해보상보험법",
+   "article_title": "휴업급여"
+  },
+  "law:장해급여": {
+   "kind": "law",
+   "event": "industrial-accident",
+   "name": "장해급여",
+   "law_query": "산업재해보상보험법",
+   "article_title": "장해급여"
+  },
+  "law:직업재활급여": {
+   "kind": "law",
+   "event": "industrial-accident",
+   "name": "직업재활급여",
+   "law_query": "산업재해보상보험법",
+   "article_title": "직업재활급여"
+  },
+  "law:산재 불승인 심사청구(이의신청)": {
+   "kind": "law",
+   "event": "industrial-accident",
+   "name": "산재 불승인 심사청구(이의신청)",
+   "law_query": "산업재해보상보험법",
+   "article_title": "심사 청구의 제기",
+   "aliases": [
+    "산재보험 이의신청",
+    "산재 심사청구",
+    "산재 불승인 이의신청"
+   ]
+  },
+  "svc:B49000100043": {
+   "kind": "gov24",
+   "event": "industrial-accident",
+   "name": "요양급여(보조기)-산재보험급여",
+   "service_id": "B49000100043"
+  },
+  "svc:149200000018": {
+   "kind": "gov24",
+   "event": "industrial-accident",
+   "name": "산재근로자 생활안정자금 융자",
+   "service_id": "149200000018"
+  },
+  "svc:149200000016": {
+   "kind": "gov24",
+   "event": "industrial-accident",
+   "name": "산재근로자 직업훈련",
+   "service_id": "149200000016"
+  },
+  "svc:149200000021": {
+   "kind": "gov24",
+   "event": "industrial-accident",
+   "name": "산재근로자 직장 복귀 지원",
+   "service_id": "149200000021"
+  },
+  "svc:149200000020": {
+   "kind": "gov24",
+   "event": "industrial-accident",
+   "name": "산재근로자사회심리재활지원",
+   "service_id": "149200000020"
+  },
+  "svc:149200005025": {
+   "kind": "gov24",
+   "event": "industrial-accident",
+   "name": "산재근로자 특별진찰",
+   "service_id": "149200005025"
+  },
+  "svc:B27000100016": {
+   "kind": "gov24",
+   "event": "industrial-accident",
+   "name": "무료 소송대리 서비스(저소득 재해근로자)",
+   "service_id": "B27000100016"
+  },
+  "law:종합소득세 확정신고": {
+   "kind": "law",
+   "event": "freelance",
+   "name": "종합소득세 확정신고",
+   "law_query": "소득세법",
+   "article_title": "종합소득과세표준 확정신고"
+  },
+  "law:예술인·노무제공자 고용보험": {
+   "kind": "law",
+   "event": "freelance",
+   "name": "예술인·노무제공자 고용보험",
+   "law_query": "고용보험법",
+   "article_title": "노무제공자"
+  },
+  "svc:149200005017": {
+   "kind": "gov24",
+   "event": "freelance",
+   "name": "예술인ㆍ노무제공자 출산전후급여등",
+   "service_id": "149200005017"
+  },
+  "svc:B55307700040": {
+   "kind": "gov24",
+   "event": "freelance",
+   "name": "소상공인 고용보험료 지원",
+   "service_id": "B55307700040"
+  },
+  "svc:B55201500201": {
+   "kind": "gov24",
+   "event": "freelance",
+   "name": "저소득 지역가입자 국민연금 보험료 지원",
+   "service_id": "B55201500201"
+  },
+  "svc:B27000100019": {
+   "kind": "gov24",
+   "event": "freelance",
+   "name": "무료 소송대리 서비스(예술인)",
+   "service_id": "B27000100019"
+  },
+  "law:식품 영업신고·허가": {
+   "kind": "law",
+   "event": "startup",
+   "name": "식품 영업신고·허가",
+   "law_query": "식품위생법",
+   "article_title": "영업허가 등"
+  },
+  "law:창업중소기업 세액감면": {
+   "kind": "law",
+   "event": "startup",
+   "name": "창업중소기업 세액감면",
+   "law_query": "조세특례제한법",
+   "article_title": "창업중소기업"
+  },
+  "svc:142000000038": {
+   "kind": "gov24",
+   "event": "startup",
+   "name": "혁신 소상공인 창업지원",
+   "service_id": "142000000038"
+  },
+  "svc:142000000099": {
+   "kind": "gov24",
+   "event": "startup",
+   "name": "청년전용창업자금",
+   "service_id": "142000000099"
+  },
+  "svc:SD0000007429": {
+   "kind": "gov24",
+   "event": "startup",
+   "name": "소상공인 정책자금 융자 지원(일반경영안정자금, 특별경영안정자금, 성장기반자금 등)",
+   "service_id": "SD0000007429"
+  },
+  "svc:135200005059": {
+   "kind": "gov24",
+   "event": "startup",
+   "name": "두루누리 사회보험료 지원",
+   "service_id": "135200005059"
+  },
+  "svc:142000000010": {
+   "kind": "gov24",
+   "event": "startup",
+   "name": "중장년 기술창업센터",
+   "service_id": "142000000010"
+  },
+  "law:폐업신고": {
+   "kind": "law",
+   "event": "business-closure",
+   "name": "폐업신고",
+   "law_query": "부가가치세법 시행령",
+   "article_title": "폐업의 신고"
+  },
+  "svc:142000000088": {
+   "kind": "gov24",
+   "event": "business-closure",
+   "name": "소상공인 재기지원",
+   "service_id": "142000000088"
+  },
+  "svc:149200005008": {
+   "kind": "gov24",
+   "event": "business-closure",
+   "name": "자영업자 실업급여",
+   "service_id": "149200005008"
+  },
+  "svc:B01000300013": {
+   "kind": "gov24",
+   "event": "business-closure",
+   "name": "소상공인·자영업자 새출발기금 채무조정 프로그램",
+   "service_id": "B01000300013"
+  },
+  "svc:B55400900009": {
+   "kind": "gov24",
+   "event": "business-closure",
+   "name": "재창업자금",
+   "service_id": "B55400900009"
+  },
+  "svc:B55369400007": {
+   "kind": "gov24",
+   "event": "business-closure",
+   "name": "재창업 재기지원 보증",
+   "service_id": "B55369400007"
+  },
+  "law:농지취득자격증명": {
+   "kind": "law",
+   "event": "return-to-farm",
+   "name": "농지취득자격증명",
+   "law_query": "농지법",
+   "article_title": "농지취득자격증명"
+  },
+  "law:농업경영체 등록": {
+   "kind": "law",
+   "event": "return-to-farm",
+   "name": "농업경영체 등록",
+   "law_query": "농어업경영체 육성 및 지원에 관한 법률",
+   "article_title": "농어업경영정보의 등록"
+  },
+  "law:귀농인 정착 지원": {
+   "kind": "law",
+   "event": "return-to-farm",
+   "name": "귀농인 정착 지원",
+   "law_query": "귀농어ㆍ귀촌 활성화 및 지원에 관한 법률",
+   "article_title": "귀농"
+  },
+  "svc:154300000011": {
+   "kind": "gov24",
+   "event": "return-to-farm",
+   "name": "귀농 농업창업 및 주택구입지원 사업",
+   "service_id": "154300000011"
+  },
+  "svc:154300000138": {
+   "kind": "gov24",
+   "event": "return-to-farm",
+   "name": "귀농·귀촌인귀농귀촌교육",
+   "service_id": "154300000138"
+  },
+  "svc:154300000396": {
+   "kind": "gov24",
+   "event": "return-to-farm",
+   "name": "청년농업인 영농정착지원",
+   "service_id": "154300000396"
+  },
+  "svc:154300000321": {
+   "kind": "gov24",
+   "event": "return-to-farm",
+   "name": "귀농귀촌종합센터 운영",
+   "service_id": "154300000321"
+  },
+  "svc:154300005035": {
+   "kind": "gov24",
+   "event": "return-to-farm",
+   "name": "맞춤형농지지원사업",
+   "service_id": "154300005035"
+  },
+  "law:현역병 입영": {
+   "kind": "law",
+   "event": "military",
+   "name": "현역병 입영",
+   "law_query": "병역법",
+   "article_title": "현역병입영"
+  },
+  "law:병역판정검사·입영 연기": {
+   "kind": "law",
+   "event": "military",
+   "name": "병역판정검사·입영 연기",
+   "law_query": "병역법",
+   "article_title": "입영 등의 연기"
+  },
+  "law:군 복무 크레딧": {
+   "kind": "law",
+   "event": "military",
+   "name": "군 복무 크레딧",
+   "law_query": "국민연금법",
+   "article_title": "군 복무"
+  },
+  "svc:129000000015": {
+   "kind": "gov24",
+   "event": "military",
+   "name": "전역예정장병 취업활동지원",
+   "service_id": "129000000015"
+  },
+  "svc:B55346600007": {
+   "kind": "gov24",
+   "event": "military",
+   "name": "청년장병 취업상담 및 일자리지원",
+   "service_id": "B55346600007"
+  },
+  "svc:129000000013": {
+   "kind": "gov24",
+   "event": "military",
+   "name": "전역예정군인 재취업 지원",
+   "service_id": "129000000013"
+  },
+  "svc:999000000020": {
+   "kind": "gov24",
+   "event": "military",
+   "name": "제대군인 취업지원",
+   "service_id": "999000000020"
+  },
+  "svc:129000000009": {
+   "kind": "gov24",
+   "event": "military",
+   "name": "장병 인권상담 지원",
+   "service_id": "129000000009"
+  },
+  "law:노령연금 청구": {
+   "kind": "law",
+   "event": "retirement",
+   "name": "노령연금 청구",
+   "law_query": "국민연금법",
+   "article_title": "노령연금"
+  },
+  "law:기초연금 신청": {
+   "kind": "law",
+   "event": "retirement",
+   "name": "기초연금 신청",
+   "law_query": "기초연금법",
+   "article_title": "기초연금 지급의 신청"
+  },
+  "svc:SSE000000170": {
+   "kind": "gov24",
+   "event": "retirement",
+   "name": "기초연금",
+   "service_id": "SSE000000170"
+  },
+  "svc:SSE000000100": {
+   "kind": "gov24",
+   "event": "retirement",
+   "name": "노인일자리 및 사회활동 지원",
+   "service_id": "SSE000000100"
+  },
+  "svc:SD0000003173": {
+   "kind": "gov24",
+   "event": "retirement",
+   "name": "주택금융공사 주택담보 노후연금 보증 지원",
+   "service_id": "SD0000003173"
+  },
+  "svc:154300000128": {
+   "kind": "gov24",
+   "event": "retirement",
+   "name": "농지연금",
+   "service_id": "154300000128"
+  },
+  "law:자녀 전학": {
+   "kind": "law",
+   "event": "move",
+   "name": "자녀 전학",
+   "law_query": "초ㆍ중등교육법 시행령",
+   "article_title": "초등학교의 전학절차"
+  },
+  "law:대항력·확정일자": {
+   "kind": "law",
+   "event": "lease",
+   "name": "대항력·확정일자",
+   "law_query": "주택임대차보호법",
+   "article_title": "대항력"
+  },
+  "law:임대차 계약 종료·갱신거절 통지": {
+   "kind": "law",
+   "event": "lease",
+   "name": "임대차 계약 종료·갱신거절 통지",
+   "law_query": "주택임대차보호법",
+   "article_title": "계약의 갱신",
+   "aliases": [
+    "임대차 계약 해지 통보",
+    "계약 해지 통지",
+    "계약 종료 통보",
+    "갱신 거절 통지"
+   ]
+  },
+  "law:묵시적 갱신 후 계약 해지 통지": {
+   "kind": "law",
+   "event": "lease",
+   "name": "묵시적 갱신 후 계약 해지 통지",
+   "law_query": "주택임대차보호법",
+   "article_title": "묵시적 갱신의 경우 계약의 해지",
+   "aliases": [
+    "묵시적 갱신 해지"
+   ]
+  },
+  "law:계약갱신요구권 행사": {
+   "kind": "law",
+   "event": "lease",
+   "name": "계약갱신요구권 행사",
+   "law_query": "주택임대차보호법",
+   "article_title": "계약갱신 요구 등"
+  },
+  "law:임차권등기명령": {
+   "kind": "law",
+   "event": "lease",
+   "name": "임차권등기명령",
+   "law_query": "주택임대차보호법",
+   "article_title": "임차권등기명령"
+  },
+  "law:주택 임대차 신고": {
+   "kind": "law",
+   "event": "lease",
+   "name": "주택 임대차 신고",
+   "law_query": "부동산 거래신고 등에 관한 법률",
+   "article_title": "주택 임대차 계약의 신고"
+  },
+  "svc:161300000103": {
+   "kind": "gov24",
+   "event": "lease",
+   "name": "국토교통부 전세보증금반환보증 보증료 지원",
+   "service_id": "161300000103"
+  },
+  "svc:161300000099": {
+   "kind": "gov24",
+   "event": "lease",
+   "name": "청년월세 지원",
+   "service_id": "161300000099"
+  },
+  "svc:999000000025": {
+   "kind": "gov24",
+   "event": "lease",
+   "name": "주거안정 월세대출",
+   "service_id": "999000000025"
+  },
+  "svc:116010000001": {
+   "kind": "gov24",
+   "event": "lease",
+   "name": "주택금융공사 월세자금보증",
+   "service_id": "116010000001"
+  },
+  "svc:B27000100035": {
+   "kind": "gov24",
+   "event": "lease",
+   "name": "주택임대차·상가건물임대차 분쟁조정",
+   "service_id": "B27000100035"
+  },
+  "law:부동산 거래신고": {
+   "kind": "law",
+   "event": "home-purchase",
+   "name": "부동산 거래신고",
+   "law_query": "부동산 거래신고 등에 관한 법률",
+   "article_title": "부동산 거래의 신고"
+  },
+  "law:소유권이전등기": {
+   "kind": "law",
+   "event": "home-purchase",
+   "name": "소유권이전등기",
+   "law_query": "부동산등기 특별조치법",
+   "article_title": "소유권이전등기"
+  },
+  "law:취득세 신고·납부": {
+   "kind": "law",
+   "event": "home-purchase",
+   "name": "취득세 신고·납부",
+   "law_query": "지방세법",
+   "article_title": "신고 및 납부"
+  },
+  "law:생애최초 취득세 감면": {
+   "kind": "law",
+   "event": "home-purchase",
+   "name": "생애최초 취득세 감면",
+   "law_query": "지방세특례제한법",
+   "article_title": "생애최초"
+  },
+  "svc:161300000088": {
+   "kind": "gov24",
+   "event": "home-purchase",
+   "name": "청년주택드림 청약통장",
+   "service_id": "161300000088"
+  },
+  "law:양도소득세 예정신고": {
+   "kind": "law",
+   "event": "home-sale",
+   "name": "양도소득세 예정신고",
+   "law_query": "소득세법",
+   "article_title": "양도소득과세표준 예정신고"
+  },
+  "law:1세대 1주택 비과세": {
+   "kind": "law",
+   "event": "home-sale",
+   "name": "1세대 1주택 비과세",
+   "law_query": "소득세법",
+   "article_title": "비과세 양도소득"
+  },
+  "law:임대사업자 등록": {
+   "kind": "law",
+   "event": "landlord",
+   "name": "임대사업자 등록",
+   "law_query": "민간임대주택에 관한 특별법",
+   "article_title": "임대사업자의 등록"
+  },
+  "law:임대보증금 보증 가입": {
+   "kind": "law",
+   "event": "landlord",
+   "name": "임대보증금 보증 가입",
+   "law_query": "민간임대주택에 관한 특별법",
+   "article_title": "임대보증금에 대한 보증"
+  },
+  "law:임대소득 종합소득세 신고": {
+   "kind": "law",
+   "event": "landlord",
+   "name": "임대소득 종합소득세 신고",
+   "law_query": "소득세법",
+   "article_title": "종합소득과세표준 확정신고"
+  },
+  "law:전세사기피해자 결정 신청": {
+   "kind": "law",
+   "event": "jeonse-fraud",
+   "name": "전세사기피해자 결정 신청",
+   "law_query": "전세사기피해자 지원 및 주거안정에 관한 특별법",
+   "article_title": "전세사기피해자등 결정"
+  },
+  "svc:135200005001": {
+   "kind": "gov24",
+   "event": "jeonse-fraud",
+   "name": "긴급복지 주거지원",
+   "service_id": "135200005001"
+  },
+  "svc:B27000100027": {
+   "kind": "gov24",
+   "event": "jeonse-fraud",
+   "name": "무료 소송대리 서비스(소액임차인)",
+   "service_id": "B27000100027"
+  },
+  "svc:999000000022": {
+   "kind": "gov24",
+   "event": "jeonse-fraud",
+   "name": "기존주택 전세임대주택 지원사업",
+   "service_id": "999000000022"
+  },
+  "law:장애인 등록": {
+   "kind": "law",
+   "event": "disability",
+   "name": "장애인 등록",
+   "law_query": "장애인복지법",
+   "article_title": "장애인 등록"
+  },
+  "law:장애인연금 수급권자": {
+   "kind": "law",
+   "event": "disability",
+   "name": "장애인연금 수급권자",
+   "law_query": "장애인연금법",
+   "article_title": "수급권자"
+  },
+  "law:활동지원급여 신청": {
+   "kind": "law",
+   "event": "disability",
+   "name": "활동지원급여 신청",
+   "law_query": "장애인활동 지원에 관한 법률",
+   "article_title": "활동지원급여의 신청"
+  },
+  "law:발달재활서비스 바우처": {
+   "kind": "law",
+   "event": "disability",
+   "name": "발달재활서비스 바우처",
+   "law_query": "장애아동 복지지원법",
+   "article_title": "발달재활서비스지원",
+   "aliases": [
+    "발달재활서비스 바우처 신청",
+    "발달재활 바우처",
+    "발달재활서비스 신청"
+   ]
+  },
+  "svc:SD0000016119": {
+   "kind": "gov24",
+   "event": "disability",
+   "name": "장애인연금",
+   "service_id": "SD0000016119"
+  },
+  "svc:SPE000000010": {
+   "kind": "gov24",
+   "event": "disability",
+   "name": "장애수당",
+   "service_id": "SPE000000010"
+  },
+  "svc:VOU000000020": {
+   "kind": "gov24",
+   "event": "disability",
+   "name": "장애인 활동지원",
+   "service_id": "VOU000000020"
+  },
+  "svc:131200000004": {
+   "kind": "gov24",
+   "event": "disability",
+   "name": "장애인차량취득세및자동차세감면",
+   "service_id": "131200000004"
+  },
+  "svc:B55092800043": {
+   "kind": "gov24",
+   "event": "disability",
+   "name": "장애인 건강보험료 경감",
+   "service_id": "B55092800043"
+  },
+  "svc:SPE000000020": {
+   "kind": "gov24",
+   "event": "disability",
+   "name": "장애아동수당",
+   "service_id": "SPE000000020"
+  },
+  "svc:135200000095": {
+   "kind": "gov24",
+   "event": "disability",
+   "name": "발달장애인 개인별지원계획 수립 지원",
+   "service_id": "135200000095"
+  },
+  "svc:WLF00006294": {
+   "kind": "national_welfare",
+   "event": "disability",
+   "name": "장애인 등록 신청",
+   "service_id": "WLF00006294"
+  },
+  "law:본인부담상한제": {
+   "kind": "law",
+   "event": "serious-illness",
+   "name": "본인부담상한제",
+   "law_query": "국민건강보험법",
+   "article_title": "비용의 일부부담"
+  },
+  "law:재난적의료비 지원대상": {
+   "kind": "law",
+   "event": "serious-illness",
+   "name": "재난적의료비 지원대상",
+   "law_query": "재난적의료비 지원에 관한 법률",
+   "article_title": "지원대상"
+  },
+  "law:긴급복지 지원요청": {
+   "kind": "law",
+   "event": "serious-illness",
+   "name": "긴급복지 지원요청",
+   "law_query": "긴급복지지원법",
+   "article_title": "지원요청"
+  },
+  "svc:B55092800041": {
+   "kind": "gov24",
+   "event": "serious-illness",
+   "name": "건강보험 산정특례",
+   "service_id": "B55092800041"
+  },
+  "svc:SD0000008743": {
+   "kind": "gov24",
+   "event": "serious-illness",
+   "name": "재난적 의료비 지원 사업",
+   "service_id": "SD0000008743"
+  },
+  "svc:B55092800002": {
+   "kind": "gov24",
+   "event": "serious-illness",
+   "name": "건강보험 본인부담상한액 초과금 지원",
+   "service_id": "B55092800002"
+  },
+  "svc:135200005017": {
+   "kind": "gov24",
+   "event": "serious-illness",
+   "name": "한국형 상병수당 시범사업",
+   "service_id": "135200005017"
+  },
+  "svc:WII000001620": {
+   "kind": "gov24",
+   "event": "serious-illness",
+   "name": "암환자의료비지원",
+   "service_id": "WII000001620"
+  },
+  "svc:429000000646": {
+   "kind": "gov24",
+   "event": "serious-illness",
+   "name": "희귀질환자 의료비 지원사업",
+   "service_id": "429000000646"
+  },
+  "svc:135200005005": {
+   "kind": "gov24",
+   "event": "serious-illness",
+   "name": "긴급복지 의료지원",
+   "service_id": "135200005005"
+  },
+  "law:장기요양인정 신청": {
+   "kind": "law",
+   "event": "elderly-care",
+   "name": "장기요양인정 신청",
+   "law_query": "노인장기요양보험법",
+   "article_title": "장기요양인정의 신청"
+  },
+  "law:가족돌봄휴직·휴가": {
+   "kind": "law",
+   "event": "elderly-care",
+   "name": "가족돌봄휴직·휴가",
+   "law_query": "남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률",
+   "article_title": "가족 돌봄 등을 위한 지원"
+  },
+  "law:치매안심센터": {
+   "kind": "law",
+   "event": "elderly-care",
+   "name": "치매안심센터",
+   "law_query": "치매관리법",
+   "article_title": "치매안심센터",
+   "aliases": [
+    "치매 환자 등록",
+    "치매안심센터 등록",
+    "치매 등록",
+    "치매 조기검진"
+   ]
+  },
+  "svc:999000000089": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "노인장기요양보험(장기요양인정)",
+   "service_id": "999000000089"
+  },
+  "svc:SSE000000020": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "재가급여",
+   "service_id": "SSE000000020"
+  },
+  "svc:SSE000000050": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "노인맞춤돌봄서비스",
+   "service_id": "SSE000000050"
+  },
+  "svc:135200000080": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "치매관리 서비스 (치매안심센터)",
+   "service_id": "135200000080"
+  },
+  "svc:135200000125": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "치매 치료관리비 지원",
+   "service_id": "135200000125"
+  },
+  "svc:135200005043": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "치매검진 지원",
+   "service_id": "135200005043"
+  },
+  "svc:149200005038": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "가족돌봄휴가 제도",
+   "service_id": "149200005038"
+  },
+  "svc:135200005031": {
+   "kind": "gov24",
+   "event": "elderly-care",
+   "name": "장기요양급여비용 본인부담금 감경",
+   "service_id": "135200005031"
+  },
+  "law:성년후견개시 심판": {
+   "kind": "law",
+   "event": "guardianship",
+   "name": "성년후견개시 심판",
+   "law_query": "민법",
+   "article_title": "성년후견개시의 심판"
+  },
+  "law:한정후견개시 심판": {
+   "kind": "law",
+   "event": "guardianship",
+   "name": "한정후견개시 심판",
+   "law_query": "민법",
+   "article_title": "한정후견개시의 심판"
+  },
+  "law:치매 성년후견 이용지원": {
+   "kind": "law",
+   "event": "guardianship",
+   "name": "치매 성년후견 이용지원",
+   "law_query": "치매관리법",
+   "article_title": "성년후견"
+  },
+  "svc:999000000047": {
+   "kind": "gov24",
+   "event": "guardianship",
+   "name": "치매 환자 공공후견 지원",
+   "service_id": "999000000047"
+  },
+  "svc:SD0000002255": {
+   "kind": "gov24",
+   "event": "guardianship",
+   "name": "발달장애인 공공후견 지원",
+   "service_id": "SD0000002255"
+  },
+  "law:기초생활보장 급여 신청": {
+   "kind": "law",
+   "event": "financial-hardship",
+   "name": "기초생활보장 급여 신청",
+   "law_query": "국민기초생활 보장법",
+   "article_title": "급여의 신청"
+  },
+  "svc:WII000001410": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "생계급여",
+   "service_id": "WII000001410"
+  },
+  "svc:999000000043": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "의료급여 (의료급여)",
+   "service_id": "999000000043"
+  },
+  "svc:336000000096": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "주거급여 (맞춤형 급여)",
+   "service_id": "336000000096"
+  },
+  "svc:135200005003": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "긴급복지 생계지원",
+   "service_id": "135200005003"
+  },
+  "svc:135200005004": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "긴급복지 연료비 및 전기요금 지원",
+   "service_id": "135200005004"
+  },
+  "svc:B55353000001": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "에너지바우처",
+   "service_id": "B55353000001"
+  },
+  "svc:WLU000000020": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "차상위 본인부담 경감대상자 지원",
+   "service_id": "WLU000000020"
+  },
+  "svc:SBA000000100": {
+   "kind": "gov24",
+   "event": "financial-hardship",
+   "name": "자활근로(기초, 차상위)",
+   "service_id": "SBA000000100"
+  },
+  "law:개인회생 신청": {
+   "kind": "law",
+   "event": "debt-relief",
+   "name": "개인회생 신청",
+   "law_query": "채무자 회생 및 파산에 관한 법률",
+   "article_title": "개인회생절차개시"
+  },
+  "law:개인파산 신청": {
+   "kind": "law",
+   "event": "debt-relief",
+   "name": "개인파산 신청",
+   "law_query": "채무자 회생 및 파산에 관한 법률",
+   "article_title": "파산신청권자"
+  },
+  "law:면책 신청": {
+   "kind": "law",
+   "event": "debt-relief",
+   "name": "면책 신청",
+   "law_query": "채무자 회생 및 파산에 관한 법률",
+   "article_title": "면책신청"
+  },
+  "law:불법추심 금지": {
+   "kind": "law",
+   "event": "debt-relief",
+   "name": "불법추심 금지",
+   "law_query": "채권의 공정한 추심에 관한 법률",
+   "article_title": "폭행ㆍ협박"
+  },
+  "svc:B01000300005": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "국민행복기금 채무조정",
+   "service_id": "B01000300005"
+  },
+  "svc:B01000300001": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "한국자산관리공사 채무조정",
+   "service_id": "B01000300001"
+  },
+  "svc:B55370000011": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "신용회복위원회 성실상환자 소액대출",
+   "service_id": "B55370000011"
+  },
+  "svc:B27000100010": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "무료 소송대리 서비스(개인회생신청대상자)",
+   "service_id": "B27000100010"
+  },
+  "svc:B27000100041": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "무료 소송대리 서비스(파산·면책신청대상자)",
+   "service_id": "B27000100041"
+  },
+  "svc:B27000100053": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "채무자대리인(변호사)무료지원사업",
+   "service_id": "B27000100053"
+  },
+  "svc:B55370100027": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "불법사금융예방대출",
+   "service_id": "B55370100027"
+  },
+  "svc:B55370100037": {
+   "kind": "gov24",
+   "event": "debt-relief",
+   "name": "햇살론일반",
+   "service_id": "B55370100037"
+  },
+  "law:피해구제 신청": {
+   "kind": "law",
+   "event": "voice-phishing",
+   "name": "피해구제 신청",
+   "law_query": "전기통신금융사기 피해 방지 및 피해자산 환급에 관한 특별법",
+   "article_title": "피해구제의 신청"
+  },
+  "law:계좌 지급정지": {
+   "kind": "law",
+   "event": "voice-phishing",
+   "name": "계좌 지급정지",
+   "law_query": "전기통신금융사기 피해 방지 및 피해자산 환급에 관한 특별법",
+   "article_title": "지급정지"
+  },
+  "law:피해환급금 지급": {
+   "kind": "law",
+   "event": "voice-phishing",
+   "name": "피해환급금 지급",
+   "law_query": "전기통신금융사기 피해 방지 및 피해자산 환급에 관한 특별법",
+   "article_title": "피해환급자산의 결정"
+  },
+  "svc:B27000100049": {
+   "kind": "gov24",
+   "event": "voice-phishing",
+   "name": "무료소송대리서비스(전기통신 금융사기 피해자(보이스피싱 피해자)",
+   "service_id": "B27000100049"
+  },
+  "law:범죄피해 구조금 지급요건": {
+   "kind": "law",
+   "event": "crime-victim",
+   "name": "범죄피해 구조금 지급요건",
+   "law_query": "범죄피해자 보호법",
+   "article_title": "구조금의 지급요건"
+  },
+  "law:구조금 지급신청": {
+   "kind": "law",
+   "event": "crime-victim",
+   "name": "구조금 지급신청",
+   "law_query": "범죄피해자 보호법",
+   "article_title": "구조금의 지급신청"
+  },
+  "svc:128000000001": {
+   "kind": "gov24",
+   "event": "crime-victim",
+   "name": "범죄 피해 구조금 지급",
+   "service_id": "128000000001"
+  },
+  "svc:128000000003": {
+   "kind": "gov24",
+   "event": "crime-victim",
+   "name": "범죄피해자에 대한 경제적 지원",
+   "service_id": "128000000003"
+  },
+  "svc:132000000008": {
+   "kind": "gov24",
+   "event": "crime-victim",
+   "name": "범죄피해자 보호·지원",
+   "service_id": "132000000008"
+  },
+  "svc:B27000100036": {
+   "kind": "gov24",
+   "event": "crime-victim",
+   "name": "무료 소송대리 서비스(범죄피해자)",
+   "service_id": "B27000100036"
+  },
+  "svc:127000000026": {
+   "kind": "gov24",
+   "event": "crime-victim",
+   "name": "성폭력, 아동학대, 장애인학대,인신매매, 스토킹범죄, 특정강력범죄 피해자 국선변호사 지원",
+   "service_id": "127000000026"
+  },
+  "law:가정폭력 임시조치": {
+   "kind": "law",
+   "event": "domestic-violence",
+   "name": "가정폭력 임시조치",
+   "law_query": "가정폭력범죄의 처벌 등에 관한 특례법",
+   "article_title": "임시조치"
+  },
+  "law:스토킹 긴급응급조치": {
+   "kind": "law",
+   "event": "domestic-violence",
+   "name": "스토킹 긴급응급조치",
+   "law_query": "스토킹범죄의 처벌 등에 관한 법률",
+   "article_title": "긴급응급조치"
+  },
+  "law:주민등록 열람 제한": {
+   "kind": "law",
+   "event": "domestic-violence",
+   "name": "주민등록 열람 제한",
+   "law_query": "주민등록법",
+   "article_title": "열람 또는 등"
+  },
+  "law:보호시설": {
+   "kind": "law",
+   "event": "domestic-violence",
+   "name": "보호시설",
+   "law_query": "가정폭력방지 및 피해자보호 등에 관한 법률",
+   "article_title": "보호시설"
+  },
+  "svc:PTR000050697": {
+   "kind": "gov24",
+   "event": "domestic-violence",
+   "name": "가정폭력 피해자 보호시설 운영 지원",
+   "service_id": "PTR000050697"
+  },
+  "svc:WII000001480": {
+   "kind": "gov24",
+   "event": "domestic-violence",
+   "name": "가정폭력 상담소 운영 지원",
+   "service_id": "WII000001480"
+  },
+  "svc:WII000001490": {
+   "kind": "gov24",
+   "event": "domestic-violence",
+   "name": "가정폭력피해자 치료회복 프로그램 및 의료비 지원",
+   "service_id": "WII000001490"
+  },
+  "svc:GEF000000050": {
+   "kind": "gov24",
+   "event": "domestic-violence",
+   "name": "가정폭력 성폭력 피해자 무료법률 지원",
+   "service_id": "GEF000000050"
+  },
+  "svc:SD0000017261": {
+   "kind": "gov24",
+   "event": "domestic-violence",
+   "name": "폭력피해자 주거지원",
+   "service_id": "SD0000017261"
+  },
+  "svc:138300000016": {
+   "kind": "gov24",
+   "event": "domestic-violence",
+   "name": "가정폭력피해자 국민임대주택 우선 입주권 부여",
+   "service_id": "138300000016"
+  },
+  "svc:138300000053": {
+   "kind": "gov24",
+   "event": "domestic-violence",
+   "name": "가정폭력 피해자 보호시설 퇴소자 자립지원금",
+   "service_id": "138300000053"
+  },
+  "law:피해학생 보호조치": {
+   "kind": "law",
+   "event": "school-violence",
+   "name": "피해학생 보호조치",
+   "law_query": "학교폭력예방 및 대책에 관한 법률",
+   "article_title": "피해학생의 보호"
+  },
+  "law:학교폭력대책심의위원회": {
+   "kind": "law",
+   "event": "school-violence",
+   "name": "학교폭력대책심의위원회",
+   "law_query": "학교폭력예방 및 대책에 관한 법률",
+   "article_title": "학교폭력대책심의위원회"
+  },
+  "svc:134200005007": {
+   "kind": "gov24",
+   "event": "school-violence",
+   "name": "위(Wee) 클래스 상담 지원",
+   "service_id": "134200005007"
+  },
+  "svc:B27000100034": {
+   "kind": "gov24",
+   "event": "school-violence",
+   "name": "무료 소송대리 서비스(학교폭력피해자)",
+   "service_id": "B27000100034"
+  },
+  "law:정부보장사업(뺑소니·무보험)": {
+   "kind": "law",
+   "event": "traffic-accident",
+   "name": "정부보장사업(뺑소니·무보험)",
+   "law_query": "자동차손해배상 보장법",
+   "article_title": "자동차손해배상 보장사업"
+  },
+  "law:보험금 청구": {
+   "kind": "law",
+   "event": "traffic-accident",
+   "name": "보험금 청구",
+   "law_query": "자동차손해배상 보장법",
+   "article_title": "보험금등의 청구"
+  },
+  "law:피해자 가불금": {
+   "kind": "law",
+   "event": "traffic-accident",
+   "name": "피해자 가불금",
+   "law_query": "자동차손해배상 보장법",
+   "article_title": "피해자에 대한 가불금"
+  },
+  "svc:B27000100011": {
+   "kind": "gov24",
+   "event": "traffic-accident",
+   "name": "무료 소송대리 서비스(저소득 교통사고 피해자)",
+   "service_id": "B27000100011"
+  },
+  "svc:WLF00006298": {
+   "kind": "national_welfare",
+   "event": "traffic-accident",
+   "name": "자동차사고 피해자 지원사업",
+   "service_id": "WLF00006298"
+  },
+  "law:재해구호 대상": {
+   "kind": "law",
+   "event": "disaster",
+   "name": "재해구호 대상",
+   "law_query": "재해구호법",
+   "article_title": "구호의 대상"
+  },
+  "law:재난지역 국고보조 지원": {
+   "kind": "law",
+   "event": "disaster",
+   "name": "재난지역 국고보조 지원",
+   "law_query": "재난 및 안전관리 기본법",
+   "article_title": "재난지역에 대한 국고보조"
+  },
+  "law:특별재난지역 지원": {
+   "kind": "law",
+   "event": "disaster",
+   "name": "특별재난지역 지원",
+   "law_query": "재난 및 안전관리 기본법",
+   "article_title": "특별재난지역에 대한 지원"
+  },
+  "law:국세 납부기한 연장": {
+   "kind": "law",
+   "event": "disaster",
+   "name": "국세 납부기한 연장",
+   "law_query": "국세징수법",
+   "article_title": "납부기한등의 연장"
+  },
+  "svc:PTR000051664": {
+   "kind": "gov24",
+   "event": "disaster",
+   "name": "재난심리회복지원 서비스",
+   "service_id": "PTR000051664"
+  },
+  "svc:171000000002": {
+   "kind": "gov24",
+   "event": "disaster",
+   "name": "재난지역 주민에 대한 우체국금융 수수료 면제",
+   "service_id": "171000000002"
+  },
+  "svc:WII000001130": {
+   "kind": "gov24",
+   "event": "disaster",
+   "name": "풍수해·지진재해보험료 지원",
+   "service_id": "WII000001130"
+  },
+  "law:갱생보호 신청": {
+   "kind": "law",
+   "event": "prison-release",
+   "name": "갱생보호 신청",
+   "law_query": "보호관찰 등에 관한 법률",
+   "article_title": "갱생보호의 신청"
+  },
+  "law:갱생보호 방법(숙식·취업 지원)": {
+   "kind": "law",
+   "event": "prison-release",
+   "name": "갱생보호 방법(숙식·취업 지원)",
+   "law_query": "보호관찰 등에 관한 법률",
+   "article_title": "갱생보호의 방법"
+  },
+  "law:주민등록증 재발급": {
+   "kind": "law",
+   "event": "lost-id",
+   "name": "주민등록증 재발급",
+   "law_query": "주민등록법",
+   "article_title": "주민등록증의 재발급"
+  },
+  "law:운전면허증 재발급": {
+   "kind": "law",
+   "event": "lost-id",
+   "name": "운전면허증 재발급",
+   "law_query": "도로교통법",
+   "article_title": "운전면허증의 재발급"
+  },
+  "law:노출된 개인정보 삭제·차단": {
+   "kind": "law",
+   "event": "lost-id",
+   "name": "노출된 개인정보 삭제·차단",
+   "law_query": "개인정보 보호법",
+   "article_title": "노출된 개인정보"
+  },
+  "law:개명신고": {
+   "kind": "law",
+   "event": "name-change",
+   "name": "개명신고",
+   "law_query": "가족관계의 등록 등에 관한 법률",
+   "article_title": "개명신고",
+   "aliases": [
+    "가정법원 개명허가 신청",
+    "개명허가 신청",
+    "개명 허가",
+    "개명 신고"
+   ]
+  },
+  "law:신규등록": {
+   "kind": "law",
+   "event": "car",
+   "name": "신규등록",
+   "law_query": "자동차관리법",
+   "article_title": "신규등록"
+  },
+  "law:이전등록": {
+   "kind": "law",
+   "event": "car",
+   "name": "이전등록",
+   "law_query": "자동차관리법",
+   "article_title": "이전등록"
+  },
+  "law:말소등록(폐차)": {
+   "kind": "law",
+   "event": "car",
+   "name": "말소등록(폐차)",
+   "law_query": "자동차관리법",
+   "article_title": "말소등록"
+  },
+  "law:자동차보험 의무가입": {
+   "kind": "law",
+   "event": "car",
+   "name": "자동차보험 의무가입",
+   "law_query": "자동차손해배상 보장법",
+   "article_title": "보험 등의 가입 의무"
+  },
+  "svc:B55258400207": {
+   "kind": "gov24",
+   "event": "car",
+   "name": "조기폐차 지원",
+   "service_id": "B55258400207"
+  },
+  "svc:148000000007": {
+   "kind": "gov24",
+   "event": "car",
+   "name": "운행 자동차 저공해 조치 지원",
+   "service_id": "148000000007"
+  },
+  "law:해외이주신고": {
+   "kind": "law",
+   "event": "emigration",
+   "name": "해외이주신고",
+   "law_query": "해외이주법",
+   "article_title": "해외이주신고"
+  },
+  "law:영주귀국 신고": {
+   "kind": "law",
+   "event": "emigration",
+   "name": "영주귀국 신고",
+   "law_query": "해외이주법",
+   "article_title": "영주귀국의 신고"
+  },
+  "law:재외국민 주민등록": {
+   "kind": "law",
+   "event": "emigration",
+   "name": "재외국민 주민등록",
+   "law_query": "주민등록법",
+   "article_title": "재외국민의 신고"
+  },
+  "law:국민연금 반환일시금": {
+   "kind": "law",
+   "event": "emigration",
+   "name": "국민연금 반환일시금",
+   "law_query": "국민연금법",
+   "article_title": "반환일시금"
+  },
+  "law:건강보험 급여정지": {
+   "kind": "law",
+   "event": "emigration",
+   "name": "건강보험 급여정지",
+   "law_query": "국민건강보험법",
+   "article_title": "급여의 정지"
+  },
+  "law:체류기간 연장허가": {
+   "kind": "law",
+   "event": "foreign-resident",
+   "name": "체류기간 연장허가",
+   "law_query": "출입국관리법",
+   "article_title": "체류기간 연장허가"
+  },
+  "law:체류지 변경신고": {
+   "kind": "law",
+   "event": "foreign-resident",
+   "name": "체류지 변경신고",
+   "law_query": "출입국관리법",
+   "article_title": "체류지 변경의 신고"
+  },
+  "law:일반귀화": {
+   "kind": "law",
+   "event": "foreign-resident",
+   "name": "일반귀화",
+   "law_query": "국적법",
+   "article_title": "일반귀화"
+  },
+  "law:외국인 건강보험": {
+   "kind": "law",
+   "event": "foreign-resident",
+   "name": "외국인 건강보험",
+   "law_query": "국민건강보험법",
+   "article_title": "외국인 등에 대한 특례"
+  },
+  "svc:B27000100004": {
+   "kind": "gov24",
+   "event": "foreign-resident",
+   "name": "무료 소송대리 서비스(국내거주외국인)",
+   "service_id": "B27000100004"
+  },
+  "svc:B49000700205": {
+   "kind": "gov24",
+   "event": "foreign-resident",
+   "name": "외국인 근로자 지원 서비스",
+   "service_id": "B49000700205"
+  },
+  "svc:SD0000006941": {
+   "kind": "gov24",
+   "event": "foreign-resident",
+   "name": "외국인근로자 등 의료지원",
+   "service_id": "SD0000006941"
+  },
+  "svc:132000000003": {
+   "kind": "gov24",
+   "event": "foreign-resident",
+   "name": "외국인 피해자 지원제도 안내·연계 서비스",
+   "service_id": "132000000003"
+  },
+  "law:국가유공자 등록": {
+   "kind": "law",
+   "event": "veterans",
+   "name": "국가유공자 등록",
+   "law_query": "국가유공자 등 예우 및 지원에 관한 법률",
+   "article_title": "등록"
+  },
+  "law:보훈보상대상자 등록": {
+   "kind": "law",
+   "event": "veterans",
+   "name": "보훈보상대상자 등록",
+   "law_query": "보훈보상대상자 지원에 관한 법률",
+   "article_title": "등록"
+  },
+  "svc:183000000015": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "국가유공자 등 보상금",
+   "service_id": "183000000015"
+  },
+  "svc:183000000014": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "국가유공자 등 간호수당",
+   "service_id": "183000000014"
+  },
+  "svc:999000000018": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "제대군인 의료지원",
+   "service_id": "999000000018"
+  },
+  "svc:183000000006": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "국가보훈대상자 보훈장학금 지원",
+   "service_id": "183000000006"
+  },
+  "svc:183000000004": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "국가보훈대상자 취업능력개발비용(취업수강료) 지원",
+   "service_id": "183000000004"
+  },
+  "svc:999000000017": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "국가보훈대상자 주택우선공급",
+   "service_id": "999000000017"
+  },
+  "svc:B55265700001": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "참전용사 진료비 감면",
+   "service_id": "B55265700001"
+  },
+  "svc:183000000009": {
+   "kind": "gov24",
+   "event": "veterans",
+   "name": "보훈가족 심리재활서비스 지원",
+   "service_id": "183000000009"
+  }
+ }
+}

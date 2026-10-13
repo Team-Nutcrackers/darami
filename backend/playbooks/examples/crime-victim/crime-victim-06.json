@@ -1,0 +1,325 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "crime-victim-06",
+    "event_id": "crime-victim",
+    "event_title": "범죄 피해",
+    "persona_summary": "50세 남성 · 광주 동구 · 상해 피해 · 소송 지원",
+    "persona": {
+      "facts": {
+        "age": 50,
+        "gender": "남성",
+        "residence": "광주 동구",
+        "situation": "상해 피해 · 소송 지원"
+      }
+    },
+    "query": "상해를 입혀서 가해자를 고소했는데 민사 소송까지 하려니 비용이 부담돼요. 범죄 피해자한테 무료로 소송을 도와주는 곳이 있다던데 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "crime-victim"
+      ],
+      "reason": "상해 민사 소송 지원"
+    },
+    "plan": {
+      "title": "상해 피해 소송 지원",
+      "emoji": "⚖️",
+      "intro": "형사 재판 중이면 배상명령(별도 비용 없음)이 가장 빠르고, 민사는 법률구조공단 범죄피해자 무료 소송대리를 이용하세요. 가해자가 무자력이면 구조금을 신청해요.",
+      "law": [
+        {
+          "name": "범죄피해 구조금 지급요건",
+          "priority": "nice",
+          "condition": "중상해·가해자 무자력 시 구조금."
+        },
+        {
+          "name": "구조금 지급신청",
+          "priority": "nice",
+          "condition": "요건 시."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "무료 소송대리 서비스(범죄피해자)",
+          "priority": "must",
+          "condition": "법률구조공단 손해배상 소송 무료(범죄피해자 요건)."
+        },
+        {
+          "name": "범죄피해자에 대한 경제적 지원",
+          "priority": "nice",
+          "condition": "치료비."
+        },
+        {
+          "name": "범죄피해자 보호·지원",
+          "priority": "nice",
+          "condition": "경찰 지원."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "범죄피해"
+        ],
+        "local_keywords": [
+          "범죄피해",
+          "법률"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "형사 배상명령 신청",
+          "law_query": "소송촉진 등에 관한 특례법",
+          "keywords": [
+            "배상명령"
+          ],
+          "priority": "must",
+          "condition": "형사 재판 변론 종결 전 배상명령 신청."
+        }
+      ]
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "crime-victim",
+    "events": [
+      "crime-victim"
+    ],
+    "title": "상해 피해 소송 지원",
+    "emoji": "⚖️",
+    "intro": "형사 재판 중이면 배상명령(별도 비용 없음)이 가장 빠르고, 민사는 법률구조공단 범죄피해자 무료 소송대리를 이용하세요. 가해자가 무자력이면 구조금을 신청해요.",
+    "region": {
+      "sido": "광주광역시",
+      "sgg": "동구"
+    },
+    "procedures": [
+      {
+        "ref": "G4",
+        "id": "gov24-B27000100036",
+        "name": "무료 소송대리 서비스(범죄피해자)",
+        "priority": "must",
+        "condition": "법률구조공단 손해배상 소송 무료(범죄피해자 요건).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대한법률구조공단",
+        "online": true,
+        "documents": [],
+        "link": "www.klac.or.kr",
+        "source": {
+          "name": "보조금24 · 대한법률구조공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 타인의 범죄행위로 인해 발생한 피해자의 피해 회복 등 법률복지 증진\r\n\r\n○ 무료 법률상담\r\n\r\n○ 무료 소송대리\r\n - 타인의 범죄행위로 발생한 사건, 2차 사건",
+        "verification_status": "verified",
+        "eligibility": "범죄피해자(신체)  - 건강보험료 본인부담금 합산액이 기준중위소득 125% 이하인 자",
+        "key": "svc:B27000100036",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "형사 배상명령 신청",
+        "priority": "must",
+        "condition": "형사 재판 변론 종결 전 배상명령 신청.",
+        "deadline": "제1심 또는 제2심 공판의 변론이 종결되기 전까지",
+        "deadlineDays": 9999,
+        "agency": "법무부·법원 · 해당 형사사건이 계속 중인 법원(형사재판부)",
+        "online": false,
+        "documents": [
+          "배상신청서(사건번호·사건명·법원, 신청인 성명·주소, 피고인 성명·주소, 배상 대상과 내용, 청구 금액 기재)",
+          "신청서 부본(피고인 수만큼)",
+          "증거서류(진단서, 치료비 영수증, 피해 금액 입증자료 등)",
+          "대리인 선임 관련 서류(배우자·직계혈족·형제자매가 대리할 때, 법원 허가 필요)"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=734&ccfNo=2&cciNo=4&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 범죄피해자 > 배상명령 · 소송촉진 등에 관한 특례법 제25조(배상명령)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "상해·폭행·절도·사기·성폭력 등 범죄 피해자는 별도 민사소송 없이 형사재판 법원에 배상신청서를 내 치료비·물적 피해·위자료를 배상명령으로 받을 수 있다. 1심 또는 2심 변론 종결 전까지 신청해야 하며, 확정된 배상명령은 민사판결과 같은 집행력을 가진다. 같은 피해로 민사소송이 진행 중이면 신청할 수 없다.",
+        "verification_status": "verified",
+        "key": "x:형사 배상명령 신청",
+        "unlocks": 0,
+        "order": 2,
+        "where": "피고인의 형사사건이 진행 중인 법원에 배상신청서 제출(증인으로 출석한 경우 법정에서 구두 신청 가능)",
+        "steps": [
+          "검사의 공소제기 통지 등으로 사건번호와 담당 법원을 확인한다(배상신청 가능 사건이면 검사가 통지)",
+          "배상신청서와 피고인 수만큼의 부본, 치료비·피해액 증거서류를 준비한다",
+          "변론 종결 전에 해당 법원에 제출한다(증인 출석 시 구두 신청 가능)",
+          "유죄판결과 함께 선고된 배상명령 정본으로 강제집행한다(가집행 선고 시 즉시 집행 가능)"
+        ],
+        "pitfalls": [
+          "피해 금액이 특정되지 않거나 배상책임 범위가 불명확하면 각하될 수 있고, 각하·일부 인용 결정에는 불복할 수 없다",
+          "같은 범죄 피해로 민사 손해배상 소송이 계속 중이면 배상신청을 할 수 없다",
+          "배상명령이 확정되면 인용된 금액 범위에서는 다시 민사로 청구할 수 없다",
+          "유죄판결이 상소심에서 무죄·면소 등으로 바뀌면 배상명령도 취소된다(합의된 배상액은 예외)"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=734&ccfNo=2&cciNo=4&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "ref": "L1",
+        "id": "law-crime-victim-l1",
+        "name": "범죄피해 구조금 지급요건",
+        "priority": "nice",
+        "condition": "중상해·가해자 무자력 시 구조금.",
+        "deadline": "범죄피해를 안 날부터 3년, 발생한 날부터 10년 이내 신청",
+        "deadlineDays": 9999,
+        "agency": "법무부 · 주소지·거주지·범죄발생지 관할 지방검찰청 범죄피해구조심의회(지구심의회)",
+        "online": false,
+        "documents": [],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?ccfNo=3&cciNo=2&cnpClsNo=2&csmSeq=734&popMenu=ov",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 장해구조금 및 중상해구조금 · 범죄피해자 보호법 제16조(구조금의 지급요건)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "국내(또는 한국 선박·항공기 안)에서 생명·신체를 해치는 범죄로 사망·장해·중상해를 입고 가해자 불명·무자력 등으로 피해를 배상받지 못한 경우 국가가 유족구조금·장해구조금·중상해구조금을 지급한다. 중상해는 치료 2개월 이상 + 주요 장기 손상, 신체 절단·변형, 1주 이상 입원이 필요한 준하는 상해, 3일 이상 입원이 필요한 중증 정신질환 중 하나에 해당해야 하며, 유족구조금은 배우자·자녀·부모 등 법정 순위에 따라 선순위 유족에게 지급된다. 가해자가 부부·직계혈족·4촌 이내 친족·동거친족이거나, 피해자가 범죄를 유발·가담한 경우, 다른 법령·손해배상으로 보전받은 범위는 지급이 제한된다.",
+        "verification_status": "verified",
+        "key": "law:범죄피해 구조금 지급요건",
+        "unlocks": 1,
+        "order": 3,
+        "where": "관할 지방검찰청 범죄피해구조심의회(검찰청 피해자지원실 1577-2584)",
+        "fee": "무료",
+        "pitfalls": [
+          "정당행위·정당방위·과실로 인한 피해는 구조금 대상이 아니다",
+          "가해자와 부부·직계혈족·4촌 이내 친족 관계면 전부 지급되지 않는다",
+          "안 날부터 3년·발생일부터 10년이 지나면 신청 불가",
+          "가해자에게서 손해배상을 받으면 그 범위만큼 구조금이 줄어든다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?ccfNo=3&cciNo=2&cnpClsNo=2&csmSeq=734&popMenu=ov",
+        "curated": true
+      },
+      {
+        "ref": "L2",
+        "id": "law-crime-victim-l2",
+        "name": "구조금 지급신청",
+        "priority": "nice",
+        "condition": "요건 시.",
+        "deadline": "범죄피해 발생을 안 날부터 3년, 발생한 날부터 10년 이내",
+        "deadlineDays": 9999,
+        "agency": "법무부(검찰) · 주소지·거주지 또는 범죄발생지 관할 지방검찰청 범죄피해구조심의회(지구심의회)",
+        "online": false,
+        "documents": [
+          "구조금 지급신청서(장해·중상해·긴급: 시행규칙 별지 제11호, 유족: 별지 제9호)",
+          "장해·중상해 부위와 상태를 증명하는 의사·치과의사·한의사의 진단서 또는 소견서",
+          "범죄 전 동일 부위 기존 장해에 관한 진단서(해당 시)",
+          "입원·퇴원 확인서 등 입원·치료기간 증명서류(중상해구조금)",
+          "소득금액증명·건강보험료 산정내역서 등 수입상황 확인 서류(행정정보 공동이용 가능 시 생략)",
+          "가족관계증명서·기본증명서",
+          "사망진단서 또는 사체검안서(유족구조금)",
+          "위임장·위임인 신분증 사본 또는 인감증명서·대리인 신분증(대리 신청 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?HighCtgCD=A08006&CappBizCD=12800000037&tp_seq=",
+        "source": {
+          "name": "정부24 - 장해/중상해 구조금지급 신청 · 범죄피해자 보호법 제25조(구조금의 지급신청)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "범죄로 사망·장해·중상해 피해를 입었는데 가해자로부터 배상을 받지 못한 피해자(또는 유족)는 관할 지방검찰청 범죄피해구조심의회에 구조금 지급을 신청할 수 있다. 피해를 안 날부터 3년, 발생일부터 10년 이내에 방문 신청해야 하며 수수료는 없고 처리기간은 30일이다. 예시의 서울서부지검·인천지검 부천지청 심의회처럼 주소지·범죄발생지 관할 검찰청에 낸다.",
+        "verification_status": "verified",
+        "key": "law:구조금 지급신청",
+        "unlocks": 0,
+        "order": 4,
+        "where": "관할 지방검찰청(지청 경유 가능) 범죄피해구조심의회 방문 접수",
+        "fee": "무료",
+        "steps": [
+          "구조 요건 확인: 생명·신체를 해치는 범죄로 사망·장해·중상해를 입고 가해자 불명·무자력 등으로 배상받지 못한 경우",
+          "진단서·소득증명·가족관계서류를 갖춰 지급신청서를 작성",
+          "주소지·거주지·범죄발생지 관할 지방검찰청 범죄피해구조심의회에 방문 제출(지청 경유 가능)",
+          "심의회 심의·결정(처리기간 30일) 후 결정통지서 수령, 기각·각하 시 2주 내 본부심의회 재심 신청",
+          "장해·중상해 정도가 불명확하면 예상 구조금의 1/2 범위에서 긴급구조금 신청 가능"
+        ],
+        "pitfalls": [
+          "신청 기한(안 날부터 3년, 발생일부터 10년)을 넘기면 신청 불가",
+          "가해자에게서 손해배상을 일부 받았으면 그만큼 구조금에서 감액·제외될 수 있다",
+          "구조결정 송달 후 2년간 권리를 행사하지 않으면 시효 소멸",
+          "긴급구조금을 받은 뒤 확정 구조금이 더 적으면 차액을 반환해야 한다",
+          "외국인은 상호보증이 있거나 일정한 장기체류 자격이 있어야 대상"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?HighCtgCD=A08006&CappBizCD=12800000037&tp_seq=",
+        "curated": true,
+        "dependsOn": [
+          "law-crime-victim-l1"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-128000000003",
+        "name": "범죄피해자에 대한 경제적 지원",
+        "priority": "nice",
+        "condition": "치료비.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "대검찰청",
+        "online": true,
+        "documents": [
+          "1. 주민등록증 사본 등 신분증명서류",
+          "2. 피해자 본인이 아닌 다른 사람이 신청하는 경우에는 피해자와의 친족관계를 증명할 수 있는 가족관계 증명서 또는 대리인임을 증명할 수 있는 서류(위임장 등)",
+          "3. 통장사본",
+          "4. 그밖에 검찰이 경제적 지원을 위하여 특히 필요하다고 인정하는 서류"
+        ],
+        "link": "http://www.kics.go.kr",
+        "source": {
+          "name": "보조금24 · 대검찰청",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "범죄피해자 보호 지원",
+        "verification_status": "verified",
+        "eligibility": "범죄행위로 피해를 당한 피해자 본인, 그 배우자, 직계친족 및 4촌 이내의 친족",
+        "key": "svc:128000000003",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-132000000008",
+        "name": "범죄피해자 보호·지원",
+        "priority": "nice",
+        "condition": "경찰 지원.",
+        "deadline": "접수기관에 문의",
+        "deadlineDays": 9999,
+        "agency": "경찰청",
+        "online": true,
+        "documents": [
+          "신청서, 개인정보제공동의서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/132000000008",
+        "source": {
+          "name": "보조금24 · 경찰청",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "강력범죄 피해자를 대상으로 '범죄피해자 안전조치'를 실시하여 보복범죄 등 추가피해를 방지하고, 심리적·경제적 지원제도 연계를 통해 조속한 피해회복을 도모",
+        "verification_status": "verified",
+        "eligibility": "강력범죄 피해자",
+        "key": "svc:132000000008",
+        "unlocks": 0,
+        "order": 6
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

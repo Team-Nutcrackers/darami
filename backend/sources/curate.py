@@ -12,6 +12,7 @@ allowlist 소스(현재: 국가법령정보 OPEN API)에서 근거·기한을 �
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 import json as _json
@@ -19,6 +20,8 @@ import json as _json
 from .law_api import ground_legal, ground_legal_auto
 from .welfare_api import ground_welfare, search_services, ground_service
 from .national_welfare_api import ground_national_welfare
+from .local_welfare_api import search_local, ground_local_service
+from . import kb
 from .common import COMMON, CROSSCUT_KEYS, common_ref, catalog, learn
 from prompts import build_dynamic_plan_prompt, build_dynamic_curate_prompt
 
@@ -181,7 +184,7 @@ def curate_event(event: str, region: str | None = None, force: bool = False) -> 
     grounded = [_enrich(p, region) for p in seed.get("procedures", []) if p.get("id") in groundable]
     grounded = [p for p in grounded if p.get("verification_status") in ("verified", "partial")]
     pb = dict(seed)
-    pb["procedures"] = grounded
+    pb["procedures"] = kb.apply(grounded)
     _play_cache[cache_key] = pb
     return pb
 
@@ -215,6 +218,10 @@ def _region_from_text(*texts: str) -> str | None:
 def _region_from_persona(persona: dict) -> str | None:
     blob = " ".join(str(v) for v in ((persona or {}).get("facts") or {}).values() if isinstance(v, str))
     return _region_from_text(blob)
+
+
+def _norm_name(name: str) -> str:
+    return re.sub(r"[\s()·ㆍ'\"]", "", name or "")
 
 
 def _base_proc(pid: str, name: str, priority: str, condition: str) -> dict:
@@ -270,8 +277,13 @@ def curate_dynamic(description: str, persona: dict, solar_json) -> dict:
     procedures: list[dict] = []
     used_common: set[str] = set()
 
-    # 2) source-first: 보조금24 검색 → 후보 → LLM 선별 → grounding
+    # 2) source-first: 보조금24 + 지자체복지서비스 검색 → 후보 → LLM 선별 → grounding
     candidates = search_services(keywords, region=region) if keywords else []
+    if keywords:
+        # 같은 사업이 보조금24에도 있으면 보조금24 쪽(서류·기한이 더 풍부)을 남긴다
+        seen = {_norm_name(c["name"]) for c in candidates}
+        candidates += [c for c in search_local(keywords, region, f"{persona_blob} {description}")
+                       if _norm_name(c["name"]) not in seen]
     if candidates:
         brief = [{"service_id": c["service_id"], "name": c["name"], "agency": c["agency"], "summary": c["summary"]}
                  for c in candidates]
@@ -285,11 +297,14 @@ def curate_dynamic(description: str, persona: dict, solar_json) -> dict:
             sid = s.get("service_id")
             if sid not in by_id:
                 continue
-            g = ground_service(sid, by_id[sid])
+            if by_id[sid].get("source") == "local":
+                g, label = ground_local_service(sid, by_id[sid]), "복지로"
+            else:
+                g, label = ground_service(sid, by_id[sid]), "보조금24"
             if g.get("verification_status") != "verified":
                 continue
             out = _base_proc(s.get("id") or sid, by_id[sid]["name"], s.get("priority"), s.get("condition"))
-            procedures.append(_apply_grounding(out, g, "보조금24", set_name=True))
+            procedures.append(_apply_grounding(out, g, label, set_name=True))
 
     # 3) 핵심 법령/신고 절차 — 카탈로그(공통+학습) 매칭은 결정론적 grounding,
     #    아니면 LLM이 준 법령으로 '키워드 검색 grounding' 시도 → 성공 시 학습 카탈로그에 영속, 실패 시 ai

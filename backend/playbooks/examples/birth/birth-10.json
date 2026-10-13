@@ -1,0 +1,388 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "birth-10",
+    "event_id": "birth",
+    "event_title": "출산",
+    "persona_summary": "34세 남성 · 경기 평택시 · 군인 · 출생신고 기한 임박",
+    "persona": {
+      "facts": {
+        "age": 34,
+        "gender": "남성",
+        "residence": "경기 평택시",
+        "situation": "군인 · 출생신고 기한 임박"
+      }
+    },
+    "query": "아이가 태어난 지 거의 한 달이 다 돼가는데 훈련 때문에 아직 출생신고를 못 했어요. 기한을 넘기면 과태료가 있는지, 아내 혼자 가서 해도 되는지 알고 싶습니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "birth"
+      ],
+      "reason": "출생신고 기한 임박, 대리 신고"
+    },
+    "plan": {
+      "title": "출생신고 기한 임박(군인 가정)",
+      "emoji": "👶",
+      "intro": "출생신고는 출생 후 1개월을 넘기면 과태료가 있고, 부모 중 한 사람(아내)만 가서도 할 수 있어요. 온라인 신고도 가능해요.",
+      "law": [
+        {
+          "name": "출생신고",
+          "priority": "must",
+          "condition": "출생 거의 1개월 → 즉시. 아내 단독 신고 가능(신분증·출생증명서). 지연 시 과태료(최대 5만 원)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+          "priority": "must",
+          "condition": "출생신고와 함께 통합신청."
+        },
+        {
+          "name": "첫만남이용권 지원",
+          "priority": "must",
+          "condition": "200만 원."
+        },
+        {
+          "name": "아동수당",
+          "priority": "must",
+          "condition": "출생 60일 이내(기한 임박)."
+        },
+        {
+          "name": "배우자 출산휴가 급여",
+          "priority": "nice",
+          "condition": "군인은 군인 복무규정상 배우자 출산휴가(부대 신청)."
+        }
+      ],
+      "national_welfare": [
+        {
+          "name": "부모급여 지원",
+          "priority": "must",
+          "condition": "출생 60일 이내 신청해야 소급."
+        }
+      ],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "출산"
+        ],
+        "local_keywords": [
+          "출산장려금"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "출산축하지원금 지원",
+          "priority": "must",
+          "condition": "평택시 출산축하지원금 — 출생신고 시 함께 신청.",
+          "service_id": "391000000117"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "birth",
+    "events": [
+      "birth"
+    ],
+    "title": "출생신고 기한 임박(군인 가정)",
+    "emoji": "👶",
+    "intro": "출생신고는 출생 후 1개월을 넘기면 과태료가 있고, 부모 중 한 사람(아내)만 가서도 할 수 있어요. 온라인 신고도 가능해요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "평택시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "birth-report",
+        "name": "출생신고",
+        "priority": "must",
+        "condition": "출생 거의 1개월 → 즉시. 아내 단독 신고 가능(신분증·출생증명서). 지연 시 과태료(최대 5만 원).",
+        "deadline": "1개월 이내",
+        "deadlineDays": 30,
+        "agency": "법무부(가족관계등록 사무는 법원행정처 감독) · 시(구)·읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "출생신고서(자녀 이름은 한글 또는 통상 사용 한자)",
+          "출생증명서(의사·조산사 작성) 또는 출생사실을 증명하는 서면",
+          "신고인 신분증(우편 제출 시 사본)",
+          "부·모의 혼인관계증명서(행정정보 공동이용 가능 시 생략)",
+          "자녀 출생 당시 모가 한국인임을 증명하는 서면(해당 시)",
+          "자녀가 이중국적자인 경우 취득한 국적을 소명하는 자료(해당 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "source": {
+          "name": "정부24 출생신고 민원안내 · 가족관계의 등록 등에 관한 법률 제44조(출생신고의 기재사항)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "아이가 태어나면 1개월 안에 부 또는 모가 출생증명서를 첨부해 주민센터나 전자가족관계등록시스템에 출생신고를 한다. 수수료는 없으며, 신고 때 행복출산 원스톱으로 부모급여·아동수당 등을 함께 신청하면 편하다. 기한을 넘기면 5만 원 이하 과태료가 부과된다.",
+        "verification_status": "verified",
+        "key": "common:birth-report",
+        "unlocks": 4,
+        "order": 1,
+        "where": "출생지·등록기준지·주소지 시(구)·읍·면·동 주민센터 방문, 우편, 또는 대법원 전자가족관계등록시스템(efamily.scourt.go.kr, 온라인 출생신고 참여 병원 출산 시)",
+        "fee": "무료",
+        "steps": [
+          "병원에서 출생증명서 발급(온라인 출생신고 참여 병원이면 정보 제공 동의)",
+          "출생신고서 작성(이름·본·등록기준지·출생 일시·장소·부모 정보)",
+          "주민센터 방문 제출 또는 전자가족관계등록시스템에서 전자서명 후 제출",
+          "같은 자리에서 행복출산 원스톱(부모급여·아동수당·첫만남이용권) 통합 신청"
+        ],
+        "pitfalls": [
+          "온라인 출생신고는 참여 병원에서 출산한 경우에만 가능 — 병원에 미리 확인",
+          "출생증명서를 받을 수 없으면 대체 서면이나 가정법원 출생확인이 필요해 시간이 걸림",
+          "혼인 외 출생자는 모가 신고의무자",
+          "부모급여·아동수당 등은 출생 후 60일 이내 신청해야 출생월부터 소급"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "curated": true
+      },
+      {
+        "id": "law-parental-leave-2cf523ff",
+        "name": "배우자 출산휴가",
+        "priority": "must",
+        "condition": "선행 절차 — 휴가 사용 후 급여 신청",
+        "deadline": "배우자 출산일부터 120일 이내 사용(출산예정일 50일 전부터 시작 가능), 최대 3회 분할",
+        "deadlineDays": 120,
+        "agency": "고용노동부 · 소속 사업장(사용자)",
+        "online": false,
+        "documents": [
+          "배우자 출산(또는 출산예정) 사실 증빙(출생증명서·출산예정일 확인서 등 — 회사 내부 절차에 따름)",
+          "배우자 관계 증빙(가족관계증명서 등 — 회사가 요구하는 경우)",
+          "배우자 출산휴가 확인서(급여 신청용, 사업주가 고용24에 제출)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=1380&ccfNo=1&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 배우자 출산휴가 신청 · 남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률 제18조의2(배우자 출산전후휴가)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "배우자가 출산한 근로자는 사용자에게 청구해 20일의 유급 배우자 출산휴가를 쓸 수 있다(2025-02-23부터 10→20일, 3회 분할, 출산일부터 120일 이내). 사용자는 거부할 수 없으며, 우선지원대상기업 근로자는 휴가 후 고용24에서 정부 급여(20일분, 상한 있음)를 별도로 신청한다.",
+        "verification_status": "verified",
+        "key": "law:배우자 출산휴가",
+        "autoAdded": true,
+        "autoAddedFor": "gov24-999000000004",
+        "unlocks": 1,
+        "order": 2,
+        "where": "회사(사용자)에 배우자 출산 사실을 알리고 휴가 청구(별도 행정기관 접수 없음); 급여는 고용24(고용센터)에 별도 신청",
+        "fee": "무료(20일 전부 유급)",
+        "steps": [
+          "배우자 출산(예정) 사실을 회사에 알리고 휴가 사용 기간을 청구한다(출산일부터 120일 이내, 3회까지 분할).",
+          "회사는 20일의 유급휴가를 부여해야 한다(거부·무급 처리 시 500만원 이하 과태료).",
+          "휴가 사용 후 우선지원대상기업 근로자는 고용24에서 배우자 출산휴가 급여를 신청한다(사업주의 확인서 선제출 필요)."
+        ],
+        "pitfalls": [
+          "출산일부터 120일이 지나면 휴가를 쓸 수 없다. 휴가 기간 중 휴일·휴무일은 일수에 포함되지 않는다.",
+          "2025-02-22 이전에 10일을 모두 썼더라도 청구기한이 남았으면 확대된 20일이 적용되고 이미 사용한 일수는 차감된다.",
+          "급여 신청은 휴가 시작 후 1개월부터 휴가 종료 후 12개월 이내, 고용보험 피보험단위기간 180일 이상이어야 한다.",
+          "휴가 중 퇴사하면 퇴직일 이후 기간은 급여가 지급되지 않는다."
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=1380&ccfNo=1&cciNo=2&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-174000000029",
+        "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+        "priority": "must",
+        "condition": "출생신고와 함께 통합신청.",
+        "deadline": "출생신고 시 또는 출생신고 이후(※ 개별 서비스별 신청 기간은 \"지원대상\" 참조)",
+        "deadlineDays": 9999,
+        "agency": "행정안전부",
+        "online": true,
+        "documents": [
+          "○ 온라인 : 간편인증, 공동인증서 등(본인인증 필요)",
+          "○ 방문: 신분증, 출산자의 신분증 사본(대리인 신청시), 가족관계증명서 등 가족관계를 증명할 수 있는 서류(시부모가 신청시)",
+          "* 저소득층 조제분유 지원, 지자체 지원 서비스 신청 또는 자격확인 연계 등이 불가한 경우,  해당 구비서류가 추가로 필요할 수 있습니다."
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/174000000029",
+        "source": {
+          "name": "보조금24 · 행정안전부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산 후 받을 수 있는 각종 출산지원 서비스를 한 번에 통합신청하는 서비스를 제공하여 출산가정에 서비스 이용 편의 제고",
+        "verification_status": "verified",
+        "eligibility": "신청일 기준 출산자(출산가정)  * 출생신고 시 또는 출생신고 이후 신청가능(출생자 주민등록번호 부여 후, 등록 처리 가능)  ※개별 서비스별 예외사항 및 신청가능기간(개별신청은 담당기관 문의)  부모급여, 아동수당, 양육수당, 기저귀·조제분유지원 :",
+        "key": "svc:174000000029",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-135200005015",
+        "name": "첫만남이용권 지원",
+        "priority": "must",
+        "condition": "200만 원.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "신분증",
+          "대리신청시 위임장, 보호자 신분증 사본 제출, 대리인 신분증"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출생 아동에게 200만원 이상의 첫만남이용권을 지급하여 생애초기 아동양육에 따른 경제적 부담 경감",
+        "verification_status": "verified",
+        "eligibility": "출생아로서 출생신고되어 정상적으로 주민등록번호를 부여받은 아동(주민등록상 생년월일로부터 1년이 초과되지 않는 출생아)  * 2024년 1월 1일 이후 출생아는 주민등록상 생년월일로부터 2년내에 신청하여 사용 가능",
+        "key": "svc:135200005015",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-135200000120",
+        "name": "아동수당",
+        "priority": "must",
+        "condition": "출생 60일 이내(기한 임박).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 공통서류",
+          "아동수당 지급 신청서",
+          "신청인의 신분증",
+          "○ 대리신청인 구비서류",
+          "대리 신청 시 위임장, 대리인 신분증, 보호자 신분증(사본) 지참"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000120",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "아동에게 아동수당을 지급하여 아동 양육에 따른 경제적 부담을 경감하고 건강한 성장환경을 조성함으로써 아동의 기본적 권리와 복지 증진에 기여",
+        "verification_status": "verified",
+        "eligibility": "만 8세 미만 모든 아동에게 아동수당을 지급  - 대한민국 국적을 보유한 아동   ㆍ 부모가 외국인이어도 아동이 한국 국적이면 요건 충족   ㆍ 국적법에 따른 복수국적자 포함   ㆍ 난민법에 따른 난민 인정 아동 포함   ㆍ ｢재한외국인처우기본법｣에 ",
+        "key": "svc:135200000120",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "N1",
+        "id": "national_welfare-WLF00004657",
+        "name": "부모급여 지원",
+        "priority": "must",
+        "condition": "출생 60일 이내 신청해야 소급.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 아동정책과",
+        "online": true,
+        "documents": [
+          "사회보장급여 신청(변경)서"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004657",
+        "source": {
+          "name": "복지로 · 보건복지부 아동정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "영아기 집중돌봄을 두텁게 지원하여 출산 및 양육으로 인한 경제적 부담을 줄여드립니다.",
+        "verification_status": "verified",
+        "eligibility": "2세 미만의 아동(0~23개월)에게 지원합니다.※ 2세부터는 가정양육수당을 지원합니다.\r2세 생일이 도래하는 달의 전 달까지 최대 24개월간 지급합니다.",
+        "key": "svc:WLF00004657",
+        "unlocks": 0,
+        "order": 6,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "R1",
+        "id": "regional-391000000117",
+        "name": "출산축하지원금 지원",
+        "priority": "must",
+        "condition": "평택시 출산축하지원금 — 출생신고 시 함께 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "경기도 평택시",
+        "online": true,
+        "documents": [
+          "신청인 신분증(부 또는 모의 신분증 필수 지참)",
+          "출생 증명서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/391000000117",
+        "source": {
+          "name": "보조금24 · 경기도 평택시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "○ 지원대상자\r\n  - 지원기준: 신생아 출산(입양)일 기준 1년 전부터 신청일 현재까지 부모 중 1명이 평택시에 주민등록을 두어야 함\r\n   ※ 출생(입양)일 기준 1년 미만일 경우 평택시 거주기간(전입일 기준) 1년 6개월 후 신청 가능\r\n\r\n  - 자녀순위: 가족관계등록부 등재 기준(사망한 손위 형제자매 포함)\r\n    ※ 단, 재혼가정의 전혼 중 출",
+        "verification_status": "verified",
+        "key": "svc:391000000117",
+        "eligibility": "지원기준   - 신생아 출산(입양)일 기준 1년 전부터 신청일 현재까지 부모 중 1명이 평택시에 주민등록을 두어야 함 / 출생(입양)일 기준 6개월 이내 신청   - 단, 출생일 기주 1년 미만 거주자는 전입일 기준 1년 6개월이 경과한 날부터 6개월",
+        "unlocks": 0,
+        "order": 7
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-999000000004",
+        "name": "배우자 출산휴가 급여",
+        "priority": "nice",
+        "condition": "군인은 군인 복무규정상 배우자 출산휴가(부대 신청).",
+        "deadline": "휴가가 끝난 날 이후 12개월 이내에 신청",
+        "deadlineDays": 360,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "출산전후휴가 급여등 신청서(고용보험법 시행규칙 별지 제105호서식)",
+          "배우자 출산휴가 확인서(고용보험법 시행규칙 별지 제107호의2 서식) 1부",
+          "통상임금을 확인할 수 있는 자료(임금대장, 근로계약서 등) 사본 1부",
+          "휴가기간 동안 사업주로부터 금품을 지급받은 경우 이를 확인할 수 있는 자료"
+        ],
+        "link": "http://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "배우자 출산휴가를 사용한 남성 근로자에게 급여를 지원함으로써 남성의 육아 참여 활성화와 모성보호 도모",
+        "verification_status": "verified",
+        "eligibility": "- 「남녀고용평등과 일ㆍ가정 양립 지원에 관한 법률」 제18조의2에 따른 배우자 출산휴가를 받은 우선지원대상기업 소속 근로자 - 휴가가 끝난 날 이전에 고용보험 피보험 단위기간이 합산하여 180일 이상 - 휴가가 끝난 날 이후 12개월 이내에 신청",
+        "key": "svc:999000000004",
+        "unlocks": 0,
+        "order": 8,
+        "dependsOn": [
+          "law-parental-leave-2cf523ff"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 8,
+    "by_status": {
+      "verified": 8
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

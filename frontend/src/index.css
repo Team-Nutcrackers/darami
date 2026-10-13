@@ -46,3 +46,58 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 .pop-in { animation: pop 0.25s ease-out; }
+
+/* ---------- 할 일 그래프 팝업 (GraphPopover) ----------
+   버튼 중심(오른쪽 아래에서 26px)에서 원이 퍼지며 열리고, 같은 원으로 오므라들며 닫힌다.
+   열릴 때는 노드가 추천 순서대로 톡톡 커지며 나타나고 간선이 뒤따른다(지연은 컴포넌트 인라인 스타일). */
+.graph-pop {
+  --gp-origin: calc(100% - 26px) calc(100% - 26px);
+  clip-path: circle(0px at var(--gp-origin));
+  opacity: 0;
+  pointer-events: none;
+  transition: clip-path 300ms cubic-bezier(0.55, 0, 0.75, 0.2), opacity 220ms ease 80ms;
+}
+.graph-pop[data-open="true"] {
+  clip-path: circle(calc(150% + 60px) at var(--gp-origin));
+  opacity: 1;
+  pointer-events: auto;
+  transition: clip-path 520ms cubic-bezier(0.22, 0.85, 0.24, 1), opacity 160ms ease;
+}
+.graph-pop .gp-node {
+  opacity: 0;
+  transform: scale(0.3);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 240ms ease, transform 420ms cubic-bezier(0.34, 1.45, 0.5, 1);
+}
+.graph-pop[data-open="true"] .gp-node {
+  opacity: 1;
+  transform: none;
+}
+.graph-pop .gp-fade {
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+.graph-pop[data-open="true"] .gp-fade {
+  opacity: 1;
+}
+@keyframes gpTip {
+  from { opacity: 0; transform: translateY(3px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.gp-tip { animation: gpTip 140ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .graph-pop,
+  .graph-pop[data-open="true"] {
+    clip-path: none;
+    transition: opacity 150ms ease;
+  }
+  .graph-pop .gp-node,
+  .graph-pop .gp-fade {
+    transition: opacity 150ms ease;
+    transition-delay: 0ms !important;
+    transform: none;
+  }
+  .gp-tip { animation: none; }
+}

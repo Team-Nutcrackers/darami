@@ -13,9 +13,17 @@
       "deadlineDays": 365,
       "agency": "거주지 관할 고용센터 + 고용보험 온라인 교육",
       "online": true,
-      "documents": ["이직확인서(권고사직)", "워크넷 구직등록 완료", "신분증"],
+      "documents": [
+        "이직확인서(권고사직)",
+        "워크넷 구직등록 완료",
+        "신분증"
+      ],
       "link": "https://www.ei.go.kr",
-      "source": { "name": "고용보험", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "고용보험",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "고용보험 가입기간(180일 이상) 충족 + 비자발적 이직(권고사직 해당).",
       "summary": "권고사직은 비자발적 이직이라 수급 대상입니다. 온라인 수급자격 교육 → 고용센터 방문 신청 → 인정일마다 실업인정 절차를 거칩니다. 수급기간이 지나면 못 받으니 퇴사 후 바로 시작하세요."
     },
@@ -27,9 +35,16 @@
       "deadlineDays": 14,
       "agency": "회사(사업주)",
       "online": false,
-      "documents": ["근로계약서", "급여명세"],
+      "documents": [
+        "근로계약서",
+        "급여명세"
+      ],
       "link": "",
-      "source": { "name": "근로자퇴직급여 보장법", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "근로자퇴직급여 보장법",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "1년 이상 근속한 경우.",
       "summary": "퇴직금은 원칙적으로 퇴직 후 법정 기한 내 지급되어야 합니다. 미지급 시 고용노동부에 진정을 넣을 수 있어요. 지급액·지급일을 확인하세요."
     },
@@ -43,7 +58,11 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "재취업·직무전환 훈련을 원하는 경우.",
       "summary": ""
     },
@@ -57,9 +76,16 @@
       "online": false,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "실업급여 수급 중 조기 재취업한 경우.",
-      "summary": ""
+      "summary": "",
+      "dependsOn": [
+        "unemployment-benefit"
+      ]
     },
     {
       "id": "health-insurance-change",
@@ -71,7 +97,11 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "직장가입자 → 지역가입자 전환(공통).",
       "summary": ""
     },
@@ -85,7 +115,11 @@
       "online": true,
       "documents": [],
       "link": "",
-      "source": { "name": "", "tier": "reference", "checkedAt": "" },
+      "source": {
+        "name": "",
+        "tier": "reference",
+        "checkedAt": ""
+      },
       "condition": "퇴사로 소득·자격이 바뀐 경우(공통).",
       "summary": ""
     }

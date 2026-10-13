@@ -1,0 +1,309 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "domestic-violence-09",
+    "event_id": "domestic-violence",
+    "event_title": "가정폭력·스토킹 피해",
+    "persona_summary": "27세 여성 · 서울 성북구 · 데이트폭력 · 치료비",
+    "persona": {
+      "facts": {
+        "age": 27,
+        "gender": "여성",
+        "residence": "서울 성북구",
+        "situation": "데이트폭력 · 치료비"
+      }
+    },
+    "query": "남자친구한테 맞아서 병원 치료를 받고 있어요. 치료비랑 상담비가 부담되는데 데이트폭력 피해자도 의료비 지원을 받을 수 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "domestic-violence",
+        "crime-victim"
+      ],
+      "reason": "데이트폭력 피해 의료비(범죄피해자 지원 포함)"
+    },
+    "plan": {
+      "title": "데이트폭력 의료비",
+      "emoji": "🛡️",
+      "intro": "교제 폭력도 가정폭력 피해자 치료회복 프로그램·의료비 지원(1366 연계) 대상이고, 범죄피해자 치료비 지원(검찰청)도 받을 수 있어요. 경찰 신고 시 접근금지 잠정조치를 요청하세요.",
+      "law": [
+        {
+          "name": "스토킹 긴급응급조치",
+          "priority": "must",
+          "condition": "교제 폭력 → 112 신고, 접근금지(스토킹·잠정조치)."
+        },
+        {
+          "name": "보호시설",
+          "priority": "nice",
+          "condition": "위험 시 1366 피난."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "가정폭력피해자 치료회복 프로그램 및 의료비 지원",
+          "priority": "must",
+          "condition": "교제폭력 피해자 의료비·심리치료(1366 연계)."
+        },
+        {
+          "name": "범죄피해자에 대한 경제적 지원",
+          "priority": "must",
+          "condition": "검찰청 치료비 지원."
+        },
+        {
+          "name": "가정폭력 상담소 운영 지원",
+          "priority": "nice",
+          "condition": "상담."
+        },
+        {
+          "name": "가정폭력 성폭력 피해자 무료법률 지원",
+          "priority": "nice",
+          "condition": "고소·배상."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "폭력피해",
+          "가정폭력"
+        ],
+        "local_keywords": [
+          "폭력피해",
+          "여성 폭력"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "domestic-violence",
+    "events": [
+      "domestic-violence",
+      "crime-victim"
+    ],
+    "title": "데이트폭력 의료비",
+    "emoji": "🛡️",
+    "intro": "교제 폭력도 가정폭력 피해자 치료회복 프로그램·의료비 지원(1366 연계) 대상이고, 범죄피해자 치료비 지원(검찰청)도 받을 수 있어요. 경찰 신고 시 접근금지 잠정조치를 요청하세요.",
+    "region": {
+      "sido": "서울특별시",
+      "sgg": "성북구"
+    },
+    "procedures": [
+      {
+        "ref": "L4",
+        "id": "law-domestic-violence-l4",
+        "name": "스토킹 긴급응급조치",
+        "priority": "must",
+        "condition": "교제 폭력 → 112 신고, 접근금지(스토킹·잠정조치).",
+        "deadline": "조치 기간 최대 1개월(검사는 조치 후 48시간 이내 법원에 사후승인 청구)",
+        "deadlineDays": 30,
+        "agency": "경찰청(사법경찰관) · 112 신고 / 관할 경찰서, 사후승인은 검사·지방법원 판사",
+        "online": false,
+        "documents": [
+          "별도 제출 서류 없음(피해 사실 진술, 문자·통화기록 등 증거자료 제출 권장)",
+          "긴급응급조치통지서(경찰이 피해자에게 교부)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1661&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 스토킹 신고에 대한 조치 · 스토킹범죄의 처벌 등에 관한 법률 제4조(긴급응급조치)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "스토킹 신고 후 행위가 반복될 우려가 있으면 경찰이 피해자 요청 또는 직권으로 100m 이내 접근금지·전기통신 접근금지 긴급응급조치를 최대 1개월간 취한다. 검사가 48시간 내 법원 사후승인을 받으며, 위반 시 행위자는 1년 이하 징역 또는 1천만원 이하 벌금이다. 장기 보호가 필요하면 법원 잠정조치(접근금지 최대 9개월, 유치 1개월)로 이어진다.",
+        "verification_status": "verified",
+        "key": "law:스토킹 긴급응급조치",
+        "unlocks": 0,
+        "order": 1,
+        "where": "112 신고 또는 관할 경찰서에서 피해자·법정대리인·신고자가 사법경찰관에게 긴급응급조치를 요청(경찰 직권도 가능)",
+        "fee": "무료",
+        "steps": [
+          "112 신고 → 경찰 현장 출동, 행위 제지·경고·분리 등 응급조치",
+          "스토킹이 지속·반복될 우려가 있고 긴급하면 피해자가 사법경찰관에게 긴급응급조치를 요청(또는 경찰 직권)",
+          "경찰이 100m 이내 접근금지·전기통신 접근금지 결정, 즉시 결정서 작성 후 검사에게 사후승인 신청",
+          "검사가 48시간 내 법원에 청구, 판사 승인(불승인 시 즉시 취소)",
+          "기간 만료 전 지속 보호가 필요하면 법원 잠정조치(접근금지 3개월, 2회 연장 가능)를 요청한다"
+        ],
+        "pitfalls": [
+          "긴급응급조치는 최대 1개월이므로 만료 전에 잠정조치 청구를 경찰·검사에게 요청해야 공백이 없다",
+          "판사가 승인하지 않거나 검사가 청구하지 않으면 조치가 즉시 취소된다",
+          "피해자가 이사한 경우 사법경찰관에게 조치 변경을 신청해야 새 주거지가 보호된다",
+          "증거(문자·통화·사진)를 확보해 두면 승인·잠정조치 판단에 유리하다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1661&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G8",
+        "id": "gov24-WII000001490",
+        "name": "가정폭력피해자 치료회복 프로그램 및 의료비 지원",
+        "priority": "must",
+        "condition": "교제폭력 피해자 의료비·심리치료(1366 연계).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [
+          "○치료회복 프로그램",
+          "구비서류 없음",
+          "○의료비 지원",
+          "진료비 명세서",
+          "가정폭력 피해 상담사실 확인서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/WII000001490",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 가정폭력 피해자 및 동반 가족의 치유를 통한 심신 회복\r\n○ 폭력 피해자의 후유증을 최소화하는 등 피해자 보호",
+        "verification_status": "verified",
+        "eligibility": "가정폭력 피해자 및 동반 아동",
+        "key": "svc:WII000001490",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-128000000003",
+        "name": "범죄피해자에 대한 경제적 지원",
+        "priority": "must",
+        "condition": "검찰청 치료비 지원.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "대검찰청",
+        "online": true,
+        "documents": [
+          "1. 주민등록증 사본 등 신분증명서류",
+          "2. 피해자 본인이 아닌 다른 사람이 신청하는 경우에는 피해자와의 친족관계를 증명할 수 있는 가족관계 증명서 또는 대리인임을 증명할 수 있는 서류(위임장 등)",
+          "3. 통장사본",
+          "4. 그밖에 검찰이 경제적 지원을 위하여 특히 필요하다고 인정하는 서류"
+        ],
+        "link": "http://www.kics.go.kr",
+        "source": {
+          "name": "보조금24 · 대검찰청",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "범죄피해자 보호 지원",
+        "verification_status": "verified",
+        "eligibility": "범죄행위로 피해를 당한 피해자 본인, 그 배우자, 직계친족 및 4촌 이내의 친족",
+        "key": "svc:128000000003",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "G7",
+        "id": "gov24-WII000001480",
+        "name": "가정폭력 상담소 운영 지원",
+        "priority": "nice",
+        "condition": "상담.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/WII000001480",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "가정폭력 등 피해자 및 가족을 위해 상담, 임시보호, 의료기관 보호시설 등과 연계 지원",
+        "verification_status": "verified",
+        "eligibility": "가정폭력, 스토킹, 교제폭력 등 피해자 및 그 가족",
+        "key": "svc:WII000001480",
+        "unlocks": 1,
+        "order": 4
+      },
+      {
+        "ref": "L6",
+        "id": "law-domestic-violence-l6",
+        "name": "보호시설",
+        "priority": "nice",
+        "condition": "위험 시 1366 피난.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부 · 여성긴급전화 1366센터·가정폭력 상담소·가정폭력피해자 보호시설",
+        "online": false,
+        "documents": [
+          "입소 신청(1366·상담소 상담 후 의뢰, 별도 서류 없이 가능)",
+          "보호자의 입소 동의(의사능력이 불완전한 피해자인 경우)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=3&cciNo=4&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운생활법령 – 가정폭력 피해자 단기 주거지원(보호시설) · 가정폭력방지 및 피해자보호 등에 관한 법률 제7조(보호시설의 설치)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "가정폭력 피해자와 가정구성원(자녀 동반 가능)은 여성긴급전화 1366이나 지역 가정폭력 상담소를 통해 긴급피난처(3일, 최대 7일)와 가정폭력피해자 보호시설(단기 6개월~최대 1년, 장기 2년)에 무료로 입소할 수 있습니다. 10세 이상 남아 동반 등 일반시설 입소가 어려우면 가족보호시설을 이용합니다. 보호시설·긴급피난처 입소 확인서는 주민등록 열람제한, 주거지원 신청 등의 증빙으로 쓰입니다.",
+        "verification_status": "verified",
+        "key": "law:보호시설",
+        "unlocks": 0,
+        "order": 5,
+        "where": "여성긴급전화 ☎1366(24시간) 또는 지역 가정폭력 상담소 상담 후 긴급피난처·보호시설 입소",
+        "fee": "무료",
+        "steps": [
+          "여성긴급전화 1366(또는 112, 지역 가정폭력 상담소)에 연락해 상담",
+          "당장 피신이 필요하면 1366 긴급피난처에 임시보호(3일 이내, 필요 시 7일까지)",
+          "상담 결과에 따라 보호시설 입소 의뢰: 단기보호시설 6개월 이내(3개월씩 2회 연장, 최대 1년), 장기·외국인·장애인보호시설 2년 이내, 자녀 동반 시 가족보호시설",
+          "입소 중 숙식·상담·의료·법률 지원, 자립지원 연계, 입소 확인서로 주민등록 열람제한·주거지원 등 신청",
+          "본인 의사 또는 보호자 요청으로 퇴소, 퇴소 후 자립지원금·국민임대주택 우선 입주 등 신청"
+        ],
+        "pitfalls": [
+          "보호시설 입소는 상담소·1366을 거쳐야 하며 직접 시설로 찾아가는 방식이 아님",
+          "단기보호시설은 6개월 원칙, 연장은 치료·심리안정 등 사유가 있을 때 3개월씩 2회",
+          "입소 확인서는 이후 지원(열람제한·주거·자립지원금) 신청에 필요하므로 꼭 발급받을 것"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=3&cciNo=4&cnpClsNo=1",
+        "curated": true,
+        "dependsOn": [
+          "gov24-WII000001480"
+        ]
+      },
+      {
+        "ref": "G9",
+        "id": "gov24-GEF000000050",
+        "name": "가정폭력 성폭력 피해자 무료법률 지원",
+        "priority": "nice",
+        "condition": "고소·배상.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [
+          "가정폭력, 성폭력 피해 상담사실 확인서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/GEF000000050",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "가정폭력·성폭력 등 피해자에 대한 민사, 가사 소송대리, 형사소송 지원, 법률상담 등을 통한 피해자 인권 보호",
+        "verification_status": "verified",
+        "eligibility": "가정폭력 및 성폭력 등 피해자에 대한 무료 법률상담, 민사·가사 소송대리, 형사소송 지원 등",
+        "key": "svc:GEF000000050",
+        "unlocks": 0,
+        "order": 6
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.2
+  }
+}

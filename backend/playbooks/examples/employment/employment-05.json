@@ -1,0 +1,277 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "employment-05",
+    "event_id": "employment",
+    "event_title": "취업·이직",
+    "persona_summary": "31세 남성 · 대전 대덕구 · 지방 이전 취업",
+    "persona": {
+      "facts": {
+        "age": 31,
+        "gender": "남성",
+        "residence": "대전 대덕구",
+        "situation": "지방 이전 취업"
+      }
+    },
+    "query": "서울에서 살다가 대전에 있는 회사에 취업해서 내려왔어요. 지방에 취업한 청년한테 정착금을 준다거나 주거비를 지원해 주는 게 있을까요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "employment",
+        "move"
+      ],
+      "reason": "지방 취업 정착, 이사"
+    },
+    "plan": {
+      "title": "대전 취업 이주 정착",
+      "emoji": "💼",
+      "intro": "대전으로 주소를 옮기면 전입신고(14일)를 하고, 대전시·지역 청년 정착·주거 지원을 확인하세요.",
+      "law": [
+        {
+          "name": "전입신고",
+          "priority": "must",
+          "condition": "대전 전입 후 14일 이내."
+        },
+        {
+          "name": "건강보험 자격·주소 변경",
+          "priority": "nice",
+          "condition": "주소 변경은 전입신고로 연계."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "청년미래적금",
+          "priority": "nice",
+          "condition": "청년 자산형성."
+        },
+        {
+          "name": "청년내일채움공제",
+          "priority": "nice",
+          "condition": "중소기업이면."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "청년",
+          "정착"
+        ],
+        "local_keywords": [
+          "청년 정착",
+          "청년 취업",
+          "청년 월세"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "대전 청년 월세지원",
+          "priority": "must",
+          "condition": "대전 이주 청년 월세 지원(소득·거주 요건).",
+          "service_id": "WLF00005253"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "employment",
+    "events": [
+      "employment",
+      "move"
+    ],
+    "title": "대전 취업 이주 정착",
+    "emoji": "💼",
+    "intro": "대전으로 주소를 옮기면 전입신고(14일)를 하고, 대전시·지역 청년 정착·주거 지원을 확인하세요.",
+    "region": {
+      "sido": "대전광역시",
+      "sgg": "대덕구"
+    },
+    "procedures": [
+      {
+        "ref": "L4",
+        "id": "transfer-report",
+        "name": "전입신고",
+        "priority": "must",
+        "condition": "대전 전입 후 14일 이내.",
+        "deadline": "14일 이내",
+        "deadlineDays": 14,
+        "agency": "행정안전부 · 새 거주지 읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "전입신고서(세대 전부/일부 이동용, 방문 시 현장 작성)",
+          "신고자 본인 신분증(주민등록증·운전면허증·여권 등 유효기간 내)",
+          "함께 전입하는 세대원의 신분증(배우자·직계혈족과 함께 전입 시 신고자 신분증만으로 가능)",
+          "위임장(대리 신청 시)",
+          "위임한 사람과 대리인의 신분증(대리 신청 시)",
+          "행정정보 공동이용 사전동의서(대리 신청 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=13100000016",
+        "source": {
+          "name": "정부24 전입신고 민원안내 · 주민등록법 제16조(거주지의 이동)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "이사 후 14일 안에 새 주소지 주민센터 또는 정부24에서 전입신고를 한다. 수수료는 없고 즉시 처리되며, 대리인 신청은 방문만 가능하다. 임차인은 전입신고와 같은 날 확정일자를 받아 대항력·우선변제권을 갖추는 것이 중요하다.",
+        "verification_status": "verified",
+        "key": "common:transfer-report",
+        "unlocks": 1,
+        "order": 1,
+        "where": "정부24(온라인, 본인만) 또는 새 거주지 읍·면·동 주민센터 방문",
+        "fee": "무료",
+        "steps": [
+          "이사 완료 후 정부24 로그인(공동·금융·간편인증) → '전입신고' 선택, 또는 새 주소지 주민센터 방문",
+          "전입 세대 정보(세대 전부/일부, 세대주 변경 여부) 입력 후 신분 확인",
+          "임차인이면 같은 자리에서 확정일자 부여·주택 임대차 신고 함께 처리",
+          "처리(즉시, 근무시간 내 3시간) 후 주민등록표 등본으로 주소 반영 확인"
+        ],
+        "pitfalls": [
+          "온라인(정부24)은 본인만 가능, 대리인·해외체류자·재외국민은 주민센터 방문 필요",
+          "14일 초과 시 과태료 부과 대상",
+          "세대원 전입은 전입자 본인의 서명·신분 확인이 필요(세대주 단독 신고 불가)",
+          "전국번호판 차량은 전입신고로 자동차 변경등록이 갈음되지만 지역번호판 차량이 다른 시·도로 가면 별도 변경등록 필요"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=13100000016",
+        "curated": true
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00005253",
+        "name": "대전 청년 월세지원",
+        "priority": "must",
+        "condition": "대전 이주 청년 월세 지원(소득·거주 요건).",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "대전광역시 복지국 청년정책과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005253&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 대전광역시 복지국 청년정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "- 청년층의 주거비 부담 완화로 청년의 자립 기반 구축 및 지역 정착 도모 - 월 20만원 지원(최대 12개월, 최대 240만원) *생애 1회",
+        "verification_status": "verified",
+        "key": "svc:WLF00005253",
+        "eligibility": "주민등록상 대전광역시에 거주하는 19~39세 이하의 무주택 청년 가구 - (주택기준) 월세 임차보증금 1억원 이하, 월세 60만원 이하 주택- (소득기준) 기준중위소득 150% 이하",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "L2",
+        "id": "health-insurance-change",
+        "name": "건강보험 자격·주소 변경",
+        "priority": "nice",
+        "condition": "주소 변경은 전입신고로 연계.",
+        "deadline": "14일 이내",
+        "deadlineDays": 14,
+        "agency": "보건복지부 · 국민건강보험공단 지사",
+        "online": true,
+        "documents": [
+          "피부양자 자격(취득·상실) 신고서 1부(직장가입자 서명·날인)",
+          "가족관계증명서(상세) 또는 혼인관계증명서 1부(주민등록등본으로 관계 확인이 안 될 때)",
+          "장애인등록증 또는 국가유공상이자 증빙자료(해당 시)",
+          "인우보증서·사실혼 공적자료(사실혼 배우자인 경우)",
+          "외국인등록증 또는 국내거소신고증(외국인·재외국민인 경우)"
+        ],
+        "link": "https://www.nhis.or.kr/nhis/policy/wbhada07300m01.do",
+        "source": {
+          "name": "국민건강보험공단 피부양자 취득안내 · 국민건강보험법 제9조(자격의 변동 시기 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "직장가입자의 가족(신생아·배우자 등)을 피부양자로 올리거나, 취업·퇴사·전입 등으로 자격이 바뀌면 국민건강보험공단에 신고한다. 피부양자 신고는 직장가입자 본인이 공단 홈페이지·앱·지사에서 하고, 직장가입자 취득 신고는 사용자(회사)가 한다. 변동일부터 90일 안에 신고해야 취득일로 소급된다.",
+        "verification_status": "verified",
+        "key": "common:health-insurance-change",
+        "unlocks": 0,
+        "order": 3,
+        "where": "국민건강보험공단 홈페이지·The건강보험 앱·4대사회보험정보연계센터(온라인) 또는 공단 지사 방문·팩스·우편·고객센터(1577-1000)",
+        "fee": "무료",
+        "steps": [
+          "변동 유형 확인: 피부양자 등록(출생·혼인), 취업(사용자가 직장가입자 취득 신고), 퇴사(다음 날 지역가입자 자동 전환), 세대 전입(세대주가 신고)",
+          "피부양자 자격(취득·상실) 신고서 작성 후 가족관계증명서(상세) 등 첨부",
+          "공단 홈페이지·앱·4대사회보험정보연계센터로 온라인 제출하거나 지사 방문·팩스·우편 제출",
+          "처리 결과(피부양자 등재·보험료 변동) 확인"
+        ],
+        "pitfalls": [
+          "가족관계증명서는 '열람용'이 아닌 '상세' 증명서로 제출(열람용은 법적 효력 없어 재발급 요청됨)",
+          "90일을 넘겨 신고하면 신고일부터 피부양자 자격이 생겨 그 사이 지역보험료가 부과될 수 있음",
+          "피부양자 소득·재산 요건(연소득 2천만 원 이하 등)을 넘으면 반려됨",
+          "퇴사하면 자동으로 지역가입자로 전환되므로 별도 취득 신고는 필요 없으나 세대 전입 등은 세대주가 14일 이내 신고"
+        ],
+        "sourceUrl": "https://www.nhis.or.kr/nhis/policy/wbhada07300m01.do",
+        "curated": true,
+        "dependsOn": [
+          "transfer-report"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-B55370100044",
+        "name": "청년미래적금",
+        "priority": "nice",
+        "condition": "청년 자산형성.",
+        "deadline": "'26.6월 출시",
+        "deadlineDays": 9999,
+        "agency": "서민금융진흥원",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55370100044",
+        "source": {
+          "name": "보조금24 · 서민금융진흥원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "사회·경제적 환경 변화로 인해 타 연령층 대비 자산형성에 있어 어려움을 겪고 있는 청년층의 자산 형성 지원을 지원하는 적금상품",
+        "verification_status": "verified",
+        "eligibility": "가입대상 : 개인소득 및 가구소득 기준을 모두 충족하는 19~34세 청년 - (개인소득) 총급여 7,500만원(종합소득 6,300만원) 이하 또는 연매출 3억원 이하 - (가구소득) 기준중위소득 200% 이하",
+        "key": "svc:B55370100044",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000011848",
+        "name": "청년내일채움공제",
+        "priority": "nice",
+        "condition": "중소기업이면.",
+        "deadline": "-",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "청년·기업·정부 3자 적립을 통해 노동시장 중소기업 신규취업 진입 청년에게 만기공제금 지원\r\n('24년부터 신규지원 중단, 기가입자 계속 지원)",
+        "verification_status": "verified",
+        "eligibility": "('23년 가입자 기준)  ㅇ 고용보험 피보험자수 5인이상~50인 미만 제조,건설업종의 '중소기업', 해당 기업에 정규직으로 취업한 ‘청년’  ㅇ (청년) 만 15~34세(군 복무기간 포함 39세까지) 정규직 신규 취업자로서,     -  생애 최초 ",
+        "key": "svc:SD0000011848",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 1.4
+  }
+}

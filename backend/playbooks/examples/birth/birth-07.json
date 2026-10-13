@@ -1,0 +1,306 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "birth-07",
+    "event_id": "birth",
+    "event_title": "출산",
+    "persona_summary": "31세 여성 · 강원 속초시 · 자영업 · 출산 후 산후조리",
+    "persona": {
+      "facts": {
+        "age": 31,
+        "gender": "여성",
+        "residence": "강원 속초시",
+        "situation": "자영업 · 출산 후 산후조리"
+      }
+    },
+    "query": "곧 출산인데 속초에는 산후조리원이 거의 없어서 걱정이에요. 산후조리 비용을 지원해 준다거나 집으로 도우미가 와주는 서비스가 있으면 알고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "birth"
+      ],
+      "reason": "산후조리 비용·방문 서비스"
+    },
+    "plan": {
+      "title": "속초 산후조리 지원",
+      "emoji": "🤱",
+      "intro": "산모·신생아 건강관리 지원으로 집에 건강관리사가 와주고, 강원도·속초시 산후조리비 지원도 확인하세요.",
+      "law": [
+        {
+          "name": "출생신고",
+          "priority": "must",
+          "condition": "출산 후 1개월 이내."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "산모·신생아 건강관리 지원",
+          "priority": "must",
+          "condition": "출산 예정 40일 전~출산 후 30일 신청, 건강관리사 방문(소득 기준·지자체 예외 확인)."
+        },
+        {
+          "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+          "priority": "must",
+          "condition": "출생신고 시 통합신청."
+        },
+        {
+          "name": "첫만남이용권 지원",
+          "priority": "nice",
+          "condition": "바우처는 산후조리원·산후조리 비용에도 사용 가능."
+        }
+      ],
+      "national_welfare": [
+        {
+          "name": "부모급여 지원",
+          "priority": "nice",
+          "condition": "출생 60일 이내."
+        }
+      ],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "산후조리",
+          "출산"
+        ],
+        "local_keywords": [
+          "산후조리",
+          "출산장려금"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "출산장려금",
+          "priority": "must",
+          "condition": "속초시 출산장려금(거주 요건 확인).",
+          "service_id": "WLF00003376"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "birth",
+    "events": [
+      "birth"
+    ],
+    "title": "속초 산후조리 지원",
+    "emoji": "🤱",
+    "intro": "산모·신생아 건강관리 지원으로 집에 건강관리사가 와주고, 강원도·속초시 산후조리비 지원도 확인하세요.",
+    "region": {
+      "sido": "강원",
+      "sgg": "속초시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "birth-report",
+        "name": "출생신고",
+        "priority": "must",
+        "condition": "출산 후 1개월 이내.",
+        "deadline": "1개월 이내",
+        "deadlineDays": 30,
+        "agency": "법무부(가족관계등록 사무는 법원행정처 감독) · 시(구)·읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "출생신고서(자녀 이름은 한글 또는 통상 사용 한자)",
+          "출생증명서(의사·조산사 작성) 또는 출생사실을 증명하는 서면",
+          "신고인 신분증(우편 제출 시 사본)",
+          "부·모의 혼인관계증명서(행정정보 공동이용 가능 시 생략)",
+          "자녀 출생 당시 모가 한국인임을 증명하는 서면(해당 시)",
+          "자녀가 이중국적자인 경우 취득한 국적을 소명하는 자료(해당 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "source": {
+          "name": "정부24 출생신고 민원안내 · 가족관계의 등록 등에 관한 법률 제44조(출생신고의 기재사항)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "아이가 태어나면 1개월 안에 부 또는 모가 출생증명서를 첨부해 주민센터나 전자가족관계등록시스템에 출생신고를 한다. 수수료는 없으며, 신고 때 행복출산 원스톱으로 부모급여·아동수당 등을 함께 신청하면 편하다. 기한을 넘기면 5만 원 이하 과태료가 부과된다.",
+        "verification_status": "verified",
+        "key": "common:birth-report",
+        "unlocks": 3,
+        "order": 1,
+        "where": "출생지·등록기준지·주소지 시(구)·읍·면·동 주민센터 방문, 우편, 또는 대법원 전자가족관계등록시스템(efamily.scourt.go.kr, 온라인 출생신고 참여 병원 출산 시)",
+        "fee": "무료",
+        "steps": [
+          "병원에서 출생증명서 발급(온라인 출생신고 참여 병원이면 정보 제공 동의)",
+          "출생신고서 작성(이름·본·등록기준지·출생 일시·장소·부모 정보)",
+          "주민센터 방문 제출 또는 전자가족관계등록시스템에서 전자서명 후 제출",
+          "같은 자리에서 행복출산 원스톱(부모급여·아동수당·첫만남이용권) 통합 신청"
+        ],
+        "pitfalls": [
+          "온라인 출생신고는 참여 병원에서 출산한 경우에만 가능 — 병원에 미리 확인",
+          "출생증명서를 받을 수 없으면 대체 서면이나 가정법원 출생확인이 필요해 시간이 걸림",
+          "혼인 외 출생자는 모가 신고의무자",
+          "부모급여·아동수당 등은 출생 후 60일 이내 신청해야 출생월부터 소급"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "curated": true
+      },
+      {
+        "ref": "G5",
+        "id": "gov24-PTR000050390",
+        "name": "산모·신생아 건강관리 지원",
+        "priority": "must",
+        "condition": "출산 예정 40일 전~출산 후 30일 신청, 건강관리사 방문(소득 기준·지자체 예외 확인).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 공통서류",
+          "신청인(대리 신청인)의 신분증",
+          "출생증명서 등 출산 또는 출산예정일 증빙자료",
+          "산모 및 배우자의 소득 증빙자료(건강보험증 사본, 신청일 기준 직전월 건강보험료 납부확인서 등)",
+          "가구원 수 및 출산 순위 확인자료(주민등록서류, 가족관계증명서 등)",
+          "휴직 확인자료(재직증명서 및 최근 월분 급여명세서 등)",
+          "예외지원 대상 확인자료(해당자에 한함)"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산가정에 건강관리사를 파견하여 산모의 산후 회복과 신생아의 양육을 지원하고,  출산가정의 경제적 부담을 경감",
+        "verification_status": "verified",
+        "eligibility": "지원대상  - 산모 또는 배우자가 생계·의료·주거·교육급여 수급자 또는 차상위계층*에 해당하는 출산가정     * 차상위본인부담경감, 차상위자활, 차상위장애인, 차상위자격확인  - 산모 및 배우자 등 해당 가구의 건강보험료 본인 부담금 합산액이 기준중",
+        "key": "svc:PTR000050390",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-174000000029",
+        "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+        "priority": "must",
+        "condition": "출생신고 시 통합신청.",
+        "deadline": "출생신고 시 또는 출생신고 이후(※ 개별 서비스별 신청 기간은 \"지원대상\" 참조)",
+        "deadlineDays": 9999,
+        "agency": "행정안전부",
+        "online": true,
+        "documents": [
+          "○ 온라인 : 간편인증, 공동인증서 등(본인인증 필요)",
+          "○ 방문: 신분증, 출산자의 신분증 사본(대리인 신청시), 가족관계증명서 등 가족관계를 증명할 수 있는 서류(시부모가 신청시)",
+          "* 저소득층 조제분유 지원, 지자체 지원 서비스 신청 또는 자격확인 연계 등이 불가한 경우,  해당 구비서류가 추가로 필요할 수 있습니다."
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/174000000029",
+        "source": {
+          "name": "보조금24 · 행정안전부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산 후 받을 수 있는 각종 출산지원 서비스를 한 번에 통합신청하는 서비스를 제공하여 출산가정에 서비스 이용 편의 제고",
+        "verification_status": "verified",
+        "eligibility": "신청일 기준 출산자(출산가정)  * 출생신고 시 또는 출생신고 이후 신청가능(출생자 주민등록번호 부여 후, 등록 처리 가능)  ※개별 서비스별 예외사항 및 신청가능기간(개별신청은 담당기관 문의)  부모급여, 아동수당, 양육수당, 기저귀·조제분유지원 :",
+        "key": "svc:174000000029",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00003376",
+        "name": "출산장려금",
+        "priority": "must",
+        "condition": "속초시 출산장려금(거주 요건 확인).",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "강원특별자치도 속초시 행정국 자치행정과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00003376&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 강원특별자치도 속초시 행정국 자치행정과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "저출산에 따른 급격한 인구 감소의 사회적인 추이에 대응하고자 출산장려금 지급 등 출산장려 분위기 조성",
+        "verification_status": "verified",
+        "key": "svc:WLF00003376",
+        "eligibility": "출산일을 기준으로 6개월 전부터 신청일 현재까지 속초시에 주민등록을 두고 출생아와 함께 거주하는 출생아의 부 또는 모.단, 6개월 미만인 경우에는 6개월 경과 시 신청 가능 출산일을 기준으로 6개월 전부터 신청일 현재까지 속초시에 주민등록을 두고 출생",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-135200005015",
+        "name": "첫만남이용권 지원",
+        "priority": "nice",
+        "condition": "바우처는 산후조리원·산후조리 비용에도 사용 가능.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "신분증",
+          "대리신청시 위임장, 보호자 신분증 사본 제출, 대리인 신분증"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출생 아동에게 200만원 이상의 첫만남이용권을 지급하여 생애초기 아동양육에 따른 경제적 부담 경감",
+        "verification_status": "verified",
+        "eligibility": "출생아로서 출생신고되어 정상적으로 주민등록번호를 부여받은 아동(주민등록상 생년월일로부터 1년이 초과되지 않는 출생아)  * 2024년 1월 1일 이후 출생아는 주민등록상 생년월일로부터 2년내에 신청하여 사용 가능",
+        "key": "svc:135200005015",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "N1",
+        "id": "national_welfare-WLF00004657",
+        "name": "부모급여 지원",
+        "priority": "nice",
+        "condition": "출생 60일 이내.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 아동정책과",
+        "online": true,
+        "documents": [
+          "사회보장급여 신청(변경)서"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004657",
+        "source": {
+          "name": "복지로 · 보건복지부 아동정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "영아기 집중돌봄을 두텁게 지원하여 출산 및 양육으로 인한 경제적 부담을 줄여드립니다.",
+        "verification_status": "verified",
+        "eligibility": "2세 미만의 아동(0~23개월)에게 지원합니다.※ 2세부터는 가정양육수당을 지원합니다.\r2세 생일이 도래하는 달의 전 달까지 최대 24개월간 지급합니다.",
+        "key": "svc:WLF00004657",
+        "unlocks": 0,
+        "order": 6,
+        "dependsOn": [
+          "birth-report"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

@@ -72,10 +72,29 @@ export default function ProcedureSheet() {
             </p>
           )}
 
-          {/* 담당 기관 */}
+          {/* 담당 기관 · 어디서 */}
           {p.agency?.trim() && (
             <Section title="담당 기관">
               <p className="text-[13px] text-acorn">{p.agency}</p>
+            </Section>
+          )}
+          {p.where?.trim() && (
+            <Section title="어디서">
+              <p className="text-[13px] text-acorn/80">{p.where}</p>
+              {p.fee?.trim() && <p className="text-[12px] text-acorn/60 mt-1">수수료 · {p.fee}</p>}
+            </Section>
+          )}
+
+          {/* 진행 순서 (지식베이스) */}
+          {(p.steps?.length ?? 0) > 0 && (
+            <Section title="진행 순서">
+              <ol className="space-y-1.5 list-decimal pl-4">
+                {p.steps!.map((st, i) => (
+                  <li key={i} className="text-[13px] text-acorn/80">
+                    {st}
+                  </li>
+                ))}
+              </ol>
             </Section>
           )}
 
@@ -86,6 +105,19 @@ export default function ProcedureSheet() {
                 {p.documents.map((d, i) => (
                   <li key={i} className="text-[13px] text-acorn/80">
                     {d}
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
+          {/* 주의점 */}
+          {(p.pitfalls?.length ?? 0) > 0 && (
+            <Section title="주의">
+              <ul className="space-y-1.5">
+                {p.pitfalls!.map((d, i) => (
+                  <li key={i} className="text-[12.5px] text-nut-deep">
+                    ⚠ {d}
                   </li>
                 ))}
               </ul>
@@ -148,14 +180,22 @@ function SourceSection({ proc }: { proc: Procedure }) {
     <Section title="출처">
       <div className="flex items-center gap-2 flex-wrap">
         <span className={`text-[11px] font-semibold rounded-md px-2 py-1 ${v.cls}`}>{v.label}</span>
-        <span className="text-[11px] text-acorn/60">{proc.source.name}</span>
+        {proc.sourceUrl ? (
+          <a href={proc.sourceUrl} target="_blank" rel="noreferrer" className="text-[11px] text-nut-deep underline">
+            {proc.source.name}
+          </a>
+        ) : (
+          <span className="text-[11px] text-acorn/60">{proc.source.name}</span>
+        )}
         {grounded && proc.source.checkedAt && (
           <span className="text-[10px] text-acorn/40">· 조회 {proc.source.checkedAt}</span>
         )}
       </div>
       <p className="text-[11px] text-acorn/55 mt-1.5 leading-snug">
         {grounded
-          ? "담당기관·기한·서류는 공공 API(국가법령정보·보조금24)로 실시간 확인된 값이에요. 신청 시점에 변동될 수 있어 담당 기관 확인을 권장합니다."
+          ? proc.curated
+            ? "창구·서류·기한은 공식 안내 페이지(정부24·기관 사이트)를 직접 확인해 정리한 값이에요. 신청 시점에 변동될 수 있어 담당 기관 확인을 권장합니다."
+            : "담당기관·기한·서류는 공공 API(국가법령정보·보조금24)로 실시간 확인된 값이에요. 신청 시점에 변동될 수 있어 담당 기관 확인을 권장합니다."
           : "아직 공식 소스로 자동 검증되지 않은 안내값입니다. 신청 전 담당 기관에서 확인하세요."}
       </p>
     </Section>

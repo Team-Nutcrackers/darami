@@ -1,11 +1,10 @@
 import { useStore } from "../store";
 import { effectiveDday, ddayLabel } from "../lib/dday";
 import mainLogo from "../../figure/darami-main-logo.png";
-import { llmLabel } from "../data/llm";
 
 /** 상단 바: 로고 + 이벤트 + 가장 임박한 Must 절차(D-day) + 탭 전환 */
 export default function TimelineBar() {
-  const { playbook, board, procIndex, userTodos, tab, setTab, reset, persona, event, llm } = useStore();
+  const { playbook, board, procIndex, userTodos, tab, setTab, reset, persona, event } = useStore();
 
   // 보드에 올라온 미완료 Must 절차 중 가장 임박한(작은 실효 D-day) 항목
   const urgent = board
@@ -43,12 +42,6 @@ export default function TimelineBar() {
             {playbook ? `${playbook.title} 절차 안내` : ""}
           </div>
         </div>
-        <span
-          title={`응답 AI: ${llmLabel(llm)}`}
-          className="shrink-0 text-[10px] font-bold text-acorn/55 bg-sand/70 rounded-full px-2 py-0.5"
-        >
-          {llmLabel(llm)}
-        </span>
       </div>
 
       {urgent && (

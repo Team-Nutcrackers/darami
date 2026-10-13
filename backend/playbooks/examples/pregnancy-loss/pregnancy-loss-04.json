@@ -1,0 +1,152 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "pregnancy-loss-04",
+    "event_id": "pregnancy-loss",
+    "event_title": "유산·사산",
+    "persona_summary": "37세 여성 · 부산 남구 · 교사 · 반복 유산",
+    "persona": {
+      "facts": {
+        "age": 37,
+        "gender": "여성",
+        "residence": "부산 남구",
+        "situation": "교사 · 반복 유산"
+      }
+    },
+    "query": "유산이 이번이 세 번째예요. 몸도 걱정이지만 마음이 너무 무너져서 전문적인 상담을 받아보고 싶어요. 유산 경험한 사람을 위한 심리상담이 있다고 들었는데 어디서 받을 수 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "pregnancy-loss"
+      ],
+      "reason": "반복 유산 심리상담"
+    },
+    "plan": {
+      "title": "반복 유산 심리 지원",
+      "emoji": "🕊️",
+      "intro": "난임·우울증상담센터에서 유산 경험 부부 심리상담을 무료로 받을 수 있어요. 교사도 유산휴가 대상이에요.",
+      "law": [
+        {
+          "name": "유산·사산휴가",
+          "priority": "nice",
+          "condition": "교사(교육공무원)도 유산휴가 규정 동일 적용 — 임신 주수별 기간."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "난임 부부, 유산 및 사산경험 부부, 임산부 및 양육모를 위한 심리상담",
+          "priority": "must",
+          "condition": "부산 권역 난임·우울증상담센터 상담."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [],
+        "local_keywords": [
+          "유산"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "pregnancy-loss",
+    "events": [
+      "pregnancy-loss"
+    ],
+    "title": "반복 유산 심리 지원",
+    "emoji": "🕊️",
+    "intro": "난임·우울증상담센터에서 유산 경험 부부 심리상담을 무료로 받을 수 있어요. 교사도 유산휴가 대상이에요.",
+    "region": {
+      "sido": "부산광역시",
+      "sgg": "남구"
+    },
+    "procedures": [
+      {
+        "ref": "G3",
+        "id": "gov24-B55265700002",
+        "name": "난임 부부, 유산 및 사산경험 부부, 임산부 및 양육모를 위한 심리상담",
+        "priority": "must",
+        "condition": "부산 권역 난임·우울증상담센터 상담.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "국립중앙의료원",
+        "online": true,
+        "documents": [],
+        "link": "https://22762276.nmc.or.kr",
+        "source": {
+          "name": "보조금24 · 국립중앙의료원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 난임 부부, 유산 및 사산경험 부부, 임산부, 양육모 및 배우자를 대상으로 심리상담, 정서적 지지 및 정신건강 고위험군에 대한 의료적 개입 지원을 병행하는 서비스를 제공함으로써 정서적·심리적 문제를 완화하여 삶의 질을 향상시키기 위함\r\n\r\n○ 대상자별(난임 부부, 유산 및 사산경험 부부, 임산부, 양육모 및 배우자) 심리상담서비스 (대면, 비대면 상담서",
+        "verification_status": "verified",
+        "eligibility": "난임 부부  - 부부가 피임을 하지 않고 1년 이상 정기적인 성생활을 하여도 임신이 안되는 경우   유산 및 사산경험 부부  - 유산 및 사산 등으로 임신 유지관련 정서적 어려움을 호소하는 경우   임신부 및 배우자  - 임신 중인 여성 및 배우자  ",
+        "key": "svc:B55265700002",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "L1",
+        "id": "law-pregnancy-loss-l1",
+        "name": "유산·사산휴가",
+        "priority": "nice",
+        "condition": "교사(교육공무원)도 유산휴가 규정 동일 적용 — 임신 주수별 기간.",
+        "deadline": "유산·사산한 날부터 기산되므로 즉시 청구(임신 15주 이내 10일, 16~21주 30일, 22~27주 60일, 28주 이상 90일)",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 소속 사업장(사업주)",
+        "online": false,
+        "documents": [
+          "유산·사산휴가 신청서(휴가 청구 사유, 유산·사산 발생일, 임신기간 기재)",
+          "의료기관 진단서(임신기간 기재 필수)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1379&ccfNo=3&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운생활법령 – 유산·사산휴가 사용 · 근로기준법 제74조(임산부의 보호)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임신 중 유산·사산한 여성 근로자가 청구하면 사업주는 임신기간에 따라 유산·사산일부터 10일(15주 이내)~90일(28주 이상)의 유산·사산휴가를 반드시 주어야 하며, 계약직 등 고용형태와 무관합니다. 임신기간이 적힌 진단서와 신청서를 회사에 내면 되고, 모자보건법상 허용 사유가 아닌 인공임신중절은 제외됩니다. 휴가 기간 급여는 고용보험(피보험 단위기간 180일 이상)에서 유산·사산휴가 급여로 지급받으므로 휴가 후 12개월 이내에 별도 신청하세요.",
+        "verification_status": "verified",
+        "key": "law:유산·사산휴가",
+        "unlocks": 0,
+        "order": 2,
+        "where": "회사(사업주)에 유산·사산휴가 신청서와 진단서 제출",
+        "fee": "무료",
+        "steps": [
+          "유산·사산 즉시 의료기관에서 임신기간이 적힌 진단서 발급",
+          "휴가 사유·발생일·임신기간을 적은 유산·사산휴가 신청서에 진단서를 첨부해 사업주에게 제출(사업주는 거부 불가, 위반 시 2년 이하 징역·2천만원 이하 벌금)",
+          "임신기간별 휴가 사용: 15주 이내 10일 / 16~21주 30일 / 22~27주 60일 / 28주 이상 90일(유산·사산일부터 기산)",
+          "휴가 시작 1개월 후~종료 후 12개월 이내 고용24·고용센터에 유산·사산휴가 급여 신청(피보험 단위기간 180일 이상, 진단서 첨부)"
+        ],
+        "pitfalls": [
+          "휴가는 유산·사산한 날부터 기산되어 늦게 청구하면 남은 일수만 사용 가능",
+          "진단서에 임신기간이 없으면 휴가 일수 산정 불가",
+          "2025년 법 개정으로 15주 이내도 10일(종전 11주 이내 5일) — 옛 기준 안내에 주의",
+          "급여는 자동 지급이 아니며 휴가 종료 후 12개월 내 고용24에 신청해야 함"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1379&ccfNo=3&cciNo=2&cnpClsNo=1",
+        "curated": true
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 2,
+    "by_status": {
+      "verified": 2
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

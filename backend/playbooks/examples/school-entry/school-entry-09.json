@@ -1,0 +1,317 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "school-entry-09",
+    "event_id": "school-entry",
+    "event_title": "자녀 입학",
+    "persona_summary": "32세 여성 · 경남 진주시 · 다문화 가정 · 유치원 입학 정보",
+    "persona": {
+      "facts": {
+        "age": 32,
+        "gender": "여성",
+        "residence": "경남 진주시",
+        "situation": "다문화 가정 · 유치원 입학 정보"
+      }
+    },
+    "query": "제가 외국에서 와서 한국 유치원 입학 절차를 잘 몰라요. 아이가 내년에 다섯 살이 되는데 언제 어디서 신청하는지, 비용은 얼마나 드는지 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "school-entry",
+        "international-marriage"
+      ],
+      "reason": "다문화 가정 유치원 입학"
+    },
+    "plan": {
+      "title": "다문화 가정 유치원 입학",
+      "emoji": "🎒",
+      "intro": "유치원은 매년 11월 '처음학교로'에서 온라인으로 지원해요. 유아학비 지원으로 비용 부담이 줄고, 가족센터가 입학 안내를 도와줘요.",
+      "law": [
+        {
+          "name": "유아 무상교육",
+          "priority": "must",
+          "condition": "다섯 살(만 3세) → 유아학비 지원 대상."
+        },
+        {
+          "name": "다문화가족지원센터",
+          "priority": "nice",
+          "condition": "진주시 가족센터에서 입학 절차 안내·통역."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "유아학비 (누리과정) 지원",
+          "priority": "must",
+          "condition": "유치원 입학 후 유아학비 신청."
+        },
+        {
+          "name": "다문화가족지원센터 이용",
+          "priority": "nice",
+          "condition": "입학 상담·통역."
+        },
+        {
+          "name": "다문화가족 자녀 언어발달 지원서비스",
+          "priority": "nice",
+          "condition": "입학 전 언어발달 평가."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "유치원",
+          "다문화"
+        ],
+        "local_keywords": [
+          "유치원",
+          "다문화",
+          "입학준비금"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "사립유치원 저소득층 유아학비 지원",
+          "priority": "nice",
+          "condition": "저소득이면 경남교육청 사립유치원 학비 추가.",
+          "service_id": "901000000013"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "school-entry",
+    "events": [
+      "school-entry",
+      "international-marriage"
+    ],
+    "title": "다문화 가정 유치원 입학",
+    "emoji": "🎒",
+    "intro": "유치원은 매년 11월 '처음학교로'에서 온라인으로 지원해요. 유아학비 지원으로 비용 부담이 줄고, 가족센터가 입학 안내를 도와줘요.",
+    "region": {
+      "sido": "경상남도",
+      "sgg": "진주시"
+    },
+    "procedures": [
+      {
+        "ref": "L7",
+        "id": "law-school-entry-l7",
+        "name": "유아 무상교육",
+        "priority": "must",
+        "condition": "다섯 살(만 3세) → 유아학비 지원 대상.",
+        "deadline": "유치원 입학(이용) 전 또는 이용 시작 시 신청(소급 지원 불가)",
+        "deadlineDays": 9999,
+        "agency": "교육부 · 시·도교육청 / 아동 주소지 읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "사회보장급여(유아학비) 신청서(주민센터 비치/복지로 온라인 작성)",
+          "신청인 신분증",
+          "아이행복카드(또는 국민행복카드) 발급(유아학비 결제·인증용)",
+          "저소득층 추가지원 대상 증빙(수급자·차상위·한부모 증명, 사립유치원 저소득층 유아학비 신청 시)"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000969",
+        "source": {
+          "name": "복지로 - 유아학비 지원(3~5세 누리과정 지원) · 유아교육법 제24조(무상교육)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "만 3~5세(2026년 기준 3~5세 도달) 유아가 유치원에 다니면 소득과 관계없이 누리과정 유아학비(국공립·사립 유치원 학비, 방과후과정비)를 지원받는다. 복지로 온라인 또는 아동 주소지 주민센터에서 '유아학비'를 신청하고, 매월 아이행복카드로 학부모 인증을 하면 교육청이 유치원에 직접 지급한다. 어린이집 보육료·양육수당을 받고 있었다면 반드시 유아학비로 변경 신청해야 하며 소급되지 않는다.",
+        "verification_status": "verified",
+        "key": "law:유아 무상교육",
+        "unlocks": 2,
+        "order": 1,
+        "where": "복지로(bokjiro.go.kr) 온라인 신청(부모만) 또는 아동 주민등록 주소지 읍·면·동 주민센터 방문",
+        "fee": "무료",
+        "steps": [
+          "만 3~5세 자녀가 유치원에 입학(또는 전원)하면 복지로 또는 주민센터에서 '유아학비' 서비스를 신청한다(기존 보육료·양육수당 수급자는 유아학비로 변경 신청)",
+          "복지로: 복지서비스 신청하기 → 유아학비 선택 → 가족정보 실명인증 → 신청서 작성 완료(제출 후 수정 불가)",
+          "자격 결정 후 매월(또는 분기) 아이행복카드로 학부모 인증을 하면 교육청이 유치원에 유아학비·방과후과정비를 입금한다",
+          "어린이집으로 옮기면 보육료로 다시 변경 신청한다"
+        ],
+        "pitfalls": [
+          "보육료·양육수당 등 다른 급여를 받다 유치원으로 옮기면 변경 신청을 해야 지원되고 소급은 안 된다",
+          "온라인 신청은 부모만 가능, 조부모·후견인 등은 주민센터 방문",
+          "해외체류 31일째부터 자격이 중지되며 재신청 필요",
+          "유치원 이용시간에 아이돌봄서비스 등과 중복지원 불가",
+          "대한민국 국적이 없는 유아는 원칙적으로 제외(난민 등 예외)"
+        ],
+        "sourceUrl": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000969",
+        "curated": true
+      },
+      {
+        "ref": "G11",
+        "id": "gov24-000000465790",
+        "name": "유아학비 (누리과정) 지원",
+        "priority": "must",
+        "condition": "유치원 입학 후 유아학비 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "사회복지서비스 및 급여제공(변경) 신청서",
+          "사회복지서비스 이용권(바우처) 제공(변경) 신청서",
+          "아이사랑 카드발급 신청 및 개인신용정보의 조회·제공·이용 동의서"
+        ],
+        "link": "https://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "3~5세 누리과정 도입으로 유치원·어린이집에 국가수준 공통 교육과정(누리과정)을 적용함에 따라, 보호자의 소득수준에 관계없이 전 계층 유아학비, 보육료 지원",
+        "verification_status": "verified",
+        "eligibility": "지원대상 : 국공립 및 사립유치원에 다니는 3~5세 유아       - '23년 1~2월생으로 유치원 입학을 희망하여 3세반에 취원한 유아도 지원 대상    -  취학대상 아동('19.1.1~12.31.출생)이 취학을 유예하는 경우, 유예한 1년에 한",
+        "key": "svc:000000465790",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "law-school-entry-l7"
+        ]
+      },
+      {
+        "ref": "L4",
+        "id": "law-international-marriage-l4",
+        "name": "다문화가족지원센터",
+        "priority": "nice",
+        "condition": "진주시 가족센터에서 입학 절차 안내·통역.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부 · 시·군·구 가족센터(다문화가족지원센터)",
+        "online": true,
+        "documents": [
+          "신분증(외국인등록증 또는 여권)",
+          "센터별 프로그램 참가 신청서(센터 홈페이지 회원가입 후 신청)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=638&ccfNo=1&cciNo=1&cnpClsNo=3",
+        "source": {
+          "name": "찾기쉬운생활법령 – 다문화가족지원센터 · 다문화가족지원법 제12조(다문화가족지원센터의 설치ㆍ운영 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "다문화가족지원센터(가족센터)는 결혼이민자와 다문화가족에게 한국어교육, 가족·개인 상담, 통번역, 취업 정보·알선, 자녀 언어발달 지원, 가정폭력 피해자 연계 등을 제공합니다. 거주지 센터를 다누리포털에서 찾아 방문하거나 다누리콜센터(1577-1366)에 24시간 다국어로 상담하면 되고, 센터 이용이 어려우면 방문교육을 신청할 수 있습니다. 가정폭력 등 긴급 상황에도 다누리콜센터가 긴급피난처·보호시설과 연계해 줍니다.",
+        "verification_status": "verified",
+        "key": "law:다문화가족지원센터",
+        "unlocks": 0,
+        "order": 3,
+        "where": "거주지 가족센터 방문 또는 다누리포털(liveinkorea.kr)·다누리콜센터(☎1577-1366, 24시간·다국어)",
+        "fee": "무료(방문교육 등 일부 프로그램은 소득에 따라 자부담)",
+        "steps": [
+          "다누리포털(liveinkorea.kr)에서 거주지 가족센터 검색 또는 다누리콜센터 1577-1366 상담(13개국어 이상, 365일 24시간)",
+          "센터 방문·회원가입 후 한국어교육(집합·방문), 가족상담, 통번역, 취업연계, 자녀 언어발달 지원 등 필요한 프로그램 신청",
+          "가정폭력·긴급 상황이면 다누리콜센터를 통해 긴급피난처·보호시설·경찰·의료 연계"
+        ],
+        "pitfalls": [
+          "지역 센터마다 운영 프로그램·대상(예: 입국 5년 이하 결혼이민자 한국어교육)이 달라 사전 확인 필요",
+          "방문교육은 소득수준에 따라 자부담이 있을 수 있음",
+          "다누리콜센터 지역센터는 평일 09~18시, 이후·공휴일은 중앙센터로 연결"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=638&ccfNo=1&cciNo=1&cnpClsNo=3",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-138300000056",
+        "name": "다문화가족지원센터 이용",
+        "priority": "nice",
+        "condition": "입학 상담·통역.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/138300000056",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "진로설계, 기초학습 지원, 가족상담, 관련 프로그램 등을 다문화가족지원센터에서 제공함으로써 다문화 가족의 한국 적응과 안정적인 정착을 도움.",
+        "verification_status": "verified",
+        "eligibility": "ㅇ 다문화가족 -한국인(출생·인지·귀화 등 불문)과 결혼이민자로 이루어진 가족 -한국인(출생·인지·귀화 등 불문)과 귀화자로 이루어진 가족",
+        "key": "svc:138300000056",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "G5",
+        "id": "gov24-WII000001250",
+        "name": "다문화가족 자녀 언어발달 지원서비스",
+        "priority": "nice",
+        "condition": "입학 전 언어발달 평가.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [
+          "○  공통",
+          "다문화가족지원센터 서비스 개인정보 수집ㆍ이용동의서",
+          "다문화가족지원센터 서비스 개인정보 제3자 제공 동의서",
+          "회원등록 신청서",
+          "프로그램 신청서",
+          "민감정보 수집이용동의서",
+          "○  주민등록 등재 여부에 따라 다음과 같이 서류 제출",
+          "주민등록 등재시 : 주민등록등본(결혼이민자 또는 귀화자가 등본 상 기재)",
+          "주민등록 미 등재시 : 가족관계증명서와 외국인등록증 사본 또는 가족관게증명서와 여권사본"
+        ],
+        "link": "http://www.familynet.or.kr",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "체계적ㆍ전문적 언어발달지원 서비스 제공을 통해 다문화 가족 자녀들의 원만한 언어발달이 이루어지고, 글로벌 인재로 성장할 수 있는 초석 마련",
+        "verification_status": "verified",
+        "eligibility": "언어평가 및 언어교육이 필요한 만 12세 이하 다문화 가족 자녀  - 초등학교 재학 중인 아동의 경우 만 12세를 초과하여도 사업 대상에 포함",
+        "key": "svc:WII000001250",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "R1",
+        "id": "regional-901000000013",
+        "name": "사립유치원 저소득층 유아학비 지원",
+        "priority": "nice",
+        "condition": "저소득이면 경남교육청 사립유치원 학비 추가.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "경상남도교육청",
+        "online": true,
+        "documents": [],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 경상남도교육청",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "○ 지원 내용\r\n - 유아 1인당 유아학비 월 최대 20만원 추가 지원\r\n - 추가 학부모 부담금이 20만원 미만인 경우 실비 범위 내 지원",
+        "verification_status": "verified",
+        "key": "svc:901000000013",
+        "eligibility": "유아학비 지원 자격이 있고, 사립유치원에 다니는 3~5세 법정저소득층 유아  - 법정저소득층 : 생계급여·의료급여·주거급여·교육급여 수급자, 차상위계층, 한부모 가정",
+        "unlocks": 0,
+        "order": 6,
+        "dependsOn": [
+          "law-school-entry-l7"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

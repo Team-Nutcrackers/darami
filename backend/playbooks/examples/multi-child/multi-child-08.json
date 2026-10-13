@@ -1,0 +1,215 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "multi-child-08",
+    "event_id": "multi-child",
+    "event_title": "다자녀",
+    "persona_summary": "44세 남성 · 충북 제천시 · 공무원 · 자녀 3명, 고속도로 통행료",
+    "persona": {
+      "facts": {
+        "age": 44,
+        "gender": "남성",
+        "residence": "충북 제천시",
+        "situation": "공무원 · 자녀 3명, 고속도로 통행료"
+      }
+    },
+    "query": "주말마다 애들 데리고 고속도로를 타는데 다자녀 가정은 통행료 할인이 된다고 들었어요. 어떤 차가 되고 어떻게 등록하는지 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "multi-child"
+      ],
+      "reason": "다자녀 고속도로 통행료"
+    },
+    "plan": {
+      "title": "다자녀 고속도로 통행료 할인",
+      "emoji": "🛣️",
+      "intro": "다자녀 통행료 할인은 하이패스 단말기와 차량을 등록해야 적용돼요. 자녀 3명 이상(18세 미만) 가정이 대상이에요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "고속도로 다자녀가구 통행료 할인",
+          "priority": "must",
+          "condition": "자녀 3명 이상 → 하이패스 카드·차량 등록 후 할인 적용."
+        },
+        {
+          "name": "다자녀가구 자동차취득세 감면",
+          "priority": "nice",
+          "condition": "차량 교체 시 취득세 감면."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "다자녀"
+        ],
+        "local_keywords": [
+          "다자녀"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R3",
+          "name": "충북 다자녀 행복카드 발급 지원",
+          "priority": "nice",
+          "condition": "충북 다자녀 행복카드 가맹점 할인.",
+          "service_id": "643000000753"
+        },
+        {
+          "cid": "R1",
+          "name": "다자녀가구 등록금 지원",
+          "priority": "nice",
+          "condition": "제천시 다자녀 대학생 자녀 등록금 지원(진학 시).",
+          "service_id": "440000000117"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "multi-child",
+    "events": [
+      "multi-child"
+    ],
+    "title": "다자녀 고속도로 통행료 할인",
+    "emoji": "🛣️",
+    "intro": "다자녀 통행료 할인은 하이패스 단말기와 차량을 등록해야 적용돼요. 자녀 3명 이상(18세 미만) 가정이 대상이에요.",
+    "region": {
+      "sido": "충청북도",
+      "sgg": "제천시"
+    },
+    "procedures": [
+      {
+        "ref": "G3",
+        "id": "gov24-B50000400042",
+        "name": "고속도로 다자녀가구 통행료 할인",
+        "priority": "must",
+        "condition": "자녀 3명 이상 → 하이패스 카드·차량 등록 후 할인 적용.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "한국도로공사",
+        "online": true,
+        "documents": [
+          "공공 마이데이터 미이용 시 주민등록등본, 가족관계증명서(주민등록등본만으로 부모·자녀 관계 확인 불가 시 주민등록등본과 함께 구비) 등 아래 서류를 구비하여 영업소를 방문하여 신청하여야 합니다.",
+          "[구비서류]",
+          "○ 신분증, 자녀와 함께 등재된 부(모) 또는 자녀 기준 주민등록등본*, 신청인 또는 자녀 기준 가족관계증명서",
+          "○ 자동차등록증(1년 이상 임차·대여차량은 시설대여계약서(리스) 또는 임대차계약서(렌트) 제출)",
+          "○ 본인 명의 하이패스카드번호(선불하이패스카드는 SM하이플러스카드, EX하이패스카드 기명카드만 가능)",
+          "○ 본인 명의 계좌정보(선불 하이패스카드)",
+          "○ 준회원 개인정보(위치정보 포함) 수집·이용 동의서**(고속도로 통행료 홈페이지 자료실에서 다운로드 가능)",
+          "* 행정복지센터에서 발급",
+          "** 자녀와 동일세대인 부 또는 모의 휴대전화번호를 등록하려는 경우 해당 부 또는 모의 서명본 지참"
+        ],
+        "link": "https://www.hipass.co.kr/main.do",
+        "source": {
+          "name": "보조금24 · 한국도로공사",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "저출생 위기 대응을 위한 생활밀착형 지원 \r\n다자녀가구의 주말 나들이 부담 경감",
+        "verification_status": "verified",
+        "eligibility": "부 또는 모와 만 19세 미만 자녀 2명 이상이 주민등록등본에 함께 등재되어 있는 가구       - 차량요건 : 부 또는 모가 소유하거나 1년 이상 리스·렌트한 비영업용 차량 (승용차 또는 12인승 이하 승합차, 세대당 1대)      ※ 개인·법인",
+        "key": "svc:B50000400042",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-131200000008",
+        "name": "다자녀가구 자동차취득세 감면",
+        "priority": "nice",
+        "condition": "차량 교체 시 취득세 감면.",
+        "deadline": "자세한 날짜는 시군구청에 따라 다를 수 있음",
+        "deadlineDays": 9999,
+        "agency": "행정안전부",
+        "online": true,
+        "documents": [
+          "지방세 감면 신청서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/131200000008",
+        "source": {
+          "name": "보조금24 · 행정안전부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "다자녀가구가 취득한 자동차의 취득세를 감면하여 출산 및 양육을 지원",
+        "verification_status": "verified",
+        "eligibility": "만18세 미만의 자녀 2명 이상을 양육하는 자(가족관계등록부 기준, 양자 및 배우자 자녀 포함)",
+        "key": "svc:131200000008",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "R3",
+        "id": "regional-643000000753",
+        "name": "충북 다자녀 행복카드 발급 지원",
+        "priority": "nice",
+        "condition": "충북 다자녀 행복카드 가맹점 할인.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "충청북도",
+        "online": true,
+        "documents": [
+          "충북 다자녀 행복카드"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/643000000753",
+        "source": {
+          "name": "보조금24 · 충청북도",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "○ 2자녀 이상의 가정이라면 충청북도 다자녀 행복카드 발급 신청 가능\r\n - 신청자격 및 발급대상: 신청일 현재 충북도에 주민등록상 주소를 같이하는 두 자녀 이상을 양육중이면서 막내자녀가 만 18세 이하인 가정\r\n\r\n○ 신청방법: 거주지에서 가까운 농협 본점, 지점(단위농협 포함)에서 신청서 작성, 제출\r\n - 2자녀 입증 서류 및 본인확인 서류 지참",
+        "verification_status": "verified",
+        "key": "svc:643000000753",
+        "eligibility": "신청일 현재 충청북도에 주민등록상 주소를 같이하는 두자녀 이상을 양육중이면서 막내자녀가 만 18세 이하인 가정",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "R1",
+        "id": "regional-440000000117",
+        "name": "다자녀가구 등록금 지원",
+        "priority": "nice",
+        "condition": "제천시 다자녀 대학생 자녀 등록금 지원(진학 시).",
+        "deadline": "1학기 : 5월 / 2학기 : 11월",
+        "deadlineDays": 9999,
+        "agency": "충청북도 제천시",
+        "online": true,
+        "documents": [
+          "공고문 확인",
+          "제천시청 홈페이지 -> 소식알림 -> 고시공고 \"등록금\" 검색"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/440000000117",
+        "source": {
+          "name": "보조금24 · 충청북도 제천시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "○ 지원대상 : 보호자와 지원대상자인 자녀가 신청일 현재 3년 이상 주민등록을 두고 거주하는 둘 이상의 자녀를 양육하는 다자녀 가정의 자녀로 대학교 신입생 또는 재학생\r\n\r\n○ 지원금액 : 학기당 등록금 최대 100만원(최대 8학기)\r\n ※ 타 장학금을 지원받는 경우 타 장학금액을 포함한 금액이 등록금을 초과하지 않는 범위 내에서 차액 지원",
+        "verification_status": "verified",
+        "key": "svc:440000000117",
+        "eligibility": "보호자와 지원대상자가 제천시에 3년 이상 주민등록을 두고 거주하는 둘 이상의 자녀를 양육하는 다자녀 가정의 자녀로 대학교 재학생",
+        "unlocks": 0,
+        "order": 4
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 4,
+    "by_status": {
+      "verified": 4
+    },
+    "candidates": 6,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "college-05",
+    "event_id": "college",
+    "event_title": "대학 진학·학자금",
+    "persona_summary": "22세 여성 · 대구 중구 · 대학 3학년 · 국가장학금 탈락",
+    "persona": {
+      "facts": {
+        "age": 22,
+        "gender": "여성",
+        "residence": "대구 중구",
+        "situation": "대학 3학년 · 국가장학금 탈락"
+      }
+    },
+    "query": "이번 학기 국가장학금을 신청했는데 성적 기준에 걸려서 못 받았어요. 다음 학기에 다시 받을 수 있는 방법이 있는지, 한 번 탈락하면 계속 불리한지 궁금해요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "college"
+      ],
+      "reason": "국가장학금 성적 탈락"
+    },
+    "plan": {
+      "title": "국가장학금 성적 탈락 후",
+      "emoji": "🎓",
+      "intro": "직전 학기 B학점(80점) 미만이면 탈락하지만 다음 학기 성적을 채우면 다시 받을 수 있고, 저소득층은 C학점 경고제로 1회 구제돼요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "국가장학금 Ⅰ유형 (학생직접지원형)",
+          "priority": "must",
+          "condition": "다음 학기 성적 기준(B0 이상, 12학점) 충족 시 재신청. 기초·차상위는 C학점 경고제 1회."
+        },
+        {
+          "name": "국가근로장학금",
+          "priority": "nice",
+          "condition": "근로장학은 성적 기준(C 이상)이 낮음."
+        },
+        {
+          "name": "취업 후 상환 학자금대출",
+          "priority": "nice",
+          "condition": "탈락 학기 등록금 대출."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "장학금",
+          "대학생"
+        ],
+        "local_keywords": [
+          "장학금",
+          "대학생"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "대학생 학자금 대출 부담경감 지원",
+          "priority": "nice",
+          "condition": "대구 대학생 학자금대출 이자 지원.",
+          "service_id": "627000000134"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "college",
+    "events": [
+      "college"
+    ],
+    "title": "국가장학금 성적 탈락 후",
+    "emoji": "🎓",
+    "intro": "직전 학기 B학점(80점) 미만이면 탈락하지만 다음 학기 성적을 채우면 다시 받을 수 있고, 저소득층은 C학점 경고제로 1회 구제돼요.",
+    "region": {
+      "sido": "대구광역시",
+      "sgg": "중구"
+    },
+    "procedures": [
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000004508",
+        "name": "국가장학금 Ⅰ유형 (학생직접지원형)",
+        "priority": "must",
+        "condition": "다음 학기 성적 기준(B0 이상, 12학점) 충족 시 재신청. 기초·차상위는 C학점 경고제 1회.",
+        "deadline": "(2026년 2학기) (1차) 2026년 5월 22일~6월 22일 (2차) 2026년 8월 12일~ 9월 9일",
+        "deadlineDays": 739490,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "○ 필수서류",
+          "구비서류 없음",
+          "○ 선택서류",
+          "국가장학금 신청정보와 한국장학재단에서 신청자에 대한 확인 정보가 불일치할 경우 별도 제출 필요",
+          "(신청인 제출 서류) 가족관계증명서, 기초생활보장 수급자증명서, 한부모가족증명서, 수급자증명서 등",
+          "※ 불일치 사유별 제출서류 상이"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "경제적 여건과 관계없이 능력과 의지가 있는 학생이면 누구나 대학교육의 혜택을 누릴 수 있는 여건 마련",
+        "verification_status": "verified",
+        "eligibility": "대한민국 국적을 소지한 국내대학의 학자금지원 9구간 이하 대학생 중 직전학기 성적 및 이수학점(100점 만점에 80점 이상, 12학점 이수) 기준을 충족하는 경우에 지원  - 세부지원 기준은 한국장학재단 홈페이지(www.kosaf.go.kr) 참고",
+        "key": "svc:SD0000004508",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-GES000000120",
+        "name": "국가근로장학금",
+        "priority": "nice",
+        "condition": "근로장학은 성적 기준(C 이상)이 낮음.",
+        "deadline": "사업별 공고 확인",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "1. 가족관계증명서(제출 대상자에 한함)",
+          "2. 혼인관계증명서(제출 대상자에 한함)",
+          "3. 선택서류 : 신청 시 해당사항을 선택한 학생",
+          "기초생활보장 수급자 증명서",
+          "차상위계층 증명서",
+          "장애인 증명서 등"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "대학생에게 학자금(등록금과 생활비) 마련을 위한 근로기회를 제공하고 그에 따른 대가(장학금)를 지급함으로써 안정적인 학업 여건 조성 및 사회‧직업체험 기회 제공으로 취업역량 제고",
+        "verification_status": "verified",
+        "eligibility": "ㅇ 대한민국 국적을 소지한 사업 참여대학의 재학생 중 성적 및 소득기준을 모두 충족한 학생  - (성적기준) C0 수준(70점/100점) 이상  - (소득기준) 학자금 지원 9구간 이하",
+        "key": "svc:GES000000120",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-GES000000110",
+        "name": "취업 후 상환 학자금대출",
+        "priority": "nice",
+        "condition": "탈락 학기 등록금 대출.",
+        "deadline": "2026-2학기 신청기간 : 2026.7.1.~2026.11.17.",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "기본적으로 제출 서류는 없으나, 경우에 따라서 추가서류 필요"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "대학생에게 학자금을 대출하고 그 원리금은 소득이 발생한 후에 소득 수준에 따라 상환하도록 하여 현재의 경제적 여건에 관계없이 누구나 원하는 고등교육 기회를 가질 수 있도록 함",
+        "verification_status": "verified",
+        "eligibility": "교육부 또는 한국장학재단과 협약을 체결한 국내 고등교육기관 학부생, 전문기술석사 및 대학원생",
+        "key": "svc:GES000000110",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "R1",
+        "id": "regional-627000000134",
+        "name": "대학생 학자금 대출 부담경감 지원",
+        "priority": "nice",
+        "condition": "대구 대학생 학자금대출 이자 지원.",
+        "deadline": "2026년 8월말 ~ 9월초",
+        "deadlineDays": 739490,
+        "agency": "대구광역시",
+        "online": true,
+        "documents": [
+          "○ 대출이자지원",
+          "본인의 주소가 대구일 경우 : 본인의 주민등록등본, 재학(휴학)증명서 또는 졸업증명서",
+          "직계존속의 주소가 대구일 경우 : 직계존속의 주민등록등본, 가족관계증명서, 재학(휴학)증명서 또는 졸업증명서",
+          "○ 신용회복지원",
+          "본인의 주민등록초본",
+          "※ 공통사항 : 모든 구비서류는 공고일 이후 발급된 서류만 인정됨"
+        ],
+        "link": "http://minwon.daegu.go.kr/main",
+        "source": {
+          "name": "보조금24 · 대구광역시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "○ 지역대학생 학자금 대출이자 지원으로 연체 방지 및 신용 보호\r\n○ 학비로 인한 경제적 부담을 경감하고 학업에 전념토록 지원",
+        "verification_status": "verified",
+        "key": "svc:627000000134",
+        "eligibility": "대출이자지원 : 직계존속이나 본인이 대구에 주민등록을 둔 대구‧경북소재 대학(원)교 재(휴)학생 또는 2021년 이후 졸업생    신용회복지원 : 대구에 주민등록을 둔 39세 이하 학자금대출 부실채무자로, 신용도판단정보 등록된 자",
+        "unlocks": 0,
+        "order": 4
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 4,
+    "by_status": {
+      "verified": 4
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 16.8
+  }
+}

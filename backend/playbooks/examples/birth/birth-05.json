@@ -1,0 +1,308 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "birth-05",
+    "event_id": "birth",
+    "event_title": "출산",
+    "persona_summary": "27세 여성 · 경북 경산시 · 계약직 · 출산 후 육아 고민",
+    "persona": {
+      "facts": {
+        "age": 27,
+        "gender": "여성",
+        "residence": "경북 경산시",
+        "situation": "계약직 · 출산 후 육아 고민"
+      }
+    },
+    "query": "아기를 낳은 지 한 달 됐는데 매달 받는 지원금이 여러 개라 헷갈려요. 부모급여랑 아동수당이 다른 건지, 둘 다 받을 수 있는지 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "birth"
+      ],
+      "reason": "부모급여·아동수당 구분"
+    },
+    "plan": {
+      "title": "부모급여와 아동수당 구분",
+      "emoji": "👶",
+      "intro": "부모급여(0~1세 월 100만/50만 원)와 아동수당(8세 미만 월 10만 원)은 별개라 둘 다 받아요. 어린이집에 보내면 부모급여는 보육료로 전환돼요.",
+      "law": [
+        {
+          "name": "출생신고",
+          "priority": "nice",
+          "condition": "출산 1개월 → 아직 안 했으면 즉시."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "아동수당",
+          "priority": "must",
+          "condition": "만 8세 미만 월 10만 원, 부모급여와 중복 수령."
+        },
+        {
+          "name": "첫만남이용권 지원",
+          "priority": "must",
+          "condition": "출생 후 1회 바우처."
+        },
+        {
+          "name": "가정양육수당 지원",
+          "priority": "nice",
+          "condition": "24개월 이후 어린이집 미이용 시 양육수당으로 전환."
+        },
+        {
+          "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+          "priority": "nice",
+          "condition": "아직 신청 안 한 게 있으면 통합신청."
+        }
+      ],
+      "national_welfare": [
+        {
+          "name": "부모급여 지원",
+          "priority": "must",
+          "condition": "0세 월 100만 원, 1세 월 50만 원. 출생 60일 이내 신청해야 출생월 소급."
+        }
+      ],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "출산"
+        ],
+        "local_keywords": [
+          "출산장려금"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "birth",
+    "events": [
+      "birth"
+    ],
+    "title": "부모급여와 아동수당 구분",
+    "emoji": "👶",
+    "intro": "부모급여(0~1세 월 100만/50만 원)와 아동수당(8세 미만 월 10만 원)은 별개라 둘 다 받아요. 어린이집에 보내면 부모급여는 보육료로 전환돼요.",
+    "region": {
+      "sido": "경상북도",
+      "sgg": "경산시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "birth-report",
+        "name": "출생신고",
+        "priority": "nice",
+        "condition": "출산 1개월 → 아직 안 했으면 즉시.",
+        "deadline": "1개월 이내",
+        "deadlineDays": 30,
+        "agency": "법무부(가족관계등록 사무는 법원행정처 감독) · 시(구)·읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "출생신고서(자녀 이름은 한글 또는 통상 사용 한자)",
+          "출생증명서(의사·조산사 작성) 또는 출생사실을 증명하는 서면",
+          "신고인 신분증(우편 제출 시 사본)",
+          "부·모의 혼인관계증명서(행정정보 공동이용 가능 시 생략)",
+          "자녀 출생 당시 모가 한국인임을 증명하는 서면(해당 시)",
+          "자녀가 이중국적자인 경우 취득한 국적을 소명하는 자료(해당 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "source": {
+          "name": "정부24 출생신고 민원안내 · 가족관계의 등록 등에 관한 법률 제44조(출생신고의 기재사항)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "아이가 태어나면 1개월 안에 부 또는 모가 출생증명서를 첨부해 주민센터나 전자가족관계등록시스템에 출생신고를 한다. 수수료는 없으며, 신고 때 행복출산 원스톱으로 부모급여·아동수당 등을 함께 신청하면 편하다. 기한을 넘기면 5만 원 이하 과태료가 부과된다.",
+        "verification_status": "verified",
+        "key": "common:birth-report",
+        "unlocks": 5,
+        "order": 1,
+        "where": "출생지·등록기준지·주소지 시(구)·읍·면·동 주민센터 방문, 우편, 또는 대법원 전자가족관계등록시스템(efamily.scourt.go.kr, 온라인 출생신고 참여 병원 출산 시)",
+        "fee": "무료",
+        "steps": [
+          "병원에서 출생증명서 발급(온라인 출생신고 참여 병원이면 정보 제공 동의)",
+          "출생신고서 작성(이름·본·등록기준지·출생 일시·장소·부모 정보)",
+          "주민센터 방문 제출 또는 전자가족관계등록시스템에서 전자서명 후 제출",
+          "같은 자리에서 행복출산 원스톱(부모급여·아동수당·첫만남이용권) 통합 신청"
+        ],
+        "pitfalls": [
+          "온라인 출생신고는 참여 병원에서 출산한 경우에만 가능 — 병원에 미리 확인",
+          "출생증명서를 받을 수 없으면 대체 서면이나 가정법원 출생확인이 필요해 시간이 걸림",
+          "혼인 외 출생자는 모가 신고의무자",
+          "부모급여·아동수당 등은 출생 후 60일 이내 신청해야 출생월부터 소급"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000045",
+        "curated": true
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-135200000120",
+        "name": "아동수당",
+        "priority": "must",
+        "condition": "만 8세 미만 월 10만 원, 부모급여와 중복 수령.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 공통서류",
+          "아동수당 지급 신청서",
+          "신청인의 신분증",
+          "○ 대리신청인 구비서류",
+          "대리 신청 시 위임장, 대리인 신분증, 보호자 신분증(사본) 지참"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000120",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "아동에게 아동수당을 지급하여 아동 양육에 따른 경제적 부담을 경감하고 건강한 성장환경을 조성함으로써 아동의 기본적 권리와 복지 증진에 기여",
+        "verification_status": "verified",
+        "eligibility": "만 8세 미만 모든 아동에게 아동수당을 지급  - 대한민국 국적을 보유한 아동   ㆍ 부모가 외국인이어도 아동이 한국 국적이면 요건 충족   ㆍ 국적법에 따른 복수국적자 포함   ㆍ 난민법에 따른 난민 인정 아동 포함   ㆍ ｢재한외국인처우기본법｣에 ",
+        "key": "svc:135200000120",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-135200005015",
+        "name": "첫만남이용권 지원",
+        "priority": "must",
+        "condition": "출생 후 1회 바우처.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "신분증",
+          "대리신청시 위임장, 보호자 신분증 사본 제출, 대리인 신분증"
+        ],
+        "link": "http://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출생 아동에게 200만원 이상의 첫만남이용권을 지급하여 생애초기 아동양육에 따른 경제적 부담 경감",
+        "verification_status": "verified",
+        "eligibility": "출생아로서 출생신고되어 정상적으로 주민등록번호를 부여받은 아동(주민등록상 생년월일로부터 1년이 초과되지 않는 출생아)  * 2024년 1월 1일 이후 출생아는 주민등록상 생년월일로부터 2년내에 신청하여 사용 가능",
+        "key": "svc:135200005015",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "N1",
+        "id": "national_welfare-WLF00004657",
+        "name": "부모급여 지원",
+        "priority": "must",
+        "condition": "0세 월 100만 원, 1세 월 50만 원. 출생 60일 이내 신청해야 출생월 소급.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 아동정책과",
+        "online": true,
+        "documents": [
+          "사회보장급여 신청(변경)서"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004657",
+        "source": {
+          "name": "복지로 · 보건복지부 아동정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "영아기 집중돌봄을 두텁게 지원하여 출산 및 양육으로 인한 경제적 부담을 줄여드립니다.",
+        "verification_status": "verified",
+        "eligibility": "2세 미만의 아동(0~23개월)에게 지원합니다.※ 2세부터는 가정양육수당을 지원합니다.\r2세 생일이 도래하는 달의 전 달까지 최대 24개월간 지급합니다.",
+        "key": "svc:WLF00004657",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-134200005012",
+        "name": "가정양육수당 지원",
+        "priority": "nice",
+        "condition": "24개월 이후 어린이집 미이용 시 양육수당으로 전환.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "○ 사회보장급여 신청(변경)서",
+          "○ 아동 명의 또는 부모 등의 명의 통장 사본"
+        ],
+        "link": "https://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "어린이집,  유치원(특수학교 포함) 등 시설 미이용 아동에 대한 부모의 가정양육 부담 경감 및 아동의 건강한 발달 지원",
+        "verification_status": "verified",
+        "eligibility": "어린이집, 유치원(특수학교 포함), 종일제 아이돌봄서비스 등을 이용하지 않는 취학 전 24개월~86개월 미만 가정양육 영유아 ※ 부모급여 도입에 따라 0~23개월은 부모급여 지원, 24개월부터 가정양육수당 지원   소득 인정액 기준 없음   중복불가서",
+        "key": "svc:134200005012",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "birth-report"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-174000000029",
+        "name": "출산 관련 서비스 통합처리 신청(행복출산)",
+        "priority": "nice",
+        "condition": "아직 신청 안 한 게 있으면 통합신청.",
+        "deadline": "출생신고 시 또는 출생신고 이후(※ 개별 서비스별 신청 기간은 \"지원대상\" 참조)",
+        "deadlineDays": 9999,
+        "agency": "행정안전부",
+        "online": true,
+        "documents": [
+          "○ 온라인 : 간편인증, 공동인증서 등(본인인증 필요)",
+          "○ 방문: 신분증, 출산자의 신분증 사본(대리인 신청시), 가족관계증명서 등 가족관계를 증명할 수 있는 서류(시부모가 신청시)",
+          "* 저소득층 조제분유 지원, 지자체 지원 서비스 신청 또는 자격확인 연계 등이 불가한 경우,  해당 구비서류가 추가로 필요할 수 있습니다."
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/174000000029",
+        "source": {
+          "name": "보조금24 · 행정안전부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "출산 후 받을 수 있는 각종 출산지원 서비스를 한 번에 통합신청하는 서비스를 제공하여 출산가정에 서비스 이용 편의 제고",
+        "verification_status": "verified",
+        "eligibility": "신청일 기준 출산자(출산가정)  * 출생신고 시 또는 출생신고 이후 신청가능(출생자 주민등록번호 부여 후, 등록 처리 가능)  ※개별 서비스별 예외사항 및 신청가능기간(개별신청은 담당기관 문의)  부모급여, 아동수당, 양육수당, 기저귀·조제분유지원 :",
+        "key": "svc:174000000029",
+        "unlocks": 0,
+        "order": 6,
+        "dependsOn": [
+          "birth-report"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

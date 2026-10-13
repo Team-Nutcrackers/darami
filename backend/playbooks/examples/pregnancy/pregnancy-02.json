@@ -1,0 +1,260 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "pregnancy-02",
+    "event_id": "pregnancy",
+    "event_title": "임신",
+    "persona_summary": "27세 여성 · 대전 서구 · 판매직 · 임신 12주, 근무시간 단축",
+    "persona": {
+      "facts": {
+        "age": 27,
+        "gender": "여성",
+        "residence": "대전 서구",
+        "situation": "판매직 · 임신 12주, 근무시간 단축"
+      }
+    },
+    "query": "임신 12주인데 매장에서 하루 종일 서 있으니까 너무 힘들어요. 임신 초기에는 근무시간을 줄일 수 있다고 들었는데 월급이 깎이는지, 사장님한테 어떻게 말해야 하는지 궁금해요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "pregnancy"
+      ],
+      "reason": "임신 초기 근로시간 단축"
+    },
+    "plan": {
+      "title": "임신 초기 근로시간 단축",
+      "emoji": "🤰",
+      "intro": "임신 12주 이내(또는 32주 이후)에는 하루 2시간 단축을 청구할 수 있고 임금을 깎을 수 없어요.",
+      "law": [
+        {
+          "name": "임산부 보호(출산전후휴가·근로시간 단축)",
+          "priority": "must",
+          "condition": "임신 12주 → 지금 바로 2시간 단축 청구 가능(임금 삭감 금지). 3일 전 서면 신청."
+        },
+        {
+          "name": "태아검진 시간",
+          "priority": "nice",
+          "condition": "정기검진 시간 허용."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "건강보험 임신·출산 진료비 지원",
+          "priority": "nice",
+          "condition": "진료비 바우처 발급 여부 확인."
+        },
+        {
+          "name": "임산부 외래진료비 본인부담률 경감",
+          "priority": "nice",
+          "condition": "외래 본인부담 경감."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "임산부"
+        ],
+        "local_keywords": [
+          "임산부"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "(임신출산)임산부 차량 주차료 감면",
+          "priority": "nice",
+          "condition": "대전 서구 임산부 공영주차장 감면.",
+          "service_id": "WLF00000831"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "pregnancy",
+    "events": [
+      "pregnancy"
+    ],
+    "title": "임신 초기 근로시간 단축",
+    "emoji": "🤰",
+    "intro": "임신 12주 이내(또는 32주 이후)에는 하루 2시간 단축을 청구할 수 있고 임금을 깎을 수 없어요.",
+    "region": {
+      "sido": "대전광역시",
+      "sgg": "서구"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-pregnancy-l1",
+        "name": "임산부 보호(출산전후휴가·근로시간 단축)",
+        "priority": "must",
+        "condition": "임신 12주 → 지금 바로 2시간 단축 청구 가능(임금 삭감 금지). 3일 전 서면 신청.",
+        "deadline": "근로시간 단축 개시 예정일 3일 전까지 신청",
+        "deadlineDays": 3,
+        "agency": "고용노동부 · 소속 사업장(사용자)",
+        "online": false,
+        "documents": [
+          "임신기 근로시간 단축 신청서(임신기간, 단축 개시·종료 예정일, 근무 시작·종료 시각 기재)",
+          "의사의 진단서(같은 임신에 대해 재신청 시 생략 가능)",
+          "출산전후휴가 신청서(회사 양식)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1112&ccfNo=5&cciNo=1&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 임산부 근로시간 단축 등 · 근로기준법 제74조(임산부의 보호)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임신 12주 이내 또는 32주 이후인 여성 근로자는 임금 삭감 없이 1일 2시간 근로시간 단축을 회사에 신청할 수 있고, 회사는 허용해야 한다(위반 시 과태료 500만원 이하). 출산전후휴가는 90일(다태아 120일, 미숙아 100일)이며 근속기간·시간제 여부와 관계없이 적용된다. 임신 중 시간외근로는 본인 동의와 무관하게 금지된다.",
+        "verification_status": "verified",
+        "key": "law:임산부 보호(출산전후휴가·근로시간 단축)",
+        "unlocks": 0,
+        "order": 1,
+        "where": "사업주에게 문서(전자문서 포함)로 신청, 위반 시 관할 고용노동관서 신고",
+        "fee": "무료",
+        "steps": [
+          "임신 12주 이내 또는 32주 이후(유산·조산 위험 진단 시 전 기간)에 단축 개시 3일 전까지 신청서와 진단서를 회사에 제출",
+          "1일 2시간(1일 8시간 미만 근로자는 6시간까지) 단축 근무, 임금 삭감 없음",
+          "출산 전후 90일(다태아 120일, 미숙아 100일) 출산전후휴가 청구, 출산 후 45일(다태아 60일) 이상 확보",
+          "휴가 중 최초 60일(다태아 75일)은 유급, 이후는 고용보험 출산전후휴가급여 신청"
+        ],
+        "pitfalls": [
+          "12주 초과~32주 미만 기간은 고위험 진단이 없으면 회사에 허용 의무가 없다",
+          "단축 신청은 개시 3일 전까지 서면으로 해야 하며 최초 신청 시 진단서 필요",
+          "출산 후 45일(다태아 60일) 이상을 반드시 출산 후에 배정해야 한다",
+          "시간제·단기계약 근로자도 동일하게 적용되며 계약 종료 시 휴가 급여는 남은 기간 전부 지급"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1112&ccfNo=5&cciNo=1&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000007672",
+        "name": "건강보험 임신·출산 진료비 지원",
+        "priority": "nice",
+        "condition": "진료비 바우처 발급 여부 확인.",
+        "deadline": "임신·유산(사산)·출산 사실이 확인이 된 날 ~ 분만예정일·출산(유·사산)일로부터 2년까지  ※ 신청 당시 분만예정일이 지난 경우 ‘임신’으로 신청 불가하며, ‘출산 등’으로 확인받아 신청하여야 함",
+        "deadlineDays": 730,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "건강보험 임신·출산 진료비 지급 신청서",
+          "․ 산부인과 전문의가 있는 요양기관에서 온라인(요양기관정보마당)에 임신·출산 정보 입력한 경우, 서면의 서류 별도 제출 필요 없음",
+          "고위험 임신 등의 사유로 본인이 신청 불가하여 임산부 가족이 대리로 신청하는 경우, 임산부와의 관계를 입증할 수 있는 서류 추가 제출(주민등록표 등본, 가족관계증명서 등)"
+        ],
+        "link": "https://bokjiro.go.kr/",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "임산부와 영유아의 의료비 부담을 경감하여 출산 친화적 환경을 조성하고, 주기적인 산전 진찰로 건강한 태아를 분만할 수 있도록 임산부와 2세 미만 영유아의 진료비 등의 본인부담금(급여·비급여) 결제에 사용할 수 있는 이용권을 제공하는 제도",
+        "verification_status": "verified",
+        "eligibility": "임신‧출산(유산·사산 포함)이 확인된 건강보험 가입자 또는 피부양자  2세 미만인 가입자 또는 피부양자의 법정대리인(출산한 가입자 또는 피부양자가 사망한 경우) * 제외 대상 : (의료급여법)에 따라 의료급여를 받는 자(수급권자), 건강보험 적용배제 ",
+        "key": "svc:SD0000007672",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "L2",
+        "id": "law-pregnancy-l2",
+        "name": "태아검진 시간",
+        "priority": "nice",
+        "condition": "정기검진 시간 허용.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "고용노동부 · 소속 사업장(사용자)",
+        "online": false,
+        "documents": [
+          "별도 법정 서류 없음(회사 취업규칙·복무규정에 따라 진료 예약 내역·검진 확인서 등을 요구할 수 있음)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1379&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 임산부를 위한 근무환경(태아검진 시간) · 근로기준법 제74조의2(태아검진 시간의 허용 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임신한 여성 근로자가 모자보건법상 임산부 정기건강진단(임신 28주까지 4주 1회, 29~36주 2주 1회, 37주 이후 1주 1회; 35세 이상·다태아·고위험 임신은 추가 가능)을 받는 데 필요한 시간을 청구하면 사용자는 허용해야 하고, 그 시간을 이유로 임금을 삭감할 수 없다(근로기준법 제74조의2). 법에 정해진 시간 수나 신청 서식은 없으며 병원 왕복·대기·진료 시간을 포함한 '필요한 시간'을 회사 규정 절차로 청구하면 된다.",
+        "verification_status": "verified",
+        "key": "law:태아검진 시간",
+        "unlocks": 0,
+        "order": 3,
+        "where": "별도 행정 신청 없음 — 회사(인사·담당 부서)에 정기건강진단 시간을 청구(회사 취업규칙·복무규정 절차에 따름)",
+        "fee": "무료(해당 시간은 유급)",
+        "pitfalls": [
+          "상시 5인 이상 사업장에 적용된다(5인 미만 사업장은 법적 의무 아님).",
+          "사용 주체는 임신한 여성 근로자 본인이며 배우자(남편)는 이 제도를 쓸 수 없다(연차 등 활용).",
+          "하루 전체를 부여할 의무는 없고 '필요한 시간'만 허용하면 된다는 것이 고용노동부 해석이다.",
+          "위반 시 별도 벌칙 조항이 없어 실효성이 낮다는 지적이 있다(2026년 과태료 신설 개정안 발의 상태 — 시행 여부 확인 필요)."
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1379&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-135200005046",
+        "name": "임산부 외래진료비 본인부담률 경감",
+        "priority": "nice",
+        "condition": "외래 본인부담 경감.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005046",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "임신부들의 요양 기관 이용에 대한  편의 증진",
+        "verification_status": "verified",
+        "eligibility": "임산부",
+        "key": "svc:135200005046",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00000831",
+        "name": "(임신출산)임산부 차량 주차료 감면",
+        "priority": "nice",
+        "condition": "대전 서구 임산부 공영주차장 감면.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "대전광역시 서구 안전건설국 주차행정과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00000831&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 대전광역시 서구 안전건설국 주차행정과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "임산부 주차료 감면으로 출산장려 사회분위기 조성",
+        "verification_status": "verified",
+        "key": "svc:WLF00000831",
+        "eligibility": "임산부스티커 부착 차량임산부 스티커 부착 차량(임산부 차량 스티커를 부착한 임신중인자 및 출산 후 6개월 이내인 자) 임산부 스티커 부착 차량(임산부 차량 스티커를 부착한 임신중인자 및 출산 후 6개월 이내인 자)",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 3,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}

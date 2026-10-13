@@ -1,0 +1,111 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "school-entry-04",
+    "event_id": "school-entry",
+    "event_title": "자녀 입학",
+    "persona_summary": "41세 여성 · 부산 해운대구 · 자영업 · 입학준비금",
+    "persona": {
+      "facts": {
+        "age": 41,
+        "gender": "여성",
+        "residence": "부산 해운대구",
+        "situation": "자영업 · 입학준비금"
+      }
+    },
+    "query": "첫째가 중학교에 들어가요. 부산에서는 입학할 때 교복비나 준비금을 준다고 들었는데 신청해야 받을 수 있는 건가요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "school-entry"
+      ],
+      "reason": "중학교 입학준비금"
+    },
+    "plan": {
+      "title": "중학교 입학준비금",
+      "emoji": "🎒",
+      "intro": "부산은 중·고 신입생 입학준비금(교복비 등)을 지원해요. 학교·구청 안내에 따라 신청해야 받을 수 있어요.",
+      "law": [],
+      "gov24": [],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "입학준비금",
+          "교복"
+        ],
+        "local_keywords": [
+          "입학준비금",
+          "교복",
+          "입학축하금"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "중학교 신입생 교복구입비 지원",
+          "priority": "must",
+          "condition": "부산교육청 중학교 신입생 교복비(학교 통해 신청).",
+          "service_id": "715000000210"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "school-entry",
+    "events": [
+      "school-entry"
+    ],
+    "title": "중학교 입학준비금",
+    "emoji": "🎒",
+    "intro": "부산은 중·고 신입생 입학준비금(교복비 등)을 지원해요. 학교·구청 안내에 따라 신청해야 받을 수 있어요.",
+    "region": {
+      "sido": "부산광역시",
+      "sgg": "해운대구"
+    },
+    "procedures": [
+      {
+        "ref": "R1",
+        "id": "regional-715000000210",
+        "name": "중학교 신입생 교복구입비 지원",
+        "priority": "must",
+        "condition": "부산교육청 중학교 신입생 교복비(학교 통해 신청).",
+        "deadline": "별도의 신청절차가 없음",
+        "deadlineDays": 9999,
+        "agency": "부산광역시교육청",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/715000000210",
+        "source": {
+          "name": "보조금24 · 부산광역시교육청",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "교복 구입에 따른 학부모의 경제적 부담 경감 \r\n교육의 공공성 강화와 학생 복지 증진",
+        "verification_status": "verified",
+        "key": "svc:715000000210",
+        "eligibility": "교복을 착용하는 부산 관내 중학교에 입학하는 신입생   타시도 및 국외에서 교복을 착용하는 부산 관내 중학교로 전입하는 1학년 학생",
+        "unlocks": 0,
+        "order": 1
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 1,
+    "by_status": {
+      "verified": 1
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

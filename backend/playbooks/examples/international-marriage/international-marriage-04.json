@@ -1,0 +1,242 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "international-marriage-04",
+    "event_id": "international-marriage",
+    "event_title": "국제결혼·외국인 가족",
+    "persona_summary": "38세 여성 · 중국 출신 결혼이민자 · 대구 달서구 · 입국 4년 차",
+    "persona": {
+      "facts": {
+        "age": 38,
+        "gender": "여성",
+        "nationality": "중국",
+        "residence": "대구 달서구",
+        "situation": "결혼이민자 · 입국 4년 차"
+      }
+    },
+    "query": "저는 중국에서 와서 한국 남편과 산 지 4년 됐어요. 이제 한국 국적을 따고 싶은데 결혼한 사람은 조금 더 쉽게 된다고 들었어요. 어떤 조건이 있고 비용은 얼마나 드나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "international-marriage"
+      ],
+      "reason": "결혼이민자 간이귀화"
+    },
+    "plan": {
+      "title": "결혼이민자 간이귀화 신청",
+      "emoji": "🇰🇷",
+      "intro": "한국인 배우자와 혼인 상태로 2년 이상 거주했으면 간이귀화 요건을 충족해요. 귀화 신청 수수료는 면제 대상인지 확인하세요.",
+      "law": [
+        {
+          "name": "간이귀화",
+          "priority": "must",
+          "condition": "입국 4년·혼인 상태 거주 2년 이상 → 간이귀화 요건(생계 능력·기본 소양 요건 포함)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "귀화허가, 국적회복허가 신청 수수료 면제 안내",
+          "priority": "nice",
+          "condition": "결혼이민자 등 수수료 면제 대상인지 확인."
+        },
+        {
+          "name": "다문화가족지원센터 이용",
+          "priority": "nice",
+          "condition": "귀화 필기·면접 대비 교육."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "결혼이민"
+        ],
+        "local_keywords": [
+          "결혼이민"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "international-marriage",
+    "events": [
+      "international-marriage"
+    ],
+    "title": "결혼이민자 간이귀화 신청",
+    "emoji": "🇰🇷",
+    "intro": "한국인 배우자와 혼인 상태로 2년 이상 거주했으면 간이귀화 요건을 충족해요. 귀화 신청 수수료는 면제 대상인지 확인하세요.",
+    "region": {
+      "sido": "대구광역시",
+      "sgg": "달서구"
+    },
+    "procedures": [
+      {
+        "id": "law-international-marriage-a84ee461",
+        "name": "외국인등록",
+        "priority": "must",
+        "condition": "선행 절차 — 국내 체류(외국인등록) 기간이 귀화 요건",
+        "deadline": "입국일부터 90일 이내",
+        "deadlineDays": 90,
+        "agency": "법무부 · 체류지 관할 출입국·외국인관서",
+        "online": false,
+        "documents": [
+          "통합신청서(출입국관리법 시행규칙 별지 제34호서식)",
+          "여권",
+          "컬러 사진(3.5cm×4.5cm, 정부24 안내는 3cm×4cm 2매)",
+          "체류지 입증서류(임대차계약서·숙소 제공 확인서 등)",
+          "체류자격별 추가 서류(재직증명서·재학증명서·혼인관계증명서 등)",
+          "수수료"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000025",
+        "source": {
+          "name": "정부24 외국인등록 민원안내 · 출입국관리법 제31조(외국인등록)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "90일을 넘겨 한국에 체류하는 외국인은 입국일부터 90일 안에 하이코리아에서 예약하고 체류지 관할 출입국·외국인관서에 방문해 외국인등록을 한다. 여권·사진·체류지 입증서류·체류자격별 서류를 내며 수수료가 있다. 등록을 하지 않으면 과태료·체류 불이익이 있다.",
+        "verification_status": "verified",
+        "key": "law:외국인등록",
+        "autoAdded": true,
+        "autoAddedFor": "law-international-marriage-l3",
+        "unlocks": 1,
+        "order": 1,
+        "where": "하이코리아(hikorea.go.kr)에서 방문 예약 후 체류지 관할 출입국·외국인청(사무소) 방문(온라인 접수 불가)",
+        "fee": "정부24 안내 기준 35,000원(하이코리아에서 최신 금액 확인)",
+        "steps": [
+          "하이코리아에서 관할 출입국·외국인관서 방문 예약",
+          "통합신청서·여권·사진·체류지 입증서류·체류자격별 서류 준비",
+          "관서 방문해 신청(즉시 접수), 수수료 납부",
+          "외국인등록증 수령(우편 수령 신청 가능), 이후 체류지 변경·여권 변경은 15일 이내 신고"
+        ],
+        "pitfalls": [
+          "재외동포(F-4)는 국내거소신고로 대체 가능하나 거소신고를 안 하면 90일 내 외국인등록 필요",
+          "방문 예약 없이 가면 접수가 어려울 수 있음(하이코리아 예약 필수)",
+          "회사·학교가 대행하는지 반드시 확인(대행이라도 기한 책임은 본인)",
+          "등록 후 체류지 변경은 15일 이내 신고, 여권 정보 변경도 15일 이내 신고"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000025",
+        "curated": true
+      },
+      {
+        "ref": "L3",
+        "id": "law-international-marriage-l3",
+        "name": "간이귀화",
+        "priority": "must",
+        "condition": "입국 4년·혼인 상태 거주 2년 이상 → 간이귀화 요건(생계 능력·기본 소양 요건 포함).",
+        "deadline": "없음(종합평가는 신청일부터 1년 이내 응시)",
+        "deadlineDays": 9999,
+        "agency": "법무부 출입국·외국인정책본부 국적과 · 주소지 관할 출입국·외국인관서",
+        "online": false,
+        "documents": [
+          "귀화허가 신청서(국적법 시행규칙 별지 제2호서식)",
+          "귀화진술서·신원진술서(사진 부착)",
+          "여권 사본·외국인등록증",
+          "한국인 배우자의 가족관계증명서·기본증명서·혼인관계증명서·주민등록등본(외국 혼인으로 등록부에 혼인 기록이 없으면 혼인 증명서류)",
+          "정상적인 혼인관계 입증자료(사진·주변인 확인서 등)",
+          "생계유지 능력 증명: 3천만원 이상 금융재산 또는 3천만원 이상 부동산·임대차보증금 증명 중 1",
+          "사회통합프로그램 이수증·종합평가 성적(해당 시)",
+          "세부 서류는 하이코리아 정보광장 > 국적/귀화 > 귀화(일반·간이·특별) 목록 기준"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=47&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 결혼이민자 국적 취득의 방법·절차 · 국적법 제6조(간이귀화 요건)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "한국인과 혼인한 결혼이민자는 혼인 상태로 국내에 2년 이상 계속 거주(또는 혼인 3년 경과 + 1년 거주)하면 간이귀화를 신청할 수 있다. 하이코리아 방문예약 후 관할 출입국·외국인관서에 본인이 신청하며 수수료 30만원, 생계능력(3천만원 이상 재산)과 기본소양(종합평가·면접) 요건이 있다. 심사에 2년 이상 걸릴 수 있다.",
+        "verification_status": "verified",
+        "key": "law:간이귀화",
+        "unlocks": 0,
+        "order": 2,
+        "where": "하이코리아(hikorea.go.kr) 방문예약 후 주소지 관할 출입국·외국인청(사무소) 방문 신청(본인 직접)",
+        "fee": "수수료 300,000원(정부수입인지)",
+        "steps": [
+          "요건 확인: 한국인 배우자와 법률혼 상태로 국내에 2년 이상 계속 주소, 또는 혼인 후 3년 경과 + 혼인 상태로 1년 이상 주소(배우자 사망·실종 등 귀책 없는 사유는 잔여기간 충족 후 법무부 인정)",
+          "하이코리아에서 구비서류를 확인하고 방문예약 후 관할 출입국·외국인관서에 본인이 신청, 수수료 납부",
+          "적격심사(종합평가·면접, KIIP 이수 시 면제), 혼인 실태 조사",
+          "허가 → 국민선서·귀화증서 수여 → 국적취득일부터 1년 내 외국국적 포기 또는 불행사 서약"
+        ],
+        "pitfalls": [
+          "사실혼은 간이귀화 대상이 아니며 일반귀화(5년) 요건을 따른다",
+          "혼인관계가 심사 중 파탄되면 허가가 제한될 수 있다(귀책 없는 사유는 예외)",
+          "심사기간이 길어(혼인귀화 약 26~30개월) 체류자격(F-6) 연장을 별도로 챙겨야 한다",
+          "국적취득 후 1년 내 외국국적 포기·서약을 안 하면 국적 상실"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=47&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "curated": true,
+        "dependsOn": [
+          "law-international-marriage-a84ee461"
+        ]
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-127000000023",
+        "name": "귀화허가, 국적회복허가 신청 수수료 면제 안내",
+        "priority": "nice",
+        "condition": "결혼이민자 등 수수료 면제 대상인지 확인.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "법무부",
+        "online": true,
+        "documents": [
+          "수수료 면제 대상임을 소명하는 자료"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/127000000023",
+        "source": {
+          "name": "보조금24 · 법무부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "귀화허가, 국적회복 허가 신청자 인도적 사유 등을 고려하여 수수료 면제가 필요하다고 인정되는 경우에 대한 안내",
+        "verification_status": "verified",
+        "eligibility": "국적법 제7조제1항제2호에 따른 특별공로자 본인 또는 그 배우자나 직계존비속이 법 제9조에 따라 국적회복허가를 신청하는 경우   국적법 제7조제1항제2호에 따른 특별공로자 본인의 직계존비속의 배우자로 법 제6조에 따른 간이귀화나 법 제9조에 따른 국적",
+        "key": "svc:127000000023",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-138300000056",
+        "name": "다문화가족지원센터 이용",
+        "priority": "nice",
+        "condition": "귀화 필기·면접 대비 교육.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/138300000056",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "진로설계, 기초학습 지원, 가족상담, 관련 프로그램 등을 다문화가족지원센터에서 제공함으로써 다문화 가족의 한국 적응과 안정적인 정착을 도움.",
+        "verification_status": "verified",
+        "eligibility": "ㅇ 다문화가족 -한국인(출생·인지·귀화 등 불문)과 결혼이민자로 이루어진 가족 -한국인(출생·인지·귀화 등 불문)과 귀화자로 이루어진 가족",
+        "key": "svc:138300000056",
+        "unlocks": 0,
+        "order": 4
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 4,
+    "by_status": {
+      "verified": 4
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.2
+  }
+}

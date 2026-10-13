@@ -1,0 +1,315 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "startup-07",
+    "event_id": "startup",
+    "event_title": "창업",
+    "persona_summary": "52세 남성 · 경남 진주시 · 중장년 기술창업",
+    "persona": {
+      "facts": {
+        "age": 52,
+        "gender": "남성",
+        "residence": "경남 진주시",
+        "situation": "중장년 기술창업"
+      }
+    },
+    "query": "30년 동안 기계 쪽 일을 하다가 그 경험으로 창업을 해보려고 해요. 중장년 창업자를 도와주는 곳이나 사무실을 싸게 쓸 수 있는 곳이 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "startup"
+      ],
+      "reason": "중장년 기술창업"
+    },
+    "plan": {
+      "title": "중장년 기술창업",
+      "emoji": "🔧",
+      "intro": "중장년 기술창업센터에서 입주 공간·멘토링을 받을 수 있고, 창업중소기업 세액감면과 정책자금도 대상이에요.",
+      "law": [
+        {
+          "name": "사업자등록",
+          "priority": "must",
+          "condition": "창업 시 사업자등록(개인/법인)."
+        },
+        {
+          "name": "창업중소기업 세액감면",
+          "priority": "nice",
+          "condition": "진주(과밀억제권역 외) 제조업 창업 → 5년 50% 감면(청년 아님)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "중장년 기술창업센터",
+          "priority": "must",
+          "condition": "40세 이상 기술 경력 창업자 → 사무공간·멘토링·사업화."
+        },
+        {
+          "name": "소상공인 정책자금 융자 지원(일반경영안정자금, 특별경영안정자금, 성장기반자금 등)",
+          "priority": "nice",
+          "condition": "창업 자금 융자."
+        },
+        {
+          "name": "혁신 소상공인 창업지원",
+          "priority": "nice",
+          "condition": "창업 지원 공고."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "창업",
+          "중장년"
+        ],
+        "local_keywords": [
+          "창업",
+          "중장년"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "중장년 맞춤형 창업 지원",
+          "priority": "must",
+          "condition": "경남 중장년 창업 최대 500만 원 지원·교육·컨설팅.",
+          "service_id": "648000001157"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "startup",
+    "events": [
+      "startup"
+    ],
+    "title": "중장년 기술창업",
+    "emoji": "🔧",
+    "intro": "중장년 기술창업센터에서 입주 공간·멘토링을 받을 수 있고, 창업중소기업 세액감면과 정책자금도 대상이에요.",
+    "region": {
+      "sido": "경상남도",
+      "sgg": "진주시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "business-registration",
+        "name": "사업자등록",
+        "priority": "must",
+        "condition": "창업 시 사업자등록(개인/법인).",
+        "deadline": "사업개시일부터 20일 이내(사업 개시 전 신청 가능)",
+        "deadlineDays": 20,
+        "agency": "재정경제부(국세청) · 사업장 관할 세무서 민원봉사실",
+        "online": true,
+        "documents": [
+          "사업자등록신청서(본인 자필 서명)",
+          "신분증",
+          "임대차계약서 사본(사업장을 임차한 경우)",
+          "상가건물 일부 임차 시 해당 부분 도면",
+          "허가·등록·신고증 사본(인허가 업종인 경우)",
+          "동업계약서(공동사업자인 경우)",
+          "자금출처 명세서(금지금 도·소매업 등 특정 업종)",
+          "위임장 및 위임자 신분증 사본(대리 신청 시)"
+        ],
+        "link": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2444&cntntsId=7777",
+        "source": {
+          "name": "국세청 사업자등록 신청 안내 · 부가가치세법 제8조(사업자등록)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "사업을 시작하면 사업개시일부터 20일 이내에 홈택스 또는 세무서에 사업자등록을 신청한다. 임차 사업장이면 임대차계약서 사본, 인허가 업종이면 허가증 사본이 필요하고 수수료는 없다. 미등록 시 공급가액의 1% 가산세와 매입세액 불공제 불이익이 있다.",
+        "verification_status": "verified",
+        "key": "common:business-registration",
+        "unlocks": 2,
+        "order": 1,
+        "where": "홈택스(온라인) 또는 관할·가까운 세무서 민원봉사실 방문",
+        "fee": "무료",
+        "steps": [
+          "업종(한국표준산업분류)·과세유형(일반/간이/면세) 결정, 인허가 업종이면 허가·신고 먼저",
+          "임대차계약서 등 구비서류 준비(스캔본)",
+          "홈택스 '사업자등록 신청' 또는 세무서 민원봉사실 제출",
+          "2일 이내 사업자등록증 발급(홈택스 조회·출력)"
+        ],
+        "pitfalls": [
+          "기한 경과 시 미등록 가산세(공급가액의 1%) 및 등록 전 매입세액 불공제",
+          "실제 사업하지 않는 장소를 사업장으로 등록하면 현장 확인·추징 대상",
+          "인적용역 프리랜서는 등록 의무가 없으나 세금계산서 발급이 필요하면 등록",
+          "온라인 판매는 사업자등록 후 통신판매업 신고를 별도로 해야 함"
+        ],
+        "sourceUrl": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2444&cntntsId=7777",
+        "curated": true
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-142000000010",
+        "name": "중장년 기술창업센터",
+        "priority": "must",
+        "condition": "40세 이상 기술 경력 창업자 → 사무공간·멘토링·사업화.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "회원가입 신청 및 사업계획서 등 제출"
+        ],
+        "link": "http://www.K-startup.go.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "경력, 네트워크, 전문성을 보유한 중장년의 기술창업 활성화를 위한 교육 및 창업 거점 지원",
+        "verification_status": "verified",
+        "eligibility": "만 40세 이상 (예비) 창업자",
+        "key": "svc:142000000010",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "R1",
+        "id": "regional-648000001157",
+        "name": "중장년 맞춤형 창업 지원",
+        "priority": "must",
+        "condition": "경남 중장년 창업 최대 500만 원 지원·교육·컨설팅.",
+        "deadline": "2026-03-04 ~ 2026-04-06",
+        "deadlineDays": 9999,
+        "agency": "경상남도",
+        "online": true,
+        "documents": [
+          "○ 사업신청서, 개인정보이용동의서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/648000001157",
+        "source": {
+          "name": "보조금24 · 경상남도",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "신중년 인생 2막 설계를 위한 창업지원",
+        "verification_status": "verified",
+        "key": "svc:648000001157",
+        "eligibility": "40세 이상 69세 이하 경남도민으로 창업을 준비 중이며 '25년 11월 30일 까지 창업이 가능한 예비 창업자",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "L4",
+        "id": "law-startup-l4",
+        "name": "창업중소기업 세액감면",
+        "priority": "nice",
+        "condition": "진주(과밀억제권역 외) 제조업 창업 → 5년 50% 감면(청년 아님).",
+        "deadline": "해당 과세연도 소득세·법인세 과세표준 신고 기한까지 감면신청서 제출",
+        "deadlineDays": 9999,
+        "agency": "국세청 · 납세지 관할 세무서",
+        "online": true,
+        "documents": [
+          "세액감면(면제)신청서(조세특례제한법 시행규칙 별지 제2호)",
+          "창업중소기업 등에 대한 감면세액계산서(별지 제2호의2)",
+          "사업자등록증(창업일·업종·소재지 확인)",
+          "대표자 연령·병역 증빙(청년 요건 적용 시)"
+        ],
+        "link": "https://nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=41127&cntntsId=239082",
+        "source": {
+          "name": "국세청 - 청년지원정책 세액감면 및 절세혜택 · 조세특례제한법 제6조(창업중소기업 등에 대한 세액감면)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "청년(창업 당시 15~34세, 병역기간 최대 6년 가산) 등이 감면 대상 업종(광업·제조업·음식점업·정보통신업 등, 도소매·부동산임대업 제외)으로 창업한 중소기업은 창업 후 5년간 소득세·법인세를 감면받는다(연간 감면 한도 5억원). 2025년까지 창업분은 수도권 과밀억제권역 밖 청년 창업 100%, 과밀억제권역 안(수원 등) 청년 창업 50%였고, 2026년 1월 1일 이후 창업분은 개정으로 일반 창업 25%·50%, 청년·생계형 창업 50%·75%·100% 체계로 바뀌었으므로 창업일 기준 지역·감면율을 국세청 안내표에서 확인한다. 별도 승인 절차 없이 종합소득세(5월)·법인세 신고 시 세액감면(면제)신청서와 창업중소기업 감면세액계산서를 함께 제출하면 되며, 홈택스 '신고도움 서비스 → 절세혜택'에서 대상 여부를 확인할 수 있다.",
+        "verification_status": "verified",
+        "key": "law:창업중소기업 세액감면",
+        "unlocks": 0,
+        "order": 4,
+        "where": "홈택스에서 종합소득세(5월)·법인세 신고 시 세액감면신청서 함께 제출",
+        "fee": "무료",
+        "steps": [
+          "요건 확인: 감면 대상 업종(제조·음식점·정보통신 등, 도소매·부동산임대 제외), 중소기업, 청년(창업 당시 15~34세, 병역기간 최대 6년 가산) 여부, 창업 지역(과밀억제권역 안/밖)",
+          "창업(사업자등록) 후 첫 소득 발생 과세연도부터 5년간 감면 적용",
+          "종합소득세(5월)·법인세 신고 시 홈택스에서 세액감면신청서와 감면세액계산서 작성·제출",
+          "연간 감면 한도 5억원, 최저한세·농어촌특별세 적용 여부 확인"
+        ],
+        "pitfalls": [
+          "도소매업·부동산임대업 등은 감면 대상 업종이 아니다",
+          "창업 시기(2025년 이전/2026년 이후)에 따라 과밀억제권역 감면율이 다르므로 창업일 기준으로 확인",
+          "사업 승계·법인전환·폐업 후 재개 등은 창업으로 보지 않아 감면 불가",
+          "감면을 적용해도 최저한세·농어촌특별세가 적용될 수 있다"
+        ],
+        "sourceUrl": "https://nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=41127&cntntsId=239082",
+        "curated": true,
+        "dependsOn": [
+          "business-registration"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-SD0000007429",
+        "name": "소상공인 정책자금 융자 지원(일반경영안정자금, 특별경영안정자금, 성장기반자금 등)",
+        "priority": "nice",
+        "condition": "창업 자금 융자.",
+        "deadline": "자금별 상이",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "신청서, 사업자등록증 등"
+        ],
+        "link": "http://ols.semas.or.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "민간금융기관 이용이 어려운 소상공인 대상 시중은행 대비 저금리 정책자금을 지원하여 소상공인의 경영안정 및 지속성장을 지원",
+        "verification_status": "verified",
+        "eligibility": "「소상공인 기본법」에 따른 소상공인    ※ 단, 소상공인 정책자금 융자공고에 따른 융자제외업종은 지원 불가",
+        "key": "svc:SD0000007429",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "business-registration"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-142000000038",
+        "name": "혁신 소상공인 창업지원",
+        "priority": "nice",
+        "condition": "창업 지원 공고.",
+        "deadline": "별도 안내",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "신사업창업사관학교 교육생 선발 공고 등의 안내사항 참고"
+        ],
+        "link": "https://www.sbiz24.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "신사업 분야 등 예비창업자를 선발하여 창업교육, 점포경영체험, 사업화 자금 등을 패키지로 지원하여 소상공인의 준비된 창업 촉진",
+        "verification_status": "verified",
+        "eligibility": "생활분야에서 창의적인 아이디어로 창업을 하고자 하는 하는 예비창업자",
+        "key": "svc:142000000038",
+        "unlocks": 0,
+        "order": 6
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.6
+  }
+}

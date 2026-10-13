@@ -1,0 +1,218 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "pregnancy-loss-10",
+    "event_id": "pregnancy-loss",
+    "event_title": "유산·사산",
+    "persona_summary": "36세 여성 · 제주 서귀포시 · 회사원 · 유산 후 재임신 준비",
+    "persona": {
+      "facts": {
+        "age": 36,
+        "gender": "여성",
+        "residence": "제주 서귀포시",
+        "situation": "회사원 · 유산 후 재임신 준비"
+      }
+    },
+    "query": "두 달 전에 유산하고 몸을 추스르는 중이에요. 다시 임신을 준비하려는데 남은 바우처는 어떻게 되는지, 다시 임신하면 새로 받을 수 있는지 궁금합니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "pregnancy-loss",
+        "pregnancy"
+      ],
+      "reason": "유산 후 바우처 잔액과 재임신 시 지원"
+    },
+    "plan": {
+      "title": "유산 후 재임신 준비",
+      "emoji": "🌱",
+      "intro": "남은 바우처는 유산일부터 2년까지 쓸 수 있고, 다시 임신하면 새 임신확인서로 바우처를 새로 받아요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "건강보험 임신·출산 진료비 지원",
+          "priority": "must",
+          "condition": "기존 바우처는 유산일부터 2년 사용 가능, 재임신 시 신규 발급(별도 100만 원)."
+        },
+        {
+          "name": "난임 부부, 유산 및 사산경험 부부, 임산부 및 양육모를 위한 심리상담",
+          "priority": "nice",
+          "condition": "재임신 전 심리상담."
+        },
+        {
+          "name": "임산부 엽산제, 철분제 지원",
+          "priority": "nice",
+          "condition": "재임신 확인 후 보건소 등록."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [],
+        "local_keywords": [
+          "유산",
+          "임산부"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "pregnancy-loss",
+    "events": [
+      "pregnancy-loss",
+      "pregnancy"
+    ],
+    "title": "유산 후 재임신 준비",
+    "emoji": "🌱",
+    "intro": "남은 바우처는 유산일부터 2년까지 쓸 수 있고, 다시 임신하면 새 임신확인서로 바우처를 새로 받아요.",
+    "region": {
+      "sido": "제주",
+      "sgg": "서귀포시"
+    },
+    "procedures": [
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000007672",
+        "name": "건강보험 임신·출산 진료비 지원",
+        "priority": "must",
+        "condition": "기존 바우처는 유산일부터 2년 사용 가능, 재임신 시 신규 발급(별도 100만 원).",
+        "deadline": "임신·유산(사산)·출산 사실이 확인이 된 날 ~ 분만예정일·출산(유·사산)일로부터 2년까지  ※ 신청 당시 분만예정일이 지난 경우 ‘임신’으로 신청 불가하며, ‘출산 등’으로 확인받아 신청하여야 함",
+        "deadlineDays": 730,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "건강보험 임신·출산 진료비 지급 신청서",
+          "․ 산부인과 전문의가 있는 요양기관에서 온라인(요양기관정보마당)에 임신·출산 정보 입력한 경우, 서면의 서류 별도 제출 필요 없음",
+          "고위험 임신 등의 사유로 본인이 신청 불가하여 임산부 가족이 대리로 신청하는 경우, 임산부와의 관계를 입증할 수 있는 서류 추가 제출(주민등록표 등본, 가족관계증명서 등)"
+        ],
+        "link": "https://bokjiro.go.kr/",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "임산부와 영유아의 의료비 부담을 경감하여 출산 친화적 환경을 조성하고, 주기적인 산전 진찰로 건강한 태아를 분만할 수 있도록 임산부와 2세 미만 영유아의 진료비 등의 본인부담금(급여·비급여) 결제에 사용할 수 있는 이용권을 제공하는 제도",
+        "verification_status": "verified",
+        "eligibility": "임신‧출산(유산·사산 포함)이 확인된 건강보험 가입자 또는 피부양자  2세 미만인 가입자 또는 피부양자의 법정대리인(출산한 가입자 또는 피부양자가 사망한 경우) * 제외 대상 : (의료급여법)에 따라 의료급여를 받는 자(수급권자), 건강보험 적용배제 ",
+        "key": "svc:SD0000007672",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "id": "law-pregnancy-f576da34",
+        "name": "보건소 임산부 등록·건강관리",
+        "priority": "must",
+        "condition": "선행 절차 — 보건소 임산부 등록 후 지급",
+        "deadline": "임신 확인 후 분만 예정일까지(상시)",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 주소지 관할 보건소",
+        "online": true,
+        "documents": [
+          "임신확인서(의료기관 발급; 산모수첩 등 임신 증명서류로 갈음하는 지자체도 있음)",
+          "신분증(방문 시)",
+          "본인인증(정부24 온라인 신청 시, 임산부 본인만 가능)"
+        ],
+        "link": "https://www.gov.kr/portal/service/serviceInfo/SD0000016094",
+        "source": {
+          "name": "정부24 – 임산부 엽산제, 철분제 지원 · 모자보건법 제10조(임산부ㆍ영유아ㆍ미숙아등의 건강관리 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임신이 확인되면 병원 임신확인서를 가지고 주소지 보건소에 방문하거나 정부24 '맘편한임신'으로 임산부 등록을 하면 모자보건법에 따른 엽산제·철분제 무료 지급, 표준모자보건수첩, 산전검사·영양플러스 등 보건소 건강관리 서비스를 받을 수 있습니다. 엽산제·철분제 등 다수 지원은 '보건소 등록 임산부'가 조건이므로 등록을 먼저 해야 합니다. 지자체별로 제공 서비스와 필요 서류가 달라 보건소에 확인하세요.",
+        "verification_status": "verified",
+        "key": "law:보건소 임산부 등록·건강관리",
+        "autoAdded": true,
+        "autoAddedFor": "gov24-SD0000016094",
+        "unlocks": 1,
+        "order": 2,
+        "where": "주소지 보건소 방문 또는 정부24 '임신 관련 서비스 통합처리 신청(맘편한임신)' 온라인",
+        "fee": "무료",
+        "steps": [
+          "병원에서 임신확인서 발급",
+          "주소지 보건소 방문(신분증·임신확인서) 또는 정부24 맘편한임신으로 임산부 등록",
+          "등록 후 표준모자보건수첩 수령, 엽산제(임신 전후 3개월분)·철분제(16주 이상 5개월분) 지급",
+          "영양플러스(중위소득 80% 이하), 임산부 배지·지자체 추가 혜택 신청 및 산전검사 등 건강관리 이용"
+        ],
+        "pitfalls": [
+          "정부24 온라인 신청은 임산부 본인만 가능(대리 불가)",
+          "지자체에 따라 온라인은 영양제·배지 신청만 되고 등록은 방문 필요할 수 있음",
+          "철분제는 임신 16주 이후 지급",
+          "유산·사산 후에도 보건소 심리상담 등 지원이 있으니 문의"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/service/serviceInfo/SD0000016094",
+        "curated": true
+      },
+      {
+        "ref": "G9",
+        "id": "gov24-B55265700002",
+        "name": "난임 부부, 유산 및 사산경험 부부, 임산부 및 양육모를 위한 심리상담",
+        "priority": "nice",
+        "condition": "재임신 전 심리상담.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "국립중앙의료원",
+        "online": true,
+        "documents": [],
+        "link": "https://22762276.nmc.or.kr",
+        "source": {
+          "name": "보조금24 · 국립중앙의료원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 난임 부부, 유산 및 사산경험 부부, 임산부, 양육모 및 배우자를 대상으로 심리상담, 정서적 지지 및 정신건강 고위험군에 대한 의료적 개입 지원을 병행하는 서비스를 제공함으로써 정서적·심리적 문제를 완화하여 삶의 질을 향상시키기 위함\r\n\r\n○ 대상자별(난임 부부, 유산 및 사산경험 부부, 임산부, 양육모 및 배우자) 심리상담서비스 (대면, 비대면 상담서",
+        "verification_status": "verified",
+        "eligibility": "난임 부부  - 부부가 피임을 하지 않고 1년 이상 정기적인 성생활을 하여도 임신이 안되는 경우   유산 및 사산경험 부부  - 유산 및 사산 등으로 임신 유지관련 정서적 어려움을 호소하는 경우   임신부 및 배우자  - 임신 중인 여성 및 배우자  ",
+        "key": "svc:B55265700002",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-SD0000016094",
+        "name": "임산부 엽산제, 철분제 지원",
+        "priority": "nice",
+        "condition": "재임신 확인 후 보건소 등록.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "임신확인서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/SD0000016094",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "(철분제) 임산부의 철분 결핍성 빈혈로 발생할 수 있는 조산, 유산, 산모 사망을 예방할 수 있는 철분제를 지원하여 안전한 분만유도 및 임산부 및 태아, 영유아의 건강증진을 도모하고자 함\r\n(엽산제) 엽산제 지원을 통해 신경관 결손으로 발생할 수 있는 유사산, 선천성 기형아 출산 등을 사전에 예방하여 임산부와 태아의 건강증진 도모",
+        "verification_status": "verified",
+        "eligibility": "(엽산제) 임신 전후 3개월  (철분제) 임신 16주 이상",
+        "key": "svc:SD0000016094",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-pregnancy-f576da34"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 4,
+    "by_status": {
+      "verified": 4
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

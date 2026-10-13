@@ -1,0 +1,269 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "marriage-07",
+    "event_id": "marriage",
+    "event_title": "결혼",
+    "persona_summary": "30세 여성 · 광주 북구 · 공무원 · 예비신부, 상견례 마침",
+    "persona": {
+      "facts": {
+        "age": 30,
+        "gender": "여성",
+        "residence": "광주 북구",
+        "situation": "공무원 · 예비신부, 상견례 마침"
+      }
+    },
+    "query": "상견례 마치고 내년 봄 결혼을 준비하고 있어요. 혼인신고를 결혼식 전에 해두는 게 집 구할 때 유리하다는 얘기를 들었는데 사실인가요? 광주에서 전세를 알아보는 중입니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "marriage"
+      ],
+      "reason": "결혼 준비, 혼인신고 시점과 전세"
+    },
+    "plan": {
+      "title": "결혼 전 혼인신고와 전세 준비",
+      "emoji": "💍",
+      "intro": "혼인신고를 먼저 하면 신혼부부 전세대출·임대 청약 자격이 바로 생겨요. 예정자도 일부 되지만 신고가 가장 확실해요.",
+      "law": [
+        {
+          "name": "혼인신고",
+          "priority": "must",
+          "condition": "내년 봄 결혼 예정. 신고를 앞당기면 신혼부부 자격(혼인 7년)이 그날부터 시작."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "버팀목전세자금대출",
+          "priority": "must",
+          "condition": "광주 전세 계약 시 신혼부부(3개월 내 결혼 예정자 포함) 전세대출."
+        },
+        {
+          "name": "행복주택 공급",
+          "priority": "nice",
+          "condition": "예비 신혼부부도 입주 전 혼인 조건으로 청약 가능."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "신혼부부"
+        ],
+        "local_keywords": [
+          "신혼부부",
+          "결혼"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R2",
+          "name": "신혼부부 전세자금 대출이자 지원",
+          "priority": "nice",
+          "condition": "광주 거주 신혼부부 전세대출 이자 지원.",
+          "service_id": "WLF00004697"
+        },
+        {
+          "cid": "R4",
+          "name": "전라남도 청년부부 결혼축하금 지원사업",
+          "priority": "nice",
+          "condition": "통합특별시 거주 청년 부부 결혼축하금 — 거주 요건·연령 확인.",
+          "service_id": "WLF00005765"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "marriage",
+    "events": [
+      "marriage"
+    ],
+    "title": "결혼 전 혼인신고와 전세 준비",
+    "emoji": "💍",
+    "intro": "혼인신고를 먼저 하면 신혼부부 전세대출·임대 청약 자격이 바로 생겨요. 예정자도 일부 되지만 신고가 가장 확실해요.",
+    "region": {
+      "sido": "광주광역시",
+      "sgg": "북구"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "marriage-report",
+        "name": "혼인신고",
+        "priority": "must",
+        "condition": "내년 봄 결혼 예정. 신고를 앞당기면 신혼부부 자격(혼인 7년)이 그날부터 시작.",
+        "deadline": "기한 없음(신고로 효력 발생). 외국 방식으로 혼인한 경우 혼인일부터 3개월 이내 재외공관·관서에 혼인증서등본 제출",
+        "deadlineDays": 9999,
+        "agency": "법무부(가족관계등록 사무는 법원행정처 감독) · 시(구)·읍·면 사무소 가족관계등록 창구",
+        "online": false,
+        "documents": [
+          "혼인신고서(성년 증인 2인의 서명·날인 포함)",
+          "신고인(당사자) 모두의 신분증",
+          "불출석 당사자의 신분증 또는 인감증명서·서명공증(한쪽만 출석하거나 우편 제출 시)",
+          "기본증명서·혼인관계증명서·가족관계증명서 각 1통(전산 확인 가능 시 생략)",
+          "혼인동의서 및 성년후견인 자격 증명 서면(미성년자·피성년후견인 혼인 시)",
+          "자녀의 성·본을 모의 성·본으로 하기로 한 협의서(해당 시)",
+          "외국인 배우자의 혼인성립요건구비증명서 원본 + 번역문(외국인과 혼인 시, 중국인은 미혼증명서)",
+          "외국인 배우자의 국적 증명 서류(여권 또는 외국인등록증) 사본(외국인과 혼인 시)",
+          "혼인증서등본 + 번역문(외국 방식으로 먼저 혼인한 경우)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000050",
+        "source": {
+          "name": "정부24 혼인신고 민원안내 · 가족관계의 등록 등에 관한 법률 제71조(혼인신고의 기재사항 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "혼인은 시(구)·읍·면 사무소에 혼인신고서를 제출해 수리되어야 효력이 생긴다. 성년 증인 2명의 서명이 필요하고 수수료는 없으며 신고 기한은 없다. 외국인과의 혼인은 상대국 발급 혼인요건구비증명서와 번역문이 필요하고, 결혼이민(F-6) 비자는 혼인신고가 끝난 뒤 신청한다.",
+        "verification_status": "verified",
+        "key": "common:marriage-report",
+        "unlocks": 0,
+        "order": 1,
+        "where": "등록기준지·주소지·현재지 중 아무 시(구)·읍·면 사무소 방문 또는 우편(동 주민센터·온라인 불가)",
+        "fee": "무료",
+        "steps": [
+          "혼인신고서 작성: 당사자 인적사항·등록기준지, 부모 정보, 근친혼 아님 확인, 성년 증인 2인 서명",
+          "외국인 배우자가 있으면 본국·대사관 발급 혼인요건구비증명서와 번역문 준비",
+          "시(구)·읍·면 사무소 가족관계등록 창구에 신분증과 함께 제출(한쪽만 가면 상대방 신분증 또는 인감증명서 지참)",
+          "수리 후 혼인관계증명서 발급으로 확인 → 건강보험 피부양자·F-6 사증 등 후속 절차"
+        ],
+        "pitfalls": [
+          "동 주민센터나 온라인으로는 접수 불가 — 시·구청(읍·면) 가족관계등록 창구",
+          "한쪽만 출석하면 상대방 신분증 원본 또는 인감증명서가 없으면 접수 거부",
+          "외국 문서는 번역문 첨부 필수, 외국에서 먼저 혼인했으면 3개월 내 미제출 시 과태료",
+          "증인 2명은 성년이어야 하며 신고서에 직접 서명"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000050",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-161300000076",
+        "name": "버팀목전세자금대출",
+        "priority": "must",
+        "condition": "광주 전세 계약 시 신혼부부(3개월 내 결혼 예정자 포함) 전세대출.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "국토교통부",
+        "online": true,
+        "documents": [
+          "○ 확정일자부 임대차 계약서",
+          "○ 임차 보증금의 5% 이상 납입한 영수증",
+          "○ 주민등록등본(1개월 이내 발급 분)",
+          "○ 필요하면 주민등록초본, 가족관계증명서 등(1개월 이내 발급 분)",
+          "○ 대상주택 등기사항전부증명서(舊.등기부 등본)",
+          "○ 소득확인서류 - 원천징수영수증, 소득 금액 증명원, 신고 사실 없음 “사실증명원”(무소득자) 등",
+          "○ 재직확인서류 - 건강보험자격득실확인서, 사업자 등록 증명원 등",
+          "○ 기타 필요하면 요청 서류"
+        ],
+        "link": "https://enhuf.molit.go.kr",
+        "source": {
+          "name": "보조금24 · 국토교통부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "근로자 및 서민의 주거안정을 위한 전세자금 대출",
+        "verification_status": "verified",
+        "eligibility": "만19세 이상 세대주(단독세대주인 경우 만25세 이상), 무주택자, 부부합산 연 소득 5천만원 이하인 자(2자녀 이상 가구 6천만원 이하, 신혼가구 7.5천만원 이하)",
+        "key": "svc:161300000076",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-999000000026",
+        "name": "행복주택 공급",
+        "priority": "nice",
+        "condition": "예비 신혼부부도 입주 전 혼인 조건으로 청약 가능.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "국토교통부",
+        "online": true,
+        "documents": [
+          "개인정보 수집 제공 활용 동의서",
+          "금융정보 등 제공동의서",
+          "자산보유 사실확인서",
+          "주민등록등본",
+          "기타 입주가격 증명서류"
+        ],
+        "link": "http://myhome.go.kr",
+        "source": {
+          "name": "보조금24 · 국토교통부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "만19~39세 청년, (예비)신혼부부, 한부모가족, 대학생 등 젊은층의 주거안정을 위하여 대중교통이 편리하거나 직주근접이 가능한 부지에 주변 시세보다 저렴하게 공급",
+        "verification_status": "verified",
+        "eligibility": "대학생, 청년, (예비)신혼부부, 한부모가족   고령자   주거급여수급자   산업단지 근로자",
+        "key": "svc:999000000026",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "R2",
+        "id": "local-WLF00004697",
+        "name": "신혼부부 전세자금 대출이자 지원",
+        "priority": "nice",
+        "condition": "광주 거주 신혼부부 전세대출 이자 지원.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 여성가족국 여성가족과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004697&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 여성가족국 여성가족과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "주거비 마련 부담때문에 결혼을 고민하는 청년층과 아이낳이 키우기 좋은 환경에서 아이를 키우고 싶은 신혼부부의 주거안정을 위해 전세자금 대출이자를 지원.",
+        "verification_status": "verified",
+        "key": "svc:WLF00004697",
+        "eligibility": "지원대상 : 21.1.1이후 주택도시기금 신혼부부 전용 전세자금대출 신규 대출자 및 대출 연장자 *신혼부부 전용 버팀목 전세자금 대출 기준 지원대상 : 대출자의  주민등록 및 임차(전세)주택 주소지가 광주지역에 소재하고 3개월이내 혼인 예정이거나 혼인",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "R4",
+        "id": "local-WLF00005765",
+        "name": "전라남도 청년부부 결혼축하금 지원사업",
+        "priority": "nice",
+        "condition": "통합특별시 거주 청년 부부 결혼축하금 — 거주 요건·연령 확인.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "전남광주통합특별시 인구청년이민국 청년희망과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00005765&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 전남광주통합특별시 인구청년이민국 청년희망과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "도내 거주중인 청년층의 결혼 초기 경제적 부담 완화 및 안정적인 지역 정착을 지원",
+        "verification_status": "verified",
+        "key": "svc:WLF00005765",
+        "eligibility": "* 혼인신고일 기준, 남녀 모두 만 49세 이하* 혼인신고 이후 부부 모두 6개월 이상 도내에 주민등록을 두고 거주* 신청일부터 지급일까지 부부 모두 도내에 주소를 두고 거주하고, 1명(신청자)은 해당 시군(결혼축하금을 신청한 시군)에 주소를 두고 거",
+        "unlocks": 0,
+        "order": 5
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 4,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}

@@ -1,0 +1,292 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "debt-relief-10",
+    "event_id": "debt-relief",
+    "event_title": "채무 조정·개인회생",
+    "persona_summary": "31세 여성 · 경기 김포시 · 신용 낮음 · 생활자금 필요",
+    "persona": {
+      "facts": {
+        "age": 31,
+        "gender": "여성",
+        "residence": "경기 김포시",
+        "situation": "신용 낮음 · 생활자금 필요"
+      }
+    },
+    "query": "신용점수가 낮아서 은행 대출이 안 돼요. 서민한테 저금리로 빌려주는 대출이 있다던데 어디서 상담받을 수 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "debt-relief"
+      ],
+      "reason": "저신용 서민금융"
+    },
+    "plan": {
+      "title": "저신용 생활자금 대출",
+      "emoji": "💰",
+      "intro": "서민금융진흥원(1397)·서민금융통합지원센터에서 햇살론(연 소득·신용 기준), 소액생계비대출(최대 100만 원, 당일)을 상담받을 수 있어요. 불법 사채는 절대 쓰지 마세요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "햇살론일반",
+          "priority": "must",
+          "condition": "연소득 3,500만 원 이하 또는 신용 하위 20%·4,500만 원 이하 → 최대 2천만 원."
+        },
+        {
+          "name": "불법사금융예방대출",
+          "priority": "nice",
+          "condition": "급전 소액(100만 원) 당일 대출."
+        },
+        {
+          "name": "신용회복위원회 성실상환자 소액대출",
+          "priority": "nice",
+          "condition": "채무조정 중이면."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "서민금융",
+          "채무"
+        ],
+        "local_keywords": [
+          "서민금융",
+          "채무"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "서민금융진흥원 서민금융 지원",
+          "law_query": "서민의 금융생활 지원에 관한 법률",
+          "keywords": [
+            "서민금융진흥원의 업무"
+          ],
+          "priority": "nice",
+          "condition": "햇살론·소액생계비대출·금융 상담."
+        }
+      ]
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "경기도 서민금융복지지원센터 운영 지원",
+          "priority": "must",
+          "condition": "경기도 서민금융복지지원센터 무료 재무·채무 상담.",
+          "service_id": "641000000672"
+        },
+        {
+          "cid": "R2",
+          "name": "경기도 재도전론(채무조정 성실상환자 대상 소액금융지원)",
+          "priority": "nice",
+          "condition": "채무조정 성실상환자 소액대출.",
+          "service_id": "641000000673"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "debt-relief",
+    "events": [
+      "debt-relief"
+    ],
+    "title": "저신용 생활자금 대출",
+    "emoji": "💰",
+    "intro": "서민금융진흥원(1397)·서민금융통합지원센터에서 햇살론(연 소득·신용 기준), 소액생계비대출(최대 100만 원, 당일)을 상담받을 수 있어요. 불법 사채는 절대 쓰지 마세요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "김포시"
+    },
+    "procedures": [
+      {
+        "ref": "G8",
+        "id": "gov24-B55370100037",
+        "name": "햇살론일반",
+        "priority": "must",
+        "condition": "연소득 3,500만 원 이하 또는 신용 하위 20%·4,500만 원 이하 → 최대 2천만 원.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "서민금융진흥원",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55370100037",
+        "source": {
+          "name": "보조금24 · 서민금융진흥원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "소득 증빙이 가능하며 신용등급이 상대적으로 양호하나 제도권 금융 이용에 어려움을 겪는 분들을 지원하기 위한 보증상품",
+        "verification_status": "verified",
+        "eligibility": "연소득 3,500만원 이하(신용점수 무관)이거나, 연소득 4,500만원 이하이면서 신용점수 하위 20% 이하이신 분",
+        "key": "svc:B55370100037",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "R1",
+        "id": "regional-641000000672",
+        "name": "경기도 서민금융복지지원센터 운영 지원",
+        "priority": "must",
+        "condition": "경기도 서민금융복지지원센터 무료 재무·채무 상담.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "경기도",
+        "online": true,
+        "documents": [
+          "공통서류 없음",
+          "상담 후 채무조정 지원 관련 서류 등 내담자별 서류 필요 서류 제출 안내"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/641000000672",
+        "source": {
+          "name": "보조금24 · 경기도",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "도내 금융취약계층에 대한 금융복지 서비스 지원을 통한 금융안전망 구축",
+        "verification_status": "verified",
+        "key": "svc:641000000672",
+        "eligibility": "경기도 내 금융취약계층",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G7",
+        "id": "gov24-B55370100027",
+        "name": "불법사금융예방대출",
+        "priority": "nice",
+        "condition": "급전 소액(100만 원) 당일 대출.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "서민금융진흥원",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/B55370100027",
+        "source": {
+          "name": "보조금24 · 서민금융진흥원",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "불법사금융에 노출되기 쉬운 취약계층을 정책서민금융으로 흡수하기 위해 소액대출 지원",
+        "verification_status": "verified",
+        "eligibility": "재직, 소득 및 연체여부에 상관없이 대출지원 - 연소득 3,500만원 이하이면서 신용평점 하위 20% 이하",
+        "key": "svc:B55370100027",
+        "unlocks": 0,
+        "order": 3
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-B55370000011",
+        "name": "신용회복위원회 성실상환자 소액대출",
+        "priority": "nice",
+        "condition": "채무조정 중이면.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "신용회복위원회",
+        "online": true,
+        "documents": [
+          "○ 신분증, 주민등록등본, 소득 및 재직증명서류 등 (필요 시 용도증빙 서류 등 추가 준비 필요)"
+        ],
+        "link": "https://cyber.ccrs.or.kr/",
+        "source": {
+          "name": "보조금24 · 신용회복위원회",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "채무조정 성실상환자를 대상으로 생활안정자금, 학자금, 운영자금 등 긴급자금을 지원하는 제도",
+        "verification_status": "verified",
+        "eligibility": "신용회복위원회로부터 채무조정을 받아 6개월 이상 성실하게 상환하고 있거나 최근 3년 이내 상환을 완료한 분  채무자회생 및 파산에 관한 법률에 의거 법원으로부터 개인회생 변제계획 인가를 받아 12개월 이상 성실하게 상환하고 있거나 최근 3년 이내 상환",
+        "key": "svc:B55370000011",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "R2",
+        "id": "regional-641000000673",
+        "name": "경기도 재도전론(채무조정 성실상환자 대상 소액금융지원)",
+        "priority": "nice",
+        "condition": "채무조정 성실상환자 소액대출.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "경기도",
+        "online": true,
+        "documents": [
+          "○ 신청인 제출서류",
+          "채무조정  및 개인회생 변제, 완제 증명서 등",
+          "기타 신용회복위원회 요청 서류",
+          "신용회복위원회 상담센터(1600-5500)를 통해 신청요건 확인 후 지부 심사역의 안내에 따라 필요한 서류 준비"
+        ],
+        "link": "https://www.ccrs.or.kr/finance/summary/view.do",
+        "source": {
+          "name": "보조금24 · 경기도",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "채무조정을 통한 변제 중 생활자금 부족으로 어려움을 겪는 경기도민에 대한 소액금융 및 경제적 회생 지원",
+        "verification_status": "verified",
+        "key": "svc:641000000673",
+        "eligibility": "지원대상(요건) : 신청일 현재 도내 거주자로 채무조정·개인회생 후 일정기간＊ 변제 중이거나 최근 3년 이내 완제한 자     * 채무조정 – 6개월 이상, 개인회생 – 12개월 이상      ① 신용회복지원을 받아 6개월 이상 변제 계획을 성실하게 ",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "서민금융진흥원 서민금융 지원",
+        "priority": "nice",
+        "condition": "햇살론·소액생계비대출·금융 상담.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "금융위원회 · 서민금융진흥원(서민금융통합지원센터)",
+        "online": true,
+        "documents": [
+          "신분증(센터 방문 시 본인확인용)",
+          "추가 서류(금융기관 계좌 이용제한 등 불가피한 경우, 1397로 사전 확인)"
+        ],
+        "link": "https://www.kinfa.or.kr/financialProduct/peopleFinancial.do",
+        "source": {
+          "name": "서민금융진흥원 금융상품(서민금융 전체보기)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "서민금융진흥원은 햇살론 등 정책서민금융 상품과 불법사금융예방대출(1인 최대 100만원, 신용평점 하위 20%·연소득 3,500만원 이하)을 서민금융통합지원센터와 '서민금융 잇다' 앱으로 지원한다. 센터 방문은 1397 콜센터 예약이 필수이며, 센터에서는 신용회복위원회 채무조정·개인회생 연계와 고용·복지 상담까지 한 번에 받을 수 있다.",
+        "verification_status": "verified",
+        "key": "x:서민금융진흥원 서민금융 지원",
+        "unlocks": 0,
+        "order": 6,
+        "where": "서민금융 잇다 앱·홈페이지(loan.kinfa.or.kr, 온라인) 또는 전국 서민금융통합지원센터 방문(서민금융콜센터 1397로 방문 예약)",
+        "fee": "무료(상담·신청 수수료 없음, 대출은 상품별 금리 적용)",
+        "steps": [
+          "서민금융콜센터 1397 또는 서민금융 잇다 앱에서 이용 가능한 상품(햇살론일반·햇살론유스·햇살론카드·불법사금융예방대출(구 소액생계비대출) 등) 확인",
+          "센터 방문이 필요한 상품은 1397로 서민금융통합지원센터 방문 예약(전국 50개 센터)",
+          "센터에서 종합상담(신용·부채 진단) 후 자금지원·채무조정·고용복지 연계 중 맞는 서비스 신청",
+          "서류 안내에 따라 작성·제출 후 심사 결과에 따라 대출 실행 또는 채무조정 연계"
+        ],
+        "pitfalls": [
+          "서민금융통합지원센터는 예약 없이 방문하면 상담이 어렵다(1397 예약 필수)",
+          "구 소액생계비대출(불법사금융예방대출)은 2026.1.2.부터 기존 보유자 대상 추가대출만 가능(2026년 말까지 한시)",
+          "상품별로 신용평점·소득 요건이 다르므로 잇다 앱의 맞춤 조회로 먼저 확인",
+          "'서민금융진흥원 사칭' 문자·전화 주의(공식 번호 1397)"
+        ],
+        "sourceUrl": "https://www.kinfa.or.kr/financialProduct/peopleFinancial.do",
+        "curated": true
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 16.2
+  }
+}

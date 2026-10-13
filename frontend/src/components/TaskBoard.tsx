@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useStore } from "../store";
 import { effectiveDday, ddayLabel } from "../lib/dday";
+import { buildGraph } from "../lib/graph";
+import GraphPopover from "./GraphPopover";
 import type { BoardItem, Priority, Procedure, Status, UserTodo } from "../types";
+
+const ORDER_COLOR: Record<Priority, string> = { must: "bg-nut-deep", nice: "bg-leaf", qna: "bg-acorn/40" };
 
 const PRIORITY_GROUPS: { key: Priority; label: string; hint: string }[] = [
   { key: "must", label: "Must · 필수", hint: "기한 내 꼭 처리해야 해요" },
@@ -35,10 +39,9 @@ function fallbackProc(id: string): Procedure {
 
 export default function TaskBoard() {
   const {
-    board, procIndex, openProc, toggleDone, persona, event,
+    board, procIndex, openProc, toggleDone, persona, event, boardNotice,
     userTodos, openTodoId, addUserTodo, toggleUserTodo, removeUserTodo, openTodo, updateTodoNote,
   } = useStore();
-
   if (board.length === 0 && userTodos.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-center px-8 text-acorn/50">
@@ -50,19 +53,23 @@ export default function TaskBoard() {
     );
   }
 
-  // 상세가 없으면 fallback으로 채워 어떤 항목도 누락되지 않게 한다(카운트 일치 보장)
-  const items: { b: BoardItem; p: Procedure }[] = board.map((b) => ({
-    b,
-    p: procIndex[b.id] ?? fallbackProc(b.id),
-  }));
-
   const doneCount = board.filter((b) => b.status === "done").length;
+  // 절차 그래프: 추천 순서(order)·지금 가능/선행 대기 상태. 목록·흐름도 두 뷰가 같은 계산을 쓴다
+  const graph = buildGraph(board, procIndex, persona, event, fallbackProc);
+  const nextUp = graph.nodes.filter((n) => n.state === "ready").sort((a, b) => a.order - b.order).slice(0, 2);
 
   return (
-    <div className="flex-1 overflow-y-auto no-scrollbar px-4 py-4">
+    <div className="relative flex-1 min-h-0 flex flex-col">
+    {/* 아래쪽 여백 = 오른쪽 아래 흐름 버튼에 마지막 카드가 가리지 않게 */}
+    <div className="flex-1 overflow-y-auto no-scrollbar px-4 pt-4 pb-20">
+      {boardNotice && (
+        <div className="mb-3 text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+          🔒 {boardNotice}
+        </div>
+      )}
       {/* 진행률 */}
-      <div className="mb-4">
-        <div className="flex justify-between text-[11px] text-acorn/60 mb-1">
+      <div className="mb-3">
+        <div className="flex items-center justify-between text-[11px] text-acorn/60 mb-1">
           <span>진행 상황</span>
           <span>
             {doneCount}/{board.length} 완료
@@ -74,90 +81,35 @@ export default function TaskBoard() {
             style={{ width: `${board.length ? (doneCount / board.length) * 100 : 0}%` }}
           />
         </div>
+        {/* 다음 할 일: 선행이 모두 끝나 지금 할 수 있는 것 중 추천 순서가 앞선 것 */}
+        {nextUp.length > 0 && (
+          <div className="mt-2 flex items-center gap-1.5 text-[11px] text-acorn/70 flex-wrap">
+            <span className="font-semibold text-nut-deep">다음 할 일</span>
+            {nextUp.map((n) => (
+              <button
+                key={n.id}
+                onClick={() => openProc(n.id)}
+                className="inline-flex items-center gap-1 bg-white border border-nut/40 rounded-full pl-1 pr-2 py-0.5 active:scale-95 transition"
+              >
+                <span className={`w-4 h-4 rounded-full text-white text-[9px] font-bold flex items-center justify-center ${ORDER_COLOR[n.p.priority]}`}>
+                  {n.order}
+                </span>
+                <span className="font-semibold text-acorn max-w-[120px] truncate">{n.p.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {PRIORITY_GROUPS.map((g) => {
-        const groupItems = items
-          .filter((x) => x.p.priority === g.key)
-          .sort(
-            (a, b) =>
-              effectiveDday(a.p, persona, event) - effectiveDday(b.p, persona, event)
-          );
-        if (groupItems.length === 0) return null;
-        return (
-          <div key={g.key} className="mb-5">
-            <div className="flex items-center gap-2 mb-2 px-1">
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  g.key === "must" ? "bg-nut" : g.key === "nice" ? "bg-leaf" : "bg-acorn/40"
-                }`}
-              />
-              <span className="text-[12px] font-bold text-acorn">{g.label}</span>
-              <span className="text-[10px] text-acorn/40">{g.hint}</span>
-            </div>
-            <div className="space-y-2">
-              {groupItems.map(({ b, p }) => (
-                <div
-                  key={b.id}
-                  className="bg-white rounded-xl border border-sand p-3 flex items-center gap-3 active:scale-[0.99] transition"
-                >
-                  <button
-                    onClick={() => toggleDone(b.id)}
-                    className={`w-6 h-6 rounded-md border-2 flex items-center justify-center shrink-0 transition ${
-                      b.status === "done"
-                        ? "bg-leaf border-leaf text-white"
-                        : "border-acorn/25 text-transparent"
-                    }`}
-                  >
-                    ✓
-                  </button>
-                  <button onClick={() => openProc(p.id)} className="flex-1 min-w-0 text-left">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`font-semibold text-[13.5px] truncate ${
-                          b.status === "done" ? "text-acorn/40 line-through" : "text-acorn"
-                        }`}
-                      >
-                        {p.name}
-                      </span>
-                      {p.online && (
-                        <span className="text-[9px] text-leaf border border-leaf/40 rounded px-1 py-0.5 shrink-0">
-                          온라인
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-[11px] text-acorn/55 mt-0.5 truncate">{p.deadline}</div>
-                  </button>
-                  <div className="flex flex-col items-end gap-1 shrink-0">
-                    <span
-                      className={`text-[10px] font-bold rounded-md px-1.5 py-0.5 ${STATUS_BADGE[b.status].cls}`}
-                    >
-                      {STATUS_BADGE[b.status].label}
-                    </span>
-                    {(() => {
-                      const dday = effectiveDday(p, persona, event);
-                      if (p.priority !== "must" || dday >= 3650 || b.status === "done") return null;
-                      return (
-                        <span
-                          className={`text-[10px] font-semibold ${
-                            dday < 0 ? "text-red-500" : "text-nut-deep"
-                          }`}
-                        >
-                          {ddayLabel(dday)}
-                        </span>
-                      );
-                    })()}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-
-      <p className="text-[10px] text-acorn/40 text-center mt-2">
-        절차를 탭하면 서류·기관·바로가기를 확인할 수 있어요.
-      </p>
+      {board.length > 0 && (
+        <ChecklistView
+          items={board.map((b) => ({ b, p: procIndex[b.id] ?? fallbackProc(b.id) }))}
+          persona={persona}
+          event={event}
+          onToggle={toggleDone}
+          onOpen={openProc}
+        />
+      )}
 
       {/* User defined — 사용자가 직접 추가한 할 일 (검증 대상 아님, 클릭 시 메모) */}
       <UserDefinedSection
@@ -169,6 +121,9 @@ export default function TaskBoard() {
         onNote={updateTodoNote}
         onAdd={addUserTodo}
       />
+    </div>
+    {/* 오른쪽 아래 동그라미: 올리면(탭하면) 절차 흐름 그래프가 퍼져 나오는 팝업 */}
+    {board.length > 0 && <GraphPopover graph={graph} />}
     </div>
   );
 }
@@ -269,5 +224,94 @@ function UserDefinedSection({
         </button>
       </div>
     </div>
+  );
+}
+
+/** 목록 보기 — 우선순위(Must/Nice/참고)별로 묶고 그룹 안에서는 D-day 순. 체크박스 = 완료, 이름 = 상세 */
+function ChecklistView({
+  items, persona, event, onToggle, onOpen,
+}: {
+  items: { b: BoardItem; p: Procedure }[];
+  persona: Parameters<typeof effectiveDday>[1];
+  event: Parameters<typeof effectiveDday>[2];
+  onToggle: (id: string) => void;
+  onOpen: (id: string) => void;
+}) {
+  return (
+    <>
+      {PRIORITY_GROUPS.map((g) => {
+        const groupItems = items
+          .filter((x) => x.p.priority === g.key)
+          .sort((a, b) => effectiveDday(a.p, persona, event) - effectiveDday(b.p, persona, event));
+        if (groupItems.length === 0) return null;
+        return (
+          <div key={g.key} className="mb-5">
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  g.key === "must" ? "bg-nut" : g.key === "nice" ? "bg-leaf" : "bg-acorn/40"
+                }`}
+              />
+              <span className="text-[12px] font-bold text-acorn">{g.label}</span>
+              <span className="text-[10px] text-acorn/40">{g.hint}</span>
+            </div>
+            <div className="space-y-2">
+              {groupItems.map(({ b, p }) => (
+                <div
+                  key={b.id}
+                  className="bg-white rounded-xl border border-sand p-3 flex items-center gap-3 active:scale-[0.99] transition"
+                >
+                  <button
+                    onClick={() => onToggle(b.id)}
+                    aria-label={b.status === "done" ? `${p.name} 완료 해제` : `${p.name} 완료`}
+                    className={`w-6 h-6 rounded-md border-2 flex items-center justify-center shrink-0 transition ${
+                      b.status === "done"
+                        ? "bg-leaf border-leaf text-white"
+                        : "border-acorn/25 text-transparent"
+                    }`}
+                  >
+                    ✓
+                  </button>
+                  <button onClick={() => onOpen(p.id)} className="flex-1 min-w-0 text-left">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`font-semibold text-[13.5px] truncate ${
+                          b.status === "done" ? "text-acorn/40 line-through" : "text-acorn"
+                        }`}
+                      >
+                        {p.name}
+                      </span>
+                      {p.online && (
+                        <span className="text-[9px] text-leaf border border-leaf/40 rounded px-1 py-0.5 shrink-0">
+                          온라인
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-acorn/55 mt-0.5 truncate">{p.deadline}</div>
+                  </button>
+                  <div className="flex flex-col items-end gap-1 shrink-0">
+                    <span className={`text-[10px] font-bold rounded-md px-1.5 py-0.5 ${STATUS_BADGE[b.status].cls}`}>
+                      {STATUS_BADGE[b.status].label}
+                    </span>
+                    {(() => {
+                      const dday = effectiveDday(p, persona, event);
+                      if (p.priority !== "must" || dday >= 3650 || b.status === "done") return null;
+                      return (
+                        <span className={`text-[10px] font-semibold ${dday < 0 ? "text-red-500" : "text-nut-deep"}`}>
+                          {ddayLabel(dday)}
+                        </span>
+                      );
+                    })()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      <p className="text-[10px] text-acorn/40 text-center mt-2 mb-5">
+        절차를 탭하면 서류·기관·바로가기를 확인할 수 있어요.
+      </p>
+    </>
   );
 }

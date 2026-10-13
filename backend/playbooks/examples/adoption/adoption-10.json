@@ -1,0 +1,396 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "adoption-10",
+    "event_id": "adoption",
+    "event_title": "입양",
+    "persona_summary": "37세 여성 · 충남 서산시 · 회사원 · 입양 후 아동수당",
+    "persona": {
+      "facts": {
+        "age": 37,
+        "gender": "여성",
+        "residence": "충남 서산시",
+        "situation": "회사원 · 입양 후 아동수당"
+      }
+    },
+    "query": "두 살 아이를 입양했는데 아동수당이나 부모급여 같은 건 친부모 가정처럼 받을 수 있나요? 입양아동 양육수당이랑 중복으로 받을 수 있는지도 알고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "adoption",
+        "birth"
+      ],
+      "reason": "입양 아동의 아동수당·부모급여"
+    },
+    "plan": {
+      "title": "입양 아동의 수당 중복 여부",
+      "emoji": "🧸",
+      "intro": "입양아동 양육수당은 아동수당·부모급여와 중복으로 받을 수 있어요. 두 살이면 부모급여(1세) 대신 가정양육수당 또는 보육료로 넘어가요.",
+      "law": [
+        {
+          "name": "입양신고",
+          "priority": "nice",
+          "condition": "신고 완료 확인."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "입양아동 양육수당 지원",
+          "priority": "must",
+          "condition": "입양 아동 월 양육수당(다른 수당과 중복 가능)."
+        },
+        {
+          "name": "아동수당",
+          "priority": "must",
+          "condition": "8세 미만 → 입양 후 즉시 신청(친생자와 동일)."
+        },
+        {
+          "name": "가정양육수당 지원",
+          "priority": "nice",
+          "condition": "24개월 이상 어린이집 미이용 시."
+        },
+        {
+          "name": "입양축하금",
+          "priority": "nice",
+          "condition": "입양 축하금."
+        }
+      ],
+      "national_welfare": [
+        {
+          "name": "부모급여 지원",
+          "priority": "nice",
+          "condition": "만 2세 미만까지만 → 두 살 생일 전이면 남은 기간 신청."
+        }
+      ],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "입양"
+        ],
+        "local_keywords": [
+          "입양"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "충청남도 입양축하금 지원",
+          "priority": "nice",
+          "condition": "충남 입양축하금.",
+          "service_id": "WLF00004272"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "adoption",
+    "events": [
+      "adoption",
+      "birth"
+    ],
+    "title": "입양 아동의 수당 중복 여부",
+    "emoji": "🧸",
+    "intro": "입양아동 양육수당은 아동수당·부모급여와 중복으로 받을 수 있어요. 두 살이면 부모급여(1세) 대신 가정양육수당 또는 보육료로 넘어가요.",
+    "region": {
+      "sido": "충청남도",
+      "sgg": "서산시"
+    },
+    "procedures": [
+      {
+        "id": "law-adoption-2a7307f4",
+        "name": "가정법원 입양허가",
+        "priority": "must",
+        "condition": "선행 절차 — 법원 허가 후 신고",
+        "deadline": "법원은 청구일부터 6개월 이내 허가 여부 결정(원칙)",
+        "deadlineDays": 9999,
+        "agency": "보건복지부(국가아동권리보장원) · 양자가 될 아동 주소지 관할 가정법원",
+        "online": true,
+        "documents": [
+          "입양허가 청구서",
+          "아동의 출생신고 증빙 서류",
+          "양자가 될 아동으로 결정한 서류",
+          "입양 동의 및 승낙 의사 확인 서류",
+          "결연확인서",
+          "아동의 가족관계등록부 등 증명서 및 주민등록표 등·초본",
+          "양부모가 되려는 사람의 가족관계등록부 등 증명서 및 주민등록표 등·초본",
+          "양부모가 되려는 사람의 범죄경력조회회신서",
+          "양부모교육 이수증명서"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2584&ccfNo=1&cciNo=3&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 보호대상아동 입양의 절차와 효과 · 국내입양에 관한 특별법 제21조(가정법원의 입양허가)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "2025.7.19 시행 국내입양에 관한 특별법에 따라 보호대상아동 입양은 국가아동권리보장원 신청→교육·가정조사→결연을 거쳐 아동 주소지 관할 가정법원에 입양허가를 청구하고, 인용 심판이 확정되면 입양 효력이 생긴다. 법원은 청구일부터 6개월 이내에 결정하며, 확정 후 허가서를 첨부해 입양신고를 한다.",
+        "verification_status": "verified",
+        "key": "law:가정법원 입양허가",
+        "autoAdded": true,
+        "autoAddedFor": "law-adoption-l4",
+        "unlocks": 6,
+        "order": 1,
+        "where": "아동 주소지 관할 가정법원에 입양허가 청구(방문 또는 전자소송); 사전 절차는 국가아동권리보장원",
+        "fee": "법원 인지·송달료(가사비송)",
+        "steps": [
+          "양부모가 되려는 사람이 국가아동권리보장원에 입양신청서 제출",
+          "상담·양부모교육 이수·가정환경조사(2회 이상 방문, 1회는 불시) 후 보고서 작성",
+          "보건복지부 입양정책위원회 심의로 결연 → 결연확인서 발급",
+          "아동 주소지 관할 가정법원에 입양허가 청구(결연확인서·범죄경력조회·교육이수증 등 첨부); 필요 시 임시양육결정 신청",
+          "법원 심리 후 허가 심판 → 확정되면 입양 효력 발생(친양자 지위), 아동 인도",
+          "허가서(심판서·확정증명서) 첨부해 시·구·읍·면에 입양신고"
+        ],
+        "pitfalls": [
+          "허가 없이 입양하면 3년 이하 징역 또는 3천만 원 이하 벌금",
+          "결연확인서·양부모교육 이수증·범죄경력조회회신서가 없으면 청구 불가",
+          "효력은 신고가 아니라 심판 확정 시 발생하지만, 가족관계등록을 위해 신고는 해야 한다",
+          "임시양육결정이 있으면 양부모가 임시후견인이 되고 친권 행사가 정지된다",
+          "외국인 관련 서류는 본국 공증 필요"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2584&ccfNo=1&cciNo=3&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "ref": "L4",
+        "id": "law-adoption-l4",
+        "name": "입양신고",
+        "priority": "nice",
+        "condition": "신고 완료 확인.",
+        "deadline": "친양자 입양은 재판 확정일부터 1개월 이내(일반 입양은 신고기간 없음, 신고로 효력 발생)",
+        "deadlineDays": 30,
+        "agency": "법무부(가족관계등록)·법원행정처 · 시(구)·읍·면 가족관계등록 담당",
+        "online": false,
+        "documents": [
+          "입양신고서",
+          "입양동의서",
+          "가정법원 입양허가서 등본(미성년자 입양) 또는 부모 동의를 갈음하는 가정법원 심판서",
+          "친양자 입양은 심판서 등본 및 확정증명서",
+          "신고인 신분증",
+          "입양당사자의 기본증명서·가족관계증명서·입양관계증명서(전산 확인 가능 시 생략)",
+          "양친 또는 양자가 외국인이면 국적·본국법 요건 증명서면"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=707&ccfNo=3&cciNo=1&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 입양신고하기 · 가족관계의 등록 등에 관한 법률 제61조(입양신고의 기재사항)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "입양은 가족관계등록법에 따라 시(구)·읍·면에 신고해야 효력이 생기며, 미성년자 입양은 가정법원 허가서 등본을, 친양자 입양은 심판 확정일부터 1개월 이내에 심판서·확정증명서를 첨부해 신고한다. 양친과 양자가 직접 신고하고(13세 미만은 승낙한 법정대리인), 대리 신고는 할 수 없다. 신고가 끝나야 입양축하금·양육수당·아동수당 등 후속 지원을 신청할 수 있다.",
+        "verification_status": "verified",
+        "key": "law:입양신고",
+        "unlocks": 5,
+        "order": 2,
+        "where": "입양자의 등록기준지 또는 신고인 주소지·현재지의 시(구)청·읍·면사무소 방문(대리 신고 불가, 온라인 불가)",
+        "fee": "무료",
+        "steps": [
+          "미성년자 입양은 가정법원 입양허가(친양자는 친양자 입양재판) 확정 → 심판서 등본·확정증명서 발급",
+          "입양신고서 작성(양친·양자 신고, 13세 미만은 승낙한 법정대리인)",
+          "등록기준지 또는 주소지 시(구)·읍·면에 허가서 등본·동의서·신분증 지참 방문 제출",
+          "가족관계등록부 정리(친양자는 양부의 성·본으로 기재) → 입양관계증명서 발급 확인"
+        ],
+        "pitfalls": [
+          "친양자 입양 신고를 확정일부터 1개월 넘기면 과태료(5만원 이하)",
+          "본인 의사 중시로 대리인 신고가 불가하다",
+          "미성년자 입양에 가정법원 허가 없이 신고하면 수리되지 않는다",
+          "친양자 입양은 친생부모와의 관계가 종료되고 양부 성·본으로 등록된다는 점을 확인"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMainBtr.laf?popMenu=ov&csmSeq=707&ccfNo=3&cciNo=1&cnpClsNo=1",
+        "curated": true,
+        "dependsOn": [
+          "law-adoption-2a7307f4"
+        ]
+      },
+      {
+        "ref": "G10",
+        "id": "gov24-SCY000000060",
+        "name": "입양아동 양육수당 지원",
+        "priority": "must",
+        "condition": "입양 아동 월 양육수당(다른 수당과 중복 가능).",
+        "deadline": "지급신청 후 통지한날이 속한달부터 지급",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "입양아동 양육보조금 등 신청서 1부, 입양확정증명원 사본 1부, 통장사본 1부"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/SCY000000060",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "입양아동 양육수당 지원을 통해 입양가정의 경제적 부담을 완화하여 국내 입양 활성화 및 아동의 건전육성 도모",
+        "verification_status": "verified",
+        "eligibility": "국내입양에 관한 특별법에 따라 보호대상아동을 국내입양한 가정(구 입양특례법상 허가를 받은 입양기관에 의해 보호대상아동을 국내입양한 가정도 해당)  - 입양아동이 만 18세가 되는 날이 속한 달까지",
+        "key": "svc:SCY000000060",
+        "unlocks": 0,
+        "order": 3,
+        "dependsOn": [
+          "law-adoption-l4"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-135200000120",
+        "name": "아동수당",
+        "priority": "must",
+        "condition": "8세 미만 → 입양 후 즉시 신청(친생자와 동일).",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "○ 공통서류",
+          "아동수당 지급 신청서",
+          "신청인의 신분증",
+          "○ 대리신청인 구비서류",
+          "대리 신청 시 위임장, 대리인 신분증, 보호자 신분증(사본) 지참"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200000120",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "아동에게 아동수당을 지급하여 아동 양육에 따른 경제적 부담을 경감하고 건강한 성장환경을 조성함으로써 아동의 기본적 권리와 복지 증진에 기여",
+        "verification_status": "verified",
+        "eligibility": "만 8세 미만 모든 아동에게 아동수당을 지급  - 대한민국 국적을 보유한 아동   ㆍ 부모가 외국인이어도 아동이 한국 국적이면 요건 충족   ㆍ 국적법에 따른 복수국적자 포함   ㆍ 난민법에 따른 난민 인정 아동 포함   ㆍ ｢재한외국인처우기본법｣에 ",
+        "key": "svc:135200000120",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "law-adoption-l4"
+        ]
+      },
+      {
+        "ref": "G9",
+        "id": "gov24-135200005011",
+        "name": "입양축하금",
+        "priority": "nice",
+        "condition": "입양 축하금.",
+        "deadline": "지급신청분에 대해 매월 20일에 1회 지급",
+        "deadlineDays": 20,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [
+          "입양아동 양육보조금 등 신청서 1부 , 입양확정증명원 사본 1부, 통장사본 1부"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/135200005011",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "입양가정에 대한 입양축하금 지급을 통해 국내 입양 활성화 도모",
+        "verification_status": "verified",
+        "eligibility": "국내입양에 관한 특별법에 따라 보호대상아동을 국내입양한 가정 중에서 가정법원 입양확정일이 2022.1.1. 이후인 가정",
+        "key": "svc:135200005011",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-adoption-l4"
+        ]
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-134200005012",
+        "name": "가정양육수당 지원",
+        "priority": "nice",
+        "condition": "24개월 이상 어린이집 미이용 시.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "○ 사회보장급여 신청(변경)서",
+          "○ 아동 명의 또는 부모 등의 명의 통장 사본"
+        ],
+        "link": "https://www.bokjiro.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "어린이집,  유치원(특수학교 포함) 등 시설 미이용 아동에 대한 부모의 가정양육 부담 경감 및 아동의 건강한 발달 지원",
+        "verification_status": "verified",
+        "eligibility": "어린이집, 유치원(특수학교 포함), 종일제 아이돌봄서비스 등을 이용하지 않는 취학 전 24개월~86개월 미만 가정양육 영유아 ※ 부모급여 도입에 따라 0~23개월은 부모급여 지원, 24개월부터 가정양육수당 지원   소득 인정액 기준 없음   중복불가서",
+        "key": "svc:134200005012",
+        "unlocks": 0,
+        "order": 6,
+        "dependsOn": [
+          "law-adoption-l4"
+        ]
+      },
+      {
+        "ref": "N1",
+        "id": "national_welfare-WLF00004657",
+        "name": "부모급여 지원",
+        "priority": "nice",
+        "condition": "만 2세 미만까지만 → 두 살 생일 전이면 남은 기간 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 아동정책과",
+        "online": true,
+        "documents": [
+          "사회보장급여 신청(변경)서"
+        ],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004657",
+        "source": {
+          "name": "복지로 · 보건복지부 아동정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "영아기 집중돌봄을 두텁게 지원하여 출산 및 양육으로 인한 경제적 부담을 줄여드립니다.",
+        "verification_status": "verified",
+        "eligibility": "2세 미만의 아동(0~23개월)에게 지원합니다.※ 2세부터는 가정양육수당을 지원합니다.\r2세 생일이 도래하는 달의 전 달까지 최대 24개월간 지급합니다.",
+        "key": "svc:WLF00004657",
+        "unlocks": 0,
+        "order": 7,
+        "dependsOn": [
+          "law-adoption-l4"
+        ]
+      },
+      {
+        "ref": "R1",
+        "id": "local-WLF00004272",
+        "name": "충청남도 입양축하금 지원",
+        "priority": "nice",
+        "condition": "충남 입양축하금.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "충청남도 인구전략국 인구정책과",
+        "online": true,
+        "documents": [],
+        "link": "https://www.bokjiro.go.kr/ssis-tbu/twataa/wlfareInfo/moveTWAT52011M.do?wlfareInfoId=WLF00004272&wlfareInfoReldBztpCd=02",
+        "source": {
+          "name": "복지로 · 충청남도 인구전략국 인구정책과",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "건전한 입양문화 정착 및 입양아동의 복지증진 강화",
+        "verification_status": "verified",
+        "key": "svc:WLF00004272",
+        "eligibility": "입양신고일 기준 6개월 이상 도내에 주민등록을 두고 실제 거주하면서 「국내입양특별법」 에 따라 아동을 국내 입양한 양친 입양신고일 기준 6개월 이상 도내에 주민등록을 두고 실제 거주하면서 「국내입양특별법」 에 따라 아동을 국내 입양한 양친",
+        "unlocks": 0,
+        "order": 8
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 8,
+    "by_status": {
+      "verified": 8
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

@@ -5,7 +5,6 @@ import type {
   ChatMessage,
   DynamicEntry,
   EventKey,
-  LlmProvider,
   Playbook,
   Procedure,
   StoredSession,
@@ -19,16 +18,8 @@ import {
   updatePersona,
 } from "./api/chat";
 import { SCENARIO_MAP } from "./data/scenarios";
-import { DEFAULT_LLM } from "./data/llm";
 
 type Tab = "chat" | "board";
-
-const LLM_KEY = "darami.llm"; // 선택한 응답 LLM(provider) 영속
-
-function loadLlm(): LlmProvider {
-  const v = localStorage.getItem(LLM_KEY);
-  return v === "solar" || v === "kexaone" ? v : DEFAULT_LLM;
-}
 
 const DYN_KEY = "darami.dynamicEvents.v2"; // v2: 동적 grounding 전환으로 옛 미검증 캐시 무효화
 const SESS_KEY = "darami.sessions.v2"; // v2: 큐레이션 grounding 전환으로 옛 보드 캐시 무효화
@@ -102,6 +93,8 @@ interface State {
   board: BoardItem[];
   userTodos: UserTodo[];
   openTodoId: string | null;
+  /** 보드에서 막힌 동작 안내(선행 절차 미완료 등). 잠시 뒤 사라진다 */
+  boardNotice: string | null;
   tab: Tab;
   openProcId: string | null;
 
@@ -113,11 +106,7 @@ interface State {
   // 이벤트별 대화 세션 (영속)
   sessions: Record<string, StoredSession>;
 
-  // 응답 LLM (영속) — "solar"(Solar Pro) | "kexaone"(K-EXAONE)
-  llm: LlmProvider;
-
   // actions
-  setLlm: (key: LlmProvider) => void;
   startScenario: (key: EventKey) => Promise<void>;
   enterEvent: (event: EventKey, playbook: Playbook, opener: string) => Promise<void>;
   generateAndStart: (description: string) => Promise<void>;
@@ -164,7 +153,8 @@ function applyBoardOps(board: BoardItem[], ops: BoardOp[]): BoardItem[] {
     if (!op?.id) continue;
     const existing = map.get(op.id);
     if (existing) {
-      if (op.status) existing.status = op.status;
+      // 이미 보드에 있는 절차의 재-add 는 무시(모델이 add 로 다시 보내면 done 이 waiting 으로 풀리던 버그)
+      if (op.op !== "add" && op.status) existing.status = op.status;
     } else {
       // add(또는 모르는 id의 update)는 새 항목으로 보드에 올린다
       map.set(op.id, { id: op.id, status: op.status ?? "waiting" });
@@ -188,22 +178,13 @@ export const useStore = create<State>((set, get) => ({
   board: [],
   userTodos: [],
   openTodoId: null,
+  boardNotice: null,
   tab: "chat",
   openProcId: null,
   dynamicEvents: loadDynamic(),
   generating: false,
   genError: null,
   sessions: loadSessions(),
-  llm: loadLlm(),
-
-  setLlm: (key) => {
-    try {
-      localStorage.setItem(LLM_KEY, key);
-    } catch {
-      /* ignore */
-    }
-    set({ llm: key });
-  },
 
   // 현재 이벤트의 대화 상태를 세션에 저장
   persistCurrent: () => {
@@ -308,7 +289,7 @@ export const useStore = create<State>((set, get) => ({
     if (!desc || get().generating) return;
     set({ generating: true, genError: null });
     try {
-      const playbook = await generatePlaybook(desc, get().persona, get().llm);
+      const playbook = await generatePlaybook(desc, get().persona);
       if (!playbook.procedures || playbook.procedures.length === 0) {
         set({
           generating: false,
@@ -372,7 +353,7 @@ export const useStore = create<State>((set, get) => ({
     // ① 페르소나 갱신 + 충돌 검사 (1차 호출)
     let personaFacts = get().persona?.facts ?? {};
     try {
-      const pr = await updatePersona(get().persona, history, get().llm);
+      const pr = await updatePersona(get().persona, history);
       // 비충돌 facts는 conflict 여부와 무관하게 항상 커밋한다.
       // (conflict일 때 facts를 통째로 버리면 확정값이 영영 저장되지 않아 같은 질문이 무한 반복됨)
       if (pr.facts) personaFacts = pr.facts;
@@ -470,15 +451,42 @@ export const useStore = create<State>((set, get) => ({
           return { streaming: false, error: message, messages: msgs };
         }),
     },
-    // 현재 플레이북 + 페르소나 + 선택한 LLM을 함께 보낸다
+    // 현재 플레이북 + 페르소나 + 할 일 보드(완료 체크)를 함께 보낸다
     get().playbook,
     nextPersona,
-    get().llm);
+    get().board);
   },
 
   setTab: (t) => set({ tab: t }),
   openProc: (id) => set({ openProcId: id }),
   toggleDone: (id) => {
+    const { board, procIndex } = get();
+    const me = board.find((b) => b.id === id);
+    if (!me) return;
+    const nameOf = (pid: string) => procIndex[pid]?.name ?? pid;
+    const notify = (msg: string) => {
+      set({ boardNotice: msg });
+      setTimeout(() => set((s) => (s.boardNotice === msg ? { boardNotice: null } : {})), 2500);
+    };
+    if (me.status !== "done") {
+      // 선행 절차(dependsOn)가 아직 안 끝났으면 완료 처리 불가
+      const pending = (procIndex[id]?.dependsOn ?? []).filter(
+        (d) => board.some((b) => b.id === d) && board.find((b) => b.id === d)?.status !== "done"
+      );
+      if (pending.length > 0) {
+        notify(`먼저 ${pending.map(nameOf).join(", ")}을(를) 완료해야 해요`);
+        return;
+      }
+    } else {
+      // 이 절차에 기대고 있는 후속 절차가 완료 상태면 해제 불가
+      const dependents = board.filter(
+        (b) => b.status === "done" && (procIndex[b.id]?.dependsOn ?? []).includes(id)
+      );
+      if (dependents.length > 0) {
+        notify(`${dependents.map((b) => nameOf(b.id)).join(", ")}이(가) 완료 상태라 해제할 수 없어요`);
+        return;
+      }
+    }
     set((s) => ({
       board: s.board.map((b) =>
         b.id === id

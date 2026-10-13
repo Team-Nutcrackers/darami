@@ -1,0 +1,194 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "retirement-04",
+    "event_id": "retirement",
+    "event_title": "은퇴·노후",
+    "persona_summary": "68세 남성 · 대구 서구 · 연금 수급 · 일자리 희망",
+    "persona": {
+      "facts": {
+        "age": 68,
+        "gender": "남성",
+        "residence": "대구 서구",
+        "situation": "연금 수급 · 일자리 희망"
+      }
+    },
+    "query": "연금만으로는 생활이 빠듯해서 일을 좀 하고 싶어요. 노인 일자리 같은 데 신청하면 어떤 일을 하게 되고 한 달에 얼마나 받을 수 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "retirement"
+      ],
+      "reason": "노인일자리"
+    },
+    "plan": {
+      "title": "노인일자리 참여",
+      "emoji": "🌅",
+      "intro": "노인일자리는 매년 12월~1월 주민센터·시니어클럽에서 모집해요. 공익활동형(65세 이상, 월 29만 원)과 사회서비스형·시장형(60세 이상, 더 높은 보수)이 있어요.",
+      "law": [
+        {
+          "name": "노령연금 청구",
+          "priority": "nice",
+          "condition": "연금 수급 중 일해도 공익활동형은 감액 없음(소득 기준 확인)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "노인일자리 및 사회활동 지원",
+          "priority": "must",
+          "condition": "68세 → 공익활동형(월 29만 원), 사회서비스형(월 70만 원대) 신청."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "노인일자리",
+          "어르신"
+        ],
+        "local_keywords": [
+          "노인일자리",
+          "어르신"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R2",
+          "name": "어르신 통합무임 교통카드 발급관리 시스템 운영",
+          "priority": "nice",
+          "condition": "대구 어르신 무임 교통카드.",
+          "service_id": "627000000751"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "retirement",
+    "events": [
+      "retirement"
+    ],
+    "title": "노인일자리 참여",
+    "emoji": "🌅",
+    "intro": "노인일자리는 매년 12월~1월 주민센터·시니어클럽에서 모집해요. 공익활동형(65세 이상, 월 29만 원)과 사회서비스형·시장형(60세 이상, 더 높은 보수)이 있어요.",
+    "region": {
+      "sido": "대구광역시",
+      "sgg": "서구"
+    },
+    "procedures": [
+      {
+        "ref": "G2",
+        "id": "gov24-SSE000000100",
+        "name": "노인일자리 및 사회활동 지원",
+        "priority": "must",
+        "condition": "68세 → 공익활동형(월 29만 원), 사회서비스형(월 70만 원대) 신청.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "보건복지부",
+        "online": true,
+        "documents": [],
+        "link": "http://www.seniorro.or.kr",
+        "source": {
+          "name": "보조금24 · 보건복지부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "어르신들에게 다양한 사회활동 참여 기회 및 일자리를 제공하여 활력 있는 노후생활을 지원",
+        "verification_status": "verified",
+        "eligibility": "노인공익활동사업 : 65세 이상 기초연금수급자   노인역량활용사업 : 65세 이상(일부 유형 60세 이상)   민간형 : 60세 이상",
+        "key": "svc:SSE000000100",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "L1",
+        "id": "law-retirement-l1",
+        "name": "노령연금 청구",
+        "priority": "nice",
+        "condition": "연금 수급 중 일해도 공익활동형은 감액 없음(소득 기준 확인).",
+        "deadline": "수급개시연령 도달 후 청구(청구권 소멸시효 5년), 조기노령연금은 개시연령 5년 전부터 선택 가능",
+        "deadlineDays": 9999,
+        "agency": "보건복지부 · 국민연금공단 지사",
+        "online": true,
+        "documents": [
+          "노령연금 지급청구서(시행규칙 별지 제14호서식, 지사에서 전자서명 작성 가능)",
+          "신분증(사본 제출 갈음)",
+          "본인 명의 예금계좌(통장 사본)",
+          "혼인관계증명서(상세) 1부(2008년 이전 이혼 이력은 제적등본 추가)",
+          "가족관계증명서·생계유지 입증서류(부양가족연금 대상자가 있는 경우)",
+          "수급권자 신분증 사본·위임 서류(대리 청구 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14600000300",
+        "source": {
+          "name": "정부24 — 국민연금의 노령연금 지급청구 · 국민연금법 제61조(노령연금 수급권자)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "국민연금 가입기간 10년 이상인 사람이 출생연도별 수급개시연령(1961~64년생 63세, 1965~68년생 64세, 1969년생 이후 65세)에 도달하면 국민연금공단 지사나 온라인(공단 홈페이지·정부24·앱)으로 노령연금을 청구한다. 청구서·신분증·본인 계좌·혼인관계증명서가 기본 서류이며 처리기간은 30일이다. 소득이 없으면 최대 5년 일찍 조기노령연금(감액)을, 여유가 있으면 연기연금(연 7.2% 가산, 최대 5년)을 선택할 수 있다.",
+        "verification_status": "verified",
+        "key": "law:노령연금 청구",
+        "unlocks": 0,
+        "order": 2,
+        "where": "국민연금공단 지사 방문·우편·팩스, 또는 공단 홈페이지(전자민원)·정부24·'내 곁에 국민연금' 앱·ARS 1355 온라인 청구",
+        "fee": "무료",
+        "steps": [
+          "출생연도별 수급개시연령 확인(1961~64년생 63세, 1965~68년생 64세, 1969년생 이후 65세; 조기연금은 5년 전부터)",
+          "공단 청구안내문 수령 후 지사 방문(전자서명 작성) 또는 공단 홈페이지·정부24·앱에서 온라인 청구",
+          "혼인관계증명서·계좌·부양가족 서류 제출",
+          "심사(30일) 후 매월 25일 연금 지급; 필요 시 연기연금(최대 5년, 월 0.6% 가산) 선택"
+        ],
+        "pitfalls": [
+          "온라인 청구는 청구안내문을 받은 대상자만 가능하고 수급이력이 있으면 인터넷 청구 불가",
+          "조기노령연금은 평생 감액되고, 수급 중 소득이 A값을 넘으면 지급정지·감액될 수 있다",
+          "수급개시 후 5년간 소득활동 시 감액 규정이 적용된다",
+          "청구권은 5년이 지나면 소멸시효로 받지 못하는 급여가 생긴다"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=14600000300",
+        "curated": true
+      },
+      {
+        "ref": "R2",
+        "id": "regional-627000000751",
+        "name": "어르신 통합무임 교통카드 발급관리 시스템 운영",
+        "priority": "nice",
+        "condition": "대구 어르신 무임 교통카드.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대구광역시",
+        "online": true,
+        "documents": [
+          "신분증"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/627000000751",
+        "source": {
+          "name": "보조금24 · 대구광역시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "어르신 교통 복지 증진",
+        "verification_status": "verified",
+        "key": "svc:627000000751",
+        "eligibility": "대구광역시 거주 어르신 (72세 이상)",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 5,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

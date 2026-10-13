@@ -1,0 +1,366 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "domestic-violence-07",
+    "event_id": "domestic-violence",
+    "event_title": "가정폭력·스토킹 피해",
+    "persona_summary": "45세 남성 · 경기 안산시 · 아내 폭력 피해",
+    "persona": {
+      "facts": {
+        "age": 45,
+        "gender": "남성",
+        "residence": "경기 안산시",
+        "situation": "아내 폭력 피해"
+      }
+    },
+    "query": "부끄럽지만 아내한테 계속 폭력을 당하고 있어요. 남자도 가정폭력 피해자로 상담이나 보호를 받을 수 있는지 궁금합니다."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "domestic-violence"
+      ],
+      "reason": "남성 피해자"
+    },
+    "plan": {
+      "title": "남성 가정폭력 피해자",
+      "emoji": "🛡️",
+      "intro": "가정폭력 피해자 지원은 성별 구분이 없어요. 남성 피해자는 경기남성상담소·가정폭력상담소에서 상담하고, 임시조치·피해자보호명령도 똑같이 신청할 수 있어요.",
+      "law": [
+        {
+          "name": "가정폭력 임시조치",
+          "priority": "must",
+          "condition": "112 신고 → 임시조치(남성 피해자 동일)."
+        },
+        {
+          "name": "보호시설",
+          "priority": "nice",
+          "condition": "남성 피해자 보호시설(일부 지역)·임시 숙소."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "가정폭력 상담소 운영 지원",
+          "priority": "must",
+          "condition": "남성 상담 가능 상담소."
+        },
+        {
+          "name": "가정폭력 성폭력 피해자 무료법률 지원",
+          "priority": "nice",
+          "condition": "법률."
+        },
+        {
+          "name": "가정폭력피해자 치료회복 프로그램 및 의료비 지원",
+          "priority": "nice",
+          "condition": "치료비."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "가정폭력"
+        ],
+        "local_keywords": [
+          "가정폭력",
+          "남성"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "피해자보호명령(법원 직접 청구)",
+          "law_query": "가정폭력범죄의 처벌 등에 관한 특례법",
+          "keywords": [
+            "피해자보호명령 등"
+          ],
+          "priority": "nice",
+          "condition": "신고 없이 법원에 접근금지 청구 가능."
+        }
+      ]
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "경기도 가정폭력피해자 의료비 지원",
+          "priority": "nice",
+          "condition": "남성 피해자도 경기도의료원 의료비 지원.",
+          "service_id": "O00045400033"
+        }
+      ],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "domestic-violence",
+    "events": [
+      "domestic-violence"
+    ],
+    "title": "남성 가정폭력 피해자",
+    "emoji": "🛡️",
+    "intro": "가정폭력 피해자 지원은 성별 구분이 없어요. 남성 피해자는 경기남성상담소·가정폭력상담소에서 상담하고, 임시조치·피해자보호명령도 똑같이 신청할 수 있어요.",
+    "region": {
+      "sido": "경기도",
+      "sgg": "안산시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-domestic-violence-l1",
+        "name": "가정폭력 임시조치",
+        "priority": "must",
+        "condition": "112 신고 → 임시조치(남성 피해자 동일).",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "법무부(검찰)·법원 · 경찰서(사법경찰관)",
+        "online": false,
+        "documents": [
+          "피해 사실 진술 및 증거(진단서, 사진, 녹음, 112 신고 이력 등)",
+          "임시조치 신청(청구) 요청서 또는 의견서(경찰·검사에게 제출)",
+          "임시조치 결정 변경 신청서(결정 후 주거·직장 이전 시, 법원 제출)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=2&cciNo=3&cnpClsNo=3",
+        "source": {
+          "name": "찾기쉬운생활법령 – 피해자 보호를 위한 임시조치 · 가정폭력범죄의 처벌 등에 관한 특례법 제29조(임시조치)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "가정폭력 재발 우려가 있으면 경찰 신청·검사 청구로 법원이 가해자에게 주거 퇴거·격리, 100m 이내 접근금지, 전화·문자 등 연락금지, 유치장 유치 등의 임시조치를 결정합니다. 피해자는 직접 법원에 청구할 수는 없고 경찰(112)이나 검사에게 임시조치 신청·청구를 요청하거나 의견을 진술할 수 있으며, 급박하면 경찰에 긴급임시조치를 직접 신청할 수 있습니다. 가정보호사건으로 처리되지 않거나 직접 법원에 청구하려면 피해자보호명령(최대 1년)을 이용하세요.",
+        "verification_status": "verified",
+        "key": "law:가정폭력 임시조치",
+        "unlocks": 1,
+        "order": 1,
+        "where": "112 신고 후 담당 경찰관에게 임시조치 신청 요청(경찰 → 검사 청구 → 법원 결정); 긴급 시 경찰에 긴급임시조치 직접 신청",
+        "fee": "무료",
+        "steps": [
+          "112 신고(또는 여성긴급전화 1366 상담) → 경찰 응급조치(폭력 제지, 분리, 상담소·의료기관 인도)",
+          "재발 우려가 있으면 담당 경찰관에게 임시조치 신청을 요청(피해자·법정대리인은 검사에게 청구 요청·의견 진술 가능)",
+          "긴급하여 법원 결정을 기다릴 수 없으면 경찰에 긴급임시조치(퇴거·100m 접근금지·연락금지) 신청",
+          "경찰 신청 → 검사 청구 → 법원이 퇴거·격리, 100m 이내 접근금지, 전기통신 접근금지, 유치 등 결정(격리·접근금지는 2개월, 2회 연장 최장 6개월)",
+          "결정서(또는 촬영본)를 보관하고, 가해자가 위반하면 즉시 112 신고(검사가 유치 청구 가능)"
+        ],
+        "pitfalls": [
+          "피해자가 법원에 직접 청구하는 제도는 임시조치가 아니라 피해자보호명령 — 혼동 주의",
+          "경찰이 신청하지 않으면 검사에게 사유 보고 의무가 있으므로 신청 요청 사실을 명확히 남길 것",
+          "격리·접근금지 기간은 최장 6개월, 유치·의료기관 위탁은 최장 2개월",
+          "결정 후 이사·이직하면 법원에 임시조치 변경 신청 필요",
+          "긴급임시조치 불이행 시 가해자에게 과태료, 법원 임시조치 위반 시 유치 청구 가능"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=2&cciNo=3&cnpClsNo=3",
+        "curated": true
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-WII000001480",
+        "name": "가정폭력 상담소 운영 지원",
+        "priority": "must",
+        "condition": "남성 상담 가능 상담소.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/WII000001480",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "가정폭력 등 피해자 및 가족을 위해 상담, 임시보호, 의료기관 보호시설 등과 연계 지원",
+        "verification_status": "verified",
+        "eligibility": "가정폭력, 스토킹, 교제폭력 등 피해자 및 그 가족",
+        "key": "svc:WII000001480",
+        "unlocks": 1,
+        "order": 2
+      },
+      {
+        "ref": "L4",
+        "id": "law-domestic-violence-l4",
+        "name": "보호시설",
+        "priority": "nice",
+        "condition": "남성 피해자 보호시설(일부 지역)·임시 숙소.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부 · 여성긴급전화 1366센터·가정폭력 상담소·가정폭력피해자 보호시설",
+        "online": false,
+        "documents": [
+          "입소 신청(1366·상담소 상담 후 의뢰, 별도 서류 없이 가능)",
+          "보호자의 입소 동의(의사능력이 불완전한 피해자인 경우)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=3&cciNo=4&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운생활법령 – 가정폭력 피해자 단기 주거지원(보호시설) · 가정폭력방지 및 피해자보호 등에 관한 법률 제7조(보호시설의 설치)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "가정폭력 피해자와 가정구성원(자녀 동반 가능)은 여성긴급전화 1366이나 지역 가정폭력 상담소를 통해 긴급피난처(3일, 최대 7일)와 가정폭력피해자 보호시설(단기 6개월~최대 1년, 장기 2년)에 무료로 입소할 수 있습니다. 10세 이상 남아 동반 등 일반시설 입소가 어려우면 가족보호시설을 이용합니다. 보호시설·긴급피난처 입소 확인서는 주민등록 열람제한, 주거지원 신청 등의 증빙으로 쓰입니다.",
+        "verification_status": "verified",
+        "key": "law:보호시설",
+        "unlocks": 0,
+        "order": 3,
+        "where": "여성긴급전화 ☎1366(24시간) 또는 지역 가정폭력 상담소 상담 후 긴급피난처·보호시설 입소",
+        "fee": "무료",
+        "steps": [
+          "여성긴급전화 1366(또는 112, 지역 가정폭력 상담소)에 연락해 상담",
+          "당장 피신이 필요하면 1366 긴급피난처에 임시보호(3일 이내, 필요 시 7일까지)",
+          "상담 결과에 따라 보호시설 입소 의뢰: 단기보호시설 6개월 이내(3개월씩 2회 연장, 최대 1년), 장기·외국인·장애인보호시설 2년 이내, 자녀 동반 시 가족보호시설",
+          "입소 중 숙식·상담·의료·법률 지원, 자립지원 연계, 입소 확인서로 주민등록 열람제한·주거지원 등 신청",
+          "본인 의사 또는 보호자 요청으로 퇴소, 퇴소 후 자립지원금·국민임대주택 우선 입주 등 신청"
+        ],
+        "pitfalls": [
+          "보호시설 입소는 상담소·1366을 거쳐야 하며 직접 시설로 찾아가는 방식이 아님",
+          "단기보호시설은 6개월 원칙, 연장은 치료·심리안정 등 사유가 있을 때 3개월씩 2회",
+          "입소 확인서는 이후 지원(열람제한·주거·자립지원금) 신청에 필요하므로 꼭 발급받을 것"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=3&cciNo=4&cnpClsNo=1",
+        "curated": true,
+        "dependsOn": [
+          "law-domestic-violence-l1",
+          "gov24-WII000001480"
+        ]
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-GEF000000050",
+        "name": "가정폭력 성폭력 피해자 무료법률 지원",
+        "priority": "nice",
+        "condition": "법률.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [
+          "가정폭력, 성폭력 피해 상담사실 확인서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/GEF000000050",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "가정폭력·성폭력 등 피해자에 대한 민사, 가사 소송대리, 형사소송 지원, 법률상담 등을 통한 피해자 인권 보호",
+        "verification_status": "verified",
+        "eligibility": "가정폭력 및 성폭력 등 피해자에 대한 무료 법률상담, 민사·가사 소송대리, 형사소송 지원 등",
+        "key": "svc:GEF000000050",
+        "unlocks": 0,
+        "order": 4
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-WII000001490",
+        "name": "가정폭력피해자 치료회복 프로그램 및 의료비 지원",
+        "priority": "nice",
+        "condition": "치료비.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "성평등가족부",
+        "online": true,
+        "documents": [
+          "○치료회복 프로그램",
+          "구비서류 없음",
+          "○의료비 지원",
+          "진료비 명세서",
+          "가정폭력 피해 상담사실 확인서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/WII000001490",
+        "source": {
+          "name": "보조금24 · 성평등가족부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 가정폭력 피해자 및 동반 가족의 치유를 통한 심신 회복\r\n○ 폭력 피해자의 후유증을 최소화하는 등 피해자 보호",
+        "verification_status": "verified",
+        "eligibility": "가정폭력 피해자 및 동반 아동",
+        "key": "svc:WII000001490",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "R1",
+        "id": "regional-O00045400033",
+        "name": "경기도 가정폭력피해자 의료비 지원",
+        "priority": "nice",
+        "condition": "남성 피해자도 경기도의료원 의료비 지원.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "경기도의료원",
+        "online": true,
+        "documents": [
+          "○ 의뢰공문"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/O00045400033",
+        "source": {
+          "name": "보조금24 · 경기도의료원",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "○ 경기도 가정폭력피해자 의료비 지원\r\n - 100% 감면\r\n - 보약, 보철, 임플란트 및 보장구, 건강검진 제외\r\n - 학대피해로 인한 초기진단(초진)에 한함\r\n※ 경기도의료원에서 진료를 받은 경우에 한하여 적용됨",
+        "verification_status": "verified",
+        "key": "svc:O00045400033",
+        "eligibility": "유관기관 의뢰대상자(학대피해로 인한 초기진단(초진)에 한함)",
+        "unlocks": 0,
+        "order": 6
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "피해자보호명령(법원 직접 청구)",
+        "priority": "nice",
+        "condition": "신고 없이 법원에 접근금지 청구 가능.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "법무부(가정폭력범죄의 처벌 등에 관한 특례법) · 관할 가정법원(가정법원이 없는 지역은 지방법원)",
+        "online": false,
+        "documents": [
+          "피해자보호명령 청구서(가정폭력행위를 일시·내용으로 특정해 기재)",
+          "가정폭력 피해를 소명하는 자료(진단서, 사진, 문자·통화 기록, 경찰 신고 기록 등 — 있는 것만)",
+          "가족관계증명서 등 가정구성원 관계를 보여주는 서류(필요 시)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=2&cciNo=3&cnpClsNo=5",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 가정폭력 피해자 > 피해자 보호명령 · 가정폭력범죄의 처벌 등에 관한 특례법 제55조의2(피해자보호명령 등)",
+          "tier": "reference",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "가정폭력 피해자나 그 법정대리인은 수사기관을 거치지 않고 직접 관할 가정법원에 피해자보호명령을 청구해 가해자의 퇴거·격리, 100m 이내 접근금지, 전화·문자 등 전기통신 접근금지, 친권행사·면접교섭권 제한을 받아낼 수 있다. 결정 전까지 보호가 필요하면 임시보호명령을 함께 청구한다. 가정보호사건으로 처리 중이면 법원이 임시조치를 하므로, 그렇지 않은 경우에 피해자보호명령을 쓴다.",
+        "verification_status": "partial",
+        "key": "x:피해자보호명령(법원 직접 청구)",
+        "unlocks": 0,
+        "order": 7,
+        "where": "가정폭력행위자의 행위지·거주지·현재지 또는 피해자의 거주지·현재지를 관할하는 가정법원(없는 지역은 지방법원·지원) 민원실에 청구서 제출",
+        "steps": [
+          "피해자(또는 법정대리인)가 경찰 신고·고소 없이도 관할 가정법원에 피해자보호명령 청구서를 제출한다",
+          "필요하면 청구와 함께 임시보호명령(결정 시까지 격리·접근금지 등)을 신청한다",
+          "법원이 심리기일을 정해 가해자를 소환·심리한 뒤 결정(퇴거·100m 접근금지·전기통신 접근금지·친권행사 제한·면접교섭권 제한 중 하나 이상, 중복 가능)",
+          "명령 기간은 최대 1년, 필요 시 2개월 단위로 최대 3년까지 연장 청구 가능. 가해자가 어기면 2년 이하 징역·2천만원 이하 벌금·구류"
+        ],
+        "pitfalls": [
+          "청구서에 '언제 어떤 가정폭력행위가 있었는지'를 특정하지 않으면 대법원 판례상 명령을 발령할 수 없다",
+          "가정보호사건으로 송치된 경우에는 임시조치 절차를, 그 외에는 피해자보호명령을 이용한다(별개 절차)",
+          "명령은 최대 1년이며 연장이 필요하면 만료 전에 연장 청구를 해야 한다",
+          "청구 서식·수수료는 법원마다 안내가 달라 관할 가정법원 민원실에 미리 확인한다",
+          "법원 사건부호는 '처'(피해자보호명령사건)이며 가정보호사건('버')과 별개로 접수된다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=685&ccfNo=2&cciNo=3&cnpClsNo=5",
+        "curated": true
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 7,
+    "by_status": {
+      "verified": 6,
+      "partial": 1
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.2
+  }
+}

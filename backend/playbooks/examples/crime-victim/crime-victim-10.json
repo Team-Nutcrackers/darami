@@ -1,0 +1,326 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "crime-victim-10",
+    "event_id": "crime-victim",
+    "event_title": "범죄 피해",
+    "persona_summary": "43세 여성 · 경남 창원시 · 이웃 협박 피해 · 이사 필요",
+    "persona": {
+      "facts": {
+        "age": 43,
+        "gender": "여성",
+        "residence": "경남 창원시",
+        "situation": "이웃 협박 피해 · 이사 필요"
+      }
+    },
+    "query": "이웃한테 반복적으로 협박을 당해서 불안해서 이사를 가야 할 것 같아요. 범죄 피해자한테 이사비나 임시 주거를 지원해 주는 게 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "crime-victim"
+      ],
+      "reason": "협박 피해 이주 지원"
+    },
+    "plan": {
+      "title": "협박 피해 이주 지원",
+      "emoji": "🛡️",
+      "intro": "범죄피해자 주거지원(임대주택·이전비)은 검찰청 피해자지원센터와 경찰 피해자전담경찰관을 통해 신청해요. 협박은 신고 후 접근금지 등 잠정조치도 가능해요.",
+      "law": [
+        {
+          "name": "범죄피해 구조금 지급요건",
+          "priority": "nice",
+          "condition": "신체 피해 없으면 구조금 외 지원."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "범죄피해자에 대한 경제적 지원",
+          "priority": "must",
+          "condition": "이전비·주거 지원(검찰청)."
+        },
+        {
+          "name": "범죄피해자 보호·지원",
+          "priority": "must",
+          "condition": "경찰 신변보호·임시숙소·이전비."
+        },
+        {
+          "name": "무료 소송대리 서비스(범죄피해자)",
+          "priority": "nice",
+          "condition": "법률."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "범죄피해"
+        ],
+        "local_keywords": [
+          "범죄피해"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "범죄피해자 주거지원(임대주택)",
+          "law_query": "범죄피해자 보호법",
+          "keywords": [
+            "손실 복구 지원",
+            "주거"
+          ],
+          "priority": "must",
+          "condition": "범죄피해자 긴급 임대주택·이전비 지원."
+        },
+        {
+          "id": "X2",
+          "name": "스토킹 잠정조치(접근금지)",
+          "law_query": "스토킹범죄의 처벌 등에 관한 법률",
+          "keywords": [
+            "잠정조치"
+          ],
+          "priority": "nice",
+          "condition": "반복 협박이 스토킹에 해당하면 접근금지 잠정조치."
+        }
+      ]
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": [
+        "X1",
+        "X2"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "crime-victim",
+    "events": [
+      "crime-victim"
+    ],
+    "title": "협박 피해 이주 지원",
+    "emoji": "🛡️",
+    "intro": "범죄피해자 주거지원(임대주택·이전비)은 검찰청 피해자지원센터와 경찰 피해자전담경찰관을 통해 신청해요. 협박은 신고 후 접근금지 등 잠정조치도 가능해요.",
+    "region": {
+      "sido": "경상남도",
+      "sgg": "창원시"
+    },
+    "procedures": [
+      {
+        "ref": "G3",
+        "id": "gov24-132000000008",
+        "name": "범죄피해자 보호·지원",
+        "priority": "must",
+        "condition": "경찰 신변보호·임시숙소·이전비.",
+        "deadline": "접수기관에 문의",
+        "deadlineDays": 9999,
+        "agency": "경찰청",
+        "online": true,
+        "documents": [
+          "신청서, 개인정보제공동의서 등"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/132000000008",
+        "source": {
+          "name": "보조금24 · 경찰청",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "강력범죄 피해자를 대상으로 '범죄피해자 안전조치'를 실시하여 보복범죄 등 추가피해를 방지하고, 심리적·경제적 지원제도 연계를 통해 조속한 피해회복을 도모",
+        "verification_status": "verified",
+        "eligibility": "강력범죄 피해자",
+        "key": "svc:132000000008",
+        "unlocks": 1,
+        "order": 1
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-128000000003",
+        "name": "범죄피해자에 대한 경제적 지원",
+        "priority": "must",
+        "condition": "이전비·주거 지원(검찰청).",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "대검찰청",
+        "online": true,
+        "documents": [
+          "1. 주민등록증 사본 등 신분증명서류",
+          "2. 피해자 본인이 아닌 다른 사람이 신청하는 경우에는 피해자와의 친족관계를 증명할 수 있는 가족관계 증명서 또는 대리인임을 증명할 수 있는 서류(위임장 등)",
+          "3. 통장사본",
+          "4. 그밖에 검찰이 경제적 지원을 위하여 특히 필요하다고 인정하는 서류"
+        ],
+        "link": "http://www.kics.go.kr",
+        "source": {
+          "name": "보조금24 · 대검찰청",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "범죄피해자 보호 지원",
+        "verification_status": "verified",
+        "eligibility": "범죄행위로 피해를 당한 피해자 본인, 그 배우자, 직계친족 및 4촌 이내의 친족",
+        "key": "svc:128000000003",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "범죄피해자 주거지원(임대주택)",
+        "priority": "must",
+        "condition": "범죄피해자 긴급 임대주택·이전비 지원.",
+        "deadline": "",
+        "deadlineDays": 9999,
+        "agency": "법무부 · 주소지 관할 지방검찰청(지청) 종합민원실·범죄피해자지원센터 → LH",
+        "online": false,
+        "documents": [
+          "주거지원 신청서",
+          "소득확인 증명서류",
+          "건강보험증 사본(세대원 전원 표시)",
+          "가족관계증명서",
+          "주민등록표 등본",
+          "피해 정도 증명자료(사망·상해진단서, 진료기록부, 재산피해 견적서 등)",
+          "국민주택임대 공급신청서(LH 신청 시)",
+          "신분증·도장(LH 신청·계약 시)"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=734&ccfNo=3&cciNo=1&cnpClsNo=3",
+        "source": {
+          "name": "찾기쉬운 생활법령 범죄피해자 주거지원 · 범죄피해자 보호법 제7조(손실 복구 지원 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "범죄로 주거를 잃었거나 범죄현장 근처에 살기 어려운 피해자(배우자·직계친족·형제자매 포함)는 국민임대주택 우선입주 또는 LH 매입·전세임대주택을 지원받을 수 있다. 먼저 주소지 지방검찰청(지청) 종합민원실이나 범죄피해자지원센터에 주거지원을 신청해 확인증·추천을 받고, 그 뒤 LH에 입주 신청·계약한다. 소득·무주택 요건과 '가해자에게 이익이 돌아가지 않을 것' 요건을 함께 심사한다.",
+        "verification_status": "verified",
+        "key": "x:범죄피해자 주거지원(임대주택)",
+        "unlocks": 0,
+        "order": 3,
+        "where": "지방검찰청(지청) 종합민원실 또는 지역 범죄피해자지원센터에 신청(검찰청 피해자지원실 1577-2584) → 확인증·추천으로 LH(1600-1004)에 입주 신청",
+        "fee": "무료(입주 시 임대보증금·계약금은 본인 부담: 국민임대 시세의 60~80%, 전세임대 보증금 전세금의 5%)",
+        "steps": [
+          "요건 확인: 범죄로 주거를 잃었거나 범죄현장 인근이라 거주 곤란 등 + 무주택세대구성원·소득 요건",
+          "지방검찰청(지청) 종합민원실 또는 범죄피해자지원센터에 주거지원 신청서·소득·가족관계·피해 증명자료 제출",
+          "국민임대: 범죄피해자 확인증 발급 → 확인증 첨부해 공공주택사업자(LH)에 우선입주 신청",
+          "매입·전세임대: 법무부·국토교통부 지원 통보 후 LH에 신청",
+          "입주 계약 체결(계약금·주민등록등본·신분증·도장)"
+        ],
+        "pitfalls": [
+          "피해자가 범죄를 유발했거나 가해자가 함께 거주할 가능성이 높으면 제외",
+          "국토교통부 입주자격(무주택세대구성원·소득 기준)을 별도로 충족해야 하며 LH 신청 단계에서 탈락할 수 있음",
+          "매입·전세임대는 쪽방·고시원 등 열악 주거 3개월 이상 등 추가 요건 있음",
+          "지자체 긴급지원 조례에는 피해발생일부터 3개월~1년 등 기한이 있어 긴급 생계지원과 함께 신청할 때 주의"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=734&ccfNo=3&cciNo=1&cnpClsNo=3",
+        "curated": true,
+        "dependsOn": [
+          "gov24-132000000008"
+        ]
+      },
+      {
+        "ref": "L1",
+        "id": "law-crime-victim-l1",
+        "name": "범죄피해 구조금 지급요건",
+        "priority": "nice",
+        "condition": "신체 피해 없으면 구조금 외 지원.",
+        "deadline": "범죄피해를 안 날부터 3년, 발생한 날부터 10년 이내 신청",
+        "deadlineDays": 9999,
+        "agency": "법무부 · 주소지·거주지·범죄발생지 관할 지방검찰청 범죄피해구조심의회(지구심의회)",
+        "online": false,
+        "documents": [],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?ccfNo=3&cciNo=2&cnpClsNo=2&csmSeq=734&popMenu=ov",
+        "source": {
+          "name": "찾기쉬운 생활법령 — 장해구조금 및 중상해구조금 · 범죄피해자 보호법 제16조(구조금의 지급요건)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "국내(또는 한국 선박·항공기 안)에서 생명·신체를 해치는 범죄로 사망·장해·중상해를 입고 가해자 불명·무자력 등으로 피해를 배상받지 못한 경우 국가가 유족구조금·장해구조금·중상해구조금을 지급한다. 중상해는 치료 2개월 이상 + 주요 장기 손상, 신체 절단·변형, 1주 이상 입원이 필요한 준하는 상해, 3일 이상 입원이 필요한 중증 정신질환 중 하나에 해당해야 하며, 유족구조금은 배우자·자녀·부모 등 법정 순위에 따라 선순위 유족에게 지급된다. 가해자가 부부·직계혈족·4촌 이내 친족·동거친족이거나, 피해자가 범죄를 유발·가담한 경우, 다른 법령·손해배상으로 보전받은 범위는 지급이 제한된다.",
+        "verification_status": "verified",
+        "key": "law:범죄피해 구조금 지급요건",
+        "unlocks": 0,
+        "order": 4,
+        "where": "관할 지방검찰청 범죄피해구조심의회(검찰청 피해자지원실 1577-2584)",
+        "fee": "무료",
+        "pitfalls": [
+          "정당행위·정당방위·과실로 인한 피해는 구조금 대상이 아니다",
+          "가해자와 부부·직계혈족·4촌 이내 친족 관계면 전부 지급되지 않는다",
+          "안 날부터 3년·발생일부터 10년이 지나면 신청 불가",
+          "가해자에게서 손해배상을 받으면 그 범위만큼 구조금이 줄어든다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?ccfNo=3&cciNo=2&cnpClsNo=2&csmSeq=734&popMenu=ov",
+        "curated": true
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-B27000100036",
+        "name": "무료 소송대리 서비스(범죄피해자)",
+        "priority": "nice",
+        "condition": "법률.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대한법률구조공단",
+        "online": true,
+        "documents": [],
+        "link": "www.klac.or.kr",
+        "source": {
+          "name": "보조금24 · 대한법률구조공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 타인의 범죄행위로 인해 발생한 피해자의 피해 회복 등 법률복지 증진\r\n\r\n○ 무료 법률상담\r\n\r\n○ 무료 소송대리\r\n - 타인의 범죄행위로 발생한 사건, 2차 사건",
+        "verification_status": "verified",
+        "eligibility": "범죄피해자(신체)  - 건강보험료 본인부담금 합산액이 기준중위소득 125% 이하인 자",
+        "key": "svc:B27000100036",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "X2",
+        "id": "X2",
+        "name": "스토킹 잠정조치(접근금지)",
+        "priority": "nice",
+        "condition": "반복 협박이 스토킹에 해당하면 접근금지 잠정조치.",
+        "deadline": "접근금지 잠정조치 기간 3개월, 두 차례에 한해 각 3개월 연장 가능",
+        "deadlineDays": 9999,
+        "agency": "법무부(검찰)·법원 · 신청 창구는 관할 경찰서(112 신고)",
+        "online": false,
+        "documents": [],
+        "link": "http://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1661&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운생활법령 – 스토킹 신고에 대한 조치 · 스토킹범죄의 처벌 등에 관한 법률 제8조(잠정조치의 청구)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "반복적인 협박이 스토킹범죄에 해당하고 재발 우려가 있으면 법원 잠정조치로 가해자에게 피해자·가족·주거 100m 이내 접근금지와 전화·문자 등 전기통신 접근금지를 명할 수 있다. 피해자는 112 신고 후 경찰·검사에게 청구를 요청하면 되고, 기간은 3개월(2회 연장 가능)이며 위반 시 형사처벌된다.",
+        "verification_status": "verified",
+        "key": "x:스토킹 잠정조치(접근금지)",
+        "unlocks": 0,
+        "order": 6,
+        "where": "112 신고 → 경찰·검사에게 잠정조치(접근금지) 청구 요청 → 검사 청구 → 법원 결정",
+        "fee": "무료",
+        "steps": [
+          "반복되는 협박·연락·따라다니기 등이 스토킹행위에 해당하면 112에 신고하고 증거(메시지·통화기록·사진)를 보존",
+          "경찰 응급조치 시 피해자가 잠정조치(접근금지) 청구를 요청하겠다는 의사를 밝힌다(스토킹처벌법 제8조②)",
+          "검사가 법원에 청구 → 법원이 피해자·동거인·가족 및 주거 등 100m 이내 접근금지, 전기통신 접근금지 결정",
+          "결정은 피해자·가족에게 통지되며, 위반 시 112 신고(2년 이하 징역 또는 2천만원 이하 벌금)",
+          "3개월 만료 전 연장(최대 2회) 요청"
+        ],
+        "pitfalls": [
+          "접근금지는 가해자 처벌과 별개의 '보호조치'이므로 고소와 함께 반드시 청구 요청을 해야 한다",
+          "경찰이 신청하지 않으면 사유를 통지받게 되며, 이때 검사에게 직접 청구를 요청할 수 있다",
+          "3개월 단위 기간을 놓치면 보호 공백 발생 — 만료 전 연장 요청"
+        ],
+        "sourceUrl": "http://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=1661&ccfNo=2&cciNo=2&cnpClsNo=1",
+        "curated": true
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 6,
+    "by_status": {
+      "verified": 6
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.2
+  }
+}

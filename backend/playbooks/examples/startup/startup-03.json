@@ -1,0 +1,373 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "startup-03",
+    "event_id": "startup",
+    "event_title": "창업",
+    "persona_summary": "45세 남성 · 부산 사하구 · 퇴직 후 음식점 창업",
+    "persona": {
+      "facts": {
+        "age": 45,
+        "gender": "남성",
+        "residence": "부산 사하구",
+        "situation": "퇴직 후 음식점 창업"
+      }
+    },
+    "query": "직장을 그만두고 퇴직금으로 김밥집을 하려고 해요. 처음 장사하는 사람이라 뭘 신고해야 하는지, 창업 자금을 저렴하게 빌릴 데가 있는지 알려주세요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "startup"
+      ],
+      "reason": "퇴직 후 음식점 창업"
+    },
+    "plan": {
+      "title": "퇴직 후 김밥집 창업",
+      "emoji": "🍙",
+      "intro": "일반음식점 영업신고(위생교육·건강진단)와 사업자등록을 하고, 소상공인 정책자금과 중장년 창업 지원을 활용하세요.",
+      "law": [
+        {
+          "name": "식품 영업신고·허가",
+          "priority": "must",
+          "condition": "일반음식점 영업신고(사하구 보건소) — 위생교육·건강진단서."
+        },
+        {
+          "name": "사업자등록",
+          "priority": "must",
+          "condition": "영업신고 후 20일 이내."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "소상공인 정책자금 융자 지원(일반경영안정자금, 특별경영안정자금, 성장기반자금 등)",
+          "priority": "must",
+          "condition": "소진공 창업·경영안정 자금(저리)."
+        },
+        {
+          "name": "혁신 소상공인 창업지원",
+          "priority": "nice",
+          "condition": "신사업창업사관학교 등 창업 교육."
+        },
+        {
+          "name": "중장년 기술창업센터",
+          "priority": "nice",
+          "condition": "45세 중장년 창업 상담."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "창업",
+          "소상공인"
+        ],
+        "local_keywords": [
+          "창업",
+          "소상공인"
+        ]
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "식품위생교육(영업 전 교육)",
+          "law_query": "식품위생법",
+          "keywords": [
+            "식품위생교육"
+          ],
+          "priority": "must",
+          "condition": "영업신고 전 위생교육 수료."
+        }
+      ]
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "소상공인 법률서비스 지원",
+          "priority": "nice",
+          "condition": "부산 소상공인 법률 상담(임대차 계약 등).",
+          "service_id": "626000000151"
+        }
+      ],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "startup",
+    "events": [
+      "startup"
+    ],
+    "title": "퇴직 후 김밥집 창업",
+    "emoji": "🍙",
+    "intro": "일반음식점 영업신고(위생교육·건강진단)와 사업자등록을 하고, 소상공인 정책자금과 중장년 창업 지원을 활용하세요.",
+    "region": {
+      "sido": "부산광역시",
+      "sgg": "사하구"
+    },
+    "procedures": [
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "식품위생교육(영업 전 교육)",
+        "priority": "must",
+        "condition": "영업신고 전 위생교육 수료.",
+        "deadline": "영업신고(허가) 전(영업준비상 사전교육이 곤란하다고 인정되면 영업신고 후 6개월 이내)",
+        "deadlineDays": 9999,
+        "agency": "식품의약품안전처 · 업종별 지정 교육기관(일반음식점 한국외식업중앙회, 휴게음식점 한국휴게음식업중앙회, 제과점 대한제과협회 등)",
+        "online": true,
+        "documents": [
+          "교육 수료증(영업신고 시 첨부)",
+          "조리사·영양사·위생사 면허증(보유 시 교육 면제)"
+        ],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=839&ccfNo=4&cciNo=1&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 음식점 창업 > 식품위생교육 · 식품위생법 제41조(식품위생교육)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "식품접객업(음식점·카페·제과점 등)을 시작하려면 영업신고 전에 업종별 교육기관에서 6시간 식품위생교육을 받아야 한다. 조리사·영양사·위생사 면허가 있으면 면제되고, 부득이한 경우 영업신고 후 6개월 이내 수료가 허용된다. 교육을 받지 않으면 100만 원 이하 과태료가 부과된다.",
+        "verification_status": "verified",
+        "key": "x:식품위생교육(영업 전 교육)",
+        "unlocks": 3,
+        "order": 1,
+        "where": "업종별 교육기관의 교육(집합 또는 기관이 운영하는 온라인 교육) 수강 후 수료증 발급",
+        "steps": [
+          "창업할 업종(일반음식점·휴게음식점·제과점 등)에 맞는 지정 교육기관을 확인한다",
+          "신규 영업자 식품위생교육(6시간)을 수강하고 수료증을 받는다",
+          "영업신고 시 수료증을 첨부하고, 영업 개시 후에는 매년 보수교육을 받는다"
+        ],
+        "pitfalls": [
+          "업종별로 교육기관이 다르며(한국외식산업협회·프랜차이즈협회는 영업신고 후 회원만 가능) 업종에 맞지 않는 교육은 인정되지 않는다",
+          "영업자가 직접 받는 것이 원칙이나 종업원 중 책임자를 지정해 대신 받게 할 수 있다",
+          "같은 업종 묶음 안에서 재창업하면 신규교육은 면제되지만 그해 보수교육은 받아야 한다",
+          "영업신고 후 6개월 유예는 관청이 인정하는 경우에만 가능하다"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=839&ccfNo=4&cciNo=1&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "ref": "L3",
+        "id": "law-startup-l3",
+        "name": "식품 영업신고·허가",
+        "priority": "must",
+        "condition": "일반음식점 영업신고(사하구 보건소) — 위생교육·건강진단서.",
+        "deadline": "영업 개시 전 신고(신고증 발급 후 영업); 처리 근무시간 내 3시간",
+        "deadlineDays": 9999,
+        "agency": "식품의약품안전처 · 영업소 소재지 시·군·구(보건소 위생과)",
+        "online": true,
+        "documents": [
+          "식품 영업신고서(식품위생법 시행규칙 별지 제37호서식)",
+          "식품위생교육 이수증(영업 전 교육을 받은 경우; 신고관청 인정 시 신고 후 6개월 내 이수 가능)",
+          "건강진단결과서(식품 조리·판매 등 건강진단 대상자)",
+          "먹는물 수질검사성적서(수돗물이 아닌 지하수 등을 사용하는 경우)",
+          "신분증",
+          "영업장 임대차계약서 등 시설 사용권 증빙(신고관청 요구 시)",
+          "유선·도선사업 면허증 또는 신고필증(수상구조물 영업장인 경우)",
+          "국유재산 사용허가서(국유재산 내 영업인 경우)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?HighCtgCD=A09006&CappBizCD=14600000021&tp_seq=02",
+        "source": {
+          "name": "정부24 — 식품관련영업신고 · 식품위생법 제37조(영업허가 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "휴게음식점·일반음식점·제과점 등은 영업 전에 소재지 시·군·구(보건소)에 식품 영업신고를 하고 영업신고증을 받아야 한다. 영업신고서에 식품위생교육 이수증과 건강진단결과서(대상자)를 첨부하며 수수료 28,000원, 처리 3시간이다. 단란·유흥주점 등은 신고가 아닌 허가 대상이다.",
+        "verification_status": "verified",
+        "key": "law:식품 영업신고·허가",
+        "unlocks": 2,
+        "order": 2,
+        "where": "정부24(온라인) 또는 영업소 소재지 시·군·구청 보건소(위생부서) 방문·우편",
+        "fee": "28,000원(우편 25,200원)",
+        "steps": [
+          "업종(휴게음식점·일반음식점·제과점 등)을 정하고 영업장이 시설기준(조리장·급수·화장실 등)을 갖추는지 확인한다.",
+          "영업 전 식품위생교육(신규 영업자 교육)을 이수하고, 조리·판매 종사자는 보건소·병원에서 건강진단을 받는다.",
+          "정부24 또는 소재지 보건소에 영업신고서와 교육이수증·건강진단결과서 등을 제출하고 수수료 28,000원을 낸다.",
+          "영업신고증을 발급받은 뒤 세무서에 사업자등록(사업개시일부터 20일 이내)을 한다."
+        ],
+        "pitfalls": [
+          "시설기준(식품위생법 시행규칙 별표 14) 미충족 시 신고가 수리되지 않으므로 인테리어 전에 건축물 용도·정화조 용량·소방 요건을 확인한다.",
+          "식품위생교육 미이수 100만원 이하 과태료, 건강진단 미실시 300만원 이하 과태료.",
+          "영업신고증이 있어야 사업자등록(업종 코드)이 원활하며, 사업자등록은 사업개시일부터 20일 이내.",
+          "지역·신고관청마다 추가 서류가 다를 수 있으니 사전에 관할 보건소에 확인한다."
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?HighCtgCD=A09006&CappBizCD=14600000021&tp_seq=02",
+        "curated": true,
+        "suggestedAfter": [
+          "X1"
+        ]
+      },
+      {
+        "ref": "L1",
+        "id": "business-registration",
+        "name": "사업자등록",
+        "priority": "must",
+        "condition": "영업신고 후 20일 이내.",
+        "deadline": "사업개시일부터 20일 이내(사업 개시 전 신청 가능)",
+        "deadlineDays": 20,
+        "agency": "재정경제부(국세청) · 사업장 관할 세무서 민원봉사실",
+        "online": true,
+        "documents": [
+          "사업자등록신청서(본인 자필 서명)",
+          "신분증",
+          "임대차계약서 사본(사업장을 임차한 경우)",
+          "상가건물 일부 임차 시 해당 부분 도면",
+          "허가·등록·신고증 사본(인허가 업종인 경우)",
+          "동업계약서(공동사업자인 경우)",
+          "자금출처 명세서(금지금 도·소매업 등 특정 업종)",
+          "위임장 및 위임자 신분증 사본(대리 신청 시)"
+        ],
+        "link": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2444&cntntsId=7777",
+        "source": {
+          "name": "국세청 사업자등록 신청 안내 · 부가가치세법 제8조(사업자등록)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "사업을 시작하면 사업개시일부터 20일 이내에 홈택스 또는 세무서에 사업자등록을 신청한다. 임차 사업장이면 임대차계약서 사본, 인허가 업종이면 허가증 사본이 필요하고 수수료는 없다. 미등록 시 공급가액의 1% 가산세와 매입세액 불공제 불이익이 있다.",
+        "verification_status": "verified",
+        "key": "common:business-registration",
+        "unlocks": 1,
+        "order": 3,
+        "where": "홈택스(온라인) 또는 관할·가까운 세무서 민원봉사실 방문",
+        "fee": "무료",
+        "steps": [
+          "업종(한국표준산업분류)·과세유형(일반/간이/면세) 결정, 인허가 업종이면 허가·신고 먼저",
+          "임대차계약서 등 구비서류 준비(스캔본)",
+          "홈택스 '사업자등록 신청' 또는 세무서 민원봉사실 제출",
+          "2일 이내 사업자등록증 발급(홈택스 조회·출력)"
+        ],
+        "pitfalls": [
+          "기한 경과 시 미등록 가산세(공급가액의 1%) 및 등록 전 매입세액 불공제",
+          "실제 사업하지 않는 장소를 사업장으로 등록하면 현장 확인·추징 대상",
+          "인적용역 프리랜서는 등록 의무가 없으나 세금계산서 발급이 필요하면 등록",
+          "온라인 판매는 사업자등록 후 통신판매업 신고를 별도로 해야 함"
+        ],
+        "sourceUrl": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2444&cntntsId=7777",
+        "curated": true,
+        "dependsOn": [
+          "law-startup-l3"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-SD0000007429",
+        "name": "소상공인 정책자금 융자 지원(일반경영안정자금, 특별경영안정자금, 성장기반자금 등)",
+        "priority": "must",
+        "condition": "소진공 창업·경영안정 자금(저리).",
+        "deadline": "자금별 상이",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "신청서, 사업자등록증 등"
+        ],
+        "link": "http://ols.semas.or.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "민간금융기관 이용이 어려운 소상공인 대상 시중은행 대비 저금리 정책자금을 지원하여 소상공인의 경영안정 및 지속성장을 지원",
+        "verification_status": "verified",
+        "eligibility": "「소상공인 기본법」에 따른 소상공인    ※ 단, 소상공인 정책자금 융자공고에 따른 융자제외업종은 지원 불가",
+        "key": "svc:SD0000007429",
+        "unlocks": 0,
+        "order": 4,
+        "dependsOn": [
+          "business-registration"
+        ]
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-142000000038",
+        "name": "혁신 소상공인 창업지원",
+        "priority": "nice",
+        "condition": "신사업창업사관학교 등 창업 교육.",
+        "deadline": "별도 안내",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "신사업창업사관학교 교육생 선발 공고 등의 안내사항 참고"
+        ],
+        "link": "https://www.sbiz24.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "신사업 분야 등 예비창업자를 선발하여 창업교육, 점포경영체험, 사업화 자금 등을 패키지로 지원하여 소상공인의 준비된 창업 촉진",
+        "verification_status": "verified",
+        "eligibility": "생활분야에서 창의적인 아이디어로 창업을 하고자 하는 하는 예비창업자",
+        "key": "svc:142000000038",
+        "unlocks": 0,
+        "order": 5
+      },
+      {
+        "ref": "G6",
+        "id": "gov24-142000000010",
+        "name": "중장년 기술창업센터",
+        "priority": "nice",
+        "condition": "45세 중장년 창업 상담.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "중소벤처기업부",
+        "online": true,
+        "documents": [
+          "회원가입 신청 및 사업계획서 등 제출"
+        ],
+        "link": "http://www.K-startup.go.kr",
+        "source": {
+          "name": "보조금24 · 중소벤처기업부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "경력, 네트워크, 전문성을 보유한 중장년의 기술창업 활성화를 위한 교육 및 창업 거점 지원",
+        "verification_status": "verified",
+        "eligibility": "만 40세 이상 (예비) 창업자",
+        "key": "svc:142000000010",
+        "unlocks": 0,
+        "order": 6
+      },
+      {
+        "ref": "R1",
+        "id": "regional-626000000151",
+        "name": "소상공인 법률서비스 지원",
+        "priority": "nice",
+        "condition": "부산 소상공인 법률 상담(임대차 계약 등).",
+        "deadline": "2026년 2월 ~12월",
+        "deadlineDays": 739490,
+        "agency": "부산광역시",
+        "online": true,
+        "documents": [],
+        "link": "bsbsc.kr",
+        "source": {
+          "name": "보조금24 · 부산광역시",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "소상공인의 법적 분쟁 해결 및 경영 안정을 위한 법률서비스 지원",
+        "verification_status": "verified",
+        "key": "svc:626000000151",
+        "eligibility": "■ 소상공인 법률상담 지원  ❍ 지원대상 : 부산시 소재의 소상공인  ❍ 지원제외 대상 : 부산시 소상공인 자금지원 제외대상 업종    ※ 사업자등록 기준 업종 및 실제 사업 내용 유흥, 향락, 사치, 국민보건에 부정적인 업종 등  ■ 소상공인후속 법",
+        "unlocks": 0,
+        "order": 7
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 7,
+    "by_status": {
+      "verified": 7
+    },
+    "candidates": 1,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

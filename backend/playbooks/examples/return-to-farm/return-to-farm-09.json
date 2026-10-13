@@ -1,0 +1,287 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "return-to-farm-09",
+    "event_id": "return-to-farm",
+    "event_title": "귀농·귀촌",
+    "persona_summary": "43세 여성 · 광주 → 전남 해남군 · 귀농 정착 실패 우려",
+    "persona": {
+      "facts": {
+        "age": 43,
+        "gender": "여성",
+        "residence": "전남 해남군",
+        "previous_residence": "광주",
+        "situation": "귀농 정착 실패 우려"
+      }
+    },
+    "query": "귀농한 지 6개월 됐는데 생각보다 수입이 없어서 걱정이에요. 귀농인 상담이나 멘토를 연결해 주는 곳이 있는지, 다시 도시로 돌아가면 받은 지원금을 토해내야 하는지 알고 싶어요."
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "return-to-farm"
+      ],
+      "reason": "귀농 정착 상담·환수"
+    },
+    "plan": {
+      "title": "귀농 정착 어려움, 상담과 환수",
+      "emoji": "🌾",
+      "intro": "귀농귀촌종합센터·해남군 귀농 담당의 멘토링을 받을 수 있어요. 귀농 융자는 의무 거주·영농 기간(보통 5년) 전에 떠나면 상환·환수 조건이 있으니 약정을 확인하세요.",
+      "law": [
+        {
+          "name": "귀농인 정착 지원",
+          "priority": "must",
+          "condition": "귀농 6개월 → 해남군 귀농귀촌 지원센터 상담·멘토링."
+        },
+        {
+          "name": "농업경영체 등록",
+          "priority": "nice",
+          "condition": "등록돼 있는지 확인(직불금)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "귀농귀촌종합센터 운영",
+          "priority": "must",
+          "condition": "정착 상담·선도농가 멘토링."
+        },
+        {
+          "name": "귀농·귀촌인귀농귀촌교육",
+          "priority": "nice",
+          "condition": "품목 교육."
+        },
+        {
+          "name": "청년농업인 영농정착지원",
+          "priority": "nice",
+          "condition": "43세 → 39세 초과로 미해당(참고)."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "귀농"
+        ],
+        "local_keywords": [
+          "귀농",
+          "멘토"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "return-to-farm",
+    "events": [
+      "return-to-farm"
+    ],
+    "title": "귀농 정착 어려움, 상담과 환수",
+    "emoji": "🌾",
+    "intro": "귀농귀촌종합센터·해남군 귀농 담당의 멘토링을 받을 수 있어요. 귀농 융자는 의무 거주·영농 기간(보통 5년) 전에 떠나면 상환·환수 조건이 있으니 약정을 확인하세요.",
+    "region": {
+      "sido": "전라남도",
+      "sgg": "해남군"
+    },
+    "procedures": [
+      {
+        "ref": "G4",
+        "id": "gov24-154300000321",
+        "name": "귀농귀촌종합센터 운영",
+        "priority": "must",
+        "condition": "정착 상담·선도농가 멘토링.",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "농림축산식품부",
+        "online": true,
+        "documents": [],
+        "link": "http://www.greendaero.go.kr",
+        "source": {
+          "name": "보조금24 · 농림축산식품부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "귀농귀촌 상담, 교육, 홍보 등귀농귀촌 전반 서비스 제공",
+        "verification_status": "verified",
+        "eligibility": "청년, 도시민 등 (예비) 귀농·귀촌인",
+        "key": "svc:154300000321",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "L2",
+        "id": "law-return-to-farm-l2",
+        "name": "농업경영체 등록",
+        "priority": "nice",
+        "condition": "등록돼 있는지 확인(직불금).",
+        "deadline": "영농 개시 후 수시 등록(등록정보 변경 시 14일 이내 변경등록)",
+        "deadlineDays": 9999,
+        "agency": "농림축산식품부 · 주민등록지 관할 국립농산물품질관리원 지원·사무소",
+        "online": true,
+        "documents": [
+          "농업경영체 등록신청서(시행규칙 별지 제1호서식)",
+          "농지대장(경작현황·임대차현황 기재)",
+          "영농사실 확인서",
+          "본인 명의 농자재 구매영수증 또는 농산물 판매영수증(1,000㎡ 미만은 연 120만원 이상 판매영수증)",
+          "임대차계약서 사본(임차 농지인 경우)",
+          "가축사육업 허가증·등록증(축산업인 경우)",
+          "위임장·대리인 신분증(대리 신청 시)"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?HighCtgCD=A09008&CappBizCD=15410000035",
+        "source": {
+          "name": "정부24 — 농업경영체 등록 신청(농업인) · 농어업경영체 육성 및 지원에 관한 법률 제4조(농어업경영정보의 등록)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "농업경영체 등록은 농지 1,000㎡ 이상 경작·연 판매액 120만원 이상·연 90일 이상 농업 종사 중 하나에 해당하는 농업인이 주민등록지 관할 국립농산물품질관리원에 경영정보를 등록하는 절차로, 직불금·농업인 지원사업의 기본 요건이다. 농지대장·임대차계약서·영농사실확인서·구매(판매)영수증을 갖춰 온라인(uni.agrix.go.kr, 농업e지) 또는 방문·우편·팩스로 신청하며 수수료는 없다. 단순 농지 소유만으로는 등록되지 않고 실제 경작 증빙이 필요하다.",
+        "verification_status": "verified",
+        "key": "law:농업경영체 등록",
+        "unlocks": 2,
+        "order": 2,
+        "where": "농업경영체 등록 온라인서비스(uni.agrix.go.kr)·농업e지(nongupez.go.kr) 온라인, 또는 관할 농관원 사무소 방문·우편·팩스",
+        "fee": "무료",
+        "steps": [
+          "농관원 콜센터(1644-8778) 또는 온라인 사전진단으로 등록 자격(농지 1,000㎡ 이상 경작, 연 판매액 120만원 이상, 연 90일 이상 종사 중 하나) 확인",
+          "농지대장·임대차계약서·영농사실확인서·영수증 등 증빙 준비",
+          "uni.agrix.go.kr 또는 농업e지에서 온라인 신청(또는 관할 농관원 방문·우편·팩스)",
+          "농관원 심사(보완 없으면 30일, 보완 필요 시 90일) 후 등록 완료",
+          "농업경영체 등록확인서 발급(정부24·농관원) 및 직불금 등 지원사업 신청에 활용"
+        ],
+        "pitfalls": [
+          "농지를 소유만 하고 경작하지 않으면 등록 불가(경작 증빙 필수)",
+          "재배품목·면적·필지 등 변경 시 14일 이내 변경등록을 하지 않으면 지원 불이익",
+          "허위 등록 시 과태료 및 지원금 환수 대상",
+          "대행업체 수수료는 불필요 — 등록·확인서 발급 모두 무료"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?HighCtgCD=A09008&CappBizCD=15410000035",
+        "curated": true
+      },
+      {
+        "ref": "G2",
+        "id": "gov24-154300000138",
+        "name": "귀농·귀촌인귀농귀촌교육",
+        "priority": "nice",
+        "condition": "품목 교육.",
+        "deadline": "교육과정별 상이",
+        "deadlineDays": 9999,
+        "agency": "농림축산식품부",
+        "online": true,
+        "documents": [
+          "교육신청서"
+        ],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/154300000138",
+        "source": {
+          "name": "보조금24 · 농림축산식품부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "귀농·귀촌 희망자를 대상으로 우수 교육과정을 운영하여 체계적인 정보 제공 및 귀농·귀촌 준비·실행 지원",
+        "verification_status": "verified",
+        "eligibility": "귀농귀촌에 관심을 가지고 준비 중인 예비 귀농귀촌인",
+        "key": "svc:154300000138",
+        "unlocks": 1,
+        "order": 3
+      },
+      {
+        "ref": "L3",
+        "id": "law-return-to-farm-l3",
+        "name": "귀농인 정착 지원",
+        "priority": "must",
+        "condition": "귀농 6개월 → 해남군 귀농귀촌 지원센터 상담·멘토링.",
+        "deadline": "상반기 1.1~2.10, 하반기 6.1~7.10 접수(원칙, 시·군 공고 확인)",
+        "deadlineDays": 9999,
+        "agency": "농림축산식품부 · 시·군 귀농귀촌 담당부서(농업기술센터), 대출은 농협",
+        "online": false,
+        "documents": [
+          "사업 신청서",
+          "귀농 농업창업계획서",
+          "농업 창업 관련 증빙서류(견적서 등)",
+          "교육이수실적 증빙자료",
+          "주민등록 등·초본",
+          "가족관계증명서",
+          "신용조사서(농협)",
+          "사업자등록 사실여부 증명서·사업자등록증명",
+          "국민건강보험자격득실확인서",
+          "소득금액증명원"
+        ],
+        "link": "https://www.gov.kr/portal/service/serviceInfo/154300000011",
+        "source": {
+          "name": "정부24 — 귀농 농업창업 및 주택구입지원 사업 · 귀농어ㆍ귀촌 활성화 및 지원에 관한 법률 제7조(귀농어업인ㆍ귀촌인 등 정착 지원)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "귀농 농업창업 및 주택구입 지원사업은 농촌 외 지역에서 1년 이상 살다 농촌으로 이주해 농업을 시작하는 귀농인(당해연도 전입 예정자 포함)에게 농업창업자금 최대 3억 원, 주택구입(신축)자금 최대 7,500만 원을 연 2.0% 융자로 지원한다. 시·군 담당부서에 방문 접수하며 귀농교육 이수 실적과 농업창업계획서가 핵심 심사 자료이고, 선정 뒤 농협의 신용·담보 심사를 통과해야 실제 대출이 나온다.",
+        "verification_status": "verified",
+        "key": "law:귀농인 정착 지원",
+        "unlocks": 0,
+        "order": 4,
+        "where": "거주(예정) 시·군청 또는 농업기술센터 귀농귀촌 담당부서 방문 접수(온라인 접수 없음)",
+        "fee": "무료(융자 금리 연 2.0%)",
+        "steps": [
+          "시·군 귀농귀촌 담당부서(농업기술센터)와 농협에서 사업·대출 사전 상담",
+          "접수 기간에 사업 신청서·농업창업계획서·교육이수 증빙 등 제출",
+          "시·군 서류심사 및 선정심사위원회 심사 → 선정 통보",
+          "사업 추진 후 실적 확인 → 농협 금융상담·담보 심사 → 자금 대출",
+          "사후관리(영농 종사·거주 의무 이행)"
+        ],
+        "pitfalls": [
+          "보조금이 아니라 융자이며 농협 신용·담보 심사를 별도로 통과해야 한다",
+          "귀농교육 이수(지침상 100시간 기준, 시·군별 상이) 미충족 시 신청 불가",
+          "농촌 전입 후 일정 기간(지침상 5~6년) 경과자나 농촌 거주 비농업인은 주택자금 제외 등 제한이 있다",
+          "자격·서류가 시·군 공고마다 달라 반드시 해당 시·군 공고를 확인해야 한다"
+        ],
+        "sourceUrl": "https://www.gov.kr/portal/service/serviceInfo/154300000011",
+        "curated": true,
+        "dependsOn": [
+          "law-return-to-farm-l2",
+          "gov24-154300000138"
+        ]
+      },
+      {
+        "ref": "G3",
+        "id": "gov24-154300000396",
+        "name": "청년농업인 영농정착지원",
+        "priority": "nice",
+        "condition": "43세 → 39세 초과로 미해당(참고).",
+        "deadline": "지자체(시, 군, 구) 공고",
+        "deadlineDays": 9999,
+        "agency": "농림축산식품부",
+        "online": true,
+        "documents": [
+          "신청서신청서를 농림사업정보시스템(Agrix)에 작성"
+        ],
+        "link": "http://nongupez.go.kr",
+        "source": {
+          "name": "보조금24 · 농림축산식품부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "청년의 농업 유입을 촉진하고, 안정적인 영농 창업 및 정착 지원을 위해 생활안정자금, 창업자본, 토지, 영농기술 등 종합 지원체계 구축",
+        "verification_status": "verified",
+        "eligibility": "연령 : 사업 시행연도 기준 만 18세 이상 ~ 만 40세 미만  영농경력 : 영농 경력이 있을 경우 총 영농기간 3년이하  소득 : 건강보험료 소득판정기준 중위소득 140% 초과 등 일정소득이상자는 제외",
+        "key": "svc:154300000396",
+        "unlocks": 0,
+        "order": 5,
+        "dependsOn": [
+          "law-return-to-farm-l2"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 5,
+    "by_status": {
+      "verified": 5
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

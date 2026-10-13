@@ -1,0 +1,191 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "employment-03",
+    "event_id": "employment",
+    "event_title": "취업·이직",
+    "persona_summary": "29세 남성 · 전북 전주시 · 실업급여 수급 중 취업",
+    "persona": {
+      "facts": {
+        "age": 29,
+        "gender": "남성",
+        "residence": "전북 전주시",
+        "situation": "실업급여 수급 중 취업"
+      }
+    },
+    "query": "실업급여를 받던 중에 취업이 됐어요. 바로 신고해야 한다는데 언제까지 해야 하고, 남은 실업급여 일부를 받을 수 있다는 얘기가 있던데 맞나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "employment"
+      ],
+      "reason": "실업급여 수급 중 취업 신고"
+    },
+    "plan": {
+      "title": "실업급여 수급 중 취업 신고",
+      "emoji": "💼",
+      "intro": "취업한 날 바로(늦어도 다음 실업인정일 전에) 고용센터에 신고해야 하고, 남은 급여일수가 절반 이상이면 조기재취업수당을 받을 수 있어요.",
+      "law": [
+        {
+          "name": "실업급여 수급 중 취업 신고",
+          "priority": "must",
+          "condition": "취업 즉시 고용24·고용센터에 취업 신고(미신고 시 부정수급)."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "조기재취업수당",
+          "priority": "must",
+          "condition": "소정급여일수 1/2 이상 남기고 재취업 → 12개월 근속 후 남은 급여의 50% 수당."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "청년 취업"
+        ],
+        "local_keywords": [
+          "청년 취업"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [
+        {
+          "cid": "R1",
+          "name": "전북형 청년 취업 지원",
+          "priority": "nice",
+          "condition": "전북 기업 취업 청년 취업장려금(요건 확인).",
+          "service_id": "645000000148"
+        }
+      ],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "employment",
+    "events": [
+      "employment"
+    ],
+    "title": "실업급여 수급 중 취업 신고",
+    "emoji": "💼",
+    "intro": "취업한 날 바로(늦어도 다음 실업인정일 전에) 고용센터에 신고해야 하고, 남은 급여일수가 절반 이상이면 조기재취업수당을 받을 수 있어요.",
+    "region": {
+      "sido": "전북",
+      "sgg": "전주시"
+    },
+    "procedures": [
+      {
+        "ref": "L1",
+        "id": "law-employment-l1",
+        "name": "실업급여 수급 중 취업 신고",
+        "priority": "must",
+        "condition": "취업 즉시 고용24·고용센터에 취업 신고(미신고 시 부정수급).",
+        "deadline": "취업일부터 2개월 이내(실업인정대상기간 중 근로·소득은 취업한 날 이후 최초 실업인정일에 신고)",
+        "deadlineDays": 60,
+        "agency": "고용노동부 · 관할 고용센터",
+        "online": true,
+        "documents": [
+          "실업인정신청서(취업 사실 기재)",
+          "근로계약서 또는 재직증명서 등 취업일 증빙(고용보험 피보험자격 취득신고가 완료된 경우 생략 가능)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 실업급여 > 실업의 인정 · 고용보험법 제47조(실업인정대상기간 중의 취업 등의 신고)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "구직급여를 받는 중 취업하면 취업일부터 2개월 이내에 고용24(취업사실신고) 또는 고용센터에 신고해야 하며, 취업 전날까지의 급여는 지급된다. 아르바이트·일용근로·프리랜서 소득·사업자등록처럼 짧은 근로도 취업 후 첫 실업인정일에 반드시 신고해야 한다. 신고하지 않으면 부정수급으로 급여 중지·반환·추가징수와 형사처벌(3년 이하 징역 또는 3천만 원 이하 벌금) 대상이 된다.",
+        "verification_status": "verified",
+        "key": "law:실업급여 수급 중 취업 신고",
+        "unlocks": 1,
+        "order": 1,
+        "where": "고용24(고용보험 홈페이지·모바일, 개인서비스 > 실업급여 > 취업사실신고) 또는 관할 고용센터 방문·우편·팩스",
+        "fee": "무료",
+        "steps": [
+          "취업(또는 아르바이트·일용근로·사업자등록 등)이 확정되면 바로 고용24에 로그인해 취업사실신고 메뉴에서 신고한다",
+          "근로계약서 또는 재직증명서를 첨부한다(피보험자격 취득신고가 끝났으면 생략 가능)",
+          "온라인이 어려우면 실업인정신청서에 취업 사실을 적어 관할 고용센터에 방문·우편·팩스로 제출한다",
+          "취업 전날까지의 구직급여를 받고, 요건이 되면 조기재취업수당을 별도로 신청한다"
+        ],
+        "pitfalls": [
+          "임금을 받지 못했거나 소액이라도 일한 사실은 실업인정일에 모두 신고해야 한다(미신고 시 부정수급)",
+          "취업신고를 2개월 넘게 미루면 취업 전날까지의 급여도 받을 수 없다",
+          "신고는 본인이 직접 해야 하며 타인이 대신하면 부정수급에 해당한다",
+          "사업자등록을 하면 실제 영업 여부와 관계없이 취업으로 본다(휴업 증명 등 예외만 인정)"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=722&ccfNo=2&cciNo=2&cnpClsNo=2",
+        "curated": true
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-149200000063",
+        "name": "조기재취업수당",
+        "priority": "must",
+        "condition": "소정급여일수 1/2 이상 남기고 재취업 → 12개월 근속 후 남은 급여의 50% 수당.",
+        "deadline": "조기 재취업하여 12개월 이상 고용(또는 사업 개시)된 날 다음 날부터 3년 이내 신청 가능",
+        "deadlineDays": 360,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "조기재취업수당 청구서, 근로자의 경우 1년 이상 재직사실이 확인되는 근로계약서 또는 재직증명서, 월 임금내역 등 / 자영업의 경우 12개월 이상 사업 영위 자료(사업자등록증, 과세증명자료, 매출전표 등)"
+        ],
+        "link": "http://www.work24.go.kr/",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "소정급여일수를 1/2 이상 남기고 조기에 재취업한 경우로서 12개월 이상 계속하여 고용되거나 사업을 영위한 경우 남아 있는 소정급여의 절반을 인센티브를 지급하여 구직급여 수급자의 조기 재취업을 촉진",
+        "verification_status": "verified",
+        "eligibility": "수급자격자가 실업의 신고일로부터 14일이 지난 후 재취업한 날의 전날을 기준으로 구직급여 소정급여일수를 1/2 이상 남기고 재취업하여 12개월 이상 계속 고용되거나 사업을 영위한 경우(이직일 기준 65세 이상 수급자의 경우 6개월 이상 계속 고용되거나",
+        "key": "svc:149200000063",
+        "unlocks": 0,
+        "order": 2,
+        "dependsOn": [
+          "law-employment-l1"
+        ]
+      },
+      {
+        "ref": "R1",
+        "id": "regional-645000000148",
+        "name": "전북형 청년 취업 지원",
+        "priority": "nice",
+        "condition": "전북 기업 취업 청년 취업장려금(요건 확인).",
+        "deadline": "접수기관 별 상이",
+        "deadlineDays": 9999,
+        "agency": "전북특별자치도",
+        "online": true,
+        "documents": [],
+        "link": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/645000000148",
+        "source": {
+          "name": "보조금24 · 전북특별자치도",
+          "tier": "official",
+          "checkedAt": "2026-10-08"
+        },
+        "summary": "ㅇ (기업) 인건비 월 70만원, 1년(연 840만원)\r\nㅇ (청년) 2년간 근속 시 최대 300만원(100만원×3회)",
+        "verification_status": "verified",
+        "key": "svc:645000000148",
+        "eligibility": "(기업) 도내 소재 고용보험가입 3인이상 기업이 상시근로자 외 청년을 추가 채용시 지원  (청년) 전북형 청년취업지원사업에 취업한 청년(만18~39세)",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 2,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

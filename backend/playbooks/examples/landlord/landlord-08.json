@@ -1,0 +1,197 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "landlord-08",
+    "event_id": "landlord",
+    "event_title": "임대인 되기",
+    "persona_summary": "40세 남성 · 서울 마포구 · 세입자 계약갱신 요구",
+    "persona": {
+      "facts": {
+        "age": 40,
+        "gender": "남성",
+        "residence": "서울 마포구",
+        "situation": "세입자 계약갱신 요구"
+      }
+    },
+    "query": "세입자가 계약갱신을 요구했는데 제가 들어가서 살려고 했거든요. 집주인이 직접 살 거면 거절할 수 있다던데 어떻게 해야 하나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "landlord"
+      ],
+      "reason": "계약갱신 거절"
+    },
+    "plan": {
+      "title": "계약갱신 요구와 실거주 거절",
+      "emoji": "🔑",
+      "intro": "임대인(직계존비속 포함)이 실제 거주하려면 갱신을 거절할 수 있어요. 다만 거절 후 2년 안에 제3자에게 임대하면 손해배상 책임이 생겨요. 만기 6~2개월 전 서면으로 통지하세요.",
+      "law": [
+        {
+          "name": "주택 임대차 신고",
+          "priority": "nice",
+          "condition": "갱신·신규 계약 시 신고."
+        }
+      ],
+      "gov24": [
+        {
+          "name": "주택임대차·상가건물임대차 분쟁조정",
+          "priority": "nice",
+          "condition": "세입자와 분쟁 시 조정."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [],
+        "local_keywords": []
+      },
+      "extra_law": [
+        {
+          "id": "X1",
+          "name": "계약갱신 요구 거절 사유(실거주)",
+          "law_query": "주택임대차보호법",
+          "keywords": [
+            "계약갱신 요구 등"
+          ],
+          "priority": "must",
+          "condition": "임대인 본인·직계 실거주 시 거절 가능, 거절 후 2년 내 타인 임대 시 손해배상."
+        }
+      ]
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": [
+        "X1"
+      ]
+    }
+  },
+  "playbook": {
+    "event": "landlord",
+    "events": [
+      "landlord"
+    ],
+    "title": "계약갱신 요구와 실거주 거절",
+    "emoji": "🔑",
+    "intro": "임대인(직계존비속 포함)이 실제 거주하려면 갱신을 거절할 수 있어요. 다만 거절 후 2년 안에 제3자에게 임대하면 손해배상 책임이 생겨요. 만기 6~2개월 전 서면으로 통지하세요.",
+    "region": {
+      "sido": "서울특별시",
+      "sgg": "마포구"
+    },
+    "procedures": [
+      {
+        "ref": "X1",
+        "id": "X1",
+        "name": "계약갱신 요구 거절 사유(실거주)",
+        "priority": "must",
+        "condition": "임대인 본인·직계 실거주 시 거절 가능, 거절 후 2년 내 타인 임대 시 손해배상.",
+        "deadline": "임차인의 갱신 요구를 받은 뒤 임대차 만료 2개월 전까지 거절 통지",
+        "deadlineDays": 9999,
+        "agency": "국토교통부·법무부(주택임대차보호법 제6조의3) · 분쟁 시 주택임대차분쟁조정위원회·법원",
+        "online": false,
+        "documents": [],
+        "link": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=629&ccfNo=4&cciNo=4&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 임대차계약의 갱신 · 주택임대차보호법 제6조의3(계약갱신 요구 등)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "임차인이 만료 6개월~2개월 전에 계약갱신을 요구하면 임대인은 정당한 사유 없이 거절할 수 없지만, 임대인 본인 또는 직계존속·직계비속이 그 주택에 실제 거주하려는 경우에는 거절할 수 있다. 실거주를 이유로 거절해 놓고 갱신되었을 기간(2년) 안에 정당한 사유 없이 제3자에게 임대하면 임차인에게 손해를 배상해야 하며, 배상액은 (1) 거절 당시 환산월차임 3개월분, (2) 제3자 임대 차임과의 차액 2년분, (3) 임차인의 실제 손해액 중 큰 금액이다.",
+        "verification_status": "verified",
+        "key": "x:계약갱신 요구 거절 사유(실거주)",
+        "unlocks": 0,
+        "order": 1,
+        "where": "임대인이 임차인에게 갱신 거절 통지(내용증명 권장); 분쟁 시 주택임대차분쟁조정위원회 또는 법원",
+        "pitfalls": [
+          "실거주 주체는 임대인 본인·직계존속·직계비속에 한정(형제자매 등은 불가)",
+          "거절 후 2년 내 제3자에게 임대하면 손해배상 — 매도의 경우는 제6조의3 제5항이 직접 적용되지 않으나 불법행위 책임이 문제될 수 있음",
+          "갱신 거절 통지도 만료 2개월 전까지 해야 하며, 넘기면 묵시적 갱신",
+          "임차인은 퇴거 후 전입세대 열람 등으로 실거주 여부를 확인해 손해배상을 청구할 수 있음"
+        ],
+        "sourceUrl": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=629&ccfNo=4&cciNo=4&cnpClsNo=1",
+        "curated": true
+      },
+      {
+        "ref": "L1",
+        "id": "law-landlord-l1",
+        "name": "주택 임대차 신고",
+        "priority": "nice",
+        "condition": "갱신·신규 계약 시 신고.",
+        "deadline": "계약 체결일(가계약금 입금일)부터 30일 이내. 보증금·차임 변경, 해제도 확정일부터 30일 이내",
+        "deadlineDays": 30,
+        "agency": "국토교통부 · 주택 소재지 읍·면·동 주민센터(통합민원창구)",
+        "online": true,
+        "documents": [
+          "주택 임대차 계약 신고서(임대인·임차인 공동 서명, 계약서 첨부 시 1인 서명 가능)",
+          "임대차계약서(원본 또는 사본, 첨부하면 확정일자 자동 부여)",
+          "신분증(방문 시)",
+          "위임장 및 위임인 신분증 사본(대리 신고 시)"
+        ],
+        "link": "https://rtms.molit.go.kr/main/serviceInfo.do",
+        "source": {
+          "name": "국토교통부 부동산거래관리시스템 주택 임대차계약 신고 서비스 안내 · 부동산 거래신고 등에 관한 법률 제6조의2(주택 임대차 계약의 신고)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "보증금 6천만 원 초과 또는 월세 30만 원 초과 주택 임대차 계약은 계약일부터 30일 안에 RTMS 또는 주택 소재지 주민센터에 신고한다. 임대인·임차인 공동 신고가 원칙이지만 계약서를 첨부하면 한쪽만 신고할 수 있고, 신고하면 확정일자가 자동으로 부여된다. 계도기간이 끝나 미신고·지연 시 과태료(최대 30만 원)가 부과된다.",
+        "verification_status": "verified",
+        "key": "law:주택 임대차 신고",
+        "unlocks": 0,
+        "order": 2,
+        "where": "부동산거래관리시스템 RTMS(rtms.molit.go.kr, 온라인) 또는 주택 소재지 읍·면·동 주민센터 방문. 전입신고 시 계약서 제출로 갈음 가능",
+        "fee": "무료(확정일자도 함께 부여)",
+        "steps": [
+          "대상 확인: 보증금 6천만 원 초과 또는 월세 30만 원 초과, 신고 지역(수도권·광역시·세종·제주·도의 시 지역)",
+          "RTMS에서 임대인 또는 임차인이 계약서를 첨부해 신고(한쪽만 전자서명 가능), 또는 주민센터 방문",
+          "신고 수리 시 확정일자 자동 부여(필증 확인)",
+          "임차인은 전입신고도 14일 내 완료해 대항력 확보"
+        ],
+        "pitfalls": [
+          "기준은 '초과'이며 금액 변동 없이 기간만 연장하는 갱신은 제외",
+          "전입신고 때 계약서를 내면 임대차 신고로 간주되지만 전입 전(계약 후 30일 내) 신고 기한을 넘기지 않도록 주의",
+          "가계약금 입금일 기준으로 30일을 계산",
+          "지연·미신고 과태료 부과(2025.6.1 이후 계약부터)"
+        ],
+        "sourceUrl": "https://rtms.molit.go.kr/main/serviceInfo.do",
+        "curated": true
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-B27000100035",
+        "name": "주택임대차·상가건물임대차 분쟁조정",
+        "priority": "nice",
+        "condition": "세입자와 분쟁 시 조정.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "대한법률구조공단",
+        "online": true,
+        "documents": [],
+        "link": "https://www.hldcc.or.kr",
+        "source": {
+          "name": "보조금24 · 대한법률구조공단",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "○ 주택임대차와 상가건물임대차에 관련된 분쟁을 신속하고 합리적으로 조정하여 임대차시장의 안정을 도모 \r\n\r\n○ 주택임대차 관련 분쟁조정\r\n - 차임 또는 보증금의 증감에 관한 분쟁\r\n - 임대차 기간에 관한 분쟁 보증금 또는 임차주택의 반환에 관한 분쟁\r\n - 임차주택의 유지·수선 의무에 관한 분쟁\r\n - 임대차계약의 이행 및 임대차계약 내용의 해석에 관한",
+        "verification_status": "verified",
+        "eligibility": "주택임대차, 상가건물임대차에 관련된 분쟁 당사자",
+        "key": "svc:B27000100035",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}

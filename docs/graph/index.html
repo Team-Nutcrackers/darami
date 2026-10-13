@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>다람이 절차 그래프</title>
+<meta name="description" content="다람이의 절차 그래프(Procedural Graph) 전체를 3차원으로 돌아다니며 보는 뷰. 노드 = 행정 절차, 간선 = 선행 관계." />
+<style>
+  :root {
+    --surface: #0d0f14;
+    --ink: #e8e9ee;
+    --ink-2: #9a9fb0;
+    --panel: rgba(16, 18, 26, 0.86);
+    --line: rgba(255, 255, 255, 0.08);
+    --law: #3987e5; --svc: #199e70; --x: #d95926;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--surface); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif; overflow: hidden; }
+  #c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+  #c.drag { cursor: grabbing; }
+  #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .lb { position: absolute; transform: translate(-50%, -100%); padding: 3px 8px; border-radius: 999px; font-size: 12px; line-height: 1.3;
+    white-space: nowrap; color: var(--ink); background: rgba(10, 12, 18, 0.72); border: 1px solid var(--line); will-change: transform, opacity; }
+  .lb.big { font-size: 13px; font-weight: 600; }
+  .lb b { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+  #hud { position: fixed; left: 16px; top: 16px; max-width: calc(100vw - 32px); padding: 12px 14px; border-radius: 14px; background: var(--panel);
+    border: 1px solid var(--line); backdrop-filter: blur(10px); }
+  #hud h1 { margin: 0 0 4px; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+  #hud p { margin: 0; font-size: 12px; color: var(--ink-2); }
+  #hud .lg { display: flex; gap: 12px; margin-top: 8px; font-size: 12px; color: var(--ink-2); flex-wrap: wrap; }
+  #hud .lg span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: 0; }
+  #hud .lg .law::before { background: var(--law); } #hud .lg .svc::before { background: var(--svc); } #hud .lg .x::before { background: var(--x); }
+  #ctl { position: fixed; right: 16px; top: 16px; display: flex; gap: 8px; }
+  #ctl button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 8px 14px; font-size: 12px;
+    cursor: pointer; backdrop-filter: blur(10px); }
+  #ctl button[aria-pressed="true"] { background: rgba(57, 135, 229, 0.25); border-color: rgba(57, 135, 229, 0.6); }
+  #info { position: fixed; left: 16px; right: 16px; bottom: 16px; margin: 0 auto; max-width: 520px; padding: 12px 14px; border-radius: 14px;
+    background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(10px); font-size: 12px; display: none; }
+  #info.on { display: block; }
+  #info h2 { margin: 0 0 6px; font-size: 14px; }
+  #info .k { color: var(--ink-2); margin-right: 6px; }
+  #info ul { margin: 6px 0 0; padding-left: 16px; color: var(--ink-2); }
+  #info li { margin: 2px 0; } #info li em { color: var(--ink); font-style: normal; }
+  #info .close { float: right; border: none; background: none; color: var(--ink-2); cursor: pointer; font-size: 14px; }
+  @media (max-width: 600px) { #hud { padding: 10px 12px; } #hud p.sub { display: none; } #ctl { top: auto; bottom: 16px; right: 16px; } #info { bottom: 64px; } }
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="절차 그래프 3D 뷰"></canvas>
+<div id="labels" aria-hidden="true"></div>
+<div id="hud">
+  <h1>다람이 절차 그래프</h1>
+  <p id="meta">불러오는 중…</p>
+  <p class="sub">노드 = 행정 절차 · 간선 = 선행 관계(밝은 선 = 필수) · 가까운 절차에 이름이 뜹니다. 드래그로 돌리고, 휠로 당기고, 노드를 클릭해 보세요.</p>
+  <div class="lg"><span class="law">법령·공통 절차</span><span class="svc">공공서비스</span><span class="x">AI 제안 절차</span></div>
+</div>
+<div id="ctl">
+  <button id="auto" aria-pressed="true" type="button">자동 순회 ⏸</button>
+  <button id="labelsBtn" aria-pressed="true" type="button">이름 표시</button>
+</div>
+<div id="info" role="dialog" aria-live="polite"></div>
+
+<script type="importmap">{ "imports": { "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js" } }</script>
+<script type="module">
+import * as THREE from "three";
+
+const COLOR = { law: 0x3987e5, svc: 0x199e70, x: 0xd95926 };
+const KIND_KO = { law: "법령·공통 절차", svc: "공공서비스", x: "AI 제안 절차" };
+const SCALE = 60;                       // 데이터 좌표(반지름 ~1.7) → 월드 좌표
+const canvas = document.getElementById("c");
+const labelsEl = document.getElementById("labels");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0d0f14);
+scene.fog = new THREE.FogExp2(0x0d0f14, 0.0042);
+const camera = new THREE.PerspectiveCamera(50, 1, 0.5, 2000);
+
+// ---------- 데이터 ----------
+const res = await fetch("./graph.json");
+const data = await res.json();
+const N = data.nodes.length;
+document.getElementById("meta").textContent =
+  `절차 ${data.meta.nodes.toLocaleString()}개 · 선행 관계 ${data.meta.edges.toLocaleString()}개 · 연결 없는 절차 ${data.meta.isolated.toLocaleString()}개`;
+
+const pos = new Float32Array(N * 3);
+const col = new Float32Array(N * 3);
+const size = new Float32Array(N);
+const tmpC = new THREE.Color();
+data.nodes.forEach((n, i) => {
+  pos[i * 3] = n.p[0] * SCALE; pos[i * 3 + 1] = n.p[2] * SCALE; pos[i * 3 + 2] = n.p[1] * SCALE;  // z-up → y-up
+  tmpC.setHex(COLOR[n.kind] ?? 0x888888);
+  col[i * 3] = tmpC.r; col[i * 3 + 1] = tmpC.g; col[i * 3 + 2] = tmpC.b;
+  size[i] = n.deg === 0 ? 1.6 : 2.6 + 1.5 * Math.sqrt(n.deg);
+});
+
+// 노드: 둥근 글로우 스프라이트 텍스처를 쓰는 Points 두 겹(글로우 + 코어)
+function discTexture(soft) {
+  const s = 128, cv = document.createElement("canvas"); cv.width = cv.height = s;
+  const g = cv.getContext("2d"), grd = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+  if (soft) { grd.addColorStop(0, "rgba(255,255,255,0.55)"); grd.addColorStop(0.4, "rgba(255,255,255,0.12)"); grd.addColorStop(1, "rgba(255,255,255,0)"); }
+  else { grd.addColorStop(0, "rgba(255,255,255,1)"); grd.addColorStop(0.55, "rgba(255,255,255,0.95)"); grd.addColorStop(0.7, "rgba(255,255,255,0)"); grd.addColorStop(1, "rgba(255,255,255,0)"); }
+  g.fillStyle = grd; g.fillRect(0, 0, s, s);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const geo = new THREE.BufferGeometry();
+geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+geo.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
+const makePointsMat = (tex, mul, opacity) => new THREE.ShaderMaterial({
+  uniforms: { uTex: { value: tex }, uMul: { value: mul }, uOpacity: { value: opacity }, uPR: { value: renderer.getPixelRatio() } },
+  vertexShader: `attribute float aSize; varying vec3 vC; uniform float uMul; uniform float uPR;
+    void main(){ vC = color; vec4 mv = modelViewMatrix * vec4(position,1.0); gl_PointSize = aSize * uMul * uPR * 230.0 / -mv.z; gl_Position = projectionMatrix * mv; }`,
+  fragmentShader: `uniform sampler2D uTex; uniform float uOpacity; varying vec3 vC;
+    void main(){ vec4 t = texture2D(uTex, gl_PointCoord); gl_FragColor = vec4(vC, t.a * uOpacity); }`,
+  vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+});
+scene.add(new THREE.Points(geo, makePointsMat(discTexture(true), 3.6, 0.5)));
+scene.add(new THREE.Points(geo, makePointsMat(discTexture(false), 1.0, 1.0)));
+
+// 간선: hard / soft 두 LineSegments
+function lines(filterHard, color, opacity) {
+  const arr = [];
+  for (const l of data.links) if (l.hard === filterHard) {
+    arr.push(pos[l.s * 3], pos[l.s * 3 + 1], pos[l.s * 3 + 2], pos[l.t * 3], pos[l.t * 3 + 1], pos[l.t * 3 + 2]);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(arr, 3));
+  return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false }));
+}
+scene.add(lines(true, 0xeef2ff, 0.55));
+scene.add(lines(false, 0x9ea6c4, 0.22));
+
+// 이웃 목록(클릭 패널용)
+const prev = Array.from({ length: N }, () => []), next = Array.from({ length: N }, () => []);
+for (const l of data.links) { next[l.s].push(l); prev[l.t].push(l); }
+
+// ---------- 카메라: 자동 순회(궤도 + 느린 상하 요동) / 드래그 / 휠 ----------
+let theta = 0.6, phi = 1.15, radius = 150, auto = true, idleTimer = 0, dragging = false, last = null;
+const target = new THREE.Vector3(0, 0, 0);
+function placeCamera() {
+  camera.position.set(target.x + radius * Math.sin(phi) * Math.cos(theta), target.y + radius * Math.cos(phi), target.z + radius * Math.sin(phi) * Math.sin(theta));
+  camera.lookAt(target);
+}
+const autoBtn = document.getElementById("auto");
+function setAuto(v) { auto = v; autoBtn.setAttribute("aria-pressed", String(v)); autoBtn.textContent = v ? "자동 순회 ⏸" : "자동 순회 ▶"; }
+autoBtn.addEventListener("click", () => setAuto(!auto));
+function pauseForInteraction() { setAuto(false); clearTimeout(idleTimer); idleTimer = setTimeout(() => setAuto(true), 9000); }
+canvas.addEventListener("pointerdown", (e) => { dragging = true; last = [e.clientX, e.clientY]; canvas.setPointerCapture(e.pointerId); canvas.classList.add("drag"); });
+canvas.addEventListener("pointermove", (e) => {
+  if (!dragging) return;
+  const dx = e.clientX - last[0], dy = e.clientY - last[1]; last = [e.clientX, e.clientY];
+  if (Math.abs(dx) + Math.abs(dy) > 1) pauseForInteraction();
+  theta -= dx * 0.005; phi = Math.min(Math.PI - 0.15, Math.max(0.15, phi - dy * 0.005));
+});
+const endDrag = () => { dragging = false; canvas.classList.remove("drag"); };
+canvas.addEventListener("pointerup", endDrag); canvas.addEventListener("pointercancel", endDrag);
+canvas.addEventListener("wheel", (e) => { e.preventDefault(); pauseForInteraction(); radius = Math.min(400, Math.max(25, radius * (1 + Math.sign(e.deltaY) * 0.08))); }, { passive: false });
+// 터치 핀치 줌
+let pinch = null;
+canvas.addEventListener("touchstart", (e) => { if (e.touches.length === 2) pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); }, { passive: true });
+canvas.addEventListener("touchmove", (e) => { if (e.touches.length === 2 && pinch) { const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); radius = Math.min(400, Math.max(25, radius * pinch / d)); pinch = d; pauseForInteraction(); } }, { passive: true });
+
+// ---------- 라벨: 카메라에 가까운 연결 노드 몇 개만 ----------
+let showLabels = true;
+const labelsBtn = document.getElementById("labelsBtn");
+labelsBtn.addEventListener("click", () => { showLabels = !showLabels; labelsBtn.setAttribute("aria-pressed", String(showLabels)); if (!showLabels) labelsEl.replaceChildren(); });
+const MAX_LABELS = 14, pool = [];
+for (let i = 0; i < MAX_LABELS; i++) { const d = document.createElement("div"); d.className = "lb"; d.style.display = "none"; labelsEl.appendChild(d); pool.push(d); }
+const v = new THREE.Vector3();
+function updateLabels() {
+  if (!showLabels) return;
+  const w = canvas.clientWidth, h = canvas.clientHeight, cand = [];
+  const near = radius * 0.9;                 // 카메라로부터 이 거리 안쪽만 후보
+  for (let i = 0; i < N; i++) {
+    const n = data.nodes[i]; if (n.deg < 2 && i !== picked) continue;
+    v.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
+    const dist = v.distanceTo(camera.position); if (dist > near && i !== picked) continue;
+    v.project(camera); if (v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05) continue;
+    cand.push({ i, dist, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h - 6 - size[i] * 1.2 });
+  }
+  cand.sort((a, b) => (a.i === picked ? -1 : b.i === picked ? 1 : a.dist - b.dist));
+  const used = [];
+  let k = 0;
+  for (const c of cand) {
+    if (k >= MAX_LABELS) break;
+    if (used.some((u) => Math.abs(u.x - c.x) < 110 && Math.abs(u.y - c.y) < 22)) continue;  // 겹침 회피
+    used.push(c);
+    const el = pool[k++], n = data.nodes[c.i], t = Math.min(1, Math.max(0, 1 - c.dist / near));
+    el.style.display = "block"; el.style.left = c.x + "px"; el.style.top = c.y + "px";
+    el.style.opacity = (c.i === picked ? 1 : 0.35 + 0.65 * t).toFixed(2);
+    el.className = "lb" + (c.i === picked || n.deg >= 10 ? " big" : "");
+    el.innerHTML = `<b style="background:#${COLOR[n.kind].toString(16).padStart(6, "0")}"></b>${n.name}`;
+  }
+  for (; k < MAX_LABELS; k++) pool[k].style.display = "none";
+}
+
+// ---------- 클릭: 가장 가까운 노드 → 패널 ----------
+let picked = -1;
+const info = document.getElementById("info");
+const ray = new THREE.Raycaster(); ray.params.Points.threshold = 2.2;
+const mouse = new THREE.Vector2();
+let downAt = null;
+canvas.addEventListener("pointerdown", (e) => { downAt = [e.clientX, e.clientY]; });
+canvas.addEventListener("click", (e) => {
+  if (downAt && Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 4) return;  // 드래그였으면 무시
+  mouse.set((e.clientX / canvas.clientWidth) * 2 - 1, -(e.clientY / canvas.clientHeight) * 2 + 1);
+  ray.setFromCamera(mouse, camera);
+  const hits = ray.intersectObject(scene.children.find((o) => o.isPoints));
+  if (!hits.length) { picked = -1; info.classList.remove("on"); return; }
+  picked = hits[0].index; showInfo(picked); pauseForInteraction();
+});
+function li(l, other) { const n = data.nodes[other]; return `<li><em>${n.name}</em>${l.hard ? " · 필수" : ""}${l.g ? ` — ${l.g}` : ""}</li>`; }
+function showInfo(i) {
+  const n = data.nodes[i];
+  info.innerHTML = `<button class="close" aria-label="닫기">✕</button><h2>${n.name}</h2>
+    <div><span class="k">종류</span>${KIND_KO[n.kind]} <span class="k" style="margin-left:10px">연결</span>${n.deg}개</div>
+    ${prev[i].length ? `<div style="margin-top:6px"><span class="k">먼저 해야 하는 절차</span><ul>${prev[i].map((l) => li(l, l.s)).join("")}</ul></div>` : ""}
+    ${next[i].length ? `<div style="margin-top:6px"><span class="k">이 다음에 오는 절차</span><ul>${next[i].map((l) => li(l, l.t)).join("")}</ul></div>` : ""}
+    ${!prev[i].length && !next[i].length ? `<div style="margin-top:6px;color:var(--ink-2)">아직 다른 절차와 연결되지 않은 절차입니다.</div>` : ""}`;
+  info.classList.add("on");
+  info.querySelector(".close").addEventListener("click", () => { picked = -1; info.classList.remove("on"); });
+}
+
+// ---------- 루프 ----------
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.floor(w * renderer.getPixelRatio()) || canvas.height !== Math.floor(h * renderer.getPixelRatio())) {
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+}
+let t0 = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - t0) / 1000); t0 = now;
+  if (auto) {                                    // 천천히 공전 + 고도·거리 요동 → "돌아다니는" 느낌
+    theta += dt * 0.12;
+    phi = 1.15 + 0.35 * Math.sin(now * 0.00011);
+    radius += ((118 + 38 * Math.sin(now * 0.00007)) - radius) * Math.min(1, dt * 0.6);
+  }
+  resize(); placeCamera(); renderer.render(scene, camera); updateLabels();
+  requestAnimationFrame(frame);
+}
+placeCamera();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

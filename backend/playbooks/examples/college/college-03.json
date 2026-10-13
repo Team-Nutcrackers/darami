@@ -1,0 +1,182 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "college-03",
+    "event_id": "college",
+    "event_title": "대학 진학·학자금",
+    "persona_summary": "21세 여성 · 광주 북구 · 대학 2학년 · 생활비 부족",
+    "persona": {
+      "facts": {
+        "age": 21,
+        "gender": "여성",
+        "residence": "광주 북구",
+        "situation": "대학 2학년 · 생활비 부족"
+      }
+    },
+    "query": "대학교 2학년인데 아르바이트만으로는 생활비가 부족해요. 학교 안에서 일하면서 장학금처럼 돈을 받는 제도가 있다고 들었는데 어떻게 지원하나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "college"
+      ],
+      "reason": "국가근로장학금"
+    },
+    "plan": {
+      "title": "국가근로장학금",
+      "emoji": "🎓",
+      "intro": "국가근로장학금은 학기 전 한국장학재단에 신청하고 학교 안팎 근로기관에서 일한 시간만큼 장학금을 받아요. 소득 8구간 이하가 대상이에요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "국가근로장학금",
+          "priority": "must",
+          "condition": "학기 시작 전 신청, 교내·교외 근로(시급 지급)."
+        },
+        {
+          "name": "국가장학금 Ⅰ유형 (학생직접지원형)",
+          "priority": "nice",
+          "condition": "등록금 장학금 동시 신청."
+        },
+        {
+          "name": "취업 후 상환 학자금대출",
+          "priority": "nice",
+          "condition": "생활비 대출(학기당 한도)."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "대학생",
+          "장학금"
+        ],
+        "local_keywords": [
+          "대학생",
+          "장학금"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "college",
+    "events": [
+      "college"
+    ],
+    "title": "국가근로장학금",
+    "emoji": "🎓",
+    "intro": "국가근로장학금은 학기 전 한국장학재단에 신청하고 학교 안팎 근로기관에서 일한 시간만큼 장학금을 받아요. 소득 8구간 이하가 대상이에요.",
+    "region": {
+      "sido": "광주광역시",
+      "sgg": "북구"
+    },
+    "procedures": [
+      {
+        "ref": "G6",
+        "id": "gov24-GES000000120",
+        "name": "국가근로장학금",
+        "priority": "must",
+        "condition": "학기 시작 전 신청, 교내·교외 근로(시급 지급).",
+        "deadline": "사업별 공고 확인",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "1. 가족관계증명서(제출 대상자에 한함)",
+          "2. 혼인관계증명서(제출 대상자에 한함)",
+          "3. 선택서류 : 신청 시 해당사항을 선택한 학생",
+          "기초생활보장 수급자 증명서",
+          "차상위계층 증명서",
+          "장애인 증명서 등"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "대학생에게 학자금(등록금과 생활비) 마련을 위한 근로기회를 제공하고 그에 따른 대가(장학금)를 지급함으로써 안정적인 학업 여건 조성 및 사회‧직업체험 기회 제공으로 취업역량 제고",
+        "verification_status": "verified",
+        "eligibility": "ㅇ 대한민국 국적을 소지한 사업 참여대학의 재학생 중 성적 및 소득기준을 모두 충족한 학생  - (성적기준) C0 수준(70점/100점) 이상  - (소득기준) 학자금 지원 9구간 이하",
+        "key": "svc:GES000000120",
+        "unlocks": 0,
+        "order": 1
+      },
+      {
+        "ref": "G4",
+        "id": "gov24-GES000000110",
+        "name": "취업 후 상환 학자금대출",
+        "priority": "nice",
+        "condition": "생활비 대출(학기당 한도).",
+        "deadline": "2026-2학기 신청기간 : 2026.7.1.~2026.11.17.",
+        "deadlineDays": 9999,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "기본적으로 제출 서류는 없으나, 경우에 따라서 추가서류 필요"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "대학생에게 학자금을 대출하고 그 원리금은 소득이 발생한 후에 소득 수준에 따라 상환하도록 하여 현재의 경제적 여건에 관계없이 누구나 원하는 고등교육 기회를 가질 수 있도록 함",
+        "verification_status": "verified",
+        "eligibility": "교육부 또는 한국장학재단과 협약을 체결한 국내 고등교육기관 학부생, 전문기술석사 및 대학원생",
+        "key": "svc:GES000000110",
+        "unlocks": 0,
+        "order": 2
+      },
+      {
+        "ref": "G1",
+        "id": "gov24-SD0000004508",
+        "name": "국가장학금 Ⅰ유형 (학생직접지원형)",
+        "priority": "nice",
+        "condition": "등록금 장학금 동시 신청.",
+        "deadline": "(2026년 2학기) (1차) 2026년 5월 22일~6월 22일 (2차) 2026년 8월 12일~ 9월 9일",
+        "deadlineDays": 739490,
+        "agency": "교육부",
+        "online": true,
+        "documents": [
+          "○ 필수서류",
+          "구비서류 없음",
+          "○ 선택서류",
+          "국가장학금 신청정보와 한국장학재단에서 신청자에 대한 확인 정보가 불일치할 경우 별도 제출 필요",
+          "(신청인 제출 서류) 가족관계증명서, 기초생활보장 수급자증명서, 한부모가족증명서, 수급자증명서 등",
+          "※ 불일치 사유별 제출서류 상이"
+        ],
+        "link": "http://www.kosaf.go.kr",
+        "source": {
+          "name": "보조금24 · 교육부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "경제적 여건과 관계없이 능력과 의지가 있는 학생이면 누구나 대학교육의 혜택을 누릴 수 있는 여건 마련",
+        "verification_status": "verified",
+        "eligibility": "대한민국 국적을 소지한 국내대학의 학자금지원 9구간 이하 대학생 중 직전학기 성적 및 이수학점(100점 만점에 80점 이상, 12학점 이수) 기준을 충족하는 경우에 지원  - 세부지원 기준은 한국장학재단 홈페이지(www.kosaf.go.kr) 참고",
+        "key": "svc:SD0000004508",
+        "unlocks": 0,
+        "order": 3
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 3,
+    "by_status": {
+      "verified": 3
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 30.1
+  }
+}

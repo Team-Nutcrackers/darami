@@ -2,38 +2,22 @@ import type {
   ChatMessage,
   EventKey,
   LegalBasis,
-  LlmProvider,
   MetaPayload,
   Playbook,
   PersonaResult,
   UserPersona,
+  BoardItem,
 } from "../types";
-
-/** 백엔드가 보고하는 LLM provider 가용성 */
-export interface ProviderInfo {
-  key: LlmProvider;
-  label: string;
-  available: boolean;
-}
-
-/** 선택 가능한 LLM provider 목록·가용성 조회 (키 미설정 모델은 토글에서 비활성) */
-export async function getProviders(): Promise<ProviderInfo[]> {
-  const res = await fetch("/api/providers");
-  if (!res.ok) throw new Error(`provider 조회 실패 (${res.status})`);
-  const data = (await res.json()) as { providers: ProviderInfo[] };
-  return data.providers;
-}
 
 /** 대화 입력으로 사용자 페르소나 갱신 + 충돌 검사 (턴당 1차 호출) */
 export async function updatePersona(
   persona: UserPersona | null,
-  messages: ChatMessage[],
-  provider?: LlmProvider
+  messages: ChatMessage[]
 ): Promise<PersonaResult> {
   const res = await fetch("/api/persona", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ persona, messages, provider }),
+    body: JSON.stringify({ persona, messages }),
   });
   if (!res.ok) throw new Error(`페르소나 갱신 실패 (${res.status})`);
   return (await res.json()) as PersonaResult;
@@ -42,13 +26,12 @@ export async function updatePersona(
 /** 자유 입력 생활 이벤트 → 동적 플레이북 생성 (source-first 실데이터 큐레이션) */
 export async function generatePlaybook(
   description: string,
-  persona?: UserPersona | null,
-  provider?: LlmProvider
+  persona?: UserPersona | null
 ): Promise<Playbook> {
   const res = await fetch("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ description, persona: persona ?? null, provider }),
+    body: JSON.stringify({ description, persona: persona ?? null }),
   });
   if (!res.ok) throw new Error(`생성 실패 (${res.status})`);
   const pb = (await res.json()) as Playbook & { error?: string };
@@ -75,7 +58,7 @@ export async function streamChat(
   handlers: StreamHandlers,
   playbook?: Playbook | null,
   persona?: UserPersona | null,
-  provider?: LlmProvider
+  board?: BoardItem[]
 ): Promise<void> {
   const res = await fetch("/api/chat", {
     method: "POST",
@@ -85,7 +68,8 @@ export async function streamChat(
       playbook: playbook ?? null,
       persona: persona ?? null,
       messages,
-      provider,
+      // 현재 '할 일' 보드(완료 체크 포함) — 모델이 어떤 절차가 끝났는지 알고 답하도록
+      board: (board ?? []).map((b) => ({ id: b.id, status: b.status })),
     }),
   });
 

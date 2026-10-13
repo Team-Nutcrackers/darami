@@ -1,0 +1,114 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "job-seeking-06",
+    "event_id": "job-seeking",
+    "event_title": "구직 준비",
+    "persona_summary": "27세 여성 · 광주 서구 · 미취업 · 면접 준비",
+    "persona": {
+      "facts": {
+        "age": 27,
+        "gender": "여성",
+        "residence": "광주 서구",
+        "situation": "미취업 · 면접 준비"
+      }
+    },
+    "query": "다음 주에 면접이 있는데 입고 갈 정장이 없어요. 청년한테 면접 정장을 빌려준다는 얘기를 들었는데 광주에도 그런 곳이 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "job-seeking"
+      ],
+      "reason": "면접 정장 대여"
+    },
+    "plan": {
+      "title": "면접 정장 대여",
+      "emoji": "👔",
+      "intro": "광주시 청년 면접 정장 무료 대여 사업이 있고, 면접 교통비 등은 국민취업지원 취업활동비용으로 받을 수 있어요.",
+      "law": [],
+      "gov24": [
+        {
+          "name": "국민취업지원제도",
+          "priority": "nice",
+          "condition": "참여 중이면 취업활동비용."
+        }
+      ],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [
+          "면접",
+          "정장"
+        ],
+        "local_keywords": [
+          "면접",
+          "정장"
+        ]
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "job-seeking",
+    "events": [
+      "job-seeking"
+    ],
+    "title": "면접 정장 대여",
+    "emoji": "👔",
+    "intro": "광주시 청년 면접 정장 무료 대여 사업이 있고, 면접 교통비 등은 국민취업지원 취업활동비용으로 받을 수 있어요.",
+    "region": {
+      "sido": "광주광역시",
+      "sgg": "서구"
+    },
+    "procedures": [
+      {
+        "ref": "G1",
+        "id": "gov24-149200005007",
+        "name": "국민취업지원제도",
+        "priority": "nice",
+        "condition": "참여 중이면 취업활동비용.",
+        "deadline": "상시신청",
+        "deadlineDays": 9999,
+        "agency": "고용노동부",
+        "online": true,
+        "documents": [
+          "(필수) 취업지원신청서 및 지원자격 확인을 위한 개인정보 수집, 이용 및 제공 동의서",
+          "(필요시 추가서류)",
+          "가구단위 증빙서류: 가족관계증명원, 이혼소송확인서, 실종신고서 등",
+          "특정취약계층 증빙서류: 관련 추천서, 확인서 등",
+          "전산망으로 확인불가 또는 전산망에 실시간 연계되지 않은 소득, 재산, 취업경험 관련정보: 사업주 확인자료 등 관련 증빙자료"
+        ],
+        "link": "https://www.work24.go.kr",
+        "source": {
+          "name": "보조금24 · 고용노동부",
+          "tier": "official",
+          "checkedAt": "2026-10-07"
+        },
+        "summary": "근로능력과 구직의사가 있음에도 불구하고 취업에 어려움을 겪고 있는 구직자에게 통합적인 취업지원서비스를 제공하고 생계를 지원함으로써 구직활동 및 생계안정 도모",
+        "verification_status": "verified",
+        "eligibility": "∙ I유형   -(요건심사형) 15세~69세 구직자 중 중위소득 60% 이하, 재산 4억 이하(15~34세 청년은 재산 5억원 이하)이면서, 최근 2년 이내 100일 또는 800시간 이상의 취업경험이 있는 분   -(선발형) 15세~69세 구직자 중 ",
+        "key": "svc:149200005007",
+        "unlocks": 0,
+        "order": 1
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 1,
+    "by_status": {
+      "verified": 1
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.5
+  }
+}

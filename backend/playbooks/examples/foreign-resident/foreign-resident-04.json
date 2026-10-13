@@ -1,0 +1,173 @@
+{
+  "created_at": "2026-10-08T11:12:21",
+  "generator": {
+    "llm": "claude (main agent)",
+    "curate": "curate_v2"
+  },
+  "query": {
+    "id": "foreign-resident-04",
+    "event_id": "foreign-resident",
+    "event_title": "외국인 체류",
+    "persona_summary": "26세 여성 · 몽골 국적 · 인천 남동구 · 이사 후 체류지 변경",
+    "persona": {
+      "facts": {
+        "age": 26,
+        "gender": "여성",
+        "nationality": "몽골",
+        "residence": "인천 남동구",
+        "situation": "이사 후 체류지 변경"
+      }
+    },
+    "query": "얼마 전에 이사를 했는데 외국인도 주소를 바꾸면 신고를 해야 한다고 들었어요. 며칠 안에 해야 하고 안 하면 벌금이 있나요?"
+  },
+  "decisions": {
+    "classify": {
+      "events": [
+        "foreign-resident"
+      ],
+      "reason": "체류지 변경신고"
+    },
+    "plan": {
+      "title": "이사 후 체류지 변경신고",
+      "emoji": "🛂",
+      "intro": "새 주소로 옮긴 날부터 15일 안에 주민센터(또는 하이코리아)에 체류지 변경신고를 해야 하고, 늦으면 과태료(최대 200만 원)가 있어요.",
+      "law": [
+        {
+          "name": "체류지 변경신고",
+          "priority": "must",
+          "condition": "전입 15일 이내 남동구 주민센터·하이코리아 신고(임대차계약서)."
+        }
+      ],
+      "gov24": [],
+      "national_welfare": [],
+      "emergency": [],
+      "regional": {
+        "gov24_keywords": [],
+        "local_keywords": []
+      },
+      "extra_law": []
+    },
+    "select": {
+      "regional": [],
+      "extra_law_accept": []
+    }
+  },
+  "playbook": {
+    "event": "foreign-resident",
+    "events": [
+      "foreign-resident"
+    ],
+    "title": "이사 후 체류지 변경신고",
+    "emoji": "🛂",
+    "intro": "새 주소로 옮긴 날부터 15일 안에 주민센터(또는 하이코리아)에 체류지 변경신고를 해야 하고, 늦으면 과태료(최대 200만 원)가 있어요.",
+    "region": {
+      "sido": "인천광역시",
+      "sgg": "남동구"
+    },
+    "procedures": [
+      {
+        "id": "law-international-marriage-a84ee461",
+        "name": "외국인등록",
+        "priority": "must",
+        "condition": "선행 절차 — 외국인등록 후",
+        "deadline": "입국일부터 90일 이내",
+        "deadlineDays": 90,
+        "agency": "법무부 · 체류지 관할 출입국·외국인관서",
+        "online": false,
+        "documents": [
+          "통합신청서(출입국관리법 시행규칙 별지 제34호서식)",
+          "여권",
+          "컬러 사진(3.5cm×4.5cm, 정부24 안내는 3cm×4cm 2매)",
+          "체류지 입증서류(임대차계약서·숙소 제공 확인서 등)",
+          "체류자격별 추가 서류(재직증명서·재학증명서·혼인관계증명서 등)",
+          "수수료"
+        ],
+        "link": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000025",
+        "source": {
+          "name": "정부24 외국인등록 민원안내 · 출입국관리법 제31조(외국인등록)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "90일을 넘겨 한국에 체류하는 외국인은 입국일부터 90일 안에 하이코리아에서 예약하고 체류지 관할 출입국·외국인관서에 방문해 외국인등록을 한다. 여권·사진·체류지 입증서류·체류자격별 서류를 내며 수수료가 있다. 등록을 하지 않으면 과태료·체류 불이익이 있다.",
+        "verification_status": "verified",
+        "key": "law:외국인등록",
+        "autoAdded": true,
+        "autoAddedFor": "law-foreign-resident-l3",
+        "unlocks": 1,
+        "order": 1,
+        "where": "하이코리아(hikorea.go.kr)에서 방문 예약 후 체류지 관할 출입국·외국인청(사무소) 방문(온라인 접수 불가)",
+        "fee": "정부24 안내 기준 35,000원(하이코리아에서 최신 금액 확인)",
+        "steps": [
+          "하이코리아에서 관할 출입국·외국인관서 방문 예약",
+          "통합신청서·여권·사진·체류지 입증서류·체류자격별 서류 준비",
+          "관서 방문해 신청(즉시 접수), 수수료 납부",
+          "외국인등록증 수령(우편 수령 신청 가능), 이후 체류지 변경·여권 변경은 15일 이내 신고"
+        ],
+        "pitfalls": [
+          "재외동포(F-4)는 국내거소신고로 대체 가능하나 거소신고를 안 하면 90일 내 외국인등록 필요",
+          "방문 예약 없이 가면 접수가 어려울 수 있음(하이코리아 예약 필수)",
+          "회사·학교가 대행하는지 반드시 확인(대행이라도 기한 책임은 본인)",
+          "등록 후 체류지 변경은 15일 이내 신고, 여권 정보 변경도 15일 이내 신고"
+        ],
+        "sourceUrl": "https://www.gov.kr/mw/AA020InfoCappView.do?CappBizCD=12700000025",
+        "curated": true
+      },
+      {
+        "ref": "L3",
+        "id": "law-foreign-resident-l3",
+        "name": "체류지 변경신고",
+        "priority": "must",
+        "condition": "전입 15일 이내 남동구 주민센터·하이코리아 신고(임대차계약서).",
+        "deadline": "새 체류지로 전입한 날부터 15일 이내(재외동포 F-4 거소이전은 14일 이내)",
+        "deadlineDays": 15,
+        "agency": "법무부 출입국·외국인정책본부 · 새 체류지 관할 출입국·외국인관서 또는 시·군·구청/읍·면·동 주민센터",
+        "online": true,
+        "documents": [
+          "체류지 변경신고서(출입국관리법 시행규칙 별지 제34호서식)",
+          "외국인등록증(또는 국내거소신고증)",
+          "체류지 입증서류: 본인 명의 임대차계약서 또는 매매계약서",
+          "숙소제공확인서(본인이 계약자가 아닌 경우, 임차인 서명·날인 + 임차인 신분증 사본)",
+          "숙박료 납입 영수증 등 거주 사실 증명 서류(고시원 등)"
+        ],
+        "link": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2042&ccfNo=4&cciNo=1&cnpClsNo=1",
+        "source": {
+          "name": "찾기쉬운 생활법령 - 외국인등록 및 변경신고 · 출입국관리법 제36조(체류지 변경의 신고)",
+          "tier": "official",
+          "checkedAt": "2026-10-12"
+        },
+        "summary": "등록외국인이 이사하면 전입한 날부터 15일 이내에 새 체류지 관할 출입국·외국인관서, 시·군·구청 또는 읍·면·동 주민센터에 체류지 변경신고를 해야 한다. 하이코리아에서 온라인으로도 가능하며 외국인등록증과 임대차계약서 등 체류지 입증서류가 필요하다. 미신고 시 100만원 이하 벌금(출입국관리법 제98조).",
+        "verification_status": "verified",
+        "key": "law:체류지 변경신고",
+        "unlocks": 0,
+        "order": 2,
+        "where": "하이코리아(hikorea.go.kr) 전자민원(온라인) 또는 새 체류지 관할 출입국·외국인관서(방문예약 필요)·시·군·구청·읍·면·동 주민센터 방문",
+        "fee": "무료",
+        "steps": [
+          "이사 후 새 체류지 입증서류(임대차계약서 등)를 준비한다",
+          "하이코리아 전자민원으로 신고하거나, 관할 출입국·외국인관서(하이코리아 방문예약) 또는 새 주소지 시·군·구청·주민센터를 방문해 신고서를 제출한다",
+          "외국인등록증 뒷면에 변경사항 기재·필인을 받아 돌려받는다(모바일 외국인등록증은 전자민원 신고로 갈음)"
+        ],
+        "pitfalls": [
+          "세대주인 가족이 전입신고를 해도 외국인 본인의 체류지 변경은 자동으로 되지 않으므로 반드시 별도 신고한다",
+          "임대차계약서는 본인 명의여야 하고 계약기간이 지나지 않아야 한다",
+          "기한을 넘기면 주민센터에서는 접수가 안 되고 출입국·외국인관서에서 과태료(범칙금) 처리 후 신고해야 한다",
+          "재외동포(F-4) 거소신고자는 기한이 14일로 다르다"
+        ],
+        "sourceUrl": "https://easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=2042&ccfNo=4&cciNo=1&cnpClsNo=1",
+        "curated": true,
+        "dependsOn": [
+          "law-international-marriage-a84ee461"
+        ]
+      }
+    ]
+  },
+  "stats": {
+    "procedures": 2,
+    "by_status": {
+      "verified": 2
+    },
+    "candidates": 0,
+    "unresolved": [],
+    "execute_seconds": 0.0
+  }
+}
