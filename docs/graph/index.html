@@ -66,6 +66,7 @@
 import * as THREE from "three";
 
 const COLOR = { law: 0x3987e5, svc: 0x199e70, x: 0xd95926 };
+const COLOR_HI = { law: 0x8fd3ff, svc: 0x8df5c4, x: 0xffc08a };   // 원 안쪽 하이라이트(그라데이션 밝은 끝)
 const KIND_KO = { law: "법령·공통 절차", svc: "공공서비스", x: "AI 제안 절차" };
 const SCALE = 60;                       // 데이터 좌표(반지름 ~1.7) → 월드 좌표
 const canvas = document.getElementById("c");
@@ -85,56 +86,73 @@ document.getElementById("meta").textContent =
   `절차 ${data.meta.nodes.toLocaleString()}개 · 선행 관계 ${data.meta.edges.toLocaleString()}개 · 연결 없는 절차 ${data.meta.isolated.toLocaleString()}개`;
 
 const pos = new Float32Array(N * 3);
-const col = new Float32Array(N * 3);
+const col = new Float32Array(N * 3), col2 = new Float32Array(N * 3);
 const size = new Float32Array(N);
 const tmpC = new THREE.Color();
 data.nodes.forEach((n, i) => {
   pos[i * 3] = n.p[0] * SCALE; pos[i * 3 + 1] = n.p[2] * SCALE; pos[i * 3 + 2] = n.p[1] * SCALE;  // z-up → y-up
-  tmpC.setHex(COLOR[n.kind] ?? 0x888888).convertLinearToSRGB();  // 후광(커스텀 셰이더)용 — 색공간 변환이 없으므로 sRGB 값 그대로
+  tmpC.setHex(COLOR[n.kind] ?? 0x888888).convertLinearToSRGB();  // 커스텀 셰이더는 색공간 변환이 없으므로 sRGB 값 그대로
   col[i * 3] = tmpC.r; col[i * 3 + 1] = tmpC.g; col[i * 3 + 2] = tmpC.b;
-  size[i] = n.deg === 0 ? 0.34 : 0.56 + 0.34 * Math.sqrt(n.deg);   // 구 반지름(월드 단위)
+  tmpC.setHex(COLOR_HI[n.kind] ?? 0xcccccc).convertLinearToSRGB();
+  col2[i * 3] = tmpC.r; col2[i * 3 + 1] = tmpC.g; col2[i * 3 + 2] = tmpC.b;
+  size[i] = n.deg === 0 ? 1.7 : 2.8 + 1.6 * Math.sqrt(n.deg);
 });
 
-// 노드: 실제 구(InstancedMesh) — 확대해도 또렷. 바깥에 배경색 외곽선 쉘(BackSide)을 덧씌워 테두리를 진하게.
-const geo = new THREE.BufferGeometry();          // 라벨·레이캐스트 보조용 위치 버퍼(그리지는 않음)
+// 노드: 2D 원. 텍스처 대신 프래그먼트 셰이더로 원을 직접 그려 확대해도 또렷하다.
+//  - 안쪽: 하이라이트(밝은 색) → 기본색 → 가장자리로 갈수록 진하게 떨어지는 방사형 그라데이션
+//  - 테두리: 배경색 얇은 링(이웃·간선과 분리), 바깥: 같은 색의 은은한 후광
+const geo = new THREE.BufferGeometry();
 geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-const sphereGeo = new THREE.SphereGeometry(1, 28, 20);
-const nodeMat = new THREE.MeshStandardMaterial({ roughness: 0.45, metalness: 0.05, vertexColors: false });
-const nodeMesh = new THREE.InstancedMesh(sphereGeo, nodeMat, N);
-const rimMesh = new THREE.InstancedMesh(sphereGeo, new THREE.MeshBasicMaterial({ color: 0x0b0d12, side: THREE.BackSide }), N);
-const m4 = new THREE.Matrix4(), q0 = new THREE.Quaternion(), s3 = new THREE.Vector3(), p3 = new THREE.Vector3();
-for (let i = 0; i < N; i++) {
-  p3.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
-  m4.compose(p3, q0, s3.setScalar(size[i])); nodeMesh.setMatrixAt(i, m4);
-  m4.compose(p3, q0, s3.setScalar(size[i] * 1.2)); rimMesh.setMatrixAt(i, m4);    // 외곽선 두께 ≈ 반지름의 20%
-  nodeMesh.setColorAt(i, tmpC.setHex(COLOR[data.nodes[i].kind] ?? 0x888888));
-}
-nodeMesh.instanceMatrix.needsUpdate = true; rimMesh.instanceMatrix.needsUpdate = true; nodeMesh.instanceColor.needsUpdate = true;
-rimMesh.renderOrder = 1; nodeMesh.renderOrder = 2;
-scene.add(rimMesh); scene.add(nodeMesh);
-// 조명: 카메라를 따라오는 키 라이트 + 은은한 반구광(그림자 쪽도 색이 죽지 않게)
-scene.add(new THREE.HemisphereLight(0xdfe6ff, 0x1a1d28, 0.9));
-const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(0.6, 1.0, 0.8); camera.add(key); camera.add(key.target); key.target.position.set(0, 0, -1);
-scene.add(camera);
-// 약한 후광(분위기용) — 스프라이트, 구 뒤에 깔린다
-function discTexture() {
-  const s = 128, cv = document.createElement("canvas"); cv.width = cv.height = s;
-  const g = cv.getContext("2d"), grd = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
-  grd.addColorStop(0, "rgba(255,255,255,0.5)"); grd.addColorStop(0.45, "rgba(255,255,255,0.10)"); grd.addColorStop(1, "rgba(255,255,255,0)");
-  g.fillStyle = grd; g.fillRect(0, 0, s, s);
-  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
-}
-const glowGeo = new THREE.BufferGeometry();
-glowGeo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-glowGeo.setAttribute("color", new THREE.BufferAttribute(col, 3));
-glowGeo.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
-scene.add(new THREE.Points(glowGeo, new THREE.ShaderMaterial({
-  uniforms: { uTex: { value: discTexture() }, uPR: { value: renderer.getPixelRatio() } },
-  vertexShader: `attribute float aSize; varying vec3 vC; uniform float uPR;
-    void main(){ vC = color; vec4 mv = modelViewMatrix * vec4(position,1.0); gl_PointSize = aSize * 9.0 * uPR * 330.0 / -mv.z; gl_Position = projectionMatrix * mv; }`,
-  fragmentShader: `uniform sampler2D uTex; varying vec3 vC; void main(){ vec4 t = texture2D(uTex, gl_PointCoord); gl_FragColor = vec4(vC, t.a * 0.30); }`,
+geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+geo.setAttribute("aHi", new THREE.BufferAttribute(col2, 3));
+geo.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
+const order = new Uint16Array(N); for (let i = 0; i < N; i++) order[i] = i;
+geo.setIndex(new THREE.BufferAttribute(order, 1));   // 매 프레임 뒤→앞으로 정렬해 겹침이 자연스럽게
+const VERT = `attribute float aSize; attribute vec3 aHi; varying vec3 vC; varying vec3 vH; uniform float uMul; uniform float uPR;
+  void main(){ vC = color; vH = aHi; vec4 mv = modelViewMatrix * vec4(position,1.0);
+    gl_PointSize = aSize * uMul * uPR * 330.0 / -mv.z; gl_Position = projectionMatrix * mv; }`;
+const discMat = new THREE.ShaderMaterial({
+  uniforms: { uMul: { value: 1.0 }, uPR: { value: renderer.getPixelRatio() }, uRim: { value: new THREE.Color(0x0b0d12) } },
+  vertexShader: VERT,
+  fragmentShader: `varying vec3 vC; varying vec3 vH; uniform vec3 uRim;
+    void main(){
+      vec2 uv = gl_PointCoord * 2.0 - 1.0;          // -1..1
+      float r = length(uv);
+      float aa = max(fwidth(r), 0.004) * 1.4;        // 화면 픽셀 기준 안티에일리어싱 폭
+      if (r > 1.0 + aa) discard;
+      // 그라데이션: 왼쪽 위 하이라이트 → 기본색 → 가장자리 어둡게
+      float hl = 1.0 - smoothstep(0.0, 1.15, length(uv - vec2(-0.38, -0.42)));
+      vec3 body = mix(vC, vC * 0.62, smoothstep(0.35, 1.0, r));
+      vec3 colr = mix(body, vH, hl * hl * 0.85);
+      // 테두리 링(배경색) — 반지름의 바깥 12%
+      float ring = smoothstep(0.88 - aa, 0.88 + aa, r);
+      colr = mix(colr, uRim, ring * 0.92);
+      float alpha = 1.0 - smoothstep(1.0 - aa, 1.0 + aa, r);
+      gl_FragColor = vec4(colr, alpha);
+    }`,
   vertexColors: true, transparent: true, depthWrite: false, blending: THREE.NormalBlending,
-})));
+});
+const glowMat = new THREE.ShaderMaterial({
+  uniforms: { uMul: { value: 3.0 }, uPR: { value: renderer.getPixelRatio() } },
+  vertexShader: VERT,
+  fragmentShader: `varying vec3 vC; void main(){ float r = length(gl_PointCoord * 2.0 - 1.0); if (r > 1.0) discard;
+    float a = pow(1.0 - r, 2.2) * 0.42; gl_FragColor = vec4(vC, a); }`,
+  vertexColors: true, transparent: true, depthWrite: false, blending: THREE.NormalBlending,
+});
+const glowPts = new THREE.Points(geo, glowMat), discPts = new THREE.Points(geo, discMat);
+glowPts.renderOrder = 1; discPts.renderOrder = 2;
+scene.add(glowPts); scene.add(discPts);
+const nodeMesh = discPts;   // 레이캐스트 대상
+const _dist = new Float32Array(N), _idx = Array.from({ length: N }, (_, i) => i);
+let sortTick = 0;
+function sortBackToFront() {
+  if ((sortTick++ % 3) !== 0) return;     // 3프레임에 한 번
+  const cx = camera.position.x, cy = camera.position.y, cz = camera.position.z;
+  for (let i = 0; i < N; i++) { const dx = pos[i * 3] - cx, dy = pos[i * 3 + 1] - cy, dz = pos[i * 3 + 2] - cz; _dist[i] = dx * dx + dy * dy + dz * dz; }
+  _idx.sort((a, b) => _dist[b] - _dist[a]);
+  for (let i = 0; i < N; i++) order[i] = _idx[i];
+  geo.index.needsUpdate = true;
+}
 
 // 간선: hard / soft 두 LineSegments
 function lines(filterHard, color, opacity) {
@@ -185,24 +203,18 @@ const labelsBtn = document.getElementById("labelsBtn");
 labelsBtn.addEventListener("click", () => { showLabels = !showLabels; labelsBtn.setAttribute("aria-pressed", String(showLabels)); if (!showLabels) labelsEl.replaceChildren(); });
 const MAX_LABELS = 14, pool = [];
 for (let i = 0; i < MAX_LABELS; i++) { const d = document.createElement("div"); d.className = "lb"; d.style.display = "none"; labelsEl.appendChild(d); pool.push(d); }
-const v = new THREE.Vector3(), occRay = new THREE.Raycaster(), occDir = new THREE.Vector3();
-function occluded(i) {
-  occDir.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]).sub(camera.position);
-  const d = occDir.length(); occDir.divideScalar(d);
-  occRay.set(camera.position, occDir); occRay.far = d;
-  const hit = occRay.intersectObject(nodeMesh, false)[0];
-  return !!hit && hit.instanceId !== i;
-}
+const v = new THREE.Vector3();
 function updateLabels() {
   if (!showLabels) return;
   const w = canvas.clientWidth, h = canvas.clientHeight, cand = [];
   const near = radius * 0.9;                 // 카메라로부터 이 거리 안쪽만 후보
   for (let i = 0; i < N; i++) {
     const n = data.nodes[i]; if (n.deg < 2 && i !== picked) continue;
-    v.set(pos[i * 3], pos[i * 3 + 1] + size[i] * 1.25, pos[i * 3 + 2]);   // 구 꼭대기 조금 위
+    v.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
     const dist = v.distanceTo(camera.position); if (dist > near && i !== picked) continue;
     v.project(camera); if (v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05) continue;
-    cand.push({ i, dist, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h - 4 });
+    const px = size[i] * 330.0 / dist;   // 화면상 원 지름(px)의 절반쯤 위에 라벨
+    cand.push({ i, dist, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h - 4 - px * 0.55 });
   }
   cand.sort((a, b) => (a.i === picked ? -1 : b.i === picked ? 1 : a.dist - b.dist));
   const used = [];
@@ -211,7 +223,6 @@ function updateLabels() {
     if (k >= MAX_LABELS || tested > 60) break;
     if (used.some((u) => Math.abs(u.x - c.x) < 110 && Math.abs(u.y - c.y) < 22)) continue;  // 겹침 회피
     tested++;
-    if (c.i !== picked && occluded(c.i)) continue;  // 앞의 다른 구에 가려졌으면 건너뛴다
     used.push(c);
     const el = pool[k++], n = data.nodes[c.i], t = Math.min(1, Math.max(0, 1 - c.dist / near));
     el.style.display = "block"; el.style.left = c.x + "px"; el.style.top = c.y + "px";
@@ -225,7 +236,7 @@ function updateLabels() {
 // ---------- 클릭: 가장 가까운 노드 → 패널 ----------
 let picked = -1;
 const info = document.getElementById("info");
-const ray = new THREE.Raycaster();
+const ray = new THREE.Raycaster(); ray.params.Points.threshold = 1.8;
 const mouse = new THREE.Vector2();
 let downAt = null;
 canvas.addEventListener("pointerdown", (e) => { downAt = [e.clientX, e.clientY]; });
@@ -235,7 +246,7 @@ canvas.addEventListener("click", (e) => {
   ray.setFromCamera(mouse, camera);
   const hits = ray.intersectObject(nodeMesh);
   if (!hits.length) { picked = -1; info.classList.remove("on"); return; }
-  picked = hits[0].instanceId; showInfo(picked); pauseForInteraction();
+  picked = hits[0].index; showInfo(picked); pauseForInteraction();
 });
 function li(l, other) { const n = data.nodes[other]; return `<li><em>${n.name}</em>${l.hard ? " · 필수" : ""}${l.g ? ` — ${l.g}` : ""}</li>`; }
 function showInfo(i) {
@@ -264,7 +275,7 @@ function frame(now) {
     phi = 1.15 + 0.35 * Math.sin(now * 0.00011);
     radius += ((118 + 38 * Math.sin(now * 0.00007)) - radius) * Math.min(1, dt * 0.6);
   }
-  resize(); placeCamera(); renderer.render(scene, camera); updateLabels();
+  resize(); placeCamera(); sortBackToFront(); renderer.render(scene, camera); updateLabels();
   requestAnimationFrame(frame);
 }
 placeCamera();
