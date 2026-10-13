@@ -34,7 +34,7 @@
 실제 구조를 그대로 배치한다: 중심 = 거대 연결 성분(372노드, Kamada-Kawai 3D), 중간 = 작은 성분 25개(각각 힘 기반 구슬), 바깥 = 고립 노드 306개.
 색 = 종류(파랑 법령·공통 / 초록 공공서비스 / 주황 AI 제안), 크기 = 차수, 간선은 requires 가 굵고 밝음. 글자 없음.
 
-- `--gif` → `figure/procedural-graph-3d.gif`: 카메라가 한 바퀴 돌며 가까운 절차 이름이 떠오르는 README 용 애니메이션.
+- `--gif` → `figure/procedural-graph-3d.gif`: 카메라가 한 바퀴 돌며 가까운 절차 이름이 떠오르는 애니메이션(선택. 공개 README 는 정적 PNG 를 쓴다).
 - `--json` → `graph/graph.json`: 같은 배치 좌표. **`graph/index.html`**(three.js, 의존성 CDN 하나)이 이걸 읽어 WebGL 로 그린다 — 자동 순회, 드래그·휠, 카메라에 가까운 절차만 이름 표시, 노드 클릭 시 선행·후속 절차 패널. GitHub Pages(`/docs`)로 그대로 서빙된다.
 
 ## 4. 파일·명령
