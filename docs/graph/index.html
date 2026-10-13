@@ -66,7 +66,7 @@
 import * as THREE from "three";
 
 const COLOR = { law: 0x3987e5, svc: 0x199e70, x: 0xd95926 };
-const COLOR_HI = { law: 0x8fd3ff, svc: 0x8df5c4, x: 0xffc08a };   // 원 안쪽 하이라이트(그라데이션 밝은 끝)
+const COLOR_HI = { law: 0xbfe3ff, svc: 0xbdfadf, x: 0xffd9b8 };   // 별 중심(흰빛에 가까운 종류색)
 const KIND_KO = { law: "법령·공통 절차", svc: "공공서비스", x: "AI 제안 절차" };
 const SCALE = 60;                       // 데이터 좌표(반지름 ~1.7) → 월드 좌표
 const canvas = document.getElementById("c");
@@ -95,64 +95,43 @@ data.nodes.forEach((n, i) => {
   col[i * 3] = tmpC.r; col[i * 3 + 1] = tmpC.g; col[i * 3 + 2] = tmpC.b;
   tmpC.setHex(COLOR_HI[n.kind] ?? 0xcccccc).convertLinearToSRGB();
   col2[i * 3] = tmpC.r; col2[i * 3 + 1] = tmpC.g; col2[i * 3 + 2] = tmpC.b;
-  size[i] = n.deg === 0 ? 1.7 : 2.8 + 1.6 * Math.sqrt(n.deg);
+  size[i] = n.deg === 0 ? 1.9 : 3.0 + 1.9 * Math.sqrt(n.deg);
 });
 
-// 노드: 2D 원. 텍스처 대신 프래그먼트 셰이더로 원을 직접 그려 확대해도 또렷하다.
-//  - 안쪽: 하이라이트(밝은 색) → 기본색 → 가장자리로 갈수록 진하게 떨어지는 방사형 그라데이션
-//  - 테두리: 배경색 얇은 링(이웃·간선과 분리), 바깥: 같은 색의 은은한 후광
+// 노드: 별처럼 — 테두리 없이, 밝은 중심에서 바깥으로 부드럽게 사라지는 빛점(가산 혼합).
+//  - 중심: 거의 흰빛(종류 색을 살짝 섞음), 그 바깥: 종류 색의 안개 같은 후광
+//  - 허브(연결 10개 이상): 은은한 십자 빛살. 셰이더로 그려 확대해도 또렷하다.
 const geo = new THREE.BufferGeometry();
 geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
 geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
 geo.setAttribute("aHi", new THREE.BufferAttribute(col2, 3));
 geo.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
-const order = new Uint16Array(N); for (let i = 0; i < N; i++) order[i] = i;
-geo.setIndex(new THREE.BufferAttribute(order, 1));   // 매 프레임 뒤→앞으로 정렬해 겹침이 자연스럽게
-const VERT = `attribute float aSize; attribute vec3 aHi; varying vec3 vC; varying vec3 vH; uniform float uMul; uniform float uPR;
-  void main(){ vC = color; vH = aHi; vec4 mv = modelViewMatrix * vec4(position,1.0);
-    gl_PointSize = aSize * uMul * uPR * 330.0 / -mv.z; gl_Position = projectionMatrix * mv; }`;
-const discMat = new THREE.ShaderMaterial({
-  uniforms: { uMul: { value: 1.0 }, uPR: { value: renderer.getPixelRatio() }, uRim: { value: new THREE.Color(0x0b0d12) } },
-  vertexShader: VERT,
-  fragmentShader: `varying vec3 vC; varying vec3 vH; uniform vec3 uRim;
+const hub = new Float32Array(N); for (let i = 0; i < N; i++) hub[i] = data.nodes[i].deg >= 10 ? 1 : 0;
+geo.setAttribute("aHub", new THREE.BufferAttribute(hub, 1));
+const starMat = new THREE.ShaderMaterial({
+  uniforms: { uPR: { value: renderer.getPixelRatio() } },
+  vertexShader: `attribute float aSize; attribute float aHub; attribute vec3 aHi; varying vec3 vC; varying vec3 vH; varying float vHub; uniform float uPR;
+    void main(){ vC = color; vH = aHi; vHub = aHub; vec4 mv = modelViewMatrix * vec4(position,1.0);
+      gl_PointSize = aSize * 2.6 * uPR * 330.0 / -mv.z; gl_Position = projectionMatrix * mv; }`,
+  fragmentShader: `varying vec3 vC; varying vec3 vH; varying float vHub;
     void main(){
-      vec2 uv = gl_PointCoord * 2.0 - 1.0;          // -1..1
-      float r = length(uv);
-      float aa = max(fwidth(r), 0.004) * 1.4;        // 화면 픽셀 기준 안티에일리어싱 폭
-      if (r > 1.0 + aa) discard;
-      // 그라데이션: 왼쪽 위 하이라이트 → 기본색 → 가장자리 어둡게
-      float hl = 1.0 - smoothstep(0.0, 1.15, length(uv - vec2(-0.38, -0.42)));
-      vec3 body = mix(vC, vC * 0.62, smoothstep(0.35, 1.0, r));
-      vec3 colr = mix(body, vH, hl * hl * 0.85);
-      // 테두리 링(배경색) — 반지름의 바깥 12%
-      float ring = smoothstep(0.88 - aa, 0.88 + aa, r);
-      colr = mix(colr, uRim, ring * 0.92);
-      float alpha = 1.0 - smoothstep(1.0 - aa, 1.0 + aa, r);
-      gl_FragColor = vec4(colr, alpha);
+      vec2 uv = gl_PointCoord * 2.0 - 1.0; float r = length(uv);
+      if (r > 1.0) discard;
+      float core = exp(-r * r * 26.0);                 // 또렷한 중심
+      float glow = exp(-r * r * 4.5) * 0.55;           // 색 후광
+      float haze = exp(-r * r * 1.6) * 0.10;           // 아주 옅은 안개
+      float spikes = vHub * (exp(-abs(uv.x) * 26.0) + exp(-abs(uv.y) * 26.0)) * exp(-r * 2.6) * 0.36;
+      vec3 c = mix(vH, vec3(1.0), core * 0.7);         // 중심은 하이라이트색→흰빛(과노출 방지)
+      c = mix(vC, c, clamp(core * 1.6 + spikes, 0.0, 1.0));
+      float a = clamp(core + glow + haze + spikes, 0.0, 1.0);
+      gl_FragColor = vec4(c, a);
     }`,
-  vertexColors: true, transparent: true, depthWrite: false, blending: THREE.NormalBlending,
+  vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
 });
-const glowMat = new THREE.ShaderMaterial({
-  uniforms: { uMul: { value: 3.0 }, uPR: { value: renderer.getPixelRatio() } },
-  vertexShader: VERT,
-  fragmentShader: `varying vec3 vC; void main(){ float r = length(gl_PointCoord * 2.0 - 1.0); if (r > 1.0) discard;
-    float a = pow(1.0 - r, 2.2) * 0.42; gl_FragColor = vec4(vC, a); }`,
-  vertexColors: true, transparent: true, depthWrite: false, blending: THREE.NormalBlending,
-});
-const glowPts = new THREE.Points(geo, glowMat), discPts = new THREE.Points(geo, discMat);
-glowPts.renderOrder = 1; discPts.renderOrder = 2;
-scene.add(glowPts); scene.add(discPts);
-const nodeMesh = discPts;   // 레이캐스트 대상
-const _dist = new Float32Array(N), _idx = Array.from({ length: N }, (_, i) => i);
-let sortTick = 0;
-function sortBackToFront() {
-  if ((sortTick++ % 3) !== 0) return;     // 3프레임에 한 번
-  const cx = camera.position.x, cy = camera.position.y, cz = camera.position.z;
-  for (let i = 0; i < N; i++) { const dx = pos[i * 3] - cx, dy = pos[i * 3 + 1] - cy, dz = pos[i * 3 + 2] - cz; _dist[i] = dx * dx + dy * dy + dz * dz; }
-  _idx.sort((a, b) => _dist[b] - _dist[a]);
-  for (let i = 0; i < N; i++) order[i] = _idx[i];
-  geo.index.needsUpdate = true;
-}
+const starPts = new THREE.Points(geo, starMat);
+scene.add(starPts);
+const nodeMesh = starPts;   // 레이캐스트 대상
+function sortBackToFront() {}  // 가산 혼합은 순서 무관
 
 // 간선: hard / soft 두 LineSegments
 function lines(filterHard, color, opacity) {
@@ -163,8 +142,8 @@ function lines(filterHard, color, opacity) {
   const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(arr, 3));
   return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false }));
 }
-scene.add(lines(true, 0xe0e6f5, 0.58));
-scene.add(lines(false, 0x8d97b3, 0.30));
+scene.add(lines(true, 0xe6ebf8, 0.55));
+scene.add(lines(false, 0x8d97b3, 0.28));
 
 // 이웃 목록(클릭 패널용)
 const prev = Array.from({ length: N }, () => []), next = Array.from({ length: N }, () => []);
@@ -213,8 +192,8 @@ function updateLabels() {
     v.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
     const dist = v.distanceTo(camera.position); if (dist > near && i !== picked) continue;
     v.project(camera); if (v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05) continue;
-    const px = size[i] * 330.0 / dist;   // 화면상 원 지름(px)의 절반쯤 위에 라벨
-    cand.push({ i, dist, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h - 4 - px * 0.55 });
+    const px = size[i] * 330.0 / dist;   // 화면상 별 코어 크기(px)에 비례해 위에 라벨
+    cand.push({ i, dist, x: (v.x + 1) / 2 * w, y: (1 - v.y) / 2 * h - 6 - px * 0.5 });
   }
   cand.sort((a, b) => (a.i === picked ? -1 : b.i === picked ? 1 : a.dist - b.dist));
   const used = [];
