@@ -165,16 +165,16 @@ def render(G: nx.DiGraph, pos: dict, edges: list[dict], out: Path, elev: float =
     rgb = np.array([matplotlib.colors.to_rgb(COLOR[k]) for k in kinds])
     size_core = np.where(isolated, 10.0, 22.0 + 14.0 * np.sqrt(deg)) * (0.55 + 0.75 * depth)
     alpha_core = np.where(isolated, 0.35 + 0.35 * depth, 0.55 + 0.45 * depth)
-    glow_rgba = np.column_stack([rgb, np.where(isolated, 0.05 + 0.07 * depth, 0.10 + 0.20 * depth)])
-    core_rgba = np.column_stack([rgb, alpha_core])
+    # 별처럼: 테두리 없이 넓은 후광 → 좁은 후광 → 색 코어 → 흰 중심(연결 노드만). 겹치면 빛이 쌓이게 투명도로 조절
     order = np.argsort(depth)  # 뒤에서 앞으로 그린다
-    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order] * 4.5, c=glow_rgba[order], linewidths=0, depthshade=False, zorder=2)
-    # 코어: 흰 테두리로 간선·이웃과 분리(밝은 배경에서 또렷하게)
-    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order], c=core_rgba[order],
-               edgecolors=[(*RING, min(1.0, a + 0.15)) for a in alpha_core[order]], linewidths=0.6, depthshade=False, zorder=3)
-    # 허브(차수 상위)에는 작은 흰 점을 얹어 강조
-    hub = deg >= 10
-    ax.scatter(XYZ[hub, 0], XYZ[hub, 1], XYZ[hub, 2], s=size_core[hub] * 0.16, c=[(1, 1, 1, 0.95)], linewidths=0, depthshade=False, zorder=4)
+    haze = np.column_stack([rgb, np.where(isolated, 0.03 + 0.04 * depth, 0.06 + 0.10 * depth)])
+    glow = np.column_stack([rgb, np.where(isolated, 0.08 + 0.10 * depth, 0.16 + 0.22 * depth)])
+    core = np.column_stack([np.clip(rgb * 0.55 + 0.45, 0, 1), np.where(isolated, 0.45 + 0.35 * depth, 0.75 + 0.25 * depth)])
+    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order] * 7.0, c=haze[order], linewidths=0, depthshade=False, zorder=2)
+    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order] * 2.6, c=glow[order], linewidths=0, depthshade=False, zorder=3)
+    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order] * 0.75, c=core[order], linewidths=0, depthshade=False, zorder=4)
+    lit = ~isolated
+    ax.scatter(XYZ[lit, 0], XYZ[lit, 1], XYZ[lit, 2], s=size_core[lit] * 0.16, c=[(1, 1, 1, 0.95)], linewidths=0, depthshade=False, zorder=5)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=dpi, facecolor=SURFACE)
@@ -234,13 +234,15 @@ def render_gif(G: nx.DiGraph, pos: dict, nodes: dict, edges: list[dict], out: Pa
             lws = np.where(hard, 1.0 + 1.0 * d, 0.45 + 0.55 * d)
             ax.add_collection3d(Line3DCollection(segs, colors=cols, linewidths=lws))
             size = np.where(isolated, 7.0, 16.0 + 10.0 * np.sqrt(deg)) * (0.55 + 0.75 * depth)
-            glow = np.column_stack([rgb, np.where(isolated, 0.05 + 0.07 * depth, 0.10 + 0.20 * depth)])
-            core_a = np.where(isolated, 0.35 + 0.35 * depth, 0.55 + 0.45 * depth)
-            core = np.column_stack([rgb, core_a])
             order = np.argsort(depth)
-            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order] * 4.5, c=glow[order], linewidths=0, depthshade=False)
-            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order], c=core[order],
-                       edgecolors=[(*RING, min(1.0, a + 0.15)) for a in core_a[order]], linewidths=0.5, depthshade=False)
+            haze = np.column_stack([rgb, np.where(isolated, 0.03 + 0.04 * depth, 0.06 + 0.10 * depth)])
+            glow = np.column_stack([rgb, np.where(isolated, 0.08 + 0.10 * depth, 0.16 + 0.22 * depth)])
+            core = np.column_stack([np.clip(rgb * 0.55 + 0.45, 0, 1), np.where(isolated, 0.45 + 0.35 * depth, 0.75 + 0.25 * depth)])
+            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order] * 7.0, c=haze[order], linewidths=0, depthshade=False)
+            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order] * 2.6, c=glow[order], linewidths=0, depthshade=False)
+            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order] * 0.75, c=core[order], linewidths=0, depthshade=False)
+            lit = ~isolated
+            ax.scatter(XYZ[lit, 0], XYZ[lit, 1], XYZ[lit, 2], s=size[lit] * 0.16, c=[(1, 1, 1, 0.95)], linewidths=0, depthshade=False)
             # 카메라에 가까운 연결 노드에 이름 — 가까움 + 허브(차수) 가중, 화면 좌표로 겹침 회피
             from mpl_toolkits.mplot3d import proj3d
             cand = np.where(deg >= 2)[0]

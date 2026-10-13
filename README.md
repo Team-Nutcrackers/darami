@@ -88,7 +88,7 @@
 노드는 행정 절차, 간선은 선행 관계이며 간선마다 `condition / guidance / pitfalls` 를 붙입니다. 할 일 보드의 추천 순서와 체크 잠금, 대화 중 "지금 할 수 있는 절차 / 먼저 끝내야 하는 절차" 안내가 모두 이 그래프에서 나옵니다.
 
 <div align="center">
-<a href="https://team-nutcrackers.github.io/darami/graph/"><img src="docs/figure/procedural-graph-3d.gif" alt="절차 그래프 3D 애니메이션 — 노드 808개, 선행 관계 643개" width="560" /></a>
+<a href="https://team-nutcrackers.github.io/darami/graph/"><img src="docs/figure/procedural-graph-3d.png" alt="절차 그래프 전체 — 노드 808개, 선행 관계 643개" width="560" /></a>
 
 **[▶ 3D 로 직접 돌아다니기 (GitHub Pages)](https://team-nutcrackers.github.io/darami/graph/)** — 자동 순회 · 드래그/휠 · 가까운 절차 이름 표시 · 노드 클릭으로 선행·후속 보기
 
