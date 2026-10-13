@@ -7,11 +7,11 @@
 <meta name="description" content="다람이의 절차 그래프(Procedural Graph) 전체를 3차원으로 돌아다니며 보는 뷰. 노드 = 행정 절차, 간선 = 선행 관계." />
 <style>
   :root {
-    --surface: #0d0f14;
-    --ink: #e8e9ee;
-    --ink-2: #9a9fb0;
-    --panel: rgba(16, 18, 26, 0.86);
-    --line: rgba(255, 255, 255, 0.08);
+    --surface: #0b0d12;
+    --ink: #eceef3;
+    --ink-2: #9ca3b5;
+    --panel: rgba(18, 21, 30, 0.84);
+    --line: rgba(255, 255, 255, 0.09);
     --law: #3987e5; --svc: #199e70; --x: #d95926;
   }
   * { box-sizing: border-box; }
@@ -21,11 +21,11 @@
   #c.drag { cursor: grabbing; }
   #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
   .lb { position: absolute; transform: translate(-50%, -100%); padding: 3px 8px; border-radius: 999px; font-size: 12px; line-height: 1.3;
-    white-space: nowrap; color: var(--ink); background: rgba(10, 12, 18, 0.72); border: 1px solid var(--line); will-change: transform, opacity; }
+    white-space: nowrap; color: var(--ink); background: rgba(14, 16, 24, 0.78); border: 1px solid var(--line); box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35); will-change: transform, opacity; }
   .lb.big { font-size: 13px; font-weight: 600; }
   .lb b { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
   #hud { position: fixed; left: 16px; top: 16px; max-width: calc(100vw - 32px); padding: 12px 14px; border-radius: 14px; background: var(--panel);
-    border: 1px solid var(--line); backdrop-filter: blur(10px); }
+    border: 1px solid var(--line); backdrop-filter: blur(10px); box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35); }
   #hud h1 { margin: 0 0 4px; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
   #hud p { margin: 0; font-size: 12px; color: var(--ink-2); }
   #hud .lg { display: flex; gap: 12px; margin-top: 8px; font-size: 12px; color: var(--ink-2); flex-wrap: wrap; }
@@ -34,7 +34,7 @@
   #ctl { position: fixed; right: 16px; top: 16px; display: flex; gap: 8px; }
   #ctl button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 8px 14px; font-size: 12px;
     cursor: pointer; backdrop-filter: blur(10px); }
-  #ctl button[aria-pressed="true"] { background: rgba(57, 135, 229, 0.25); border-color: rgba(57, 135, 229, 0.6); }
+  #ctl button[aria-pressed="true"] { background: rgba(57, 135, 229, 0.22); border-color: rgba(57, 135, 229, 0.6); color: #cfe2ff; }
   #info { position: fixed; left: 16px; right: 16px; bottom: 16px; margin: 0 auto; max-width: 520px; padding: 12px 14px; border-radius: 14px;
     background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(10px); font-size: 12px; display: none; }
   #info.on { display: block; }
@@ -73,8 +73,8 @@ const labelsEl = document.getElementById("labels");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: "high-performance" });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0d0f14);
-scene.fog = new THREE.FogExp2(0x0d0f14, 0.0042);
+scene.background = new THREE.Color(0x0b0d12);
+scene.fog = new THREE.FogExp2(0x0b0d12, 0.0038);
 const camera = new THREE.PerspectiveCamera(50, 1, 0.5, 2000);
 
 // ---------- 데이터 ----------
@@ -90,7 +90,7 @@ const size = new Float32Array(N);
 const tmpC = new THREE.Color();
 data.nodes.forEach((n, i) => {
   pos[i * 3] = n.p[0] * SCALE; pos[i * 3 + 1] = n.p[2] * SCALE; pos[i * 3 + 2] = n.p[1] * SCALE;  // z-up → y-up
-  tmpC.setHex(COLOR[n.kind] ?? 0x888888);
+  tmpC.setHex(COLOR[n.kind] ?? 0x888888).convertLinearToSRGB();  // 커스텀 셰이더는 색공간 변환을 안 하므로 sRGB 값 그대로 넘긴다
   col[i * 3] = tmpC.r; col[i * 3 + 1] = tmpC.g; col[i * 3 + 2] = tmpC.b;
   size[i] = n.deg === 0 ? 1.6 : 2.6 + 1.5 * Math.sqrt(n.deg);
 });
@@ -108,16 +108,17 @@ const geo = new THREE.BufferGeometry();
 geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
 geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
 geo.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
-const makePointsMat = (tex, mul, opacity) => new THREE.ShaderMaterial({
-  uniforms: { uTex: { value: tex }, uMul: { value: mul }, uOpacity: { value: opacity }, uPR: { value: renderer.getPixelRatio() } },
+const makePointsMat = (tex, mul, opacity, white = false) => new THREE.ShaderMaterial({
+  uniforms: { uTex: { value: tex }, uMul: { value: mul }, uOpacity: { value: opacity }, uPR: { value: renderer.getPixelRatio() }, uWhite: { value: white ? 1.0 : 0.0 } },
   vertexShader: `attribute float aSize; varying vec3 vC; uniform float uMul; uniform float uPR;
-    void main(){ vC = color; vec4 mv = modelViewMatrix * vec4(position,1.0); gl_PointSize = aSize * uMul * uPR * 230.0 / -mv.z; gl_Position = projectionMatrix * mv; }`,
-  fragmentShader: `uniform sampler2D uTex; uniform float uOpacity; varying vec3 vC;
-    void main(){ vec4 t = texture2D(uTex, gl_PointCoord); gl_FragColor = vec4(vC, t.a * uOpacity); }`,
-  vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    void main(){ vC = color; vec4 mv = modelViewMatrix * vec4(position,1.0); gl_PointSize = aSize * uMul * uPR * 330.0 / -mv.z; gl_Position = projectionMatrix * mv; }`,
+  fragmentShader: `uniform sampler2D uTex; uniform float uOpacity; uniform float uWhite; varying vec3 vC;
+    void main(){ vec4 t = texture2D(uTex, gl_PointCoord); gl_FragColor = vec4(mix(vC, vec3(0.043, 0.051, 0.071), uWhite), t.a * uOpacity); }`,
+  vertexColors: true, transparent: true, depthWrite: false, blending: THREE.NormalBlending,
 });
-scene.add(new THREE.Points(geo, makePointsMat(discTexture(true), 3.6, 0.5)));
-scene.add(new THREE.Points(geo, makePointsMat(discTexture(false), 1.0, 1.0)));
+scene.add(new THREE.Points(geo, makePointsMat(discTexture(true), 3.4, 0.38)));          // 은은한 색 후광
+scene.add(new THREE.Points(geo, makePointsMat(discTexture(false), 1.3, 1.0, true)));    // 배경색 테두리(간선·이웃과 분리)
+scene.add(new THREE.Points(geo, makePointsMat(discTexture(false), 1.0, 1.0)));          // 코어
 
 // 간선: hard / soft 두 LineSegments
 function lines(filterHard, color, opacity) {
@@ -128,8 +129,8 @@ function lines(filterHard, color, opacity) {
   const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(arr, 3));
   return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false }));
 }
-scene.add(lines(true, 0xeef2ff, 0.55));
-scene.add(lines(false, 0x9ea6c4, 0.22));
+scene.add(lines(true, 0xe0e6f5, 0.58));
+scene.add(lines(false, 0x8d97b3, 0.30));
 
 // 이웃 목록(클릭 패널용)
 const prev = Array.from({ length: N }, () => []), next = Array.from({ length: N }, () => []);

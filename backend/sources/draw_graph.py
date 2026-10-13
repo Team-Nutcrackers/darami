@@ -36,11 +36,13 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT_DIR = ROOT.parent / "docs" / "figure"
 SEED = 7
 
-# 색: 검증된 다크 서피스용 범주 팔레트 3색(all-pairs CVD ΔE 9.4, 정상시 20.9, 대비 ≥3:1)
-SURFACE = "#0d0f14"
+# 색: 검은 서피스용 검증된 범주 팔레트 3색(all-pairs CVD ΔE 9.4, 정상시 20.9, 대비 ≥3:1)
+SURFACE = "#0b0d12"
 COLOR = {"law": "#3987e5", "svc": "#199e70", "x": "#d95926"}  # 법령·공통 / 공공서비스 / AI 제안
-EDGE_HARD = np.array([0.93, 0.95, 1.00])  # 거의 흰색(푸른 기)
-EDGE_SOFT = np.array([0.62, 0.66, 0.78])
+EDGE_HARD = np.array([0.88, 0.91, 0.98])  # 밝은 선(필수 선행)
+EDGE_SOFT = np.array([0.52, 0.57, 0.70])  # 옅은 회청(권고)
+INK = (0.95, 0.96, 0.98)
+RING = (0.06, 0.07, 0.10)  # 노드 테두리(배경색) — 겹친 노드·간선과 분리
 
 
 def _kind(key: str) -> str:
@@ -152,10 +154,10 @@ def render(G: nx.DiGraph, pos: dict, edges: list[dict], out: Path, elev: float =
         d = (depth[a] + depth[b]) / 2
         hard = bool(e.get("hard"))
         base = EDGE_HARD if hard else EDGE_SOFT
-        alpha = (0.30 + 0.55 * d) if hard else (0.14 + 0.36 * d)
+        alpha = (0.32 + 0.50 * d) if hard else (0.16 + 0.30 * d)
         segs.append([XYZ[a], XYZ[b]])
         cols.append((*base, alpha))
-        lws.append((1.1 + 1.1 * d) if hard else (0.5 + 0.6 * d))
+        lws.append((1.0 + 1.0 * d) if hard else (0.5 + 0.6 * d))
     lc = Line3DCollection(segs, colors=cols, linewidths=lws, zorder=1)
     ax.add_collection3d(lc)
 
@@ -163,14 +165,16 @@ def render(G: nx.DiGraph, pos: dict, edges: list[dict], out: Path, elev: float =
     rgb = np.array([matplotlib.colors.to_rgb(COLOR[k]) for k in kinds])
     size_core = np.where(isolated, 10.0, 22.0 + 14.0 * np.sqrt(deg)) * (0.55 + 0.75 * depth)
     alpha_core = np.where(isolated, 0.35 + 0.35 * depth, 0.55 + 0.45 * depth)
-    glow_rgba = np.column_stack([rgb, np.where(isolated, 0.05 + 0.08 * depth, 0.10 + 0.22 * depth)])
+    glow_rgba = np.column_stack([rgb, np.where(isolated, 0.05 + 0.07 * depth, 0.10 + 0.20 * depth)])
     core_rgba = np.column_stack([rgb, alpha_core])
     order = np.argsort(depth)  # 뒤에서 앞으로 그린다
-    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order] * 5.5, c=glow_rgba[order], linewidths=0, depthshade=False, zorder=2)
-    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order], c=core_rgba[order], linewidths=0, depthshade=False, zorder=3)
-    # 허브(차수 상위)에는 아주 작은 흰 점을 얹어 반짝이게
+    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order] * 4.5, c=glow_rgba[order], linewidths=0, depthshade=False, zorder=2)
+    # 코어: 흰 테두리로 간선·이웃과 분리(밝은 배경에서 또렷하게)
+    ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size_core[order], c=core_rgba[order],
+               edgecolors=[(*RING, min(1.0, a + 0.15)) for a in alpha_core[order]], linewidths=0.6, depthshade=False, zorder=3)
+    # 허브(차수 상위)에는 작은 흰 점을 얹어 강조
     hub = deg >= 10
-    ax.scatter(XYZ[hub, 0], XYZ[hub, 1], XYZ[hub, 2], s=size_core[hub] * 0.18, c=[(1, 1, 1, 0.9)], linewidths=0, depthshade=False, zorder=4)
+    ax.scatter(XYZ[hub, 0], XYZ[hub, 1], XYZ[hub, 2], s=size_core[hub] * 0.16, c=[(1, 1, 1, 0.95)], linewidths=0, depthshade=False, zorder=4)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=dpi, facecolor=SURFACE)
@@ -226,15 +230,17 @@ def render_gif(G: nx.DiGraph, pos: dict, nodes: dict, edges: list[dict], out: Pa
             segs = [[XYZ[a], XYZ[b]] for a, b, _ in pairs]
             d = np.array([(depth[a] + depth[b]) / 2 for a, b, _ in pairs])
             hard = np.array([h for _, _, h in pairs])
-            cols = [(*(EDGE_HARD if h else EDGE_SOFT), (0.30 + 0.55 * dd) if h else (0.14 + 0.36 * dd)) for h, dd in zip(hard, d)]
+            cols = [(*(EDGE_HARD if h else EDGE_SOFT), (0.32 + 0.50 * dd) if h else (0.16 + 0.30 * dd)) for h, dd in zip(hard, d)]
             lws = np.where(hard, 1.0 + 1.0 * d, 0.45 + 0.55 * d)
             ax.add_collection3d(Line3DCollection(segs, colors=cols, linewidths=lws))
             size = np.where(isolated, 7.0, 16.0 + 10.0 * np.sqrt(deg)) * (0.55 + 0.75 * depth)
-            glow = np.column_stack([rgb, np.where(isolated, 0.05 + 0.08 * depth, 0.10 + 0.22 * depth)])
-            core = np.column_stack([rgb, np.where(isolated, 0.35 + 0.35 * depth, 0.55 + 0.45 * depth)])
+            glow = np.column_stack([rgb, np.where(isolated, 0.05 + 0.07 * depth, 0.10 + 0.20 * depth)])
+            core_a = np.where(isolated, 0.35 + 0.35 * depth, 0.55 + 0.45 * depth)
+            core = np.column_stack([rgb, core_a])
             order = np.argsort(depth)
-            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order] * 5.5, c=glow[order], linewidths=0, depthshade=False)
-            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order], c=core[order], linewidths=0, depthshade=False)
+            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order] * 4.5, c=glow[order], linewidths=0, depthshade=False)
+            ax.scatter(XYZ[order, 0], XYZ[order, 1], XYZ[order, 2], s=size[order], c=core[order],
+                       edgecolors=[(*RING, min(1.0, a + 0.15)) for a in core_a[order]], linewidths=0.5, depthshade=False)
             # 카메라에 가까운 연결 노드에 이름 — 가까움 + 허브(차수) 가중, 화면 좌표로 겹침 회피
             from mpl_toolkits.mplot3d import proj3d
             cand = np.where(deg >= 2)[0]
@@ -255,8 +261,8 @@ def render_gif(G: nx.DiGraph, pos: dict, nodes: dict, edges: list[dict], out: Pa
                 a = 0.5 + 0.5 * depth[i]
                 name = nodes[keys[i]].get("name") or keys[i]
                 ax.text(XYZ[i, 0], XYZ[i, 1], XYZ[i, 2] + 0.035, name if len(name) <= 18 else name[:17] + "…",
-                        color=(0.96, 0.96, 0.98, a), fontsize=7.2, ha="center", va="bottom",
-                        bbox=dict(boxstyle="round,pad=0.25", fc=(0.05, 0.06, 0.09, 0.6 * a), ec="none"), zorder=10)
+                        color=(*INK, a), fontsize=7.2, ha="center", va="bottom",
+                        bbox=dict(boxstyle="round,pad=0.25", fc=(0.06, 0.07, 0.10, 0.78 * a), ec=(0.35, 0.38, 0.46, 0.7 * a), lw=0.5), zorder=10)
             writer.grab_frame(facecolor=SURFACE)
     plt.close(fig)
 
