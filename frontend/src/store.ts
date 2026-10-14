@@ -18,6 +18,7 @@ import {
   updatePersona,
 } from "./api/chat";
 import { SCENARIO_MAP } from "./data/scenarios";
+import { isoDate } from "./lib/holidays";
 
 type Tab = "chat" | "board";
 
@@ -59,6 +60,9 @@ function deriveRegion(facts: Record<string, string | number | boolean> | undefin
   }
   return null;
 }
+
+/** 동적 생성 요청 번호 — 기다리는 동안 홈으로 나가거나 새 요청이 오면 옛 결과를 버린다 */
+let genSeq = 0;
 
 function loadSessions(): Record<string, StoredSession> {
   try {
@@ -115,6 +119,8 @@ interface State {
   clearSession: (key: string) => void;
   persistCurrent: () => void;
   send: (text: string) => Promise<void>;
+  /** 이미 화면에 올린 마지막 사용자 메시지에 대해 페르소나 갱신 → 답변 스트리밍을 돌린다(send·generateAndStart 공용) */
+  runTurn: () => Promise<void>;
   setTab: (t: Tab) => void;
   openProc: (id: string | null) => void;
   toggleDone: (id: string) => void;
@@ -154,10 +160,16 @@ function applyBoardOps(board: BoardItem[], ops: BoardOp[]): BoardItem[] {
     const existing = map.get(op.id);
     if (existing) {
       // 이미 보드에 있는 절차의 재-add 는 무시(모델이 add 로 다시 보내면 done 이 waiting 으로 풀리던 버그)
-      if (op.op !== "add" && op.status) existing.status = op.status;
+      if (op.op !== "add" && op.status) {
+        existing.status = op.status;
+        // 완료일 기록(선행 절차 기준 기한 계산용) — 완료가 풀리면 지운다
+        if (op.status === "done") existing.doneAt = existing.doneAt ?? isoDate(new Date());
+        else delete existing.doneAt;
+      }
     } else {
       // add(또는 모르는 id의 update)는 새 항목으로 보드에 올린다
-      map.set(op.id, { id: op.id, status: op.status ?? "waiting" });
+      const status = op.status ?? "waiting";
+      map.set(op.id, { id: op.id, status, ...(status === "done" ? { doneAt: isoDate(new Date()) } : {}) });
     }
   }
   return Array.from(map.values());
@@ -283,20 +295,35 @@ export const useStore = create<State>((set, get) => ({
     set(patch);
   },
 
-  // 자유 입력 → 동적 플레이북 생성 후 홈에 누적하고 바로 시작
+  // 자유 입력 → 바로 대화 화면으로 넘어가 질문을 말풍선으로 올리고, 플레이북을 만드는 동안 그래프 탐색을 보여 준 뒤 답한다
   generateAndStart: async (description) => {
     const desc = description.trim();
     if (!desc || get().generating) return;
-    set({ generating: true, genError: null });
+    const seq = ++genSeq;
+    set({
+      started: true,
+      event: null,
+      playbook: null,
+      procIndex: {},
+      messages: [{ role: "user", content: desc }, { role: "assistant", content: "" }],
+      streaming: true,
+      board: [],
+      quickReplies: [],
+      persona: { facts: {} },
+      conflictPending: false,
+      userTodos: [],
+      openTodoId: null,
+      appliedRegion: null,
+      error: null,
+      tab: "chat",
+      generating: true,
+      genError: null,
+    });
     try {
-      const playbook = await generatePlaybook(desc, get().persona);
+      const playbook = await generatePlaybook(desc, null);
+      if (seq !== genSeq || !get().started) return; // 기다리는 동안 홈으로 나갔으면 버린다
       if (!playbook.procedures || playbook.procedures.length === 0) {
-        set({
-          generating: false,
-          genError:
-            "이 이벤트에 대한 행정 절차를 찾지 못했어요. 조금 더 구체적으로 적어 주세요.",
-        });
-        return;
+        throw new Error("이 이벤트에 대한 행정 절차를 찾지 못했어요. 조금 더 구체적으로 적어 주세요.");
       }
       const key = `dyn_${Date.now()}`;
       const entry: DynamicEntry = {
@@ -309,10 +336,24 @@ export const useStore = create<State>((set, get) => ({
       };
       const list = [...get().dynamicEvents, entry];
       saveDynamic(list);
-      set({ dynamicEvents: list, generating: false });
-      await get().enterEvent(key, playbook, desc);
-    } catch (e) {
       set({
+        dynamicEvents: list,
+        generating: false,
+        event: key,
+        playbook,
+        procIndex: Object.fromEntries(playbook.procedures.map((p) => [p.id, p])),
+        persona: { event: key, facts: {} },
+      });
+      await get().runTurn();
+    } catch (e) {
+      if (seq !== genSeq) return;
+      // 실패하면 홈으로 돌아가 입력란 아래에 이유를 보여 준다
+      set({
+        started: false,
+        event: null,
+        playbook: null,
+        messages: [],
+        streaming: false,
         generating: false,
         genError: e instanceof Error ? e.message : "생성 중 오류가 발생했어요.",
       });
@@ -347,7 +388,10 @@ export const useStore = create<State>((set, get) => ({
       quickReplies: [],
       error: null,
     }));
+    await get().runTurn();
+  },
 
+  runTurn: async () => {
     const history = get().messages.filter((m) => m.content.length > 0);
 
     // ① 페르소나 갱신 + 충돌 검사 (1차 호출)
@@ -488,11 +532,14 @@ export const useStore = create<State>((set, get) => ({
       }
     }
     set((s) => ({
-      board: s.board.map((b) =>
-        b.id === id
-          ? { ...b, status: b.status === "done" ? "waiting" : "done" }
-          : b
-      ),
+      board: s.board.map((b) => {
+        if (b.id !== id) return b;
+        if (b.status === "done") {
+          const { doneAt: _drop, ...rest } = b;
+          return { ...rest, status: "waiting" as const };
+        }
+        return { ...b, status: "done" as const, doneAt: isoDate(new Date()) };
+      }),
     }));
     get().persistCurrent(); // 체크 상태도 세션에 반영
   },
@@ -546,6 +593,7 @@ export const useStore = create<State>((set, get) => ({
       tab: "chat",
       openProcId: null,
       streaming: false,
+      generating: false,
       genError: null,
       // dynamicEvents, sessions는 홈에서 유지(영속)
     });

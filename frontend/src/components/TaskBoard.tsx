@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStore } from "../store";
-import { effectiveDday, ddayLabel } from "../lib/dday";
+import { effectiveDday, ddayLabel, deadlineInfo, dueLabel, missingHint } from "../lib/dday";
 import { buildGraph } from "../lib/graph";
 import GraphPopover from "./GraphPopover";
 import type { BoardItem, Priority, Procedure, Status, UserTodo } from "../types";
@@ -106,6 +106,8 @@ export default function TaskBoard() {
           items={board.map((b) => ({ b, p: procIndex[b.id] ?? fallbackProc(b.id) }))}
           persona={persona}
           event={event}
+          board={board}
+          procIndex={procIndex}
           onToggle={toggleDone}
           onOpen={openProc}
         />
@@ -229,11 +231,13 @@ function UserDefinedSection({
 
 /** 목록 보기 — 우선순위(Must/Nice/참고)별로 묶고 그룹 안에서는 D-day 순. 체크박스 = 완료, 이름 = 상세 */
 function ChecklistView({
-  items, persona, event, onToggle, onOpen,
+  items, persona, event, board, procIndex, onToggle, onOpen,
 }: {
   items: { b: BoardItem; p: Procedure }[];
   persona: Parameters<typeof effectiveDday>[1];
   event: Parameters<typeof effectiveDday>[2];
+  board: BoardItem[];
+  procIndex: Record<string, Procedure>;
   onToggle: (id: string) => void;
   onOpen: (id: string) => void;
 }) {
@@ -242,7 +246,7 @@ function ChecklistView({
       {PRIORITY_GROUPS.map((g) => {
         const groupItems = items
           .filter((x) => x.p.priority === g.key)
-          .sort((a, b) => effectiveDday(a.p, persona, event) - effectiveDday(b.p, persona, event));
+          .sort((a, b) => effectiveDday(a.p, persona, event, board, procIndex) - effectiveDday(b.p, persona, event, board, procIndex));
         if (groupItems.length === 0) return null;
         return (
           <div key={g.key} className="mb-5">
@@ -256,7 +260,9 @@ function ChecklistView({
               <span className="text-[10px] text-acorn/40">{g.hint}</span>
             </div>
             <div className="space-y-2">
-              {groupItems.map(({ b, p }) => (
+              {groupItems.map(({ b, p }) => {
+                const info = deadlineInfo(p, persona, event, board, procIndex);
+                return (
                 <div
                   key={b.id}
                   className="bg-white rounded-xl border border-sand p-3 flex items-center gap-3 active:scale-[0.99] transition"
@@ -287,24 +293,40 @@ function ChecklistView({
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] text-acorn/55 mt-0.5 truncate">{p.deadline}</div>
+                    {/* 기한: 만료일을 알면 실제 날짜, 기준일을 모르면 무엇을 알려 달라는 안내, 둘 다 아니면 원문 */}
+                    {b.status !== "done" && info.due ? (
+                      <div className="text-[11px] text-acorn/55 mt-0.5 truncate" title={info.basis}>
+                        {dueLabel(info)}
+                        {info.rolled && <span className="text-acorn/40"> · {info.rolled}라 다음 날로</span>}
+                      </div>
+                    ) : b.status !== "done" && info.missing ? (
+                      <div className="text-[11px] text-nut-deep/80 mt-0.5 truncate">📅 {missingHint(info)}</div>
+                    ) : (
+                      <div className="text-[11px] text-acorn/55 mt-0.5 truncate">{p.deadline}</div>
+                    )}
                   </button>
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     <span className={`text-[10px] font-bold rounded-md px-1.5 py-0.5 ${STATUS_BADGE[b.status].cls}`}>
                       {STATUS_BADGE[b.status].label}
                     </span>
                     {(() => {
-                      const dday = effectiveDday(p, persona, event);
-                      if (p.priority !== "must" || dday >= 3650 || b.status === "done") return null;
+                      if (b.status === "done") return null;
+                      const dday = info.days;
+                      // 만료일을 알 때만 D-day. 모르면 법정기간 숫자(옛 방식)는 Must 에 한해 참고로
+                      if (dday === null) {
+                        if (p.priority !== "must" || info.missing || p.deadlineDays >= 3650) return null;
+                        return <span className="text-[10px] font-semibold text-acorn/45">{p.deadlineDays}일 이내</span>;
+                      }
                       return (
-                        <span className={`text-[10px] font-semibold ${dday < 0 ? "text-red-500" : "text-nut-deep"}`}>
+                        <span className={`text-[10px] font-semibold ${dday < 0 ? "text-red-500" : dday <= 7 ? "text-nut-deep" : "text-acorn/60"}`}>
                           {ddayLabel(dday)}
                         </span>
                       );
                     })()}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         );

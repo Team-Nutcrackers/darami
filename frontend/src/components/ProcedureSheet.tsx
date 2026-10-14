@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useStore } from "../store";
 import { fetchLegalBasis } from "../api/chat";
 import type { LegalBasis, Procedure } from "../types";
+import { deadlineInfo, ddayLabel, dueLabel, missingHint } from "../lib/dday";
 
 /** 절차 상세 bottom sheet: 요약·기관·서류 체크리스트·바로가기·법적근거·출처 */
 export default function ProcedureSheet() {
-  const { openProcId, procIndex, board, openProc, toggleDone } = useStore();
+  const { openProcId, procIndex, board, openProc, toggleDone, persona, event } = useStore();
   const [legal, setLegal] = useState<LegalBasis | null>(null);
 
   // 시트가 열릴 때 해당 절차의 법적 근거를 국가법령정보 API로 실시간 조회
@@ -29,6 +30,7 @@ export default function ProcedureSheet() {
   if (!p) return null;
   const item = board.find((b) => b.id === openProcId);
   const isDone = item?.status === "done";
+  const info = deadlineInfo(p, persona, event, board, procIndex);
 
   return (
     <div className="absolute inset-0 z-40 flex flex-col justify-end">
@@ -55,6 +57,17 @@ export default function ProcedureSheet() {
               </div>
               {p.deadline?.trim() && (
                 <p className="text-[11px] text-nut-deep font-semibold mt-1">⏰ {p.deadline}</p>
+              )}
+              {/* 계산된 만료일(민법식: 초일 불산입·역 계산·휴일이면 익일) 또는 기준일 누락 안내 */}
+              {!isDone && info.due && (
+                <p className="text-[11px] text-acorn/70 mt-0.5">
+                  📅 <b className={info.days !== null && info.days < 0 ? "text-red-500" : "text-acorn"}>{dueLabel(info)}</b>
+                  {" · "}{ddayLabel(info.days as number)}
+                  <span className="text-acorn/45"> · {info.basis}{info.rolled ? ` · 말일이 ${info.rolled}라 다음 날로` : ""}</span>
+                </p>
+              )}
+              {!isDone && !info.due && info.missing && (
+                <p className="text-[11px] text-acorn/60 mt-0.5">📅 {missingHint(info)}</p>
               )}
             </div>
             <button

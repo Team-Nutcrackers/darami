@@ -10,6 +10,17 @@ export interface Source {
   checkedAt: string;
 }
 
+/**
+ * 구조화 기한 규칙(백엔드 sources/deadline.py 가 기한 문구에서 만든다). lib/dday.ts 가 민법식으로 평가.
+ *  relative: 기준일 + 기간 (amount<0 이면 "N일 전까지")  · month_offset: 기준일 달 + months 의 day 일(또는 말일)
+ *  annual: 매년/다음 해 month월 day일  · after_procedure: 보드의 선행 절차 완료일 + 기간
+ */
+export type DeadlineRule =
+  | { kind: "relative"; from?: string; amount: number; unit: "day" | "week" | "month" | "year"; fromNextDay?: boolean }
+  | { kind: "month_offset"; from?: string; months: number; day: number | "last" }
+  | { kind: "annual"; from?: string; month: number; day: number | "last"; yearOffset?: number | null }
+  | { kind: "after_procedure"; proc: string; amount: number; unit: "day" | "week" | "month" | "year" };
+
 export interface Procedure {
   id: string;
   name: string;
@@ -25,6 +36,8 @@ export interface Procedure {
   summary: string;
   /** deadlineDays를 어느 기준일(페르소나 날짜 key)로부터 셀지. 없으면 이벤트 기본값. */
   anchor?: string;
+  /** 구조화 기한 규칙 — 있으면 deadlineDays 대신 이것으로 실제 만료일을 계산한다 */
+  deadlineRule?: DeadlineRule;
   /** 큐레이션 agent의 grounding 상태 (verified/partial=공식출처, ai=AI생성·미검증) */
   verification_status?: "verified" | "partial" | "needs_review" | "unverified";
   /** 먼저 끝내야 하는 선행 절차 id 목록 (playbooks/dependencies.json 카탈로그에서 계산) */
@@ -99,6 +112,8 @@ export interface DynamicEntry {
 export interface BoardItem {
   id: string;
   status: Status;
+  /** 완료 처리한 날(YYYY-MM-DD) — "○○ 완료 후 N일" 기한의 기준 */
+  doneAt?: string;
 }
 
 export interface BoardOp {

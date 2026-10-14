@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useStore } from "../store";
 import daramiAvatar from "../../figure/darami-chat-logo.png";
+import GraphSearchBubble from "./GraphSearchBubble";
 
 /** 채팅 어시스턴트 프로필 이미지 (다람이) */
 function DaramiAvatar() {
@@ -14,7 +15,7 @@ function DaramiAvatar() {
 }
 
 export default function ChatPanel() {
-  const { messages, streaming, quickReplies, error, send, setTab } = useStore();
+  const { messages, streaming, quickReplies, error, send, setTab, playbook, generating } = useStore();
   const [input, setInput] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,6 +54,10 @@ export default function ChatPanel() {
         {messages.map((m, i) => {
           const isLast = i === messages.length - 1;
           if (m.role === "assistant" && m.content === "" && isLast && streaming) {
+            // 첫 질문: 점 세 개 대신 절차 그래프에서 관련 절차를 찾아 확대하는 애니메이션
+            if (i === 1 && messages[0]?.role === "user") {
+              return <GraphSearchBubble key="graph-search" question={messages[0].content} playbook={playbook} eventTitle={playbook?.title || undefined} pending={generating} />;
+            }
             return <TypingBubble key={i} />;
           }
           return (

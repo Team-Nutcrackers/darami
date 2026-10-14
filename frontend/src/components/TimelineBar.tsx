@@ -1,5 +1,5 @@
 import { useStore } from "../store";
-import { effectiveDday, ddayLabel } from "../lib/dday";
+import { deadlineInfo, ddayLabel, dueLabel } from "../lib/dday";
 import mainLogo from "../../figure/darami-main-logo.png";
 
 /** 상단 바: 로고 + 이벤트 + 가장 임박한 Must 절차(D-day) + 탭 전환 */
@@ -7,12 +7,15 @@ export default function TimelineBar() {
   const { playbook, board, procIndex, userTodos, tab, setTab, reset, persona, event } = useStore();
 
   // 보드에 올라온 미완료 Must 절차 중 가장 임박한(작은 실효 D-day) 항목
+  // 만료일을 실제로 아는(기준일이 파악된) 절차 중 가장 가까운 것
   const urgent = board
     .filter((b) => b.status !== "done")
     .map((b) => procIndex[b.id])
     .filter(Boolean)
-    .filter((p) => p.priority === "must" && effectiveDday(p, persona, event) < 3650)
-    .map((p) => ({ p, dday: effectiveDday(p, persona, event) }))
+    .filter((p) => p.priority === "must")
+    .map((p) => ({ p, info: deadlineInfo(p, persona, event, board, procIndex) }))
+    .filter((x) => x.info.days !== null)
+    .map((x) => ({ ...x, dday: x.info.days as number }))
     .sort((a, b) => a.dday - b.dday)[0];
 
   const activeCount =
@@ -39,7 +42,7 @@ export default function TimelineBar() {
         </button>
         <div className="flex-1 min-w-0">
           <div className="text-lg font-extrabold text-acorn leading-tight truncate">
-            {playbook ? `${playbook.title} 절차 안내` : ""}
+            {playbook ? `${playbook.title} 절차 안내` : "절차를 찾는 중…"}
           </div>
         </div>
       </div>
@@ -54,7 +57,7 @@ export default function TimelineBar() {
             {ddayLabel(urgent.dday)}
           </span>
           <span className="text-[11px] text-acorn/80 truncate">
-            가장 임박: <b className="text-acorn">{urgent.p.name}</b> · {urgent.p.deadline}
+            가장 임박: <b className="text-acorn">{urgent.p.name}</b> · {dueLabel(urgent.info)}
           </span>
         </div>
       )}

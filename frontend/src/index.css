@@ -101,3 +101,54 @@ body {
   }
   .gp-tip { animation: none; }
 }
+
+/* ---------- 첫 질문 그래프 탐색 애니메이션 (GraphSearchBubble) ---------- */
+.gs-enter { animation: pop 0.25s ease-out; }
+.gs-bg { animation: gsBgIn 600ms ease-out both; }
+@keyframes gsBgIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.gs-sonar-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gsSonar 1.3s ease-out infinite;
+}
+@keyframes gsSonar {
+  0% { transform: scale(0.1); opacity: 0.7; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.gs-pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gsPop 520ms cubic-bezier(0.34, 1.5, 0.5, 1) both;
+}
+@keyframes gsPop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.35); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.gs-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: gsRing 1.6s ease-out infinite;
+}
+@keyframes gsRing {
+  0% { transform: scale(0.45); opacity: 0.75; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+.gs-fade-in { animation: gsFade 320ms ease-out both; }
+@keyframes gsFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.gs-flow { animation: gsFlow 900ms linear infinite; }
+@keyframes gsFlow {
+  to { stroke-dashoffset: var(--gs-flow, -22); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gs-bg, .gs-pop, .gs-fade-in, .gs-enter { animation: none; opacity: 1; }
+  .gs-sonar-ring, .gs-ring, .gs-flow { animation: none; }
+  .gs-ring { opacity: 0.5; }
+}

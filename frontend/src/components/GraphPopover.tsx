@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type PointerEvent as RPointerEvent } from "react";
 import { useStore } from "../store";
-import { ddayLabel } from "../lib/dday";
+import { ddayLabel, dueLabel, missingHint } from "../lib/dday";
 import { forceLayout, edgePath, NODE_R, type Pt } from "../lib/forceLayout";
 import type { BoardGraph, GraphNode } from "../lib/graph";
 
@@ -364,7 +364,13 @@ function NodeTooltip({ tip, graph }: { tip: Tip; graph: BoardGraph }) {
   const name = (id: string) => graph.byId[id]?.p.name ?? id;
   const st = STATE_LABEL[n.state];
   const dueText =
-    p.priority === "must" && n.state !== "done" && n.dday < 3650 ? `${p.deadline ? p.deadline + " · " : ""}${ddayLabel(n.dday)}` : p.deadline;
+    n.state === "done"
+      ? p.deadline
+      : n.deadline.due
+        ? `${dueLabel(n.deadline)} · ${ddayLabel(n.deadline.days as number)}`
+        : n.deadline.missing
+          ? missingHint(n.deadline)
+          : p.deadline;
   return (
     <div
       key={n.id}
@@ -384,7 +390,7 @@ function NodeTooltip({ tip, graph }: { tip: Tip; graph: BoardGraph }) {
         {dueText && (
           <>
             <dt className="text-acorn/45">기한</dt>
-            <dd className={n.dday < 0 && n.state !== "done" ? "text-red-500 font-semibold" : ""}>{dueText}</dd>
+            <dd className={n.deadline.days !== null && n.deadline.days < 0 && n.state !== "done" ? "text-red-500 font-semibold" : ""} title={n.deadline.basis}>{dueText}</dd>
           </>
         )}
         {p.agency && (

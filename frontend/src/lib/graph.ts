@@ -1,5 +1,5 @@
 import type { BoardItem, EventKey, Procedure, UserPersona } from "../types";
-import { effectiveDday } from "./dday";
+import { deadlineInfo, type DeadlineInfo } from "./dday";
 
 /**
  * 할 일 보드를 절차 그래프(DAG)로 본다.
@@ -19,6 +19,8 @@ export interface GraphNode {
   layer: number;
   order: number;
   dday: number;
+  /** 기한 상세(만료일·근거·누락 기준일) */
+  deadline: DeadlineInfo;
   /** 이 절차가 끝나면 열리는 후속 절차 수(보드 안에서) */
   unlocks: number;
   /** 잠그는 선행(dependsOn) */
@@ -56,6 +58,7 @@ export function buildGraph(
   const onBoard = new Set(board.map((b) => b.id));
   const nodes: GraphNode[] = board.map((b) => {
     const p = procIndex[b.id] ?? fallback(b.id);
+    const deadline = deadlineInfo(p, persona, event, board, procIndex);
     return {
       id: b.id,
       p,
@@ -63,7 +66,8 @@ export function buildGraph(
       state: "ready",
       layer: 0,
       order: 0,
-      dday: effectiveDday(p, persona, event),
+      dday: deadline.days ?? p.deadlineDays,
+      deadline,
       unlocks: 0,
       parents: (p.dependsOn ?? []).filter((d) => d !== b.id && onBoard.has(d)),
       softParents: (p.suggestedAfter ?? []).filter((d) => d !== b.id && onBoard.has(d) && !(p.dependsOn ?? []).includes(d)),

@@ -11,7 +11,8 @@ from __future__ import annotations
 
 import asyncio
 import json
-from datetime import datetime
+import re
+from datetime import date, datetime
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -28,6 +29,8 @@ from prompts import build_system_prompt, build_generation_prompt, build_persona_
 from sources.curate import curate_event, legal_for, curate_dynamic
 from sources.curate_v2 import curate_dynamic_v2
 from sources import graph as procgraph
+from sources import deadline
+from sources import reldate
 
 load_dotenv()
 
@@ -105,13 +108,13 @@ def load_playbook(event: str | None) -> dict:
     try:
         curated = curate_event(event)
         if curated:
-            return curated
+            return deadline.enrich_playbook(curated)
     except Exception:  # noqa: BLE001
         pass
     path = PLAYBOOK_DIR / f"{event}.json"
     if not path.exists():
         return {"event": event, "title": "", "procedures": []}
-    return json.loads(path.read_text(encoding="utf-8"))
+    return deadline.enrich_playbook(json.loads(path.read_text(encoding="utf-8")))
 
 
 @app.get("/api/health")
@@ -130,7 +133,7 @@ def get_playbook(event: str, region: Optional[str] = None):
     try:
         curated = curate_event(event, region=region)
         if curated:
-            return JSONResponse(curated)
+            return JSONResponse(deadline.enrich_playbook(curated))
     except Exception:  # noqa: BLE001
         pass
     return JSONResponse(load_playbook(event))
@@ -225,7 +228,7 @@ def generate(req: GenReq):
             _save_live_trace(req, provider.key, playbook, trace)
     except Exception as e:  # noqa: BLE001
         return JSONResponse({"error": f"동적 큐레이션 실패: {e}"}, status_code=500)
-    return JSONResponse(playbook)
+    return JSONResponse(deadline.enrich_playbook(playbook))
 
 
 def _save_live_trace(req: GenReq, provider_key: str, playbook: dict, trace: dict) -> None:
@@ -263,7 +266,49 @@ def persona(req: PersonaReq):
     #   대조할 기존 facts가 없으면(첫 입력 등) 모델이 confirm성 conflict를 만들어도 무시 → 빈 facts 루프 차단.
     if not prior_facts:
         conflict = None
+    # ★ 기존 facts 의 어떤 값도 바뀌지 않았으면 모순이 아니다(모델이 같은 날짜를 두고 "맞나요?" 하던 가짜 conflict 차단).
+    #   내부 key 이름이나 'facts' 를 사용자 질문에 노출하는 conflict 도 버린다.
+    if conflict:
+        changed_keys = [k for k, v in prior_facts.items() if k in facts and facts[k] != v]
+        q = str(conflict.get("question", ""))
+        if not changed_keys or "facts" in q or re.search(r"\b[a-z]+_[a-z_]+\b", q):
+            conflict = None
+    facts = _fix_relative_dates(facts, prior_facts, req)
     return JSONResponse({"facts": facts, "conflict": conflict})
+
+
+_DATE_KEYS = ("move_date", "birth_date", "resignation_date", "marriage_date", "death_date", "event_date")
+
+
+def _fix_relative_dates(facts: dict, prior: dict, req: PersonaReq) -> dict:
+    """LLM 이 환산한 기준일을 결정적 상대 날짜 파서(sources/reldate)로 교차 검증한다.
+    - 이번 턴에 새로 생기거나 바뀐 날짜 key 가 하나이고, 최신 사용자 문장에서 날짜 표현이 읽히는데 값이 다르면 파서 값으로 바로잡는다.
+    - 날짜 key 가 하나도 안 생겼는데 문장에 날짜 표현 + 기준일 키워드(출생·이사·퇴사…)가 있으면 그 key 를 채운다."""
+    try:
+        latest = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
+        parsed = reldate.parse_relative_date(latest, date.today())
+        if not parsed:
+            return facts
+        iso, phrase = parsed[0].isoformat(), parsed[1]
+        changed = [k for k in _DATE_KEYS if facts.get(k) and facts.get(k) != prior.get(k)]
+        if len(changed) == 1:
+            if str(facts[changed[0]])[:10] != iso:
+                print(f"[persona] {changed[0]}: LLM {facts[changed[0]]} → 파서 {iso} ('{phrase}')")
+                facts = {**facts, changed[0]: iso}
+        elif not changed:
+            key = None
+            for w, k in deadline.ANCHOR_WORDS:
+                if w in latest:
+                    key = k
+                    break
+            if key is None and (req.persona or {}).get("event") in deadline.EVENT_ANCHOR:
+                key = deadline.EVENT_ANCHOR[(req.persona or {}).get("event")]
+            if key and not facts.get(key) and not prior.get(key):
+                print(f"[persona] {key} 비어 있음 → 파서 {iso} ('{phrase}')")
+                facts = {**facts, key: iso}
+    except Exception as e:  # noqa: BLE001 — 교차 검증 실패가 대화를 막지 않도록
+        print(f"[persona] 날짜 교차 검증 실패: {e!r}")
+    return facts
 
 
 def _sanitize_board_ops(ops, board_status: dict, playbook: dict | None = None) -> list:
@@ -294,16 +339,36 @@ def _sanitize_board_ops(ops, board_status: dict, playbook: dict | None = None) -
     return out
 
 
+_DATE_CHIP = re.compile(r"\d{4}-\d{1,2}-\d{1,2}|\d{1,2}월\s*\d{1,2}일|이전입니다|이후입니다")
+
+
+def _sanitize_quick_replies(items) -> list[str]:
+    """날짜를 고르게 하는 칩("퇴사일이 2026-10-14 이후입니다")은 뺀다 — 날짜는 글로 받는다(기준일 누락 블록 참고)."""
+    out = []
+    for q in items or []:
+        if not isinstance(q, str) or not q.strip():
+            continue
+        if _DATE_CHIP.search(q):
+            continue
+        out.append(q.strip())
+    return out
+
+
 @app.post("/api/chat")
 async def chat(req: ChatReq):
     # 동적 이벤트는 요청에 실린 플레이북을 우선 사용, 없으면 디스크에서 로드
-    playbook = req.playbook or load_playbook(req.event)
+    playbook = deadline.enrich_playbook(req.playbook) or load_playbook(req.event)
     # 절차 그래프: 보드의 완료 상태로 '현재 위치'를 잡고 지금 할 수 있는 것·막힌 것·순서를 모델에 알린다
     try:
         guidance = procgraph.guidance_block(playbook, req.board)
     except Exception:  # noqa: BLE001 — 안내 생성 실패가 대화를 막지 않도록
         guidance = ""
-    system_prompt = build_system_prompt(playbook, req.persona, req.board, guidance)
+    # 기한 계산에 필요한 기준일(출생일·이사일 등)이 페르소나에 없으면 모델이 한 번 묻도록 알린다
+    try:
+        missing = deadline.missing_anchor_block(playbook, req.persona, req.board)
+    except Exception:  # noqa: BLE001
+        missing = ""
+    system_prompt = build_system_prompt(playbook, req.persona, req.board, "\n\n".join(x for x in (guidance, missing) if x))
     provider = get_provider()
     board_status = {b.get("id"): b.get("status") for b in (req.board or []) if isinstance(b, dict) and b.get("id")}
 
@@ -338,7 +403,7 @@ async def chat(req: ChatReq):
             {
                 "eventDetected": result.get("eventDetected"),
                 "askMissing": result.get("askMissing", []),
-                "quickReplies": result.get("quickReplies", []),
+                "quickReplies": _sanitize_quick_replies(result.get("quickReplies", [])),
                 "boardOps": _sanitize_board_ops(result.get("boardOps", []), board_status, playbook),
                 "userTodos": result.get("userTodos", []),
             },
