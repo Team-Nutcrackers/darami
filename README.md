@@ -84,22 +84,11 @@
 
 ## 🕸️ 절차 그래프
 
-지식 그래프가 (개체, 관계, 개체)로 "무엇인가"에 답하듯, 다람이의 **절차 그래프**는 (절차, 관계, 절차)로 "다음에 무엇을 하나"에 답합니다.
-노드는 행정 절차, 간선은 선행 관계이며 간선마다 `condition / guidance / pitfalls` 를 붙입니다. 할 일 보드의 추천 순서와 체크 잠금, 대화 중 "지금 할 수 있는 절차 / 먼저 끝내야 하는 절차" 안내가 모두 이 그래프에서 나옵니다.
-
 <div align="center">
 <a href="https://team-nutcrackers.github.io/darami/graph/"><img src="docs/figure/procedural-graph-3d.png" alt="절차 그래프 전체 — 노드 808개, 선행 관계 643개" width="560" /></a>
 
-**[▶ 3D 로 직접 돌아다니기 (GitHub Pages)](https://team-nutcrackers.github.io/darami/graph/)** — 자동 순회 · 드래그/휠 · 가까운 절차 이름 표시 · 노드 클릭으로 선행·후속 보기
-
-<sub>파랑 = 법령·공통 절차 · 초록 = 공공서비스 · 주황 = AI 제안 절차 · 밝은 선 = 필수 선행. 중심의 큰 덩어리가 서로 이어진 절차들, 바깥 껍질은 아직 연결되지 않은 절차들입니다.</sub>
+**[▶ 3D 로 직접 돌아다니기 (GitHub Pages)](https://team-nutcrackers.github.io/darami/graph/)**
 </div>
-
-| 구성 | 내용 |
-|---|---|
-| 기본판 `backend/playbooks/graph.base.json` | 사람이 쓴 선행 관계 + 절차 지식베이스(공식 페이지로 확인한 414건)에서 뽑은 관계 + 사전 생성 500건에서 관측된 관계 — 노드 806 · 간선 639, 순환 없음 |
-| 학습판 `graph.learned.json` | 사용 중 그래프에 없는 절차가 나오면 LLM 이 간선을 제안 → 끝점·중복·역방향·순환·거절 이력 검사 → 통과한 것만 추가. 지워도 기본판만으로 동작 |
-| 설계 노트 | [`docs/procedural-graph.md`](docs/procedural-graph.md) — 근거 논문(*Procedural Graphs*, Lu et al. 2026)에서 가져온 것과 버린 것, 그림 재생성 방법 |
 
 ## 🚀 실행 방법
 
