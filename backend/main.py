@@ -107,7 +107,7 @@ def load_playbook(event: str | None) -> dict:
     # on-demand 큐레이션(법령 grounding + 캐시). 실패 시 정적 JSON으로 fallback.
     try:
         curated = curate_event(event)
-        if curated:
+        if curated and curated.get("procedures"):  # 그라운딩 키가 없어 전부 걸러지면 정적 JSON 으로
             return deadline.enrich_playbook(curated)
     except Exception:  # noqa: BLE001
         pass
@@ -132,7 +132,7 @@ def get_playbook(event: str, region: Optional[str] = None):
     region: 사용자 거주지(시도). 지자체/광역 혜택 grounding에 사용."""
     try:
         curated = curate_event(event, region=region)
-        if curated:
+        if curated and curated.get("procedures"):  # 그라운딩 키가 없어 전부 걸러지면 정적 JSON 으로
             return JSONResponse(deadline.enrich_playbook(curated))
     except Exception:  # noqa: BLE001
         pass

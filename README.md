@@ -100,9 +100,24 @@
 cd backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # UPSTAGE_API_KEY, LAW_OC, DATA_GO_KR_KEY 입력
+cp .env.example .env   # 아래 '🔑 API 키 준비' 참고
 uvicorn main:app --reload --port 8000
 ```
+
+### 🔑 API 키 준비 (`backend/.env`)
+
+`backend/.env.example` 을 `backend/.env` 로 복사하고 아래 값을 채웁니다. `.env` 는 gitignore 되어 있어 커밋되지 않습니다.
+
+| 변수 | 발급처 | 쓰임 | 없으면 |
+|---|---|---|---|
+| `UPSTAGE_API_KEY` | [Upstage Console](https://console.upstage.ai) → API Keys | 대화·플레이북 생성·페르소나 (Solar Pro, `SOLAR_MODEL=solar-pro2`) | **필수.** 없으면 대화가 되지 않습니다 |
+| `LAW_OC` | [국가법령정보 공동활용](https://open.law.go.kr) → 회원가입 → OPEN API 신청. OC 는 가입 ID(이메일 @ 앞부분) | 법령 조문·법정기한 검증(전입신고·출생신고 등) | 법령 절차가 "자동 검증 전"으로 표시되고 법적 근거 조회가 비활성 |
+| `DATA_GO_KR_KEY` | [공공데이터포털](https://www.data.go.kr) → 회원가입 → 아래 두 API 활용신청(자동 승인) → 마이페이지의 **일반 인증키(Decoding)** | 보조금24·복지로 복지 서비스 검증 | 수당·바우처류 절차가 "자동 검증 전"으로 표시 |
+
+`DATA_GO_KR_KEY` 로 활용신청할 API: **행정안전부_대한민국 공공서비스(혜택) 정보**(보조금24), **한국사회보장정보원_중앙부처복지서비스 정보**. 공공데이터포털 키 하나로 둘 다 호출합니다.
+
+주의: 국가법령정보 OPEN API 는 **호출하는 서버의 IP/도메인을 사전 등록**해야 합니다(신청 화면의 '이용 서버' 항목). 등록되지 않은 PC 에서는 법령 검증이 실패하고 그 절차는 미검증으로 표시됩니다.
+Upstage 키만 넣어도 세 시나리오(정적 플레이북)와 직접 입력은 동작합니다. 다만 공공 API 검증을 거치지 않으므로 🛡️ 검증 표시가 붙지 않고, 직접 입력 이벤트의 절차는 "ℹ️ 자동 검증 전"으로 보입니다.
 
 ### 2) 프론트엔드 (포트 5173)
 
