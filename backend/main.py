@@ -403,12 +403,15 @@ async def chat(req: ChatReq):
             yield sse("token", {"text": buf})
 
         # 2) 보드 갱신·빠른답변 등 구조화 메타를 마지막에 전달
+        #    빠른답변 칩은 '부족한 정보(askMissing)를 고르게 하는' 용도 — 물을 것이 없으면 칩도 비운다(예시 베끼기·억지 칩 차단)
+        ask_missing = [a for a in (result.get("askMissing") or []) if isinstance(a, str) and a.strip()]
+        quick = _sanitize_quick_replies(result.get("quickReplies", [])) if ask_missing else []
         yield sse(
             "meta",
             {
                 "eventDetected": result.get("eventDetected"),
-                "askMissing": result.get("askMissing", []),
-                "quickReplies": _sanitize_quick_replies(result.get("quickReplies", [])),
+                "askMissing": ask_missing,
+                "quickReplies": quick,
                 "boardOps": _sanitize_board_ops(result.get("boardOps", []), board_status, playbook),
                 "userTodos": result.get("userTodos", []),
             },
