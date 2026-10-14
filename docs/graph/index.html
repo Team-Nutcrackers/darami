@@ -179,9 +179,11 @@ canvas.addEventListener("touchmove", (e) => { if (e.touches.length === 2 && pinc
 // ---------- 라벨: 카메라에 가까운 연결 노드 몇 개만 ----------
 let showLabels = true;
 const labelsBtn = document.getElementById("labelsBtn");
-labelsBtn.addEventListener("click", () => { showLabels = !showLabels; labelsBtn.setAttribute("aria-pressed", String(showLabels)); if (!showLabels) labelsEl.replaceChildren(); });
+// 끌 때 라벨 DOM 을 지우지 않고 숨긴다(지우면 pool 이 떼어진 요소를 가리켜 다시 켜도 안 보이던 버그)
+labelsBtn.addEventListener("click", () => { showLabels = !showLabels; labelsBtn.setAttribute("aria-pressed", String(showLabels)); if (!showLabels) hideLabels(); });
 const MAX_LABELS = 14, pool = [];
 for (let i = 0; i < MAX_LABELS; i++) { const d = document.createElement("div"); d.className = "lb"; d.style.display = "none"; labelsEl.appendChild(d); pool.push(d); }
+function hideLabels() { for (const d of pool) d.style.display = "none"; }
 const v = new THREE.Vector3();
 function updateLabels() {
   if (!showLabels) return;
