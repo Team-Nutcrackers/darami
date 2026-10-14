@@ -288,6 +288,11 @@ def _fix_relative_dates(facts: dict, prior: dict, req: PersonaReq) -> dict:
         latest = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
         parsed = reldate.parse_relative_date(latest, date.today())
         if not parsed:
+            # 이번 문장에 날짜 표현이 없는데 이미 저장된 기준일이 바뀌었다면 모델이 멋대로 재계산한 것 → 기존 값 유지
+            for k in _DATE_KEYS:
+                if prior.get(k) and facts.get(k) and facts[k] != prior[k]:
+                    print(f"[persona] {k}: 날짜 표현 없이 {prior[k]} → {facts[k]} 로 바뀜 → 기존 값 유지")
+                    facts = {**facts, k: prior[k]}
             return facts
         iso, phrase = parsed[0].isoformat(), parsed[1]
         changed = [k for k in _DATE_KEYS if facts.get(k) and facts.get(k) != prior.get(k)]

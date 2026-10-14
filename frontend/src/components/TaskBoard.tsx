@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStore } from "../store";
-import { effectiveDday, ddayLabel, deadlineInfo, dueLabel, missingHint } from "../lib/dday";
+import { effectiveDday, ddayLabel, deadlineInfo, dueLabel, missingHint, fmtDate, startOfToday } from "../lib/dday";
 import { buildGraph } from "../lib/graph";
 import GraphPopover from "./GraphPopover";
 import type { BoardItem, Priority, Procedure, Status, UserTodo } from "../types";
@@ -70,7 +70,9 @@ export default function TaskBoard() {
       {/* 진행률 */}
       <div className="mb-3">
         <div className="flex items-center justify-between text-[11px] text-acorn/60 mb-1">
-          <span>진행 상황</span>
+          <span>
+            진행 상황 <span className="text-acorn/40">· 오늘 {fmtDate(startOfToday())} 기준</span>
+          </span>
           <span>
             {doneCount}/{board.length} 완료
           </span>
@@ -297,7 +299,6 @@ function ChecklistView({
                     {b.status !== "done" && info.due ? (
                       <div className="text-[11px] text-acorn/55 mt-0.5 truncate" title={info.basis}>
                         {dueLabel(info)}
-                        {info.rolled && <span className="text-acorn/40"> · {info.rolled}라 다음 날로</span>}
                       </div>
                     ) : b.status !== "done" && info.missing ? (
                       <div className="text-[11px] text-nut-deep/80 mt-0.5 truncate">📅 {missingHint(info)}</div>
