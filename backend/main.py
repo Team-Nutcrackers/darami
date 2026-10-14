@@ -252,9 +252,16 @@ def persona(req: PersonaReq):
     provider = get_provider()
     if provider.client is None:
         return JSONResponse({"error": f"{provider.label} API 키가 설정되지 않았습니다."}, status_code=500)
-    # 최근 대화를 한 덩어리로 만들어 최신 입력 중심으로 갱신
+    # 최근 대화를 한 덩어리로 만들어 최신 입력 중심으로 갱신.
+    # 옛 사용자 발화 원문("2주 뒤", "5일 전" 같은 상대 표현)이 매 턴 다시 보이면 모델이 날짜를 재환산한다 →
+    # 사용자 발화는 최신 것만 원문으로 주고 그 전 것은 가린다(이미 facts 에 반영됨). 어시스턴트 발화는 '직전에 되물었는지' 판단용으로 남긴다.
     prior_facts = (req.persona or {}).get("facts") or {}
-    convo = "\n".join(f"{m.role}: {m.content}" for m in req.messages[-8:])
+    recent = req.messages[-8:]
+    last_user = max((i for i, m in enumerate(recent) if m.role == "user"), default=-1)
+    convo = "\n".join(
+        f"{m.role}: {m.content}" if m.role != "user" or i == last_user else "user: (이전 입력 — 이미 facts 에 반영됨)"
+        for i, m in enumerate(recent)
+    )
     result = make_json_caller(provider)(build_persona_prompt(req.persona or {}), convo, temperature=0.1)
     facts = result.get("facts")
     if not isinstance(facts, dict):
@@ -262,44 +269,49 @@ def persona(req: PersonaReq):
     conflict = result.get("conflict")
     if not (isinstance(conflict, dict) and conflict.get("question")):
         conflict = None
+    # ★ 날짜 key 는 결정론적으로 먼저 정리한다 — 최신 입력에 날짜 표현이 있을 때만 파서 값으로 인정, 없으면 저장값 유지.
+    #   (모델의 재환산은 여기서 되돌아가므로 아래 충돌 판정의 근거에서도 빠진다)
+    facts, date_changed = _fix_relative_dates(facts, prior_facts, req)
     # ★ conflict는 '이미 저장된 facts'와의 모순일 때만 성립한다(룰 3a를 코드로 강제 · 모델 무관).
     #   대조할 기존 facts가 없으면(첫 입력 등) 모델이 confirm성 conflict를 만들어도 무시 → 빈 facts 루프 차단.
     if not prior_facts:
         conflict = None
     # ★ 기존 facts 의 어떤 값도 바뀌지 않았으면 모순이 아니다(모델이 같은 날짜를 두고 "맞나요?" 하던 가짜 conflict 차단).
-    #   내부 key 이름이나 'facts' 를 사용자 질문에 노출하는 conflict 도 버린다.
+    #   날짜 key 는 최신 입력에 날짜 표현이 있어 실제로 바뀐 경우에만 근거로 친다. 내부 key 이름이나 'facts' 를 노출하는 conflict 도 버린다.
     if conflict:
-        changed_keys = [k for k, v in prior_facts.items() if k in facts and facts[k] != v]
+        changed_keys = [k for k, v in prior_facts.items() if k in facts and facts[k] != v and (k not in _DATE_KEYS or k in date_changed)]
         q = str(conflict.get("question", ""))
         if not changed_keys or "facts" in q or re.search(r"\b[a-z]+_[a-z_]+\b", q):
             conflict = None
-    facts = _fix_relative_dates(facts, prior_facts, req)
     return JSONResponse({"facts": facts, "conflict": conflict})
 
 
 _DATE_KEYS = ("move_date", "birth_date", "resignation_date", "marriage_date", "death_date", "event_date")
 
 
-def _fix_relative_dates(facts: dict, prior: dict, req: PersonaReq) -> dict:
-    """LLM 이 환산한 기준일을 결정적 상대 날짜 파서(sources/reldate)로 교차 검증한다.
-    - 이번 턴에 새로 생기거나 바뀐 날짜 key 가 하나이고, 최신 사용자 문장에서 날짜 표현이 읽히는데 값이 다르면 파서 값으로 바로잡는다.
-    - 날짜 key 가 하나도 안 생겼는데 문장에 날짜 표현 + 기준일 키워드(출생·이사·퇴사…)가 있으면 그 key 를 채운다."""
+def _fix_relative_dates(facts: dict, prior: dict, req: PersonaReq) -> tuple[dict, set[str]]:
+    """기준일(날짜 key)을 결정론적으로 정리한다. 돌려주는 집합 = 최신 입력의 날짜 표현으로 실제로 바뀐(인정된) 날짜 key.
+    - 최신 사용자 문장에 날짜 표현이 없으면: 이미 저장된 날짜 key 는 모델이 바꿨어도 저장값으로 되돌린다(재환산 금지를 코드로 강제).
+    - 날짜 표현이 있으면: 이번 턴에 새로 생기거나 바뀐 날짜 key 가 하나일 때 파서 값으로 맞추고, 하나도 없으면
+      문장의 기준일 키워드(출생·이사·퇴사…) 또는 이벤트 기본 key 를 채운다."""
+    changed_ok: set[str] = set()
     try:
         latest = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
         parsed = reldate.parse_relative_date(latest, date.today())
         if not parsed:
-            # 이번 문장에 날짜 표현이 없는데 이미 저장된 기준일이 바뀌었다면 모델이 멋대로 재계산한 것 → 기존 값 유지
             for k in _DATE_KEYS:
                 if prior.get(k) and facts.get(k) and facts[k] != prior[k]:
                     print(f"[persona] {k}: 날짜 표현 없이 {prior[k]} → {facts[k]} 로 바뀜 → 기존 값 유지")
                     facts = {**facts, k: prior[k]}
-            return facts
+            return facts, changed_ok
         iso, phrase = parsed[0].isoformat(), parsed[1]
         changed = [k for k in _DATE_KEYS if facts.get(k) and facts.get(k) != prior.get(k)]
         if len(changed) == 1:
             if str(facts[changed[0]])[:10] != iso:
                 print(f"[persona] {changed[0]}: LLM {facts[changed[0]]} → 파서 {iso} ('{phrase}')")
                 facts = {**facts, changed[0]: iso}
+            if prior.get(changed[0]) and prior[changed[0]] != iso:
+                changed_ok.add(changed[0])
         elif not changed:
             key = None
             for w, k in deadline.ANCHOR_WORDS:
@@ -311,9 +323,14 @@ def _fix_relative_dates(facts: dict, prior: dict, req: PersonaReq) -> dict:
             if key and not facts.get(key) and not prior.get(key):
                 print(f"[persona] {key} 비어 있음 → 파서 {iso} ('{phrase}')")
                 facts = {**facts, key: iso}
+        else:
+            # 둘 이상 바뀌면 어느 것이 이번 문장 것인지 모른다 → 저장값이 있던 key 는 되돌린다
+            for k in changed:
+                if prior.get(k):
+                    facts = {**facts, k: prior[k]}
     except Exception as e:  # noqa: BLE001 — 교차 검증 실패가 대화를 막지 않도록
         print(f"[persona] 날짜 교차 검증 실패: {e!r}")
-    return facts
+    return facts, changed_ok
 
 
 def _sanitize_board_ops(ops, board_status: dict, playbook: dict | None = None) -> list:
