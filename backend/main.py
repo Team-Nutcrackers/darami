@@ -25,6 +25,7 @@ from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 from openai import OpenAI
 
+from ai_log import AiRun
 from prompts import build_system_prompt, build_generation_prompt, build_persona_prompt
 from sources.curate import curate_event, legal_for, curate_dynamic
 from sources.curate_v2 import curate_dynamic_v2
@@ -173,32 +174,36 @@ def _parse_json(raw: str, fallback: dict) -> dict:
         return fallback
 
 
-def _create_json(provider: Provider, chat_messages: list[dict], temperature: float) -> str:
-    """선택된 provider로 구조화 JSON 응답(raw 문자열)을 받는다."""
-    completion = provider.client.chat.completions.create(
-        model=provider.model,
-        messages=chat_messages,
-        response_format={"type": "json_object"},
-        temperature=temperature,
-    )
+def _create_json(provider: Provider, chat_messages: list[dict], temperature: float, run: Optional[AiRun] = None) -> str:
+    """선택된 provider로 구조화 JSON 응답(raw 문자열)을 받는다.
+    모든 LLM 호출이 여기를 지난다 → 호출 1건씩 AI API 호출 로그(ai_log)에 남는다.
+    run: 이 호출이 속한 기능 실행. 없으면(오프라인 스크립트 등) 스크립트 단위 기본 실행에 누적."""
+    body = {
+        "model": provider.model,
+        "messages": chat_messages,
+        "response_format": {"type": "json_object"},
+        "temperature": temperature,
+    }
+    completion = (run or AiRun.default()).call(provider.client, body)
     return completion.choices[0].message.content or "{}"
 
 
-def call_chat(provider: Provider, system_prompt: str, messages: list[Message]) -> dict:
+def call_chat(provider: Provider, system_prompt: str, messages: list[Message], run: Optional[AiRun] = None) -> dict:
     """선택된 LLM을 호출해 대화용 구조화 JSON 응답을 받는다."""
     chat_messages = [{"role": "system", "content": system_prompt}]
     chat_messages += [{"role": m.role, "content": m.content} for m in messages]
-    raw = _create_json(provider, chat_messages, temperature=0.3)
+    raw = _create_json(provider, chat_messages, temperature=0.3, run=run)
     return _parse_json(raw, {"reply": raw, "eventDetected": None, "askMissing": [], "quickReplies": [], "boardOps": []})
 
 
-def make_json_caller(provider: Provider):
-    """curate_dynamic / persona 가 쓰는 단발 JSON 호출자(provider 바인딩)."""
+def make_json_caller(provider: Provider, run: Optional[AiRun] = None):
+    """curate_dynamic / persona 가 쓰는 단발 JSON 호출자(provider · 기능 실행 바인딩)."""
     def _json_call(system_prompt: str, user_content: str, temperature: float = 0.2) -> dict:
         raw = _create_json(
             provider,
             [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_content}],
             temperature,
+            run,
         )
         return _parse_json(raw, {})
 
@@ -219,15 +224,17 @@ def generate(req: GenReq):
     provider = get_provider()
     if provider.client is None:
         return JSONResponse({"error": f"{provider.label} API 키가 설정되지 않았습니다."}, status_code=500)
-    try:
-        if CURATE_VERSION == "v1":
-            playbook = curate_dynamic(req.description.strip(), req.persona, make_json_caller(provider))
-        else:
-            # v2: 이벤트 분류 → 사전 생성 사례(few-shot) → 이벤트별 API 매핑으로 계획·grounding
-            playbook, trace = curate_dynamic_v2(req.description.strip(), req.persona, make_json_caller(provider))
-            _save_live_trace(req, provider.key, playbook, trace)
-    except Exception as e:  # noqa: BLE001
-        return JSONResponse({"error": f"동적 큐레이션 실패: {e}"}, status_code=500)
+    with AiRun("generate") as run:  # 이 요청 동안의 LLM 호출(분류·라우팅·계획·선택·그래프 확장)을 한 실행으로 기록
+        try:
+            if CURATE_VERSION == "v1":
+                playbook = curate_dynamic(req.description.strip(), req.persona, make_json_caller(provider, run))
+            else:
+                # v2: 이벤트 분류 → 사전 생성 사례(few-shot) → 이벤트별 API 매핑으로 계획·grounding
+                playbook, trace = curate_dynamic_v2(req.description.strip(), req.persona, make_json_caller(provider, run))
+                _save_live_trace(req, provider.key, playbook, trace)
+        except Exception as e:  # noqa: BLE001
+            run.fail(e)
+            return JSONResponse({"error": f"동적 큐레이션 실패: {e}"}, status_code=500)
     return JSONResponse(deadline.enrich_playbook(playbook))
 
 
@@ -262,7 +269,8 @@ def persona(req: PersonaReq):
         f"{m.role}: {m.content}" if m.role != "user" or i == last_user else "user: (이전 입력 — 이미 facts 에 반영됨)"
         for i, m in enumerate(recent)
     )
-    result = make_json_caller(provider)(build_persona_prompt(req.persona or {}), convo, temperature=0.1)
+    with AiRun("persona") as run:
+        result = make_json_caller(provider, run)(build_persona_prompt(req.persona or {}), convo, temperature=0.1)
     facts = result.get("facts")
     if not isinstance(facts, dict):
         facts = prior_facts
@@ -400,11 +408,14 @@ async def chat(req: ChatReq):
             return
 
         # LLM 호출은 동기 → 스레드로 빼서 이벤트 루프를 막지 않음
+        run = AiRun("chat")
         try:
-            result = await asyncio.to_thread(call_chat, provider, system_prompt, req.messages)
+            result = await asyncio.to_thread(call_chat, provider, system_prompt, req.messages, run)
         except Exception as e:  # noqa: BLE001
+            run.finish(e)
             yield sse("error", {"message": f"{provider.label} 호출 실패: {e}"})
             return
+        run.finish()
 
         reply = str(result.get("reply", "")).strip()
 

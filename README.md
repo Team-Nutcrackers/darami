@@ -158,6 +158,21 @@ npm run dev
 선별된 플레이북을 시스템 프롬프트에 주입하면, **Upstage Solar Pro2**(`solar-pro2`)가
 대화 답변과 보드 갱신 정보를 JSON으로 응답합니다.
 
+### AI API 호출 로그
+
+모든 LLM 호출은 `backend/main.py` 의 `_create_json` 한 곳을 지나고, `backend/ai_log.py` 가 호출마다 기록합니다.
+기록 항목은 요청 시각(KST)·엔드포인트·요청 모델·요청 내용 전체, 응답 시각·응답 본문(응답 ID·모델명·답변·토큰 사용량)입니다.
+기능 1회 실행(대화 응답 생성 · 세션 페르소나 추출 · 자유 입력 이벤트 절차 구성) 동안의 호출은
+`backend/generated/ai_logs/` 의 파일 하나에 누적됩니다. 본문 속 주민등록번호·휴대전화·이메일·카드번호·키 값은 그 부분만 마스킹됩니다.
+
+```bash
+cd backend
+python3 ai_log.py list                                         # 실행 목록 (입력 미리보기 포함)
+python3 ai_log.py export --run <ID> --run <ID> --run <ID> --out ai_api_logs.zip   # 기능별 1회 → <기능명>.json, zip 하나
+```
+
+가장 최근 실행이 실사용자 대화일 수 있으니, 데모 시나리오로 실행한 것을 골라 내용을 확인한 뒤 제출합니다.
+
 <div align="center">
 <sub>🌰 다람이 — 흩어진 공공서비스를, 한 번의 대화로.</sub>
 </div>
