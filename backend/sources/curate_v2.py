@@ -373,6 +373,8 @@ def _law_proc(it: dict, pid: str, priority: str, condition: str) -> dict:
     out["key"] = f"common:{it['common']}" if it.get("common") else f"law:{it['name']}"  # 의존관계 카탈로그용 안정 키
     ref = common_ref(it["common"]) if it.get("common") else {"law_query": it["law_query"],
                                                               "article_title": it["article_title"], "expected_days": None}
+    if ref is None:  # 그래프·의존관계가 참조하는 common 키가 이 환경의 카탈로그에 없음(common.py COMMON 승격 누락)
+        raise KeyError(f"공통 카탈로그에 없는 절차 키: {it['common']} (sources/common.py COMMON 에 추가 필요)")
     return _legal(out, ground_legal(**ref))
 
 

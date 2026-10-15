@@ -42,7 +42,19 @@ def base() -> dict:
     global _base
     if _base is None:
         _base = _read(BASE_PATH, {"nodes": {}, "edges": []})
+        missing = missing_common_keys(_base)
+        if missing:  # 환경별 learned_common.json 에만 있던 키를 그래프가 참조 → 서버에서만 깨지는 원인. COMMON 으로 승격할 것
+            print(f"[graph] 카탈로그(COMMON)에 없는 공통 절차를 그래프가 참조: {', '.join(missing)} "
+                  f"→ sources/common.py COMMON 에 추가해야 의존관계·법령 grounding 이 붙는다", file=sys.stderr)
     return _base
+
+
+def missing_common_keys(g: dict | None = None) -> list[str]:
+    """그래프가 참조하는 common:<key> 중 공통 카탈로그(COMMON)에 없는 것.
+    COMMON 은 코드(git)지만 학습 카탈로그는 환경별 파일이라, 학습 키를 그래프에 쓰면 다른 환경에서 빠진다."""
+    from .common import COMMON
+    ns = (g or base()).get("nodes", {})
+    return sorted(k.split(":", 1)[1] for k in ns if k.startswith("common:") and k.split(":", 1)[1] not in COMMON)
 
 
 def learned() -> dict:

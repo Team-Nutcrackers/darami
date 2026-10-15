@@ -5,6 +5,10 @@ predefined든 dynamic이든, 절차가 여기 매칭되면 LLM이 법령·조문
 ref는 모두 국가법령정보 OPEN API 라이브로 조문·기한을 실제 확인한 값만 등록.
 
 - crosscut=True: 여러 이벤트에 걸치는 절차. dynamic에선 '해당 시' 후보로 제시(하이브리드).
+
+학습 카탈로그(learned_common.json)는 git 에 올리지 않는 환경별 파일이다. 그래서 git 에 올라가는 데이터
+(playbooks/graph.base.json·dependencies.json·플레이북 id)가 참조하는 common:<key> 는 반드시 이 COMMON 에 있어야 한다.
+학습 항목을 그래프·의존관계에 쓰기 시작했다면 여기로 승격해 코드에 고정한다(graph.missing_common_keys 가 불일치를 경고).
 """
 
 from __future__ import annotations
@@ -33,6 +37,20 @@ COMMON: dict[str, dict] = {
     "car-address": {
         "name": "자동차 주소지 변경", "priority": "must", "condition": "차량 보유자가 주소를 옮긴 경우.",
         "ref": {"law_query": "자동차관리법", "article_title": "변경등록", "expected_days": None},
+    },
+    # 사업·고용 (법령 근거) — 학습 카탈로그에서 검증 후 승격(그래프·의존관계·퇴직 플레이북이 참조)
+    "business-registration": {
+        "name": "사업자등록", "priority": "must", "condition": "사업 시작 전 필수(사업 개시일부터 20일 이내).",
+        "ref": {"law_query": "부가가치세법", "article_title": "사업자등록", "expected_days": None},
+    },
+    "online-business-report": {
+        "name": "통신판매업 신고", "priority": "must", "condition": "온라인(통신판매)으로 판매하는 경우 사업자등록 후 필수.",
+        "ref": {"law_query": "전자상거래 등에서의 소비자보호에 관한 법률", "article_title": "통신판매업자의 신고 등", "expected_days": None},
+    },
+    "unemployment-benefit": {
+        "name": "구직급여(실업급여) 신청", "priority": "must",
+        "condition": "비자발적 퇴직 후 고용센터에 실업 신고·수급자격 신청(퇴직 다음 날부터 12개월 안에).",
+        "ref": {"law_query": "고용보험법", "article_title": "실업의 신고", "expected_days": None},
     },
     # cross-cutting (이사·퇴사·출산 등 여러 이벤트에 걸침 → 해당 시 후보)
     "health-insurance-change": {
