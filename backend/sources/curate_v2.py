@@ -143,20 +143,6 @@ def event_catalog() -> str:
                      for e in EVENTS.values())
 
 
-# "반려동물 간식을 만들어 팔려는 창업"처럼 판매 상품만 반려동물용인데 pet 이 붙는 경우(동물등록 등 엉뚱한 절차) — 기르거나 들이는 말이 없을 때만 뺀다
-_BUSINESS_CUE = re.compile(r"창업|사업자|사업을|가게|쇼핑몰|스토어|판매|팔려|팔고|장사")
-_PRODUCT_CUE = re.compile(r"간식|사료|용품|제품|상품|쇼핑몰|스토어|판매|팔려|팔고|팔아|제조")
-_OWNING_CUE = re.compile(r"입양|분양|키우|기르|데려오|데려와|들이|동물\s*등록|반려견이|반려묘가|강아지가|고양이가|잃어버|죽었|무지개")
-
-
-def drop_product_only_pet(events: list[str], query: str) -> list[str]:
-    """pet 이 붙었지만 질문은 반려동물용 상품을 만들어 파는 창업일 때 → pet 대신 startup."""
-    if "pet" in events and _BUSINESS_CUE.search(query) and _PRODUCT_CUE.search(query) and not _OWNING_CUE.search(query):
-        out = ["startup" if e == "pet" else e for e in events]
-        return list(dict.fromkeys(out))
-    return events
-
-
 def normalize_events(ids, primary: str | None = None, limit: int | None = MAX_EVENTS) -> list[str]:
     """목록에 있는 id 만, 중복 없이. primary 가 있으면 맨 앞으로(LLM 이 언급 순서대로 나열하는 경우 대비)."""
     out = []
@@ -867,7 +853,7 @@ def curate_dynamic_v2(query: str, persona: dict | None, llm_json, use_examples: 
     from prompts import build_v2_classify_prompt
     ctx = f"[질문]\n{query}\n[페르소나]\n{json.dumps(persona or {}, ensure_ascii=False)}"
     cls = llm_json(build_v2_classify_prompt(event_catalog()), ctx, 0.0)
-    all_events = drop_product_only_pet(normalize_events(cls.get("events"), cls.get("primary"), limit=None), query)
+    all_events = normalize_events(cls.get("events"), cls.get("primary"), limit=None)
     events = all_events[:MAX_EVENTS]
     trace: dict = {"classify": cls}
     extra_event = all_events[MAX_EVENTS] if len(all_events) > MAX_EVENTS else None  # 모델이 4개를 냈으면 4번째

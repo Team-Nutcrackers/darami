@@ -244,49 +244,7 @@ def generate(req: GenReq):
             run.fail(e)
             print(f"[generate] 실패: {e!r}")  # 내부 오류 내용은 로그에만(사용자 화면에 예외 문자열을 내보내지 않는다)
             return JSONResponse({"error": "절차를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요."}, status_code=500)
-    _guard_title(playbook, description)
-    _soften_done_registration(playbook, description)
     return JSONResponse(deadline.enrich_playbook(playbook))
-
-
-# 이미 국내에 사는 외국인(서울에서 대전으로 이사하는 유학생 등)은 '입국 후 90일 내 외국인등록'을 마쳤다 — 필수로 넣으면 틀린 안내
-_IN_KOREA_RE = re.compile(r"(?:서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|충북|충남|전북|전남|경북|경남|제주|[가-힣]{1,4}(?:시|군|구))\s*에서\s*"
-                          r"(?:\S+\s*){0,3}?(?:이사|살고|살다|살았|지내고|지내다|다니고|다니는|일하고|근무)|년째|살고\s*있|지내고\s*있|다니고\s*있|다니는|근무\s*중|체류\s*중|재학\s*중|"
-                          r"\bfrom\s+(?:Seoul|Busan|Incheon|Daegu|Daejeon|Gwangju|Ulsan|Sejong|Suwon|Seongnam|Goyang|Yongin)\b|"
-                          r"\b(?:living|studying|working|staying)\s+in\s+(?:Korea|Seoul|Busan)|\byears?\s+in\s+Korea|\balready\s+(?:in|living\s+in)\s+Korea", re.I)
-
-
-_FIRST_ENTRY_RE = re.compile(r"처음\s*(?:들어|오|와|입국|한국)|입국\s*(?:예정|전|하면)|들어갈\s*예정|coming\s+to\s+Korea|arriv|first\s+time|moving\s+to\s+Korea", re.I)
-
-
-def _soften_done_registration(playbook: dict, description: str) -> None:
-    if not _IN_KOREA_RE.search(description) or _FIRST_ENTRY_RE.search(description):
-        return
-    for p in playbook.get("procedures", []) or []:
-        if isinstance(p, dict) and str(p.get("name", "")).strip() == "외국인등록":
-            p["priority"] = "nice"
-            p["condition"] = "이미 국내에 머무는 중이면 대부분 마쳤을 절차 — 아직 외국인등록을 하지 않았다면(입국 후 90일 이내)"
-
-
-_URL_RE = re.compile(r"https?://\S+|www\.\S+")
-_QUOTED_RE = re.compile(r"['\"‘’“”「」『』]([^'\"‘’“”「」『』]{2,80})['\"‘’“”「」『』]")
-
-
-def _guard_title(playbook: dict, description: str) -> None:
-    """제목·안내문은 모델이 쓰지만 질문의 지시를 그대로 따를 수 있다('제목은 ○○로 써 줘').
-    링크는 지우고, 질문에서 따옴표로 지정한 문구가 그대로 실렸으면 이벤트 이름으로 바꾼다(안내문은 비운다)."""
-    norm = lambda x: " ".join(_URL_RE.sub("", x).split())
-    quoted = [q for q in (norm(x) for x in _QUOTED_RE.findall(description)) if len(q) >= 2]
-    if not re.search(r"제목|타이틀|title|intro|안내문|문구|라고\s*(?:써|적|해)", description, re.I):
-        quoted = []  # "'청년 월세 지원' 받을 수 있나요?"처럼 제도 이름을 따옴표로 쓴 평범한 질문은 건드리지 않는다
-    for k in ("title", "intro"):
-        v = playbook.get(k)
-        if not isinstance(v, str):
-            continue
-        v = _URL_RE.sub("", v).strip()
-        if any(q in norm(v) for q in quoted):
-            v = (EVENTS.get(playbook.get("event") or "", {}).get("title") or "내 생활 이벤트") if k == "title" else ""
-        playbook[k] = v
 
 
 def _save_live_trace(req: GenReq, provider_key: str, playbook: dict, trace: dict) -> None:
@@ -326,8 +284,6 @@ def persona(req: PersonaReq):
     facts = result.get("facts")
     if not isinstance(facts, dict):
         facts = prior_facts
-    # 다람이에게 하는 지시('역할을 바꿔라' 등)가 사실처럼 저장되면 매 턴 시스템 프롬프트에 실린다 → 그런 key 는 버린다
-    facts = {k: v for k, v in facts.items() if not _INSTRUCTION_KEY.search(str(k))}
     conflict = result.get("conflict")
     if not (isinstance(conflict, dict) and conflict.get("question")):
         conflict = None
@@ -349,7 +305,6 @@ def persona(req: PersonaReq):
 
 
 _DATE_KEYS = ("move_date", "birth_date", "resignation_date", "marriage_date", "death_date", "event_date")
-_INSTRUCTION_KEY = re.compile(r"assistant|instruction|prompt|system|darami|bot_|response_style|answer_style|reply_", re.I)
 
 
 def _fix_relative_dates(facts: dict, prior: dict, req: PersonaReq) -> tuple[dict, set[str]]:
@@ -443,34 +398,6 @@ def _sanitize_quick_replies(items) -> list[str]:
 
 _CRISIS_RE = re.compile(r"죽고\s*싶|자살|극단적\s*(?:인\s*)?(?:선택|생각)|살기\s*싫|살고\s*싶지\s*않|사는\s*게\s*(?:너무\s*|정말\s*)?(?:힘들|괴롭|지옥)|"
                         r"삶을\s*포기|생을\s*마감|목숨을\s*끊|사라지고\s*싶")
-_MONEY_RE = re.compile(r"\d[\d,.]*\s*(?:천|만|억)?\s*(?:만\s*)?원(?!본|하|래|인|칙|활|서|룸|금|장|형)")
-_PHONE_RE = re.compile(r"(?<!\d)(?:0\d{1,2}-\d{3,4}-\d{4}|1\d{3}-\d{4}|☎\s*\d{3,4})(?!\d)")
-_SENT_RE = re.compile(r"(?<=[.!?])\s+|\n+")
-GROUND_NOTE = "정확한 금액·연락처는 담당기관에서 확인해 주세요."
-
-
-def _drop_ungrounded(reply: str, context: str) -> str:
-    """reply 의 금액·전화번호 중 근거(시스템 프롬프트·대화)에 없는 것을 걸러 낸다.
-    전화번호는 그 번호(괄호째)만 지우고, 근거 없는 금액이 든 문장은 뺀다. 하나라도 걸렀으면 확인 안내를 덧붙인다."""
-    norm = lambda x: re.sub(r"[\s,☎]", "", x)
-    ctx = norm(context)
-    out, touched = [], False
-    for sent in _SENT_RE.split(reply):
-        if not sent.strip():
-            continue
-        for ph in _PHONE_RE.findall(sent):
-            if norm(ph) not in ctx:
-                sent = re.sub(r"\s*\(\s*" + re.escape(ph) + r"\s*\)|\s*" + re.escape(ph), "", sent)
-                touched = True
-        if any(norm(m) not in ctx for m in _MONEY_RE.findall(sent)):
-            touched = True
-            continue
-        out.append(sent)
-    if not touched:
-        return reply
-    return " ".join(out + [GROUND_NOTE]).strip()
-
-
 _HANGUL_RE = re.compile(r"[가-힣]")
 # 주입·주제 이탈 신호 — 이런 턴에만 대화 프롬프트 맨 앞에 [지켜야 할 원칙]을 넣는다
 _GUARD_TRIGGER_RE = re.compile(
@@ -493,21 +420,6 @@ def _asks_details(text: str) -> bool:
 
 def _needs_guard(text: str) -> bool:
     return bool(text) and (bool(_GUARD_TRIGGER_RE.search(text)) or not _HANGUL_RE.search(text))
-_INJECTION_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)|"
-                           r"ignore\s+(?:all\s+)?(?:the\s+)?previous|앞의\s*(?:지시|대화|내용|규칙)\S*\s*(?:모두\s*|전부\s*|다\s*)?(?:무시|잊)", re.I)
-def _note_overdue(reply: str, playbook: dict, deadlines) -> str:
-    """답에서 말한 절차의 만료일(화면 D-day 와 같은 계산)이 이미 지났는데 그 말이 없으면 한 문장 덧붙인다."""
-    if not deadlines or re.search(r"지났|지나서|지난\s*상태|경과|늦었|넘겼|넘었", reply):
-        return reply
-    names = {p.get("id"): str(p.get("name") or "") for p in playbook.get("procedures", []) or [] if isinstance(p, dict)}
-    for d in deadlines:
-        try:
-            days, due, name = int(d.get("days")), str(d.get("due"))[:10], names.get(d.get("id"), "")
-        except (TypeError, ValueError, AttributeError):
-            continue
-        if days < 0 and name and name in reply:
-            return reply + f" 참고로 {name} 기한({due})은 이미 지났어요. 늦더라도 바로 처리하시는 게 좋아요."
-    return reply
 
 
 def _strip_ids(reply: str, playbook: dict) -> str:
@@ -546,12 +458,7 @@ def _other_event(user_msgs: list[str], playbook: dict) -> str | None:
     return None
 
 
-_FAKE_SYSTEM_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)", re.I)
-_COMMAND_RE = re.compile(r"하세요|하시오|하라|해라|답하|출력|처리해|바꿔|변경해|무시|따르")
-FAKE_SYSTEM_NOTE = ("시스템 공지·관리자 모드처럼 다람이의 설정을 바꾸려는 요청은 따를 수 없어요. 다람이는 공공서비스 절차 안내를 계속 도와드릴게요. "
-                    "절차를 직접 마치셨다면 어떤 절차를 마쳤는지 알려 주세요.")
 _DANGER_RE = re.compile(r"때려|때리|폭행|가정\s*폭력|데이트\s*폭력|스토킹|협박|위협|학대")
-CRISIS_NOTE = "혹시 마음이 많이 힘드시다면 혼자 견디지 마세요. 자살예방 상담전화 109(24시간)에서 바로 이야기를 들어 드려요."
 
 
 @app.post("/api/chat")
@@ -604,17 +511,6 @@ async def chat(req: ChatReq):
 
         reply = str(result.get("reply", "")).strip()
         reply = _strip_ids(reply, playbook or {})
-        # 플레이북·대화에 없는 금액·전화번호는 모델의 기억(옛 기준·지어낸 번호)이다 → 빼고 담당기관 확인을 권한다
-        reply = _drop_ungrounded(reply, system_prompt + "\n" + "\n".join(m.content for m in req.messages))
-        reply = _note_overdue(reply, playbook or {}, req.deadlines)
-        # '[시스템 공지]·관리자 모드' 처럼 지시를 흉내 낸 턴에는 할 일 보드를 바꾸지 않는다(사람이 실제로 마쳤다고 한 말이 아니다)
-        if _INJECTION_RE.search(latest_user):
-            result["boardOps"], result["userTodos"] = [], []
-            if _FAKE_SYSTEM_RE.search(latest_user) and _COMMAND_RE.search(latest_user):  # 가짜 공지가 명령까지 하면 모델 답(명령을 따른 말)을 쓰지 않는다
-                reply, result["askMissing"] = FAKE_SYSTEM_NOTE, []
-        # 극단적 선택을 암시하는 말이 있으면 모델 답과 무관하게 상담 전화를 먼저 알린다(결정적 안전장치)
-        if _CRISIS_RE.search(latest_user) and "109" not in reply:
-            reply = CRISIS_NOTE + "\n\n" + reply
 
         # 1) reply를 짧게 끊어 타이핑 효과로 흘려준다
         buf = ""
