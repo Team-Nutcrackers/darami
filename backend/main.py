@@ -20,7 +20,6 @@ from typing import List, Optional
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 from openai import OpenAI
@@ -28,7 +27,7 @@ from openai import OpenAI
 from ai_log import AiRun
 from prompts import build_system_prompt, build_generation_prompt, build_persona_prompt
 from sources.curate import curate_event, legal_for, curate_dynamic
-from sources.curate_v2 import curate_dynamic_v2
+from sources.curate_v2 import curate_dynamic_v2, EVENTS
 from sources import graph as procgraph
 from sources import deadline
 from sources import reldate
@@ -69,12 +68,13 @@ def get_provider(_key: Optional[str] = None) -> Provider:
 
 
 app = FastAPI(title="다람이 API")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# CORS 는 열지 않는다 — 프론트는 Vite 프록시로 같은 출처(/api)에서 부른다. 다른 사이트가 브라우저로 이 API 를 쓰지 못하게.
+
+# 입력 상한(비용·악용 방지). 실제 대화는 이보다 훨씬 짧다.
+MAX_MSG_CHARS = 4000      # 메시지 한 개
+MAX_HISTORY = 40          # 대화 이력(최근 N개만 모델에 보낸다)
+MAX_DESC_CHARS = 2000     # 자유 입력 이벤트 설명
+CHAT_ROLES = ("user", "assistant")  # system 역할 등은 받지 않는다(시스템 프롬프트는 서버만 만든다)
 
 
 # ---------- 데이터 모델 ----------
@@ -89,6 +89,7 @@ class ChatReq(BaseModel):
     persona: Optional[dict] = None     # 지금까지 파악한 사용자 페르소나(facts)
     messages: List[Message]
     board: Optional[List[dict]] = None  # 현재 '할 일' 보드 [{id, status}] — 완료 체크 상태를 모델이 알도록
+    deadlines: Optional[List[dict]] = None  # 화면 D-day 와 같은 계산의 절차별 만료일 [{id, due, days}] — 모델이 날짜를 직접 셈하지 않도록
 
 
 class GenReq(BaseModel):
@@ -188,10 +189,16 @@ def _create_json(provider: Provider, chat_messages: list[dict], temperature: flo
     return completion.choices[0].message.content or "{}"
 
 
+def _clean_history(messages: list[Message], limit: int = MAX_HISTORY) -> list[dict]:
+    """모델에 보낼 대화 이력: user/assistant 만, 최근 limit 개, 메시지당 MAX_MSG_CHARS 자."""
+    msgs = [m for m in messages if m.role in CHAT_ROLES][-limit:]
+    return [{"role": m.role, "content": m.content[:MAX_MSG_CHARS]} for m in msgs]
+
+
 def call_chat(provider: Provider, system_prompt: str, messages: list[Message], run: Optional[AiRun] = None) -> dict:
     """선택된 LLM을 호출해 대화용 구조화 JSON 응답을 받는다."""
     chat_messages = [{"role": "system", "content": system_prompt}]
-    chat_messages += [{"role": m.role, "content": m.content} for m in messages]
+    chat_messages += _clean_history(messages)
     raw = _create_json(provider, chat_messages, temperature=0.3, run=run)
     return _parse_json(raw, {"reply": raw, "eventDetected": None, "askMissing": [], "quickReplies": [], "boardOps": []})
 
@@ -224,18 +231,42 @@ def generate(req: GenReq):
     provider = get_provider()
     if provider.client is None:
         return JSONResponse({"error": f"{provider.label} API 키가 설정되지 않았습니다."}, status_code=500)
+    description = req.description.strip()[:MAX_DESC_CHARS]
     with AiRun("generate") as run:  # 이 요청 동안의 LLM 호출(분류·라우팅·계획·선택·그래프 확장)을 한 실행으로 기록
         try:
             if CURATE_VERSION == "v1":
-                playbook = curate_dynamic(req.description.strip(), req.persona, make_json_caller(provider, run))
+                playbook = curate_dynamic(description, req.persona, make_json_caller(provider, run))
             else:
                 # v2: 이벤트 분류 → 사전 생성 사례(few-shot) → 이벤트별 API 매핑으로 계획·grounding
-                playbook, trace = curate_dynamic_v2(req.description.strip(), req.persona, make_json_caller(provider, run))
+                playbook, trace = curate_dynamic_v2(description, req.persona, make_json_caller(provider, run))
                 _save_live_trace(req, provider.key, playbook, trace)
         except Exception as e:  # noqa: BLE001
             run.fail(e)
-            return JSONResponse({"error": f"동적 큐레이션 실패: {e}"}, status_code=500)
+            print(f"[generate] 실패: {e!r}")  # 내부 오류 내용은 로그에만(사용자 화면에 예외 문자열을 내보내지 않는다)
+            return JSONResponse({"error": "절차를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요."}, status_code=500)
+    _guard_title(playbook, description)
     return JSONResponse(deadline.enrich_playbook(playbook))
+
+
+_URL_RE = re.compile(r"https?://\S+|www\.\S+")
+_QUOTED_RE = re.compile(r"['\"‘’“”「」『』]([^'\"‘’“”「」『』]{2,80})['\"‘’“”「」『』]")
+
+
+def _guard_title(playbook: dict, description: str) -> None:
+    """제목·안내문은 모델이 쓰지만 질문의 지시를 그대로 따를 수 있다('제목은 ○○로 써 줘').
+    링크는 지우고, 질문에서 따옴표로 지정한 문구가 그대로 실렸으면 이벤트 이름으로 바꾼다(안내문은 비운다)."""
+    norm = lambda x: " ".join(_URL_RE.sub("", x).split())
+    quoted = [q for q in (norm(x) for x in _QUOTED_RE.findall(description)) if len(q) >= 2]
+    if not re.search(r"제목|타이틀|title|intro|안내문|문구|라고\s*(?:써|적|해)", description, re.I):
+        quoted = []  # "'청년 월세 지원' 받을 수 있나요?"처럼 제도 이름을 따옴표로 쓴 평범한 질문은 건드리지 않는다
+    for k in ("title", "intro"):
+        v = playbook.get(k)
+        if not isinstance(v, str):
+            continue
+        v = _URL_RE.sub("", v).strip()
+        if any(q in norm(v) for q in quoted):
+            v = (EVENTS.get(playbook.get("event") or "", {}).get("title") or "내 생활 이벤트") if k == "title" else ""
+        playbook[k] = v
 
 
 def _save_live_trace(req: GenReq, provider_key: str, playbook: dict, trace: dict) -> None:
@@ -263,10 +294,10 @@ def persona(req: PersonaReq):
     # 옛 사용자 발화 원문("2주 뒤", "5일 전" 같은 상대 표현)이 매 턴 다시 보이면 모델이 날짜를 재환산한다 →
     # 사용자 발화는 최신 것만 원문으로 주고 그 전 것은 가린다(이미 facts 에 반영됨). 어시스턴트 발화는 '직전에 되물었는지' 판단용으로 남긴다.
     prior_facts = (req.persona or {}).get("facts") or {}
-    recent = req.messages[-8:]
+    recent = [m for m in req.messages if m.role in CHAT_ROLES][-8:]
     last_user = max((i for i, m in enumerate(recent) if m.role == "user"), default=-1)
     convo = "\n".join(
-        f"{m.role}: {m.content}" if m.role != "user" or i == last_user else "user: (이전 입력 — 이미 facts 에 반영됨)"
+        f"{m.role}: {m.content[:MAX_MSG_CHARS]}" if m.role != "user" or i == last_user else "user: (이전 입력 — 이미 facts 에 반영됨)"
         for i, m in enumerate(recent)
     )
     with AiRun("persona") as run:
@@ -274,6 +305,8 @@ def persona(req: PersonaReq):
     facts = result.get("facts")
     if not isinstance(facts, dict):
         facts = prior_facts
+    # 다람이에게 하는 지시('역할을 바꿔라' 등)가 사실처럼 저장되면 매 턴 시스템 프롬프트에 실린다 → 그런 key 는 버린다
+    facts = {k: v for k, v in facts.items() if not _INSTRUCTION_KEY.search(str(k))}
     conflict = result.get("conflict")
     if not (isinstance(conflict, dict) and conflict.get("question")):
         conflict = None
@@ -295,6 +328,7 @@ def persona(req: PersonaReq):
 
 
 _DATE_KEYS = ("move_date", "birth_date", "resignation_date", "marriage_date", "death_date", "event_date")
+_INSTRUCTION_KEY = re.compile(r"assistant|instruction|prompt|system|darami|bot_|response_style|answer_style|reply_", re.I)
 
 
 def _fix_relative_dates(facts: dict, prior: dict, req: PersonaReq) -> tuple[dict, set[str]]:
@@ -351,6 +385,8 @@ def _sanitize_board_ops(ops, board_status: dict, playbook: dict | None = None) -
     for op in ops or []:
         if not isinstance(op, dict) or not op.get("id"):
             continue
+        if op["id"] not in deps and op["id"] not in board_status:
+            continue  # 플레이북에도 보드에도 없는 id(지어낸 절차·스키마 예시 '<플레이북 절차 id>')는 카드로 만들지 않는다
         cur = board_status.get(op["id"])
         if op.get("op") == "add" and cur is not None:
             continue
@@ -384,6 +420,43 @@ def _sanitize_quick_replies(items) -> list[str]:
     return out
 
 
+_CRISIS_RE = re.compile(r"죽고\s*싶|자살|극단적\s*(?:인\s*)?(?:선택|생각)|살기\s*싫|살고\s*싶지\s*않|사는\s*게\s*(?:너무\s*|정말\s*)?(?:힘들|괴롭|지옥)|"
+                        r"삶을\s*포기|생을\s*마감|목숨을\s*끊|사라지고\s*싶")
+_MONEY_RE = re.compile(r"\d[\d,.]*\s*(?:천|만|억)?\s*(?:만\s*)?원(?!본|하|래|인|칙|활|서|룸|금|장|형)")
+_PHONE_RE = re.compile(r"(?<!\d)(?:0\d{1,2}-\d{3,4}-\d{4}|1\d{3}-\d{4}|☎\s*\d{3,4})(?!\d)")
+_SENT_RE = re.compile(r"(?<=[.!?])\s+|\n+")
+GROUND_NOTE = "정확한 금액·연락처는 담당기관에서 확인해 주세요."
+
+
+def _drop_ungrounded(reply: str, context: str) -> str:
+    """reply 의 금액·전화번호 중 근거(시스템 프롬프트·대화)에 없는 것을 걸러 낸다.
+    전화번호는 그 번호(괄호째)만 지우고, 근거 없는 금액이 든 문장은 뺀다. 하나라도 걸렀으면 확인 안내를 덧붙인다."""
+    norm = lambda x: re.sub(r"[\s,☎]", "", x)
+    ctx = norm(context)
+    out, touched = [], False
+    for sent in _SENT_RE.split(reply):
+        if not sent.strip():
+            continue
+        for ph in _PHONE_RE.findall(sent):
+            if norm(ph) not in ctx:
+                sent = re.sub(r"\s*\(\s*" + re.escape(ph) + r"\s*\)|\s*" + re.escape(ph), "", sent)
+                touched = True
+        if any(norm(m) not in ctx for m in _MONEY_RE.findall(sent)):
+            touched = True
+            continue
+        out.append(sent)
+    if not touched:
+        return reply
+    return " ".join(out + [GROUND_NOTE]).strip()
+
+
+_HANGUL_RE = re.compile(r"[가-힣]")
+_INJECTION_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)|"
+                           r"ignore\s+(?:all\s+)?(?:the\s+)?previous|앞의\s*(?:지시|대화|내용|규칙)\S*\s*(?:모두\s*|전부\s*|다\s*)?(?:무시|잊)", re.I)
+_DANGER_RE = re.compile(r"때려|때리|폭행|폭력|스토킹|협박|위협|학대")
+CRISIS_NOTE = "혹시 마음이 많이 힘드시다면 혼자 견디지 마세요. 자살예방 상담전화 109(24시간)에서 바로 이야기를 들어 드려요."
+
+
 @app.post("/api/chat")
 async def chat(req: ChatReq):
     # 동적 이벤트는 요청에 실린 플레이북을 우선 사용, 없으면 디스크에서 로드
@@ -394,11 +467,18 @@ async def chat(req: ChatReq):
     except Exception:  # noqa: BLE001 — 안내 생성 실패가 대화를 막지 않도록
         guidance = ""
     # 기한 계산에 필요한 기준일(출생일·이사일 등)이 페르소나에 없으면 모델이 한 번 묻도록 알린다
+    # (폭력·위기 상황을 말한 턴에는 날짜를 묻지 않는다 — 안전 안내가 먼저)
+    latest_user = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
     try:
-        missing = deadline.missing_anchor_block(playbook, req.persona, req.board)
+        danger = _CRISIS_RE.search(latest_user) or _DANGER_RE.search(latest_user)
+        missing = "" if danger else deadline.missing_anchor_block(playbook, req.persona, req.board)
     except Exception:  # noqa: BLE001
         missing = ""
-    system_prompt = build_system_prompt(playbook, req.persona, req.board, "\n\n".join(x for x in (guidance, missing) if x))
+    # 한국어가 아닌 말로 물으면(한글 없이 영문 등) 이번 턴 reply 언어를 지정한다 — 규칙만으로는 한국어로 답하는 경우가 많다
+    lang = ("[Response language — this turn]\nThe user is not writing in Korean. Write the entire \"reply\" in the user's language (e.g. English), "
+            "not in Korean. Keep each procedure's Korean name with a short gloss in parentheses, e.g. 전입신고 (move-in report)."
+            if latest_user and not _HANGUL_RE.search(latest_user) and len(re.findall(r"[A-Za-z]{2,}", latest_user)) >= 3 else "")
+    system_prompt = build_system_prompt(playbook, req.persona, req.board, "\n\n".join(x for x in (guidance, missing) if x), req.deadlines, lang)
     provider = get_provider()
     board_status = {b.get("id"): b.get("status") for b in (req.board or []) if isinstance(b, dict) and b.get("id")}
 
@@ -413,11 +493,20 @@ async def chat(req: ChatReq):
             result = await asyncio.to_thread(call_chat, provider, system_prompt, req.messages, run)
         except Exception as e:  # noqa: BLE001
             run.finish(e)
-            yield sse("error", {"message": f"{provider.label} 호출 실패: {e}"})
+            print(f"[chat] {provider.label} 호출 실패: {e!r}")  # 내부 오류 내용은 로그에만
+            yield sse("error", {"message": "답변을 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요."})
             return
         run.finish()
 
         reply = str(result.get("reply", "")).strip()
+        # 플레이북·대화에 없는 금액·전화번호는 모델의 기억(옛 기준·지어낸 번호)이다 → 빼고 담당기관 확인을 권한다
+        reply = _drop_ungrounded(reply, system_prompt + "\n" + "\n".join(m.content for m in req.messages))
+        # '[시스템 공지]·관리자 모드' 처럼 지시를 흉내 낸 턴에는 할 일 보드를 바꾸지 않는다(사람이 실제로 마쳤다고 한 말이 아니다)
+        if _INJECTION_RE.search(latest_user):
+            result["boardOps"], result["userTodos"] = [], []
+        # 극단적 선택을 암시하는 말이 있으면 모델 답과 무관하게 상담 전화를 먼저 알린다(결정적 안전장치)
+        if _CRISIS_RE.search(latest_user) and "109" not in reply:
+            reply = CRISIS_NOTE + "\n\n" + reply
 
         # 1) reply를 짧게 끊어 타이핑 효과로 흘려준다
         buf = ""

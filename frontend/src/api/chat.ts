@@ -58,7 +58,9 @@ export async function streamChat(
   handlers: StreamHandlers,
   playbook?: Playbook | null,
   persona?: UserPersona | null,
-  board?: BoardItem[]
+  board?: BoardItem[],
+  // 화면 D-day 와 같은 계산(lib/dday)의 절차별 만료일 — 모델이 날짜를 직접 셈하지 않고 이 값을 쓴다
+  deadlines?: { id: string; due: string; days: number }[]
 ): Promise<void> {
   const res = await fetch("/api/chat", {
     method: "POST",
@@ -70,6 +72,7 @@ export async function streamChat(
       messages,
       // 현재 '할 일' 보드(완료 체크 포함) — 모델이 어떤 절차가 끝났는지 알고 답하도록
       board: (board ?? []).map((b) => ({ id: b.id, status: b.status })),
+      deadlines: deadlines ?? [],
     }),
   });
 

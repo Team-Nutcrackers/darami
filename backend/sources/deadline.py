@@ -67,6 +67,21 @@ def _anchor_of(text: str) -> str:
     return "event"
 
 
+def _has_anchor_clue(text: str) -> bool:
+    """기한 문구에 기산점 단서('…한 날부터', '…후', '개시·만료·허가' 등)가 있는지 — 있으면 이름으로 기산점을 추측하지 않는다."""
+    return bool(re.search(r"([가-힣·()]{1,14})\s*(?:일|날|때)?\s*(?:부터|후|이후|다음\s*날|익일)", text) or _OTHER_ANCHOR.search(text))
+
+
+def _anchor_of_name(name: str) -> str | None:
+    """절차 이름의 기산점 키워드 → 페르소나 날짜 key. 없으면 None."""
+    if re.search(r"이사\s*[·회]", name):
+        return None
+    for w, key in ANCHOR_WORDS:
+        if w in name:
+            return key
+    return None
+
+
 def parse_rule(text: str | None, name: str = "") -> dict | None:
     """기한 문구 하나를 규칙으로. 못 읽으면 None. 여러 절이 있으면 첫 절('/' ';' 앞)을 본다."""
     if not text or not str(text).strip():
@@ -130,6 +145,9 @@ def enrich_procedure(p: dict, event: str | None = None) -> dict:
         rule = {"kind": "relative", "from": _anchor_of(str(p.get("deadline") or "")), "amount": days, "unit": "day"}
     if rule is None:
         return p
+    if rule.get("from") == "event" and not _has_anchor_clue(str(p.get("deadline") or "")):
+        # 문구에 기산점이 전혀 없으면('14일 이내') 절차 이름으로 — '전입신고'는 이사일, '사망신고'는 사망일
+        rule["from"] = _anchor_of_name(p.get("name", "")) or "event"
     p["deadlineRule"] = rule
     # 레거시 숫자(정렬·그래프 순서용)가 비어 있으면 규칙 길이로 채운다
     if not isinstance(days, int) or days in (0, 9999):
@@ -180,10 +198,20 @@ def missing_anchor_block(playbook: dict | None, persona: dict | None, board=None
             need.setdefault(key, []).append(p.get("name", p.get("id", "")))
     if not need:
         return ""
-    lines = [f"- {ANCHOR_LABEL.get(k, k)}({k}): {', '.join(v[:3])}{' 외' if len(v) > 3 else ''} 의 기한 계산에 필요" for k, v in need.items()]
-    first_label = ANCHOR_LABEL.get(next(iter(need)), "기준일")
+    # event_date 는 이벤트마다 뜻이 달라('사건 발생일'로 물으면 창업·피해 상황에서 어색하다) 그 절차의 기한 문구로 묻는다
+    deadline_of = {p.get("name", p.get("id", "")): str(p.get("deadline") or "") for p in target}
+    label_of = lambda k, v: (f"기준일('{deadline_of.get(v[0], '')[:40]}'의 기산점)" if k == "event_date" else ANCHOR_LABEL.get(k, k))
+    lines = [f"- {label_of(k, v)}({k}): {', '.join(v[:3])}{' 외' if len(v) > 3 else ''} 의 기한 계산에 필요" for k, v in need.items()]
+    first_key = next(iter(need))
     first_proc = next(iter(need.values()))[0]
+    if first_key == "event_date":
+        first_label = "기준일"
+        example = f"{first_proc} 기한('{deadline_of.get(first_proc, '')[:40]}')을 계산하려면 기준이 되는 날이 필요해요. 언제인지 알려 주시겠어요?"
+    else:
+        first_label = ANCHOR_LABEL.get(first_key, "기준일")
+        example = f"{first_label}이 언제인지 알려 주시면 {first_proc} 기한을 날짜로 계산해 드릴게요"
     return ("[기준일 누락 — 반드시 처리]\n" + "\n".join(lines) +
-            f"\n→ 이번 reply 마지막 문장에서 {first_label}이 언제인지 꼭 물어라(예: \"{first_label}이 언제인지 알려 주시면 {first_proc} 기한을 날짜로 계산해 드릴게요\")."
+            f"\n→ 이번 reply 마지막 문장에서 {first_label}이 언제인지 꼭 물어라(예: \"{example}\")."
             f" askMissing 에 \"{first_label}\" 을 넣어라. 직전 assistant 턴에서 이미 같은 날짜를 물었거나 사용자가 모른다고 했으면 다시 묻지 않는다."
+            " 사용자가 폭력·위기 같은 위험 상황에 있으면 날짜는 묻지 말고 안전 안내를 먼저 한다."
             " quickReplies 로는 날짜를 받을 수 없으니 날짜는 글로 답하게 한다(예: '10월 말에요', '지난주 금요일').")

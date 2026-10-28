@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime
@@ -28,6 +29,17 @@ LEARNED_PATH = ROOT / "playbooks" / "graph.learned.json"
 
 _base: dict | None = None
 _learned: dict | None = None
+
+# 학습 간선의 설명(condition·guidance·pitfalls)은 사용자 질문을 본 LLM 이 쓰고, 다른 사용자의 대화 프롬프트에 그대로 들어간다.
+# 링크·도메인·이메일·전화번호·지시문이 섞인 설명은 질문을 통한 프롬프트 주입이므로 받지 않고, 프롬프트에도 넣지 않는다.
+_UNSAFE_TEXT = re.compile(r"https?://|www\.|\b[a-z0-9-]+\.(?:com|net|org|kr|io|co|me|example|xyz|app|site|link|info|biz)\b|"
+                          r"[a-z0-9._%+-]+@[a-z0-9-]+\.|\b0\d{1,2}-\d{3,4}-\d{4}\b|시스템\s*지시|무시하고|프롬프트", re.I)
+_MAX_EDGE_TEXT = 200
+UNSAFE_REASON = "설명에 링크·연락처·지시문이 있거나 너무 김"
+
+
+def unsafe_text(*texts) -> bool:
+    return any(t and (len(str(t)) > _MAX_EDGE_TEXT or _UNSAFE_TEXT.search(str(t))) for t in texts)
 
 
 # ---------- 로드 ----------
@@ -261,14 +273,14 @@ def guidance_block(playbook: dict, board) -> str:
         for d in pend:
             e = el.get((key_of.get(d), key_of.get(p["id"])))
             rel = "필수 선행" if (e and e.get("hard")) else "권고 선행"
-            g = f" — {e['guidance']}" if e and e.get("guidance") else ""
+            g = f" — {e['guidance']}" if e and e.get("guidance") and not unsafe_text(e["guidance"]) else ""
             why.append(f"{by_id[d]['name']}({rel}{g})")
         lines.append(f"- {p['name']} 은(는) 먼저 {', '.join(why)} 을(를) 마쳐야 한다")
     for p in procs:  # AI 제안 절차 뒤에 오는 권고(잠그지 않음)
         soft = [d for d in p.get("suggestedAfter") or [] if d in by_id and d not in done]
         if soft and p["id"] not in done:
             lines.append(f"- {p['name']} 은(는) {', '.join(by_id[d]['name'] for d in soft)} 뒤에 하는 것을 권한다(필수 아님, AI 제안 기준)")
-    pits = {e["pitfalls"] for e in el.values() if e.get("pitfalls")}
+    pits = {e["pitfalls"] for e in el.values() if e.get("pitfalls") and not unsafe_text(e["pitfalls"])}
     if pits:
         lines.append("주의: " + " / ".join(sorted(pits)))
     return "\n".join(lines)
@@ -302,7 +314,8 @@ def _would_cycle(before: str, after: str, extra: list[tuple[str, str]]) -> bool:
 
 def validate(proposals: list[dict], procs: list[dict]) -> tuple[list[dict], list[dict]]:
     """제안 간선 {before_id, after_id, hard, condition, guidance, pitfalls} → (채택, 거절[+reason]).
-    규칙: 두 끝점이 플레이북에 있고 서로 다름 · 기존 간선(정/역방향) 아님 · 거절 이력 아님 · 순환 없음 · 두 끝점 모두 key 보유."""
+    규칙: 두 끝점이 플레이북에 있고 서로 다름 · 기존 간선(정/역방향) 아님 · 거절 이력 아님 · 순환 없음 · 두 끝점 모두 key 보유
+    · 설명(condition·guidance·pitfalls)에 링크·연락처·지시문이 없고 200자 이하."""
     by_id = {p["id"]: p for p in procs}
     existing = {(e["before"], e["after"]) for e in edges()}
     rejected_pairs = {(r["before"], r["after"]) for r in learned().get("rejected", [])}
@@ -328,6 +341,8 @@ def validate(proposals: list[dict], procs: list[dict]) -> tuple[list[dict], list
                 reason = "이전에 거절된 제안"
             elif _would_cycle(kb, ka, extra):
                 reason = "순환 발생"
+            elif unsafe_text(pr.get("condition"), pr.get("guidance"), pr.get("pitfalls")):
+                reason = UNSAFE_REASON
         if reason:
             bad.append({**pr, "reason": reason})
             continue
@@ -358,8 +373,8 @@ def commit(accepted: list[dict], rejected: list[dict], procs: list[dict], meta: 
     for e in accepted:
         l["edges"].append({**e, "origin": stamp})
     for r in rejected:
-        if r.get("reason") in ("플레이북에 없는 절차 id", "자기 자신", "안정 키 없음"):
-            continue  # 형식 오류는 기억할 가치가 없다
+        if r.get("reason") in ("플레이북에 없는 절차 id", "자기 자신", "안정 키 없음", UNSAFE_REASON):
+            continue  # 형식 오류·주입 의심은 기억할 가치가 없다(그 절차 쌍의 정상 제안까지 막지 않도록)
         by_id = {p["id"]: p for p in procs}
         b, a = by_id.get(str(r.get("before_id"))), by_id.get(str(r.get("after_id")))
         if b and a and b.get("key") and a.get("key"):

@@ -19,6 +19,7 @@ import {
 } from "./api/chat";
 import { SCENARIO_MAP } from "./data/scenarios";
 import { isoDate } from "./lib/holidays";
+import { deadlineInfo } from "./lib/dday";
 
 type Tab = "chat" | "board";
 
@@ -444,6 +445,11 @@ export const useStore = create<State>((set, get) => ({
     }
 
     // ② 대화 생성 (갱신된 페르소나 주입, 2차 호출 — 스트리밍)
+    // 만료일을 아는 절차는 화면 D-day 와 같은 값으로 함께 보낸다(모델이 '기한 지났는지'·요일을 틀리지 않도록)
+    const deadlines = (get().playbook?.procedures ?? []).flatMap((p) => {
+      const info = deadlineInfo(p, nextPersona, get().event, get().board, get().procIndex);
+      return info.due && info.days !== null ? [{ id: p.id, due: isoDate(info.due), days: info.days }] : [];
+    });
     await streamChat(get().event, history, {
       onToken: (t) =>
         set((s) => {
@@ -498,7 +504,8 @@ export const useStore = create<State>((set, get) => ({
     // 현재 플레이북 + 페르소나 + 할 일 보드(완료 체크)를 함께 보낸다
     get().playbook,
     nextPersona,
-    get().board);
+    get().board,
+    deadlines);
   },
 
   setTab: (t) => set({ tab: t }),

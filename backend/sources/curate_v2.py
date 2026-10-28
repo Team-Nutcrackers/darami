@@ -76,22 +76,47 @@ for _canon, _names in {
 _SGG_RE = re.compile(r"([가-힣]{1,5}(?:시|군|구))")
 
 
+# 접미사 없는 시군구 이름 중 일반 낱말과 같은 것('예산 부족', '음성 안내', '보안 강화', '목표 달성') — 지명으로 보지 않는다
+_STEM_COMMON_WORDS = {"광주", "고령", "영광", "보은", "진도", "음성", "장수", "영양", "예산", "부여", "강화", "달성", "동작",
+                      "연수", "수영", "사상", "동해", "남해", "정선", "봉화", "거창", "장성", "성주"}
+# 접미사 생략 지명 뒤에 붙는 조사('수원으로', '화성에서', '안산에')
+_STEM_TAIL = r"(?=$|[^가-힣]|(?:으로|로|에서|에|쪽)(?:[^가-힣]|$))"
+# 동네 이름으로 흔히 말하는 곳 → (시도, 시군구)
+_AREA_ALIAS = {"일산": ("경기도", "고양시"), "송도": ("인천광역시", "연수구"), "판교": ("경기도", "성남시"),
+               "동탄": ("경기도", "화성시"), "광교": ("경기도", "수원시"), "목동": ("서울특별시", "양천구"),
+               "잠실": ("서울특별시", "송파구")}
+# "A에서 B로 이사" / "A 살다가 B로 이사" — 목적지 B
+_DEST_RE = re.compile(r"(?:에서|살다가|살다)\s*(.{1,20}?)\s*(?:으로|로)\s*(?:이사|이주|전입|옮기|옮겨|이전|가요|갑니다|가려|가는|가게|가서|내려가|올라가|귀촌|귀농|전학)")
+
+
 def _sgg_in_text(text: str) -> tuple[str | None, str | None]:
-    """질문에 '고양시·마포구·안산'처럼 시군구만 나올 때 (시도, 시군구). 접미사 없는 '안산'도 '안산시'로 본다."""
+    """질문에 '고양시·마포구·안산'처럼 시군구만 나올 때 (시도, 시군구). 접미사 없는 '안산'·'수원으로'도 '안산시'·'수원시'로 본다."""
     for m in _SGG_RE.finditer(text):
         name = m.group(1)
         for cand in (name, name[1:] if len(name) > 3 else None):
             if cand and cand in _SGG_SIDO:
                 return _SGG_SIDO[cand], cand
-    for name, sido in _SGG_SIDO.items():  # 접미사 생략('안산 살아요', '고양 이사')
+    for name, sido in _SGG_SIDO.items():  # 접미사 생략('안산 살아요', '고양 이사', '수원으로 이사')
         stem = name[:-1]
-        if len(stem) >= 2 and re.search(stem + r"(?![가-힣])", text) and stem != "광주":  # '광주'만 시도(광주광역시)와 혼동
+        if len(stem) >= 2 and stem not in _STEM_COMMON_WORDS and re.search(r"(?<![가-힣])" + stem + _STEM_TAIL, text):
             return sido, name
+    for alias, (sido, sgg) in _AREA_ALIAS.items():
+        if re.search(r"(?<![가-힣])" + alias + _STEM_TAIL, text):
+            return sido, sgg
     return None, None
 
 
+def _region_in_text(query: str) -> tuple[str | None, str | None]:
+    hits = [(query.find(short), canon) for short, canon in _SIDO if short in query]
+    if hits:
+        sido = min(hits)[1]
+        sgg_sido, sgg = _sgg_in_text(query)
+        return sido, (sgg if sgg_sido == sido else None)
+    return _sgg_in_text(query)
+
+
 def resolve_region(persona: dict | None, query: str = "") -> tuple[str | None, str | None]:
-    """(시도 표준명, 시군구). 페르소나 residence → 질문의 시도(가장 먼저 나온 것) → 질문의 시군구(사전) 순."""
+    """(시도 표준명, 시군구). 페르소나 residence → 질문의 목적지("A에서 B로 이사"의 B) → 질문의 시도(가장 먼저 나온 것) → 질문의 시군구(사전) 순."""
     facts = (persona or {}).get("facts") or {}
     res = str(facts.get("residence") or "").strip()
     if res:
@@ -103,12 +128,12 @@ def resolve_region(persona: dict | None, query: str = "") -> tuple[str | None, s
         sido, sgg = _sgg_in_text(res)
         if sido:
             return sido, sgg
-    hits = [(query.find(short), canon) for short, canon in _SIDO if short in query]
-    if hits:
-        sido = min(hits)[1]
-        sgg_sido, sgg = _sgg_in_text(query)
-        return sido, (sgg if sgg_sido == sido else None)
-    return _sgg_in_text(query)
+    dest = _DEST_RE.search(query)
+    if dest:
+        sido, sgg = _region_in_text(dest.group(1))
+        if sido:
+            return sido, sgg
+    return _region_in_text(query)
 
 
 # ---------- 1) classify ----------
