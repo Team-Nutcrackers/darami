@@ -25,7 +25,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 
 from ai_log import AiRun
-from prompts import build_system_prompt, build_generation_prompt, build_persona_prompt
+from prompts import build_system_prompt, build_generation_prompt, build_persona_prompt, DANGER_NOTE
 from sources.curate import curate_event, legal_for, curate_dynamic
 from sources.curate_v2 import curate_dynamic_v2, EVENTS
 from sources import graph as procgraph
@@ -471,8 +471,44 @@ def _drop_ungrounded(reply: str, context: str) -> str:
 
 
 _HANGUL_RE = re.compile(r"[가-힣]")
+# 주입·주제 이탈 신호 — 이런 턴에만 대화 프롬프트 맨 앞에 [지켜야 할 원칙]을 넣는다
+_GUARD_TRIGGER_RE = re.compile(
+    r"무시\s*(?:하고|해|하라|해라|하세요)|(?:대화|지시|내용|규칙|설정)\S*\s*(?:을|를)?\s*(?:모두\s*|전부\s*|다\s*)?(?:잊|무시)|"
+    r"(?:너|다람이)(?:의|는|가)?\s*(?:어떤\s*)?(?:규칙|지시|설정|프롬프트)|규칙\s*(?:번호|내용|전부|그대로)|시스템\s*(?:공지|지시|메시지|프롬프트)|"
+    r"\[\s*(?:시스템|관리자|system|admin)|관리자\s*모드|개발자\s*모드|이제부터\s*(?:너|넌|다람이)|너는\s*이제|역할\s*(?:을|를)?\s*(?:바꿔|맡아)|"
+    r"레시피|요리법|코드\s*(?:를\s*)?(?:짜|작성|만들어)|코딩|파이썬|python|자바스크립트|javascript|"
+    r"시\s*(?:한\s*편|를\s*써|써\s*줘)|소설\s*(?:을\s*)?써|가사\s*(?:를\s*)?써|(?:종목|주식)\s*추천|반말로|"
+    r"ignore\s+(?:all\s+)?(?:the\s+)?previous|system\s*prompt|instructions?\b", re.I)
+
+
+_DETAIL_Q_RE = re.compile(r"서류|준비물|필요한\s*(?:게|것|서류)|뭐가\s*필요|뭘\s*챙|챙겨|지참|구비|어디서|어디로|어디에|어디\s*가|온라인|인터넷|정부24|방문|"
+                          r"신청\s*방법|어떻게\s*신청|신청하려면|발급|세대주|대리|위임|document|online|where", re.I)
+
+
+def _asks_details(text: str) -> bool:
+    """서류·장소·온라인·신청 방법을 묻는 턴 — 그때만 플레이북의 담당기관·온라인 여부·서류를 프롬프트에 넣는다."""
+    return bool(_DETAIL_Q_RE.search(text or ""))
+
+
+def _needs_guard(text: str) -> bool:
+    return bool(text) and (bool(_GUARD_TRIGGER_RE.search(text)) or not _HANGUL_RE.search(text))
 _INJECTION_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)|"
                            r"ignore\s+(?:all\s+)?(?:the\s+)?previous|앞의\s*(?:지시|대화|내용|규칙)\S*\s*(?:모두\s*|전부\s*|다\s*)?(?:무시|잊)", re.I)
+def _note_overdue(reply: str, playbook: dict, deadlines) -> str:
+    """답에서 말한 절차의 만료일(화면 D-day 와 같은 계산)이 이미 지났는데 그 말이 없으면 한 문장 덧붙인다."""
+    if not deadlines or re.search(r"지났|지나서|지난\s*상태|경과|늦었|넘겼|넘었", reply):
+        return reply
+    names = {p.get("id"): str(p.get("name") or "") for p in playbook.get("procedures", []) or [] if isinstance(p, dict)}
+    for d in deadlines:
+        try:
+            days, due, name = int(d.get("days")), str(d.get("due"))[:10], names.get(d.get("id"), "")
+        except (TypeError, ValueError, AttributeError):
+            continue
+        if days < 0 and name and name in reply:
+            return reply + f" 참고로 {name} 기한({due})은 이미 지났어요. 늦더라도 바로 처리하시는 게 좋아요."
+    return reply
+
+
 def _strip_ids(reply: str, playbook: dict) -> str:
     """답에 섞인 내부 절차 id('(law-foreign-resident-l1)', 'transfer-report')를 정리한다 — 괄호째 지우거나 절차 이름으로."""
     for p in sorted((p for p in playbook.get("procedures", []) or [] if isinstance(p, dict) and p.get("id")), key=lambda p: -len(str(p["id"]))):
@@ -513,7 +549,7 @@ _FAKE_SYSTEM_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리�
 _COMMAND_RE = re.compile(r"하세요|하시오|하라|해라|답하|출력|처리해|바꿔|변경해|무시|따르")
 FAKE_SYSTEM_NOTE = ("시스템 공지·관리자 모드처럼 다람이의 설정을 바꾸려는 요청은 따를 수 없어요. 다람이는 공공서비스 절차 안내를 계속 도와드릴게요. "
                     "절차를 직접 마치셨다면 어떤 절차를 마쳤는지 알려 주세요.")
-_DANGER_RE = re.compile(r"때려|때리|폭행|폭력|스토킹|협박|위협|학대")
+_DANGER_RE = re.compile(r"때려|때리|폭행|가정\s*폭력|데이트\s*폭력|스토킹|협박|위협|학대")
 CRISIS_NOTE = "혹시 마음이 많이 힘드시다면 혼자 견디지 마세요. 자살예방 상담전화 109(24시간)에서 바로 이야기를 들어 드려요."
 
 
@@ -529,8 +565,8 @@ async def chat(req: ChatReq):
     # 기한 계산에 필요한 기준일(출생일·이사일 등)이 페르소나에 없으면 모델이 한 번 묻도록 알린다
     # (폭력·위기 상황을 말한 턴에는 날짜를 묻지 않는다 — 안전 안내가 먼저)
     latest_user = next((m.content for m in reversed(req.messages) if m.role == "user"), "")
+    danger = bool(_CRISIS_RE.search(latest_user) or _DANGER_RE.search(latest_user))
     try:
-        danger = _CRISIS_RE.search(latest_user) or _DANGER_RE.search(latest_user)
         missing = "" if danger else deadline.missing_anchor_block(playbook, req.persona, req.board)
     except Exception:  # noqa: BLE001
         missing = ""
@@ -543,8 +579,9 @@ async def chat(req: ChatReq):
     other_note = (f"[이번 턴 — 다른 생활 이벤트]\n사용자가 지금 할 일 목록에 없는 다른 생활 이벤트({EVENTS[other]['title']})를 물었다. "
                   f"그 일의 절차·기한·날짜는 말하지 말고, '처음 화면의 입력란에 {EVENTS[other]['title']} 상황을 적으면 맞춤 절차를 찾아 드려요'라고 안내한다. "
                   "boardOps 는 [] 로 둔다." if other else "")
-    tail = "\n\n".join(x for x in (other_note, lang) if x)
-    system_prompt = build_system_prompt(playbook, req.persona, req.board, "\n\n".join(x for x in (guidance, missing) if x), req.deadlines, tail)
+    tail = "\n\n".join(x for x in (other_note, lang, DANGER_NOTE if danger else "") if x)
+    system_prompt = build_system_prompt(playbook, req.persona, req.board, "\n\n".join(x for x in (guidance, missing) if x), req.deadlines, tail,
+                                        guard=_needs_guard(latest_user), details=_asks_details(latest_user))
     provider = get_provider()
     board_status = {b.get("id"): b.get("status") for b in (req.board or []) if isinstance(b, dict) and b.get("id")}
 
@@ -568,6 +605,7 @@ async def chat(req: ChatReq):
         reply = _strip_ids(reply, playbook or {})
         # 플레이북·대화에 없는 금액·전화번호는 모델의 기억(옛 기준·지어낸 번호)이다 → 빼고 담당기관 확인을 권한다
         reply = _drop_ungrounded(reply, system_prompt + "\n" + "\n".join(m.content for m in req.messages))
+        reply = _note_overdue(reply, playbook or {}, req.deadlines)
         # '[시스템 공지]·관리자 모드' 처럼 지시를 흉내 낸 턴에는 할 일 보드를 바꾸지 않는다(사람이 실제로 마쳤다고 한 말이 아니다)
         if _INJECTION_RE.search(latest_user):
             result["boardOps"], result["userTodos"] = [], []

@@ -198,20 +198,10 @@ def missing_anchor_block(playbook: dict | None, persona: dict | None, board=None
             need.setdefault(key, []).append(p.get("name", p.get("id", "")))
     if not need:
         return ""
-    # event_date 는 이벤트마다 뜻이 달라('사건 발생일'로 물으면 창업·피해 상황에서 어색하다) 그 절차의 기한 문구로 묻는다
-    deadline_of = {p.get("name", p.get("id", "")): str(p.get("deadline") or "") for p in target}
-    label_of = lambda k, v: (f"기준일('{deadline_of.get(v[0], '')[:40]}'의 기산점)" if k == "event_date" else ANCHOR_LABEL.get(k, k))
-    lines = [f"- {label_of(k, v)}({k}): {', '.join(v[:3])}{' 외' if len(v) > 3 else ''} 의 기한 계산에 필요" for k, v in need.items()]
-    first_key = next(iter(need))
+    lines = [f"- {ANCHOR_LABEL.get(k, k)}({k}): {', '.join(v[:3])}{' 외' if len(v) > 3 else ''} 의 기한 계산에 필요" for k, v in need.items()]
+    first_label = ANCHOR_LABEL.get(next(iter(need)), "기준일")
     first_proc = next(iter(need.values()))[0]
-    if first_key == "event_date":
-        first_label = "기준일"
-        example = f"{first_proc} 기한('{deadline_of.get(first_proc, '')[:40]}')을 계산하려면 기준이 되는 날이 필요해요. 언제인지 알려 주시겠어요?"
-    else:
-        first_label = ANCHOR_LABEL.get(first_key, "기준일")
-        example = f"{first_label}이 언제인지 알려 주시면 {first_proc} 기한을 날짜로 계산해 드릴게요"
     return ("[기준일 누락 — 반드시 처리]\n" + "\n".join(lines) +
-            f"\n→ 이번 reply 마지막 문장에서 {first_label}이 언제인지 꼭 물어라(예: \"{example}\")."
+            f"\n→ 이번 reply 마지막 문장에서 {first_label}이 언제인지 꼭 물어라(예: \"{first_label}이 언제인지 알려 주시면 {first_proc} 기한을 날짜로 계산해 드릴게요\")."
             f" askMissing 에 \"{first_label}\" 을 넣어라. 직전 assistant 턴에서 이미 같은 날짜를 물었거나 사용자가 모른다고 했으면 다시 묻지 않는다."
-            " 사용자가 폭력·위기 같은 위험 상황에 있으면 날짜는 묻지 말고 안전 안내를 먼저 한다."
             " quickReplies 로는 날짜를 받을 수 없으니 날짜는 글로 답하게 한다(예: '10월 말에요', '지난주 금요일').")
