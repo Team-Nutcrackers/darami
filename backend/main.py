@@ -25,7 +25,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 
 from ai_log import AiRun, mask as mask_pii  # 외부 AI 모델로 보내기 전에도 로그와 같은 규칙으로 개인정보를 가린다
-from prompts import build_system_prompt, build_generation_prompt, build_persona_prompt, DANGER_NOTE, PII_NOTE, BAD_DATE_NOTE, CLAIM_NOTE, FRAUD_NOTE
+from prompts import build_system_prompt, build_generation_prompt, build_persona_prompt, DANGER_NOTE, PII_NOTE, BAD_DATE_NOTE, CLAIM_NOTE, FRAUD_NOTE, RULES_NOTE
 from sources.curate import curate_event, legal_for, curate_dynamic
 from sources.curate_v2 import curate_dynamic_v2, EVENTS
 from sources import graph as procgraph
@@ -658,10 +658,11 @@ async def chat(req: ChatReq):
     date_note = BAD_DATE_NOTE.format(dates="·".join(f"'{d}'" for d in bad_dates)) if bad_dates else ""
     claim = CLAIM_NOTE if _CLAIM_RE.search(latest_user) else ""
     fraud = FRAUD_NOTE if _FRAUD_RE.search(latest_user) else ""
-    tail = "\n\n".join(x for x in (other_note, lang, DANGER_NOTE if danger else "", pii, date_note, claim, fraud) if x)
+    rules_info = _asks_rules(latest_user, deadlines)
+    tail = "\n\n".join(x for x in (other_note, lang, DANGER_NOTE if danger else "", pii, date_note, claim, fraud,
+                                    RULES_NOTE if rules_info else "") if x)
     system_prompt = build_system_prompt(playbook, persona, board, "\n\n".join(x for x in (guidance, missing) if x), deadlines, tail,
-                                        guard=_needs_guard(latest_user), details=_asks_details(latest_user),
-                                        rules_info=_asks_rules(latest_user, deadlines))
+                                        guard=_needs_guard(latest_user), details=_asks_details(latest_user), rules_info=rules_info)
     provider = get_provider()
     board_status = {b["id"]: b["status"] for b in board}
 
