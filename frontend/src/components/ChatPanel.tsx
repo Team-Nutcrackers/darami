@@ -125,6 +125,7 @@ export default function ChatPanel() {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && submit(input)}
           placeholder={streaming ? "다람이가 답하고 있어요…" : "메시지를 입력하세요"}
+          maxLength={1000} // 서버 상한(MAX_INPUT_CHARS)과 같다
           disabled={streaming}
           className="flex-1 bg-white rounded-full px-4 py-2.5 text-sm outline-none border border-sand focus:border-nut/50 disabled:opacity-60"
         />

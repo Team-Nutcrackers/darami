@@ -63,6 +63,10 @@ _PATTERNS = [
     (re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"), "[이메일]"),
     (re.compile(r"(?<!\d)\d{4}[- ]\d{4}[- ]\d{4}[- ]\d{4}(?!\d)"), "[카드번호]"),
     (re.compile(r"\b(?:up|flp)_[A-Za-z0-9]{16,}\b"), "[API키]"),
+    # '계좌·통장' 뒤 12자 안의 숫자 묶음(숫자 9자리 이상, 날짜 꼴 제외) — "계좌는 국민 123-45-6789"
+    (re.compile(r"((?:계좌|통장)[^\d\n]{0,12})(\d[\d-]{7,22}\d)"),
+     lambda m: m.group(0) if sum(c.isdigit() for c in m.group(2)) < 9 or re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}", m.group(2))
+     else m.group(1) + "[계좌번호]"),
 ]
 _SECRET_ENVS = ("UPSTAGE_API_KEY", "KEXAONE_API_KEY", "LAW_OC", "DATA_GO_KR_KEY")
 

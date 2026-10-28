@@ -129,6 +129,7 @@ export default function ScenarioPicker() {
             autoFocus
             rows={3}
             placeholder="예: 부모님이 돌아가셔서 상속 절차와 사망신고를 해야 해요. 서울에 살아요."
+            maxLength={1000} // 서버 상한(MAX_INPUT_CHARS)과 같다
             disabled={generating}
             className="w-full resize-none text-[13px] text-acorn outline-none placeholder:text-acorn/35 disabled:opacity-60"
           />

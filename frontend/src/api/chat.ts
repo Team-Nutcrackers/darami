@@ -33,7 +33,10 @@ export async function generatePlaybook(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ description, persona: persona ?? null }),
   });
-  if (!res.ok) throw new Error(`생성 실패 (${res.status})`);
+  if (!res.ok) {
+    const msg = await res.json().then((d) => d?.error).catch(() => null);
+    throw new Error(typeof msg === "string" && msg ? msg : `생성 실패 (${res.status})`);
+  }
   const pb = (await res.json()) as Playbook & { error?: string };
   if (pb.error) throw new Error(pb.error);
   return pb;
@@ -77,7 +80,9 @@ export async function streamChat(
   });
 
   if (!res.ok || !res.body) {
-    handlers.onError(`서버 오류 (${res.status})`);
+    // 입력 검증(빈 메시지·너무 긴 글 등)으로 거절되면 서버가 준 안내 문구를 보여 준다
+    const msg = await res.json().then((d) => d?.error).catch(() => null);
+    handlers.onError(typeof msg === "string" && msg ? msg : `서버 오류 (${res.status})`);
     return;
   }
 

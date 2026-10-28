@@ -131,6 +131,26 @@ def parse_relative_date(text: str, today: date) -> tuple[date, str] | None:
     return None
 
 
+def invalid_dates(text: str, today: date | None = None) -> list[str]:
+    """문장 속 '2월 30일'·'13월 5일'·'2/31'·'2027-02-29' 처럼 달력에 없는 날짜 표기들. 연도가 없으면 2월 29일은 있는 날로 본다."""
+    t = text.replace("２", "2")
+    out = []
+    for m in re.finditer(r"(\d{4})\s*[-.년]\s*(\d{1,2})\s*[-.월]\s*(\d{1,2})(?:\s*일)?", t):
+        try:
+            date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            out.append(m.group(0))
+    for m in re.finditer(r"(?<![\d/])(\d{1,2})\s*월\s*(\d{1,2})\s*일|(?<![\d/])(\d{1,2})/(\d{1,2})(?![\d/])", t):
+        if not m.group(1) and _FRACTION_CTX(t, m):
+            continue
+        if re.search(r"\d{4}\s*[-.년]\s*$", t[:m.start()]):  # 위에서 연도와 함께 본 표기
+            continue
+        mo, da = (int(m.group(1)), int(m.group(2))) if m.group(1) else (int(m.group(3)), int(m.group(4)))
+        if not (1 <= mo <= 12 and 1 <= da <= calendar.monthrange(2028, mo)[1]):  # 2028 = 윤년(2월 29일 허용)
+            out.append(m.group(0))
+    return out
+
+
 def _FRACTION_CTX(t: str, m: re.Match) -> bool:
     """'N/M' 이 날짜가 아니라 분수로 쓰인 자리인지("매매가의 1/10", "1/2 이상", "3/4 정도")."""
     return bool(re.search(r"의\s*$", t[:m.start()]) or
