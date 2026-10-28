@@ -321,7 +321,8 @@ def persona(req: PersonaReq):
         for i, m in enumerate(recent)
     )
     with AiRun("persona") as run:
-        result = make_json_caller(provider, run)(build_persona_prompt(req.persona or {}), convo, temperature=0.1)
+        latest = next((m.content for m in reversed(recent) if m.role == "user"), "")
+        result = make_json_caller(provider, run)(build_persona_prompt(req.persona or {}, guard=_needs_guard(latest)), convo, temperature=0.1)
     facts = result.get("facts")
     if not isinstance(facts, dict):
         facts = prior_facts
