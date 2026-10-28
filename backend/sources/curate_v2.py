@@ -38,7 +38,7 @@ from .national_welfare_api import ground_national_service
 from .welfare_api import _get as gov24_get, ground_service, search_services
 
 EVENTS_PATH = Path(__file__).resolve().parent.parent / "playbooks" / "events.json"
-MAX_EVENTS = 4  # 분류 프롬프트는 1~3개를 시키지만 모델이 4개를 내면 버리지 않는다(결혼+퇴사+이사+임신)
+MAX_EVENTS = 3
 MAX_REGIONAL = 5
 
 
@@ -157,13 +157,13 @@ def drop_product_only_pet(events: list[str], query: str) -> list[str]:
     return events
 
 
-def normalize_events(ids, primary: str | None = None) -> list[str]:
+def normalize_events(ids, primary: str | None = None, limit: int | None = MAX_EVENTS) -> list[str]:
     """목록에 있는 id 만, 중복 없이. primary 가 있으면 맨 앞으로(LLM 이 언급 순서대로 나열하는 경우 대비)."""
     out = []
     for i in [primary, *(ids or [])]:
         if i and i in EVENTS and i not in out:
             out.append(i)
-    return out[:MAX_EVENTS]
+    return out[:limit] if limit else out
 
 
 # ---------- 2) plan: API 메뉴 ----------
@@ -862,21 +862,42 @@ def _curate_open(query: str, persona: dict | None, llm_json, ctx: str, related: 
 
 def curate_dynamic_v2(query: str, persona: dict | None, llm_json, use_examples: bool = True) -> tuple[dict, dict]:
     """llm_json(system, user, temperature) → dict. 반환: (playbook, 단계별 결정 trace).
-    단계: 분류 → 라우팅(single / multi_hop / multi_event, 홉마다 가장 비슷한 사례 1건) → 계획(사례들을 few-shot 으로) → 실행 → 선택·검증 → 조립."""
-    from prompts import build_v2_classify_prompt, build_v2_plan_prompt, build_v2_select_prompt
+    단계: 분류 → 라우팅(single / multi_hop / multi_event, 홉마다 가장 비슷한 사례 1건) → 계획(사례들을 few-shot 으로) → 실행 → 선택·검증 → 조립.
+    분류가 상한(3개)을 넘는 이벤트를 놓쳤으면(결혼+퇴사+이사+임신) 3개로 만든 플레이북은 그대로 두고, 빠진 이벤트의 절차만 따로 만들어 덧붙인다."""
+    from prompts import build_v2_classify_prompt
     ctx = f"[질문]\n{query}\n[페르소나]\n{json.dumps(persona or {}, ensure_ascii=False)}"
     cls = llm_json(build_v2_classify_prompt(event_catalog()), ctx, 0.0)
-    events = drop_product_only_pet(normalize_events(cls.get("events"), cls.get("primary")), query)
+    all_events = drop_product_only_pet(normalize_events(cls.get("events"), cls.get("primary"), limit=None), query)
+    events = all_events[:MAX_EVENTS]
     trace: dict = {"classify": cls}
-    if len(events) == 3:  # 프롬프트 상한(3개)까지 찼으면 빠진 이벤트가 있을 수 있다(결혼+퇴사+이사+임신) → 하나만 더 묻는다. 2개 이하면 영향 없음
+    extra_event = all_events[MAX_EVENTS] if len(all_events) > MAX_EVENTS else None  # 모델이 4개를 냈으면 4번째
+    if extra_event is None and len(events) == MAX_EVENTS:  # 상한까지 찼으면 빠진 이벤트가 있을 수 있다 → 하나만 더 묻는다
         from prompts import build_v2_classify_extra_prompt
         extra = llm_json(build_v2_classify_extra_prompt(event_catalog()), ctx + "\n[고른 이벤트]\n" + ", ".join(events), 0.0)
         trace["classify_extra"] = extra
         if extra.get("event") in EVENTS and extra["event"] not in events:
-            events.append(extra["event"])
+            extra_event = extra["event"]
     if not events:  # 맞는 이벤트가 없음 → 예시 없이 처음부터 설계(open 모드)
         related = normalize_events(cls.get("related"))
         return _curate_open(query, persona, llm_json, ctx, related, trace)
+    pb = _curate_events(query, persona, llm_json, ctx, events, trace, use_examples)
+    if pb is None:  # 이벤트는 골랐는데 계획이 비었거나 전부 못 찾음 → 그 이벤트를 힌트로 처음부터 다시 설계
+        trace["fallback"] = "open"
+        return _curate_open(query, persona, llm_json, ctx, events, trace)
+    if extra_event:
+        sub_trace: dict = {}
+        sub = _curate_events(query, persona, llm_json, ctx, [extra_event], sub_trace, use_examples)
+        trace["extra_event"] = {"event": extra_event, "trace": sub_trace}
+        if sub:  # 검증된 절차(법령·공통·보조금24)만 — AI 제안(x:)은 앞 플레이북 항목과 이름만 다른 중복이 되기 쉽다
+            _append_procedures(pb, [p for p in sub["procedures"] if not str(p.get("key", "")).startswith("x:")])
+            pb["events"] = list(pb.get("events") or []) + [extra_event]
+    return pb, trace
+
+
+def _curate_events(query: str, persona: dict | None, llm_json, ctx: str, events: list[str], trace: dict,
+                   use_examples: bool = True) -> dict | None:
+    """고른 이벤트들로 메뉴 → 라우팅·사례 → 계획 → 실행 → 선택 → 조립. 절차가 하나도 없으면 None."""
+    from prompts import build_v2_plan_prompt, build_v2_select_prompt
     menu = build_menu(events)
     examples: list[dict] = []
     mode = "single"
@@ -899,9 +920,41 @@ def curate_dynamic_v2(query: str, persona: dict | None, llm_json, use_examples: 
     trace.update({"plan": plan, "select": select, "unresolved": ex.get("unresolved", []), "absorbed": ex.get("absorbed", []),
                   "candidates": [{"cid": c["cid"], "name": c["name"], "source": c["source"]} for c in ex["candidates"]]})
     pb = assemble(plan, ex, select)
-    if not pb["procedures"]:  # 이벤트는 골랐는데 계획이 비었거나 전부 못 찾음 → 그 이벤트를 힌트로 처음부터 다시 설계
-        trace["fallback"] = "open"
-        return _curate_open(query, persona, llm_json, ctx, events, trace)
+    if not pb["procedures"]:
+        return None
     kb.apply(pb["procedures"])  # 법령·AI제안 절차에 창구·서류·링크(지식베이스) 덧입히기
     graph.learn(pb, llm_json, query, trace)  # 그래프에 없는 새 절차(extra_law 등)가 있으면 간선 제안 → 검증 → 학습판에 확장
-    return pb, trace
+    return pb
+
+
+def _append_procedures(pb: dict, extra: list[dict]) -> None:
+    """다른 이벤트로 만든 절차를 기존 플레이북 뒤에 덧붙인다. 같은 절차(key 또는 이름)는 건너뛰고,
+    id 가 겹치면 바꾸며, 선행 관계(dependsOn·suggestedAfter)는 바뀐 id·기존 절차 id 로 고쳐 잇는다. 기존 절차는 건드리지 않는다."""
+    procs = pb["procedures"]
+    by_key = {p["key"]: p["id"] for p in procs if p.get("key")}
+    by_name = {p.get("name"): p["id"] for p in procs}
+    ids = {p["id"] for p in procs}
+    rename: dict[str, str] = {}
+    adds = []
+    for p in extra:
+        same = by_key.get(p.get("key")) if p.get("key") else None
+        same = same or by_name.get(p.get("name"))
+        if same:
+            rename[p["id"]] = same
+            continue
+        nid = p["id"]
+        while nid in ids:
+            nid = "e-" + nid
+        rename[p["id"]] = nid
+        ids.add(nid)
+        adds.append(p)
+    order = max((p.get("order") or 0 for p in procs), default=0)
+    for p in adds:
+        q = dict(p, id=rename[p["id"]])
+        for f in ("dependsOn", "suggestedAfter"):
+            if q.get(f):
+                q[f] = [rename[d] for d in q[f] if d in rename]
+        if "order" in q:
+            order += 1
+            q["order"] = order
+        procs.append(q)
