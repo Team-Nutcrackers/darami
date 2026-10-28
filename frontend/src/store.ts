@@ -64,6 +64,8 @@ function deriveRegion(facts: Record<string, string | number | boolean> | undefin
 
 /** 동적 생성 요청 번호 — 기다리는 동안 홈으로 나가거나 새 요청이 오면 옛 결과를 버린다 */
 let genSeq = 0;
+/** 대화 턴 번호 — 답을 기다리는 동안 홈으로 나가거나 다른 대화를 열면 늦게 온 답을 버린다(그때 화면의 말풍선에 이어 붙지 않게) */
+let chatSeq = 0;
 
 function loadSessions(): Record<string, StoredSession> {
   try {
@@ -226,6 +228,7 @@ export const useStore = create<State>((set, get) => ({
 
   // 이벤트 진입: 저장된 세션이 있으면 복원, 없으면 새로 시작(opener 전송)
   enterEvent: async (event, playbook, opener) => {
+    chatSeq++;
     const procIndex = Object.fromEntries(
       playbook.procedures.map((p) => [p.id, p])
     );
@@ -393,12 +396,15 @@ export const useStore = create<State>((set, get) => ({
   },
 
   runTurn: async () => {
+    const seq = ++chatSeq;
+    const live = () => seq === chatSeq;
     const history = get().messages.filter((m) => m.content.length > 0);
 
     // ① 페르소나 갱신 + 충돌 검사 (1차 호출)
     let personaFacts = get().persona?.facts ?? {};
     try {
       const pr = await updatePersona(get().persona, history);
+      if (!live()) return;
       // 비충돌 facts는 conflict 여부와 무관하게 항상 커밋한다.
       // (conflict일 때 facts를 통째로 버리면 확정값이 영영 저장되지 않아 같은 질문이 무한 반복됨)
       if (pr.facts) personaFacts = pr.facts;
@@ -435,6 +441,7 @@ export const useStore = create<State>((set, get) => ({
     if (region && ev && region !== get().appliedRegion) {
       try {
         const rpb = await fetchPlaybook(ev, region);
+        if (!live()) return;
         if (rpb?.procedures?.length) {
           const procIndex = Object.fromEntries(rpb.procedures.map((p) => [p.id, p]));
           set({ playbook: rpb, procIndex, appliedRegion: region });
@@ -453,6 +460,7 @@ export const useStore = create<State>((set, get) => ({
     await streamChat(get().event, history, {
       onToken: (t) =>
         set((s) => {
+          if (!live()) return {};
           const msgs = [...s.messages];
           const last = msgs[msgs.length - 1];
           if (last?.role === "assistant") last.content += t;
@@ -460,6 +468,7 @@ export const useStore = create<State>((set, get) => ({
         }),
       onMeta: (meta) =>
         set((s) => {
+          if (!live()) return {};
           const ops = meta.boardOps ?? [];
           const prevIds = new Set(s.board.map((b) => b.id));
           const board = applyBoardOps(s.board, ops);
@@ -490,11 +499,13 @@ export const useStore = create<State>((set, get) => ({
           return { board, procIndex, userTodos, quickReplies: meta.quickReplies ?? [], messages: msgs };
         }),
       onDone: () => {
+        if (!live()) return;
         set({ streaming: false });
         get().persistCurrent(); // 응답 완료 시 세션 저장
       },
       onError: (message) =>
         set((s) => {
+          if (!live()) return {};
           const msgs = [...s.messages];
           const last = msgs[msgs.length - 1];
           if (last?.role === "assistant" && !last.content) msgs.pop();
@@ -582,6 +593,7 @@ export const useStore = create<State>((set, get) => ({
   },
 
   reset: () => {
+    chatSeq++;
     get().persistCurrent(); // 홈으로 나가기 전에 현재 세션 저장
     set({
       started: false,

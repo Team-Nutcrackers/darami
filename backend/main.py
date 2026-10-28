@@ -75,6 +75,8 @@ MAX_MSG_CHARS = 4000      # 메시지 한 개
 MAX_HISTORY = 40          # 대화 이력(최근 N개만 모델에 보낸다)
 MAX_DESC_CHARS = 2000     # 자유 입력 이벤트 설명
 CHAT_ROLES = ("user", "assistant")  # system 역할 등은 받지 않는다(시스템 프롬프트는 서버만 만든다)
+CHAT_MAX_TOKENS = 2000     # 대화 답 출력 상한 — 평소 답은 1,000토큰 미만(886건 중 최대 982). 끝없이 이어 쓰면(21,198토큰·145초) 여기서 끊는다
+TOO_LONG_REPLY = "물어보신 범위가 넓어서 답이 너무 길어졌어요. 궁금한 절차나 상황을 하나만 골라 다시 물어봐 주세요."
 
 
 # ---------- 데이터 모델 ----------
@@ -175,7 +177,12 @@ def _parse_json(raw: str, fallback: dict) -> dict:
         return fallback
 
 
-def _create_json(provider: Provider, chat_messages: list[dict], temperature: float, run: Optional[AiRun] = None) -> str:
+class ReplyTooLong(Exception):
+    """max_tokens 에 걸려 JSON 이 중간에 끊긴 응답"""
+
+
+def _create_json(provider: Provider, chat_messages: list[dict], temperature: float, run: Optional[AiRun] = None,
+                 max_tokens: Optional[int] = None) -> str:
     """선택된 provider로 구조화 JSON 응답(raw 문자열)을 받는다.
     모든 LLM 호출이 여기를 지난다 → 호출 1건씩 AI API 호출 로그(ai_log)에 남는다.
     run: 이 호출이 속한 기능 실행. 없으면(오프라인 스크립트 등) 스크립트 단위 기본 실행에 누적."""
@@ -185,7 +192,11 @@ def _create_json(provider: Provider, chat_messages: list[dict], temperature: flo
         "response_format": {"type": "json_object"},
         "temperature": temperature,
     }
+    if max_tokens:
+        body["max_tokens"] = max_tokens
     completion = (run or AiRun.default()).call(provider.client, body)
+    if max_tokens and completion.choices[0].finish_reason == "length":
+        raise ReplyTooLong
     return completion.choices[0].message.content or "{}"
 
 
@@ -199,7 +210,10 @@ def call_chat(provider: Provider, system_prompt: str, messages: list[Message], r
     """선택된 LLM을 호출해 대화용 구조화 JSON 응답을 받는다."""
     chat_messages = [{"role": "system", "content": system_prompt}]
     chat_messages += _clean_history(messages)
-    raw = _create_json(provider, chat_messages, temperature=0.3, run=run)
+    try:
+        raw = _create_json(provider, chat_messages, temperature=0.3, run=run, max_tokens=CHAT_MAX_TOKENS)
+    except ReplyTooLong:  # 모델이 목록을 끝없이 이어 쓴 경우 — 잘린 JSON 을 그대로 보이지 않고 짧게 다시 묻게 한다
+        return {"reply": TOO_LONG_REPLY, "eventDetected": None, "askMissing": [], "quickReplies": [], "boardOps": []}
     return _parse_json(raw, {"reply": raw, "eventDetected": None, "askMissing": [], "quickReplies": [], "boardOps": []})
 
 
@@ -385,14 +399,17 @@ _DATE_CHIP = re.compile(r"\d{4}-\d{1,2}-\d{1,2}|\d{1,2}월\s*\d{1,2}일|이전�
 
 
 def _sanitize_quick_replies(items) -> list[str]:
-    """날짜를 고르게 하는 칩("퇴사일이 2026-10-14 이후입니다")은 뺀다 — 날짜는 글로 받는다(기준일 누락 블록 참고)."""
+    """날짜를 고르게 하는 칩("퇴사일이 2026-10-14 이후입니다")은 뺀다 — 날짜는 글로 받는다(기준일 누락 블록 참고).
+    형식 예시("<조건> 있음")의 꺾쇠를 그대로 베낀 칩("<부양가족 있음>")은 꺾쇠만 뗀다."""
     out = []
     for q in items or []:
         if not isinstance(q, str) or not q.strip():
             continue
         if _DATE_CHIP.search(q):
             continue
-        out.append(q.strip())
+        q = re.sub(r"[<>]", "", q).strip()
+        if q:
+            out.append(q)
     return out
 
 
