@@ -473,6 +473,42 @@ def _drop_ungrounded(reply: str, context: str) -> str:
 _HANGUL_RE = re.compile(r"[가-힣]")
 _INJECTION_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)|"
                            r"ignore\s+(?:all\s+)?(?:the\s+)?previous|앞의\s*(?:지시|대화|내용|규칙)\S*\s*(?:모두\s*|전부\s*|다\s*)?(?:무시|잊)", re.I)
+def _strip_ids(reply: str, playbook: dict) -> str:
+    """답에 섞인 내부 절차 id('(law-foreign-resident-l1)', 'transfer-report')를 정리한다 — 괄호째 지우거나 절차 이름으로."""
+    for p in sorted((p for p in playbook.get("procedures", []) or [] if isinstance(p, dict) and p.get("id")), key=lambda p: -len(str(p["id"]))):
+        pid, name = str(p["id"]), str(p.get("name") or "")
+        reply = re.sub(r"\s*\(\s*" + re.escape(pid) + r"\s*\)", "", reply)
+        if "-" in pid and name:
+            reply = re.sub(r"(?<![\w-])" + re.escape(pid) + r"(?![\w-])", name, reply)
+    return reply
+
+
+_GENERIC_PROC = {"건강보험 자격·주소 변경"}
+_AMBIG_ALIAS = {"계약 만료"}
+
+
+def _other_event(user_msgs: list[str], playbook: dict) -> str | None:
+    """마지막 사용자 말이 지금 플레이북과 별개인 다른 생활 이벤트를 묻는지 — 그 이벤트 id.
+    첫 턴(플레이북을 만든 바로 그 질문), 플레이북 절차 이름·조건·설명에 이미 나오는 낱말, 그 이벤트의 절차가 이미 있는 경우는 제외."""
+    if len(user_msgs) < 2:
+        return None
+    text = user_msgs[-1]
+    procs = [p for p in playbook.get("procedures", []) or [] if isinstance(p, dict)]
+    names = {str(p.get("name", "")) for p in procs}
+    blob = " ".join(f"{p.get('name', '')} {p.get('condition', '')} {p.get('summary', '')}" for p in procs)
+    covered = {playbook.get("event")} | set(playbook.get("events") or [])
+    for eid, e in EVENTS.items():
+        if eid in covered:
+            continue
+        hit = [a for a in e.get("aliases", []) if a not in _AMBIG_ALIAS and a in text]
+        if not hit or any(a in blob for a in hit):
+            continue
+        if ({x["name"] for x in e.get("apis", {}).get("law", [])} - _GENERIC_PROC) & names:
+            continue
+        return eid
+    return None
+
+
 _FAKE_SYSTEM_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)", re.I)
 _COMMAND_RE = re.compile(r"하세요|하시오|하라|해라|답하|출력|처리해|바꿔|변경해|무시|따르")
 FAKE_SYSTEM_NOTE = ("시스템 공지·관리자 모드처럼 다람이의 설정을 바꾸려는 요청은 따를 수 없어요. 다람이는 공공서비스 절차 안내를 계속 도와드릴게요. "
@@ -502,7 +538,13 @@ async def chat(req: ChatReq):
     lang = ("[Response language — this turn]\nThe user is not writing in Korean. Write the entire \"reply\" in the user's language (e.g. English), "
             "not in Korean. Keep each procedure's Korean name with a short gloss in parentheses, e.g. 전입신고 (move-in report)."
             if latest_user and not _HANGUL_RE.search(latest_user) and len(re.findall(r"[A-Za-z]{2,}", latest_user)) >= 3 else "")
-    system_prompt = build_system_prompt(playbook, req.persona, req.board, "\n\n".join(x for x in (guidance, missing) if x), req.deadlines, lang)
+    # 지금 플레이북에 없는 다른 생활 이벤트를 물었으면(이사 대화 중 출산 등) 이번 턴에 새로 찾도록 안내하게 한다 — 규칙만으로는 절반쯤 지켜진다
+    other = _other_event([m.content for m in req.messages if m.role == "user"], playbook or {})
+    other_note = (f"[이번 턴 — 다른 생활 이벤트]\n사용자가 지금 할 일 목록에 없는 다른 생활 이벤트({EVENTS[other]['title']})를 물었다. "
+                  f"그 일의 절차·기한·날짜는 말하지 말고, '처음 화면의 입력란에 {EVENTS[other]['title']} 상황을 적으면 맞춤 절차를 찾아 드려요'라고 안내한다. "
+                  "boardOps 는 [] 로 둔다." if other else "")
+    tail = "\n\n".join(x for x in (other_note, lang) if x)
+    system_prompt = build_system_prompt(playbook, req.persona, req.board, "\n\n".join(x for x in (guidance, missing) if x), req.deadlines, tail)
     provider = get_provider()
     board_status = {b.get("id"): b.get("status") for b in (req.board or []) if isinstance(b, dict) and b.get("id")}
 
@@ -523,6 +565,7 @@ async def chat(req: ChatReq):
         run.finish()
 
         reply = str(result.get("reply", "")).strip()
+        reply = _strip_ids(reply, playbook or {})
         # 플레이북·대화에 없는 금액·전화번호는 모델의 기억(옛 기준·지어낸 번호)이다 → 빼고 담당기관 확인을 권한다
         reply = _drop_ungrounded(reply, system_prompt + "\n" + "\n".join(m.content for m in req.messages))
         # '[시스템 공지]·관리자 모드' 처럼 지시를 흉내 낸 턴에는 할 일 보드를 바꾸지 않는다(사람이 실제로 마쳤다고 한 말이 아니다)
