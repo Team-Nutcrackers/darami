@@ -418,6 +418,22 @@ V2_CLASSIFY_PROMPT = """너는 한국 공공서비스 생활 이벤트 분류기
 [출력 스키마] (reason 을 먼저 쓰고, 거기서 정한 주 이벤트를 primary 에, events 는 primary 부터 시작)
 { "reason": "한 줄 근거 — 주 이벤트가 무엇이고 왜인지", "primary": "주 이벤트 id(없으면 빈 문자열)", "events": ["주 이벤트 id", "보조 이벤트 id", "..."], "related": ["맞는 이벤트가 없을 때만, 조금 관련된 이벤트 id"] }"""
 
+V2_CLASSIFY_EXTRA_PROMPT = """너는 다람이의 생활 이벤트 분류 보완기다. 분류기가 사용자 [질문]에서 이벤트를 최대 개수(3개)까지 골랐다([고른 이벤트]).
+질문에 나온 일들을 하나씩 따져서, [고른 이벤트]에 없는 일 때문에 사용자가 따로 해야 할 신고·신청이 있으면 그 이벤트를 하나만 고른다
+(예: "결혼하면서 회사도 그만두고 이사, 아내는 임신 중"에 [고른 이벤트]가 marriage, move, pregnancy → 퇴사 때문에 건강보험·국민연금 변경,
+실업급여 확인이 따로 필요하므로 resignation).
+
+[규칙]
+1) 배경으로 지나간 일(예: "작년에 결혼했고"), 단지 언급만 된 일, 이미 고른 이벤트 안에서 처리되는 일(예: 이사하면서 차량 주소 변경 → move 안)은 고르지 않는다.
+2) 질문에 나오지 않은 일은 고르지 않는다. 해당하는 일이 없으면 event 를 빈 문자열로 둔다.
+3) 반드시 JSON 하나로만 응답.
+
+[이벤트 목록]
+{event_catalog}
+
+[출력 스키마]
+{ "reason": "한 줄 근거", "event": "이벤트 id 또는 빈 문자열" }"""
+
 V2_PLAN_PROMPT = """너는 다람이의 플레이북 설계자다. 사용자 [질문]·[페르소나]와, 고른 이벤트의 [API 메뉴]가 주어진다.
 이 사용자에게 필요한 절차를 만들기 위해 각 API 에 무엇을 호출할지 정한다.
 
@@ -572,6 +588,10 @@ def build_v2_route_hop_prompt() -> str:
 
 def build_v2_classify_prompt(event_catalog: str) -> str:
     return V2_CLASSIFY_PROMPT.replace("{event_catalog}", event_catalog)
+
+
+def build_v2_classify_extra_prompt(event_catalog: str) -> str:
+    return V2_CLASSIFY_EXTRA_PROMPT.replace("{event_catalog}", event_catalog)
 
 
 def build_v2_plan_prompt() -> str:

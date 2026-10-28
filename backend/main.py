@@ -245,7 +245,27 @@ def generate(req: GenReq):
             print(f"[generate] 실패: {e!r}")  # 내부 오류 내용은 로그에만(사용자 화면에 예외 문자열을 내보내지 않는다)
             return JSONResponse({"error": "절차를 만드는 중 문제가 생겼어요. 잠시 후 다시 시도해 주세요."}, status_code=500)
     _guard_title(playbook, description)
+    _soften_done_registration(playbook, description)
     return JSONResponse(deadline.enrich_playbook(playbook))
+
+
+# 이미 국내에 사는 외국인(서울에서 대전으로 이사하는 유학생 등)은 '입국 후 90일 내 외국인등록'을 마쳤다 — 필수로 넣으면 틀린 안내
+_IN_KOREA_RE = re.compile(r"(?:서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|충북|충남|전북|전남|경북|경남|제주|[가-힣]{1,4}(?:시|군|구))\s*에서\s*"
+                          r"(?:\S+\s*){0,3}?(?:이사|살고|살다|살았|지내고|지내다|다니고|다니는|일하고|근무)|년째|살고\s*있|지내고\s*있|다니고\s*있|다니는|근무\s*중|체류\s*중|재학\s*중|"
+                          r"\bfrom\s+(?:Seoul|Busan|Incheon|Daegu|Daejeon|Gwangju|Ulsan|Sejong|Suwon|Seongnam|Goyang|Yongin)\b|"
+                          r"\b(?:living|studying|working|staying)\s+in\s+(?:Korea|Seoul|Busan)|\byears?\s+in\s+Korea|\balready\s+(?:in|living\s+in)\s+Korea", re.I)
+
+
+_FIRST_ENTRY_RE = re.compile(r"처음\s*(?:들어|오|와|입국|한국)|입국\s*(?:예정|전|하면)|들어갈\s*예정|coming\s+to\s+Korea|arriv|first\s+time|moving\s+to\s+Korea", re.I)
+
+
+def _soften_done_registration(playbook: dict, description: str) -> None:
+    if not _IN_KOREA_RE.search(description) or _FIRST_ENTRY_RE.search(description):
+        return
+    for p in playbook.get("procedures", []) or []:
+        if isinstance(p, dict) and str(p.get("name", "")).strip() == "외국인등록":
+            p["priority"] = "nice"
+            p["condition"] = "이미 국내에 머무는 중이면 대부분 마쳤을 절차 — 아직 외국인등록을 하지 않았다면(입국 후 90일 이내)"
 
 
 _URL_RE = re.compile(r"https?://\S+|www\.\S+")
@@ -453,6 +473,10 @@ def _drop_ungrounded(reply: str, context: str) -> str:
 _HANGUL_RE = re.compile(r"[가-힣]")
 _INJECTION_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)|"
                            r"ignore\s+(?:all\s+)?(?:the\s+)?previous|앞의\s*(?:지시|대화|내용|규칙)\S*\s*(?:모두\s*|전부\s*|다\s*)?(?:무시|잊)", re.I)
+_FAKE_SYSTEM_RE = re.compile(r"\[\s*(?:시스템|system|관리자|admin)|관리자\s*모드|개발자\s*모드|시스템\s*(?:공지|지시|메시지|프롬프트)", re.I)
+_COMMAND_RE = re.compile(r"하세요|하시오|하라|해라|답하|출력|처리해|바꿔|변경해|무시|따르")
+FAKE_SYSTEM_NOTE = ("시스템 공지·관리자 모드처럼 다람이의 설정을 바꾸려는 요청은 따를 수 없어요. 다람이는 공공서비스 절차 안내를 계속 도와드릴게요. "
+                    "절차를 직접 마치셨다면 어떤 절차를 마쳤는지 알려 주세요.")
 _DANGER_RE = re.compile(r"때려|때리|폭행|폭력|스토킹|협박|위협|학대")
 CRISIS_NOTE = "혹시 마음이 많이 힘드시다면 혼자 견디지 마세요. 자살예방 상담전화 109(24시간)에서 바로 이야기를 들어 드려요."
 
@@ -504,6 +528,8 @@ async def chat(req: ChatReq):
         # '[시스템 공지]·관리자 모드' 처럼 지시를 흉내 낸 턴에는 할 일 보드를 바꾸지 않는다(사람이 실제로 마쳤다고 한 말이 아니다)
         if _INJECTION_RE.search(latest_user):
             result["boardOps"], result["userTodos"] = [], []
+            if _FAKE_SYSTEM_RE.search(latest_user) and _COMMAND_RE.search(latest_user):  # 가짜 공지가 명령까지 하면 모델 답(명령을 따른 말)을 쓰지 않는다
+                reply, result["askMissing"] = FAKE_SYSTEM_NOTE, []
         # 극단적 선택을 암시하는 말이 있으면 모델 답과 무관하게 상담 전화를 먼저 알린다(결정적 안전장치)
         if _CRISIS_RE.search(latest_user) and "109" not in reply:
             reply = CRISIS_NOTE + "\n\n" + reply

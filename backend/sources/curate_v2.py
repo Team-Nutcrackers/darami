@@ -38,7 +38,7 @@ from .national_welfare_api import ground_national_service
 from .welfare_api import _get as gov24_get, ground_service, search_services
 
 EVENTS_PATH = Path(__file__).resolve().parent.parent / "playbooks" / "events.json"
-MAX_EVENTS = 3
+MAX_EVENTS = 4  # 분류 프롬프트는 1~3개를 시키지만 모델이 4개를 내면 버리지 않는다(결혼+퇴사+이사+임신)
 MAX_REGIONAL = 5
 
 
@@ -141,6 +141,20 @@ def event_catalog() -> str:
     """LLM 에 줄 이벤트 목록(id · 제목 — 설명 / 흔한 표현)."""
     return "\n".join(f"- {e['id']}: {e['title']} — {e['description']} (표현: {', '.join(e.get('aliases', []))})"
                      for e in EVENTS.values())
+
+
+# "반려동물 간식을 만들어 팔려는 창업"처럼 판매 상품만 반려동물용인데 pet 이 붙는 경우(동물등록 등 엉뚱한 절차) — 기르거나 들이는 말이 없을 때만 뺀다
+_BUSINESS_CUE = re.compile(r"창업|사업자|사업을|가게|쇼핑몰|스토어|판매|팔려|팔고|장사")
+_PRODUCT_CUE = re.compile(r"간식|사료|용품|제품|상품|쇼핑몰|스토어|판매|팔려|팔고|팔아|제조")
+_OWNING_CUE = re.compile(r"입양|분양|키우|기르|데려오|데려와|들이|동물\s*등록|반려견이|반려묘가|강아지가|고양이가|잃어버|죽었|무지개")
+
+
+def drop_product_only_pet(events: list[str], query: str) -> list[str]:
+    """pet 이 붙었지만 질문은 반려동물용 상품을 만들어 파는 창업일 때 → pet 대신 startup."""
+    if "pet" in events and _BUSINESS_CUE.search(query) and _PRODUCT_CUE.search(query) and not _OWNING_CUE.search(query):
+        out = ["startup" if e == "pet" else e for e in events]
+        return list(dict.fromkeys(out))
+    return events
 
 
 def normalize_events(ids, primary: str | None = None) -> list[str]:
@@ -852,8 +866,14 @@ def curate_dynamic_v2(query: str, persona: dict | None, llm_json, use_examples: 
     from prompts import build_v2_classify_prompt, build_v2_plan_prompt, build_v2_select_prompt
     ctx = f"[질문]\n{query}\n[페르소나]\n{json.dumps(persona or {}, ensure_ascii=False)}"
     cls = llm_json(build_v2_classify_prompt(event_catalog()), ctx, 0.0)
-    events = normalize_events(cls.get("events"), cls.get("primary"))
+    events = drop_product_only_pet(normalize_events(cls.get("events"), cls.get("primary")), query)
     trace: dict = {"classify": cls}
+    if len(events) == 3:  # 프롬프트 상한(3개)까지 찼으면 빠진 이벤트가 있을 수 있다(결혼+퇴사+이사+임신) → 하나만 더 묻는다. 2개 이하면 영향 없음
+        from prompts import build_v2_classify_extra_prompt
+        extra = llm_json(build_v2_classify_extra_prompt(event_catalog()), ctx + "\n[고른 이벤트]\n" + ", ".join(events), 0.0)
+        trace["classify_extra"] = extra
+        if extra.get("event") in EVENTS and extra["event"] not in events:
+            events.append(extra["event"])
     if not events:  # 맞는 이벤트가 없음 → 예시 없이 처음부터 설계(open 모드)
         related = normalize_events(cls.get("related"))
         return _curate_open(query, persona, llm_json, ctx, related, trace)
